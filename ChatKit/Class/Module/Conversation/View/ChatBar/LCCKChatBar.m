@@ -67,6 +67,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self setup];
+        
     }
     return self;
 }
@@ -635,6 +636,9 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
             break;
     }
     [self updateChatBarConstraintsIfNeeded];
+    if (@available(iOS 11.0, *) && CYL_IS_iPHONEX) {
+        [self safeAreaInsetsDidChange];
+    }
 }
 
 - (void)buttonAction:(UIButton *)button {
@@ -981,6 +985,25 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return img;
+}
+
+- (void)safeAreaInsetsDidChange {
+    CGFloat safeAreaOffset = 0;
+    if ((_showType != LCCKFunctionViewShowFace) &&  (_showType != LCCKFunctionViewShowMore)) {
+        safeAreaOffset = -self.safeAreaInsets.bottom;
+    }
+    [self.voiceButton mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarBottomOffset+safeAreaOffset);
+    }];
+    [self.moreButton mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarBottomOffset+safeAreaOffset);
+    }];
+    [self.faceButton mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarBottomOffset+safeAreaOffset);
+    }];
+    [self.textView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarBottomOffset+safeAreaOffset);
+    }];
 }
 
 @end
