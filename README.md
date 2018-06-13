@@ -1,11 +1,18 @@
 # ChatKit 快速入门 · iOS
 
-<p align="center">
-![enter image description here](https://img.shields.io/badge/pod-v0.8.5-brightgreen.svg)  ![enter image description here](https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5618733984.svg) 
-<a href="https://github.com/leancloud/ChatKit-OC/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat"></a>[ CocoaPods-Doc](http://cocoapods.org/pods/ChatKit) 
-[![git-brag-stats](https://labs.turbo.run/git-brag?user=leancloud&repo=ChatKit-OC&maxn=7)](https://github.com/turbo/git-brag)
 
-</a>
+<p align="center">
+<a href=""><img src="https://img.shields.io/badge/pod-v2.1.0-brightgreen.svg"></a>
+<a href=""><img src="https://img.shields.io/badge/Swift-compatible-orange.svg"></a>
+<a href=""><img src="https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5152950834.svg"></a>
+<a href="https://github.com/ChenYilong/CYLTabBarController/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat"></a>
+</p>
+<p align="center">
+<a href="https://twitter.com/stevechen1010"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social&maxAge=2592000"></a>
+<a href="http://weibo.com/luohanchenyilong"><img src="http://i67.tinypic.com/wbulbr.jpg"></a>
+<a href="https://gitter.im/ChenYilong/CYLTabBarController?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge"><img src="https://badges.gitter.im/ChenYilong/CYLTabBarController.svg"></a>
+</p>
+
 
 在使用中有任何问题都可以提 issue，同时也欢迎提 PR。
 
