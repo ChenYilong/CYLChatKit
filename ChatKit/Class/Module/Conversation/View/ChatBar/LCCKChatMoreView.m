@@ -2,8 +2,8 @@
 //  LCCKChatMoreView.m
 //  LCCKChatBarExample
 //
-//  v2.1.1 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/18.
-//  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
+//  v2.1.1 Created by ElonChan ( https://github.com/ChenYilong/CYLChatKit ) on 15/8/18.
+//  Copyright (c) 2018 ChenYilong（wechat id：chenyilong1010） . All rights reserved.
 //
 
 #import "LCCKChatMoreView.h"
@@ -213,7 +213,7 @@
             NSString *reason = [NSString stringWithFormat:formatString,
                                 @(__PRETTY_FUNCTION__),
                                 @(__LINE__),
-                                @"Please make sure the custom InputViewPlugin type increase from 1 consecutively.[Chinese:]请确保自定义插件的 type 值从1开始连续递增，详情请查看文档：https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%9A%E5%8A%A1.md#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BE%93%E5%85%A5%E6%A1%86%E6%8F%92%E4%BB%B6"];
+                                @"Please make sure the custom InputViewPlugin type increase from 1 consecutively.[Chinese:]请确保自定义插件的 type 值从1开始连续递增，详情请查看文档：https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%9A%E5%8A%A1.md#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BE%93%E5%85%A5%E6%A1%86%E6%8F%92%E4%BB%B6"];
             @throw [NSException exceptionWithName:NSGenericException
                                            reason:reason
                                          userInfo:nil];

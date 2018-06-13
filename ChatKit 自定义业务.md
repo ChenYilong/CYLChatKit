@@ -2,27 +2,27 @@
 
 
 ## 导航
-  1.  [设置单聊用户的头像和昵称](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#设置单聊用户的头像和昵称) 
-      - [ClientId 与 UserId](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#clientid-与-userid) 
-  2.  [Profile缓存](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#profile缓存) 
-  3.  [聊天页面头像点击事件](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#聊天页面头像点击事件) 
-  4.  [自定义会话列表左滑菜单](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#自定义会话列表左滑菜单) 
-  5.  [自定义长按菜单](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#自定义长按菜单) 
-  6.  [自定义消息](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#自定义消息) 
-      -  [不需要显示自定义 Cell 的消息](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#不需要显示自定义-cell-的消息) 
-      -  [需要显示自定义 Cell 的消息](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#需要显示自定义-cell-的消息) 
-  7. [自定义消息步骤](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#自定义消息步骤) 
-      1.  [自定义消息](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#自定义消息) 
-      2. [自定义消息 Cell](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#自定义消息-cell) 
-      3.  [自定义输入框插件](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#自定义输入框插件) 
-      4.  [删除自定义插件、自定义消息、自定义 Cell (可选) ](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#删除自定义插件自定义消息自定义-cell) 
-  8.  [国际化与本地化](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#国际化与本地化) 
-  9.  [其他事件及属性](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#其他事件及属性) 
-      -  [监听并筛选或处理消息](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#监听并筛选或处理消息) 
-      -  [预览大图](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#预览大图) 
-      -  [预览地理位置](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#预览地理位置)
-      -  [消息未读数](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#消息未读数)
-      -  [设置单点登录与强制重连](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#设置单点登录与强制重连)
+  1.  [设置单聊用户的头像和昵称](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#设置单聊用户的头像和昵称) 
+      - [ClientId 与 UserId](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#clientid-与-userid) 
+  2.  [Profile缓存](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#profile缓存) 
+  3.  [聊天页面头像点击事件](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#聊天页面头像点击事件) 
+  4.  [自定义会话列表左滑菜单](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#自定义会话列表左滑菜单) 
+  5.  [自定义长按菜单](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#自定义长按菜单) 
+  6.  [自定义消息](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#自定义消息) 
+      -  [不需要显示自定义 Cell 的消息](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#不需要显示自定义-cell-的消息) 
+      -  [需要显示自定义 Cell 的消息](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#需要显示自定义-cell-的消息) 
+  7. [自定义消息步骤](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#自定义消息步骤) 
+      1.  [自定义消息](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#自定义消息) 
+      2. [自定义消息 Cell](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#自定义消息-cell) 
+      3.  [自定义输入框插件](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#自定义输入框插件) 
+      4.  [删除自定义插件、自定义消息、自定义 Cell (可选) ](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#删除自定义插件自定义消息自定义-cell) 
+  8.  [国际化与本地化](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#国际化与本地化) 
+  9.  [其他事件及属性](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#其他事件及属性) 
+      -  [监听并筛选或处理消息](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#监听并筛选或处理消息) 
+      -  [预览大图](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#预览大图) 
+      -  [预览地理位置](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#预览地理位置)
+      -  [消息未读数](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#消息未读数)
+      -  [设置单点登录与强制重连](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#设置单点登录与强制重连)
 
 
 ## 设置单聊用户的头像和昵称
@@ -107,7 +107,7 @@
 
  > `clientId` 是用来建立对话的，`userid` 是获取对应用户头像和名字的。这两个ID可以一样，也可以不一样。
 
- 对这个方法有疑惑，可以到这个 [issue](https://github.com/leancloud/ChatKit-OC/issues/17) 里讨论。
+ 对这个方法有疑惑，可以到这个 [issue](https://github.com/ChenYilong/CYLChatKit/issues/17) 里讨论。
  
 注意: **设置头像和昵称的这种方式是被动的，即 ChatKit 需要显示某个Person的头像和昵称时，才会回调这个 block 来获取。而不是您主动地将哪个用户的 Profile 设置到 ChatKit 中。请务必理解这一点。**
 
@@ -123,7 +123,7 @@
 
 ## Profile缓存
 
-当 ChatKit 成功获取到用户的头像和昵称后，会将 Profile 缓存到内存中，关于 Profile 缓存（暂时未作本地缓存，相关讨论见 [issue](https://github.com/leancloud/ChatKit-OC/issues/28)），如果用户修改了自己的头像和昵称，开发者应该调用下面 ChatKit 的缓存清理接口，让 ChatKit 获取新的 Profile:
+当 ChatKit 成功获取到用户的头像和昵称后，会将 Profile 缓存到内存中，关于 Profile 缓存（暂时未作本地缓存，相关讨论见 [issue](https://github.com/ChenYilong/CYLChatKit/issues/28)），如果用户修改了自己的头像和昵称，开发者应该调用下面 ChatKit 的缓存清理接口，让 ChatKit 获取新的 Profile:
 
  ```Objective-C
 - (void)removeCachedProfileForPeerId:(NSString *)peerId;
@@ -466,7 +466,7 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
 
 并且由于 VCard 被删除，那么自定义插件的 type 值也会跟着中断、不连续，比如demo中 VCard 的 type 值是 1， 
 
-删除前是：－1、－2、－3、1、2、3，然后变成了 －1、－2、－3、2、3，不连续了，你需要重新调整 type 的定义，使 type 重新连续，将之前的 2 变为 1 ，3 变为 2，确保 type 是从 1 开始连续递增。详情见 [issue 讨论：删除插件后程序crash](https://github.com/leancloud/ChatKit-OC/issues/49#issuecomment-243652387) 。
+删除前是：－1、－2、－3、1、2、3，然后变成了 －1、－2、－3、2、3，不连续了，你需要重新调整 type 的定义，使 type 重新连续，将之前的 2 变为 1 ，3 变为 2，确保 type 是从 1 开始连续递增。详情见 [issue 讨论：删除插件后程序crash](https://github.com/ChenYilong/CYLChatKit/issues/49#issuecomment-243652387) 。
 
 另外因为一个插件往往搭配一个自定义 Cell 和自定义消息，这个也需要一并删除：
 

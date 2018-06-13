@@ -5,17 +5,17 @@
 
  1. 集成红包 SDK
 
-    1.1 [源码集成](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#源码集成)
+    1.1 [源码集成](https://github.com/ChenYilong/CYLChatKit/blob/master/REDPACKET.md#源码集成)
 
-    1.2 [CocoaPods导入](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#cocoapods导入)
- 2. [集成红包功能](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#集成红包功能) 
- 3. [设置红包信息](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#设置红包信息) 
- 4. [在聊天对话中添加红包支持](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#在聊天对话中添加红包支持) 
+    1.2 [CocoaPods导入](https://github.com/ChenYilong/CYLChatKit/blob/master/REDPACKET.md#cocoapods导入)
+ 2. [集成红包功能](https://github.com/ChenYilong/CYLChatKit/blob/master/REDPACKET.md#集成红包功能) 
+ 3. [设置红包信息](https://github.com/ChenYilong/CYLChatKit/blob/master/REDPACKET.md#设置红包信息) 
+ 4. [在聊天对话中添加红包支持](https://github.com/ChenYilong/CYLChatKit/blob/master/REDPACKET.md#在聊天对话中添加红包支持) 
     
 ## 源码集成
 
- 1. [下载最新的红包 SDK 库文件](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#下载最新的支付宝SDK库文件) 
- 2. [下载最新的支付宝 SDK 库文件](https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md#下载最新的支付宝SDK库文件) 
+ 1. [下载最新的红包 SDK 库文件](https://github.com/ChenYilong/CYLChatKit/blob/master/REDPACKET.md#下载最新的支付宝SDK库文件) 
+ 2. [下载最新的支付宝 SDK 库文件](https://github.com/ChenYilong/CYLChatKit/blob/master/REDPACKET.md#下载最新的支付宝SDK库文件) 
 
 
 ## CocoaPods导入

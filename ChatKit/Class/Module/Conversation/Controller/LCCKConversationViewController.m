@@ -2,8 +2,8 @@
 //  LCCKConversationViewController.m
 //  LCCKChatBarExample
 //
-//  v2.1.1 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
-//  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
+//  v2.1.1 Created by ElonChan ( https://github.com/ChenYilong/CYLChatKit ) on 15/11/20.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010） . All rights reserved.
 //
 
 //CYLDebugging定义为1表示【debugging】 ，注释、不定义或者0 表示【debugging】

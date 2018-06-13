@@ -2,8 +2,8 @@
 //  LCCKLocationController.m
 //  LCCKChatBarExample
 //
-//  v2.1.1 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/24.
-//  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
+//  v2.1.1 Created by ElonChan ( https://github.com/ChenYilong/CYLChatKit ) on 15/8/24.
+//  Copyright (c) 2018 ChenYilong（wechat id：chenyilong1010） . All rights reserved.
 //
 
 #import "LCCKLocationController.h"

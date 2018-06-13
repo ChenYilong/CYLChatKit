@@ -18,35 +18,35 @@
 
 该篇为快速入门，更多自定义需求请前往这里：
 
- 1.  [《ChatKit 自定义样式》]( https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义样式.md )
- 2. [《ChatKit 自定义业务》]( https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md) 
- 3. [《集成红包功能》]( https://github.com/leancloud/ChatKit-OC/blob/master/REDPACKET.md ) 
+ 1.  [《ChatKit 自定义样式》]( https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义样式.md )
+ 2. [《ChatKit 自定义业务》]( https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md) 
+ 3. [《集成红包功能》]( https://github.com/ChenYilong/CYLChatKit/blob/master/REDPACKET.md ) 
 
 
 ##  导航
  
- 1. [简介](https://github.com/leancloud/ChatKit-OC#简介) 
- 2. [获取项目](https://github.com/leancloud/ChatKit-OC#获取项目) 
- 2. [集成效果](https://github.com/leancloud/ChatKit-OC#集成效果) 
- 3. [项目结构](https://github.com/leancloud/ChatKit-OC#项目结构) 
- 4. [使用方法](https://github.com/leancloud/ChatKit-OC#使用方法) 
-      1. [CocoaPods 导入](https://github.com/leancloud/ChatKit-OC#cocoapods-导入) 
-      2. [胶水函数快速集成](https://github.com/leancloud/ChatKit-OC#胶水函数快速集成) 
-      3. [最近联系人界面](https://github.com/leancloud/ChatKit-OC#最近联系人界面) 
-      4. [由最近联系人进入聊天界面](https://github.com/leancloud/ChatKit-OC#由最近联系人进入聊天界面) 
-      4. [聊天界面](https://github.com/leancloud/ChatKit-OC#聊天界面) 
-      5. [响应聊天界面的几类操作](https://github.com/leancloud/ChatKit-OC#响应聊天界面的几类操作) 
-      5. [手动集成](https://github.com/leancloud/ChatKit-OC#手动集成) 
- 8. [常见问题](https://github.com/leancloud/ChatKit-OC#常见问题) 
+ 1. [简介](https://github.com/ChenYilong/CYLChatKit#简介) 
+ 2. [获取项目](https://github.com/ChenYilong/CYLChatKit#获取项目) 
+ 2. [集成效果](https://github.com/ChenYilong/CYLChatKit#集成效果) 
+ 3. [项目结构](https://github.com/ChenYilong/CYLChatKit#项目结构) 
+ 4. [使用方法](https://github.com/ChenYilong/CYLChatKit#使用方法) 
+      1. [CocoaPods 导入](https://github.com/ChenYilong/CYLChatKit#cocoapods-导入) 
+      2. [胶水函数快速集成](https://github.com/ChenYilong/CYLChatKit#胶水函数快速集成) 
+      3. [最近联系人界面](https://github.com/ChenYilong/CYLChatKit#最近联系人界面) 
+      4. [由最近联系人进入聊天界面](https://github.com/ChenYilong/CYLChatKit#由最近联系人进入聊天界面) 
+      4. [聊天界面](https://github.com/ChenYilong/CYLChatKit#聊天界面) 
+      5. [响应聊天界面的几类操作](https://github.com/ChenYilong/CYLChatKit#响应聊天界面的几类操作) 
+      5. [手动集成](https://github.com/ChenYilong/CYLChatKit#手动集成) 
+ 8. [常见问题](https://github.com/ChenYilong/CYLChatKit#常见问题) 
 
 ## 简介
 
-[ChatKit](https://github.com/leancloud/ChatKit-OC) 是一个免费且开源的 UI 聊天组件，自带云服务器，自带推送，支持消息漫游，消息永久存储。底层聊天服务基于 [LeanCloud](https://leancloud.cn/?source=T6M35E4H) 的 IM 实时通信服务「LeanMessage」而开发，采用 Protobuf 协议进行消息传输。ChatKit 可以帮助开发者快速集成 IM 服务，轻松实现聊天功能，提供完全自由的授权协议，支持二次开发。其最大特点是把聊天常用的一些功能配合 UI 一起提供给开发者。
+[ChatKit](https://github.com/ChenYilong/CYLChatKit) 是一个免费且开源的 UI 聊天组件，自带云服务器，自带推送，支持消息漫游，消息永久存储。底层聊天服务基于 [LeanCloud](https://leancloud.cn/?source=T6M35E4H) 的 IM 实时通信服务「LeanMessage」而开发，采用 Protobuf 协议进行消息传输。ChatKit 可以帮助开发者快速集成 IM 服务，轻松实现聊天功能，提供完全自由的授权协议，支持二次开发。其最大特点是把聊天常用的一些功能配合 UI 一起提供给开发者。
 
 ## 获取项目 
 
 ```
-git clone --depth=1 https://github.com/leancloud/ChatKit-OC
+git clone --depth=1 https://github.com/ChenYilong/CYLChatKit
 ```
 
 ## 集成效果
@@ -133,7 +133,7 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
 ChatKit 支持以下两种方式导入到您的项目中：
 
  1. 通过 CocoaPods 管理依赖
- 2. 手动集成并管理依赖，参考下文的[手动集成](https://github.com/leancloud/ChatKit-OC#手动集成)部分。
+ 2. 手动集成并管理依赖，参考下文的[手动集成](https://github.com/ChenYilong/CYLChatKit#手动集成)部分。
 
 这里推荐通过 CocoaPods 管理依赖
 
@@ -276,7 +276,7 @@ pod update
 
  ![](http://ww2.sinaimg.cn/large/801b780ajw1f88fhsglsxj20dn08oq3d.jpg)
 
- 3. 实现 `-[[LCChatKit sharedInstance] setFetchProfilesBlock:]`，设置用户体系，里面要实现如何根据 userId 获取到一个 User 对象的逻辑。ChatKit 会在需要用到 User 信息时调用你设置的这个逻辑。更具体的设置方法请参考： [《ChatKit 自定义业务-设置单聊用户的头像和昵称》](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#设置单聊用户的头像和昵称) 。`LCCKUserSystemService.h` 文件中给出了例子，演示了如何集成 LeanCloud 原生的用户系统 `AVUser`。
+ 3. 实现 `-[[LCChatKit sharedInstance] setFetchProfilesBlock:]`，设置用户体系，里面要实现如何根据 userId 获取到一个 User 对象的逻辑。ChatKit 会在需要用到 User 信息时调用你设置的这个逻辑。更具体的设置方法请参考： [《ChatKit 自定义业务-设置单聊用户的头像和昵称》](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit%20自定义业务.md#设置单聊用户的头像和昵称) 。`LCCKUserSystemService.h` 文件中给出了例子，演示了如何集成 LeanCloud 原生的用户系统 `AVUser`。
  4. 如果你实现了 `-[[LCChatKit sharedInstance] setGenerateSignatureBlock:]` 方法，那么 ChatKit 会自动为以下行为添加签名：`open`（开启聊天）、`start`（创建对话）、`kick`（踢人）、`invite`（邀请）。反之不会。
  5. 调用 `-[[LCChatKit sharedInstance] openWithClientId:callback:]` 开启 LeanCloud 的 IM 服务 LeanMessage，开始聊天。请确保在 open 操作之前已经实现 `-[[LCChatKit sharedInstance] setFetchProfilesBlock:]`，否则 ChatKit 将抛出异常进行提示。
  6. 调用 `-[[LCChatKit sharedInstance] closeWithCallback:]` 关闭 LeanCloud 的 IM 服务，结束聊天。
@@ -474,7 +474,7 @@ typedef NS_ENUM(NSInteger, LCCKBarButtonItemStyle) {
 
 第一步：
 
-将 [项目结构](https://github.com/leancloud/ChatKit-OC#项目结构) 中提到的 ChatKit 这个「核心库文件夹」拖拽到项目中。
+将 [项目结构](https://github.com/ChenYilong/CYLChatKit#项目结构) 中提到的 ChatKit 这个「核心库文件夹」拖拽到项目中。
 
 第二步：
 
@@ -488,7 +488,7 @@ typedef NS_ENUM(NSInteger, LCCKBarButtonItemStyle) {
 - [FMDB](https://github.com/ccgus/fmdb) 2.6.2 
 - [UITableView+FDTemplateLayoutCell](https://github.com/forkingdog/UITableView-FDTemplateLayoutCell) 1.5.beta
 
-具体以  [这里](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit.podspec) 为准。
+具体以  [这里](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit.podspec) 为准。
 
 ## 常见问题
 

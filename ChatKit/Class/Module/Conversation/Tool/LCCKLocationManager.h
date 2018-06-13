@@ -2,8 +2,8 @@
 //  LCCKLocationManager.h
 //  LCCKLocationManagerDemo
 //
-//  v2.1.1 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/7/31.
-//  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
+//  v2.1.1 Created by ElonChan ( https://github.com/ChenYilong/CYLChatKit ) on 15/7/31.
+//  Copyright (c) 2018 ChenYilong（wechat id：chenyilong1010） . All rights reserved.
 //
 //
 //  iOS8+系统 请求授权允许,需要在info.plist添加以下字段
