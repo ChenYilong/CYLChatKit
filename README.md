@@ -165,7 +165,7 @@ ChatKit 支持以下两种方式导入到您的项目中：
   在终端中运行以下命令：
 
   ```shell
-     pod search ChatKit
+     pod search CYLChatKit
   ```
  
    这里注意，这个命令搜索的是本机上的最新版本，并没有联网查询。如果运行以上命令，没有搜到或者搜不到最新版本，您可以运行以下命令，更新一下您本地的 CocoaPods 源列表。
@@ -193,7 +193,7 @@ ChatKit 支持以下两种方式导入到您的项目中：
   在文件 `Podfile` 中加入以下内容：
 
  ```shell
-    pod 'ChatKit', '0.8.5'
+    pod 'CYLChatKit', '2.1.1'
  ```
 
   然后在终端中运行以下命令：
