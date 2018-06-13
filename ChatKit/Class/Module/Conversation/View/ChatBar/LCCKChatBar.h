@@ -19,7 +19,6 @@ static CGFloat const kLCCKChatBarMinHeight = kLCCKChatBarTextViewFrameMinHeight 
 FOUNDATION_EXTERN NSString *const kLCCKBatchDeleteTextPrefix;
 FOUNDATION_EXTERN NSString *const kLCCKBatchDeleteTextSuffix;
 
-
 /**
  *  functionView 类型
  */

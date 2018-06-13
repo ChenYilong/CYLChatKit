@@ -82,6 +82,7 @@
     }
     _pickerController = [[UIImagePickerController alloc] init];
     _pickerController.delegate = self;
+    _pickerController.allowsEditing = YES;
     return _pickerController;
 }
 

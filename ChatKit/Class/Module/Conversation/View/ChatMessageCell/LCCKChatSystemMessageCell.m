@@ -7,6 +7,7 @@
 //
 
 #import "LCCKChatSystemMessageCell.h"
+#import "UIColor+LCCKExtension.h"
 
 @interface LCCKChatSystemMessageCell ()
 
@@ -40,6 +41,8 @@
 #pragma mark - Public Methods
 
 - (void)setup {
+    self.conversationViewTimeLineTextColor = [UIColor CJ_16_Color:@"999999"];
+    self.conversationViewTimeLineBackgroundColor =  [UIColor CJ_16_Color:@"E9E9E9"];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     [self.contentView addSubview:self.systemmessageContentView];
     [self updateConstraintsIfNeeded];
@@ -57,7 +60,7 @@
     if (!_systemmessageContentView) {
         _systemmessageContentView = [[UIView alloc] init];
         _systemmessageContentView.backgroundColor = self.conversationViewTimeLineBackgroundColor ?: [UIColor lightGrayColor];
-        _systemmessageContentView.alpha = .8f;
+        _systemmessageContentView.alpha = 1.0f;
         _systemmessageContentView.layer.cornerRadius = 6.0f;
         _systemmessageContentView.translatesAutoresizingMaskIntoConstraints = NO;
 
@@ -66,7 +69,7 @@
         systemMessageLabel.textColor = self.conversationViewTimeLineTextColor;
         [_systemmessageContentView addSubview:self.systemMessageLabel = systemMessageLabel];
         [systemMessageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            CGFloat offsetTopBottom = 0.5;//8
+            CGFloat offsetTopBottom = 8;//8
             CGFloat offsetLeftRight = 8;//8
             make.edges.equalTo(_systemmessageContentView).with.insets(UIEdgeInsetsMake(offsetTopBottom, offsetLeftRight, offsetTopBottom, offsetLeftRight));
         }];

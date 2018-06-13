@@ -9,8 +9,8 @@
 #import "LCCKSettingCell.h"
 //#import <Masonry/Masonry.h>
 //#import <UIImageView+WebCache.h>
-#if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
 #else
 #import "LCChatKit.h"
 #endif

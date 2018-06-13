@@ -9,11 +9,12 @@
 #import "LCCKUtil.h"
 #import "TWMessageBarManager.h"
 //#import "MBProgressHUD.h"
-#if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
 #else
 #import "LCChatKit.h"
 #endif
+#import <sys/utsname.h>
 
 @implementation LCCKUtil
 
@@ -92,6 +93,19 @@
 
 + (void)hideNotification {
     [[TWMessageBarManager sharedInstance] hideAll];
+}
+
++ (BOOL)isIPhoneX {
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    NSString *platform = [NSString stringWithCString:systemInfo.machine encoding:NSASCIIStringEncoding];
+    if ([platform isEqualToString:@"i386"] || [platform isEqualToString:@"x86_64"]) {
+        return (CGSizeEqualToSize([UIScreen mainScreen].bounds.size, CGSizeMake(375, 812)) ||
+                CGSizeEqualToSize([UIScreen mainScreen].bounds.size, CGSizeMake(812, 375)));
+    }
+    // iPhone10,6是美版iPhoneX
+    BOOL isIPhoneX = [platform isEqualToString:@"iPhone10,3"] || [platform isEqualToString:@"iPhone10,6"];
+    return isIPhoneX;
 }
 
 @end

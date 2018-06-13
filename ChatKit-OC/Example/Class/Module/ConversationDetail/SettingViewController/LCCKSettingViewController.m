@@ -12,7 +12,7 @@
 #import "LCCKSettingFooterTitleView.h"
 #import "LCCKSettingButtonCell.h"
 #import "UIColor+LCCKExtension.h"
-#import <ChatKit/LCChatKit.h>
+#import <CYLChatKit/LCChatKit.h>
 
 @interface LCCKSettingViewController ()
 

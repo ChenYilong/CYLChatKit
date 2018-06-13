@@ -43,25 +43,25 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
             make.centerY.equalTo(self.messageContentView.mas_centerY);
         }];
         [self.messageVoiceSecondsLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(self.messageVoiceStatusImageView.mas_left).with.offset(-8);
-            make.centerY.equalTo(self.messageContentView.mas_centerY);
+            make.right.equalTo(self.messageContentView.mas_left).with.offset(-10);
+            make.bottom.equalTo(self.messageContentView.mas_bottom);
         }];
-        self.messageVoiceSecondsLabel.textColor = self.conversationViewMessageRightTextColor;
+        self.messageVoiceSecondsLabel.textColor = [UIColor lightGrayColor];
         [self.messageIndicatorView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.center.equalTo(self.messageContentView);
             make.width.equalTo(@10);
             make.height.equalTo(@10);
         }];
     } else if (self.messageOwner == LCCKMessageOwnerTypeOther) {
-        self.messageVoiceSecondsLabel.textColor = self.conversationViewMessageLeftTextColor;
+        self.messageVoiceSecondsLabel.textColor = [UIColor lightGrayColor];
         [self.messageVoiceStatusImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.messageContentView.mas_left).with.offset(12);
             make.centerY.equalTo(self.messageContentView.mas_centerY);
         }];
         
         [self.messageVoiceSecondsLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.messageVoiceStatusImageView.mas_right).with.offset(8);
-            make.centerY.equalTo(self.messageContentView.mas_centerY);
+                make.left.equalTo(self.messageContentView.mas_right).with.offset(10);
+                make.bottom.equalTo(self.messageContentView.mas_bottom);
         }];
         [self.messageIndicatorView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.center.equalTo(self.messageContentView);
@@ -79,7 +79,7 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
 #pragma mark - Public Methods
 
 - (void)setup {
-    [self.messageContentView addSubview:self.messageVoiceSecondsLabel];
+    [self addSubview:self.messageVoiceSecondsLabel];
     [self.messageContentView addSubview:self.messageVoiceStatusImageView];
     [self.messageContentView addSubview:self.messageIndicatorView];
     UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapMessageImageViewGestureRecognizerHandler:)];
@@ -172,6 +172,22 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
     }
 }
 
+- (void)setMessageSendState:(LCCKMessageSendState)messageSendState {
+    [super setMessageSendState:messageSendState];
+    switch (self.messageSendState) {
+        case LCCKMessageSendStateSending:
+            self.messageVoiceSecondsLabel.hidden = YES;
+            break;
+            
+        case LCCKMessageSendStateFailed:
+            self.messageVoiceSecondsLabel.hidden = YES;
+            break;
+        default:
+            self.messageVoiceSecondsLabel.hidden = NO;
+            break;
+    }
+}
+
 #pragma mark - Getters
 
 - (UIImageView *)messageVoiceStatusImageView {
@@ -206,8 +222,9 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
     self.messageVoiceSecondsLabel.hidden = NO;
     self.messageVoiceStatusImageView.hidden = NO;
     self.messageIndicatorView.hidden = YES;
-    [self.messageIndicatorView stopAnimating];
-    
+    dispatch_async(dispatch_get_main_queue(),^{
+        [self.messageIndicatorView stopAnimating];
+    });
     if (_voiceMessageState == LCCKVoiceMessageStatePlaying) {
         self.messageVoiceStatusImageView.highlighted = YES;
         [self.messageVoiceStatusImageView startAnimating];
@@ -215,10 +232,14 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
         self.messageVoiceSecondsLabel.hidden = YES;
         self.messageVoiceStatusImageView.hidden = YES;
         self.messageIndicatorView.hidden = NO;
-        [self.messageIndicatorView startAnimating];
+        dispatch_async(dispatch_get_main_queue(),^{
+            [self.messageIndicatorView startAnimating];
+        });
     } else {
         self.messageVoiceStatusImageView.highlighted = NO;
-        [self.messageVoiceStatusImageView stopAnimating];
+        dispatch_async(dispatch_get_main_queue(),^{
+            [self.messageVoiceStatusImageView stopAnimating];
+        });
     }
 }
 

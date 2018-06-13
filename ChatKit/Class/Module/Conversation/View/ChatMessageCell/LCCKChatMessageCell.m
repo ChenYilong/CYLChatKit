@@ -23,8 +23,8 @@
 #import "UIImageView+WebCache.h"
 #endif
 
-#if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
 #else
 #import "LCChatKit.h"
 #endif
@@ -398,7 +398,8 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         if (avatarImageViewCornerRadiusBlock) {
             CGSize avatarImageViewSize = CGSizeMake(kAvatarImageViewWidth, kAvatarImageViewHeight);
             CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatarImageViewSize);
-            self.avatarImageView.lcck_cornerRadius = avatarImageViewCornerRadius;
+                        _avatarImageView.layer.cornerRadius = avatarImageViewCornerRadius;
+                        _avatarImageView.clipsToBounds = YES;
         }
         [self bringSubviewToFront:_avatarImageView];
     }
@@ -425,7 +426,10 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 
 - (UIImageView *)messageReadStateImageView {
     if (!_messageReadStateImageView) {
-        _messageReadStateImageView = [[UIImageView alloc] init];
+        _messageReadStateImageView = [[UIImageView alloc] initWithImage:({
+            NSString *imageName = @"VoiceMessage_Unread";
+            UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
+            image;})];
     }
     return _messageReadStateImageView;
 }

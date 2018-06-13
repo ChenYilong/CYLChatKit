@@ -11,8 +11,8 @@
 
 #import "LCCKConversationViewController.h"
 
-#if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
 #else
 #import "LCChatKit.h"
 #endif
@@ -34,7 +34,6 @@
 #import "LCCKSafariActivity.h"
 #import "LCCKAlertController.h"
 #import "LCCKPhotoBrowser.h"
-
 
 #if __has_include(<CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>)
 #import <CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>
@@ -206,6 +205,9 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userWillSendMsgWithoutPower) name:LCCKNotificationRecordNoPower object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveNewMsgForLengthOut) name:LCCKNotificationTextLengthOut object:nil];
+    
     __unsafe_unretained __typeof(self) weakSelf = self;
     [self cyl_executeAtDealloc:^{
         !weakSelf.viewControllerWillDeallocBlock ?: weakSelf.viewControllerWillDeallocBlock(weakSelf);
@@ -222,7 +224,9 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         self.user = user;
     }];
     [self.chatViewModel setDefaultBackgroundImage];
-
+    if (!self.navigationItem.titleView.superview) {
+        [self setupNavigationItemTitleWithConversation:self.conversation];
+    }
     !self.viewDidLoadBlock ?: self.viewDidLoadBlock(self);
 }
 
@@ -236,9 +240,8 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     [super viewDidAppear:animated];
     [self.chatBar open];
     [self saveCurrentConversationInfoIfExists];
-    
+    //TODO:  群聊人数改变，改群名称
     [self setupNavigationItemTitleWithConversation:self.conversation];
-    
     !self.viewDidAppearBlock ?: self.viewDidAppearBlock(self, animated);
 }
 
@@ -269,9 +272,10 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
             [[LCCKConversationService sharedInstance] updateConversationAsReadWithLastMessage:_conversation.lcck_lastMessage];
         });
     }
-    
-    self.navigationItem.titleView = nil;
-    
+    //TODO:  群聊人数改变，改群名称
+    //    if (self.conversation.members.count > 2) {
+    //        self.navigationItem.titleView = nil;
+    //    }
     !self.viewDidDisappearBlock ?: self.viewDidDisappearBlock(self, animated);
 }
 
@@ -314,8 +318,11 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     UIImage *thumbnailPhoto = [representationImage lcck_imageByScalingAspectFill];
     if (error == nil) {
         LCCKMessage *message = [[LCCKMessage alloc] initWithPhoto:representationImage
+                                                       photoWidth:nil
+                                                      photoHeight:nil
                                                    thumbnailPhoto:thumbnailPhoto
                                                         photoPath:path
+                                
                                                      thumbnailURL:nil
                                                    originPhotoURL:nil
                                                          senderId:self.userId
@@ -1002,5 +1009,31 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         self.clientStatusView.hidden = NO;
     }
 }
+ - (void)dealloc {
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+    }
+
+ #pragma mark - Notification
+
+ - (void)userWillSendMsgWithoutPower {
+        [self showWaring:@"需要开启麦克风权限"];
+    }
+
+- (void)recieveNewMsgForLengthOut {
+    NSString *message = [NSString stringWithFormat:@"每次输入最多%@字~", @(LCCKNotificationTextLengthOutLength)];
+    [self showWaring:message];
+}
+
+ - (void)showWaring:(NSString *)message {
+        // 没有找到Toast 只能用弹框
+        LCCKAlertController *alert = [LCCKAlertController alertControllerWithTitle:nil
+                                                                                                              message:message
+                                                                                                       preferredStyle:LCCKAlertControllerStyleAlert];
+        NSString *cancelActionTitle = LCCKLocalizedStrings(@"ok");
+        LCCKAlertAction *cancelAction = [LCCKAlertAction actionWithTitle:cancelActionTitle style:LCCKAlertActionStyleDefault
+                                                                                                       handler:^(LCCKAlertAction * action) {}];
+        [alert addAction:cancelAction];
+        [alert showWithSender:nil controller:self animated:YES completion:NULL];
+    }
 
 @end

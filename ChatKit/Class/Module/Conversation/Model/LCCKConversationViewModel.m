@@ -5,8 +5,8 @@
 //  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
-#if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
 #else
 #import "LCChatKit.h"
 #endif
@@ -482,6 +482,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
         id<LCCKUserDelegate> sender = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
         message.sender = sender;
         message.ownerType = LCCKMessageOwnerTypeSelf;
+        message.message = avimTypedMessage;
         avimTypedMessage = [AVIMTypedMessage lcck_messageWithLCCKMessage:message];
     } else {
         avimTypedMessage = aMessage;

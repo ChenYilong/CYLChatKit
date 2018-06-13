@@ -209,7 +209,7 @@ ChatKit 支持以下两种方式导入到您的项目中：
 然后在需要的地方导入 ChatKit：
 
   ```Objective-C
-     #import <ChatKit/LCChatKit.h>
+     #import <CYLChatKit/LCChatKit.h>
   ```
 
 

@@ -12,7 +12,7 @@
 #import "LCCKSettingSwitchCell.h"
 #import "LCCKSettingGroup.h"
 #import "NSObject+LCCKHUD.h"
-#import <ChatKit/LCChatKit.h>
+#import <CYLChatKit/LCChatKit.h>
 
 @class AVIMConversation;
 

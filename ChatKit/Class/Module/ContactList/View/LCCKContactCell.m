@@ -14,8 +14,8 @@
     #import "UIImageView+WebCache.h"
 #endif
 
-#if __has_include(<ChatKit/LCChatKit.h>)
-    #import <ChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+    #import <CYLChatKit/LCChatKit.h>
 #else
     #import "LCChatKit.h"
 #endif
@@ -44,7 +44,8 @@
     LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
     if (avatarImageViewCornerRadiusBlock) {
         CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(self.avatarImageView.frame.size);
-        self.avatarImageView.lcck_cornerRadius = avatarImageViewCornerRadius;
+        self.avatarImageView.layer.cornerRadius = avatarImageViewCornerRadius;
+        self.avatarImageView.clipsToBounds = YES;
     }
     NSString *selectionStatusButtonNormalImageName = @"CellGraySelected";
     NSString *selectionStatusButtonSelectedImageName = @"CellBlueSelected";

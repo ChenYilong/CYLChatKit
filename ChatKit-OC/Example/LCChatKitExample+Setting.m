@@ -9,8 +9,8 @@
 #import "LCCKTabBarControllerConfig.h"
 #import "LCCKUser.h"
 #import "LCCKUtil.h"
-#if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
 #else
 #import "LCChatKit.h"
 #endif
@@ -67,7 +67,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
     [self lcck_setupHud];
     [self lcck_setupOpenProfile];
     //开启圆角
-    //[self lcck_setupAvatarImageCornerRadius];
+    [self lcck_setupAvatarImageCornerRadius];
     //筛选消息
     //[self lcck_setupFilterMessage];
     //发送消息HOOK

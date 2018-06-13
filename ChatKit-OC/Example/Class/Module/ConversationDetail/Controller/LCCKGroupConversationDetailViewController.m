@@ -9,7 +9,7 @@
 #import "LCCKGroupConversationDetailViewController.h"
 #import "LCCKUserGroupCell.h"
 #import "LCCKChatDetailHelper.h"
-#import <ChatKit/LCChatKit.h>
+#import <CYLChatKit/LCChatKit.h>
 #import "LCCKContactManager.h"
 #import "LCCKProfileNameEditViewController.h"
 #import "CYLTabBarController.h"

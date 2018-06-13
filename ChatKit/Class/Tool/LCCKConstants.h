@@ -41,6 +41,9 @@ typedef void (^LCCKProgressBlock)(NSInteger percentDone);
 ///=============================================================================
 /// @name Common Define
 ///=============================================================================
+#define CYL_STATUSBAR_HEIGHT ([UIApplication sharedApplication].statusBarFrame.size.height)
+#define CYL_IS_iPHONEX ((CYL_STATUSBAR_HEIGHT == 44) ? YES : NO)
+static NSInteger const CYL_iPHONEX_OFFSET = 34;
 
 static NSString *const LCCKBadgeTextForNumberGreaterThanLimit = @"···";
 
@@ -48,7 +51,7 @@ static NSString *const LCCKBadgeTextForNumberGreaterThanLimit = @"···";
 
 #ifndef LCCKLocalizedStrings
 #define LCCKLocalizedStrings(key) \
-    NSLocalizedStringFromTableInBundle(key, @"LCChatKitString", [NSBundle lcck_bundleForName:@"Other" class:[self class]], nil)
+    NSLocalizedStringFromTableInBundle(key, @"LCChatKitString", [NSBundle lcck_bundleForName:@"Other" class:[LCChatKit class]], nil)
 #endif
 
 
@@ -129,6 +132,22 @@ static NSString *const LCCKNotificationContactListDataSourceUserIdType = @"LCCKN
 static NSString *const LCCKNotificationContactListDataSourceContactObjType = @"LCCKNotificationContactListDataSourceContactObjType";
 static NSString *const LCCKNotificationContactListDataSourceUpdatedUserInfoDataSourceTypeKey = @"LCCKNotificationContactListDataSourceUpdatedUserInfoDataSourceTypeKey";
 
+
+/**
+   *  发送语音消息没有权限。通知界面提醒用户
+   */
+static NSString *const LCCKNotificationRecordNoPower = @"LCCKChatBarRecordVoiceNoPower";
+
+/**
+   *  发送文本消息过长。通知界面提醒用户
+   */
+static NSString *const LCCKNotificationTextLengthOut = @"LCCKChatBarTextLengthOut";
+
+/**
+   *  发送语音消息倒计时结束。通知UI停止动效
+   */
+static NSString *const LCCKNotificationRecordTimeOut = @"LCCKChatBarRecordVoiceTimeOut";
+static NSInteger const LCCKNotificationTextLengthOutLength = 1000;
 #pragma mark - Conversation Enum : Message Type and operation
 ///=============================================================================
 /// @name Conversation Enum : Message Type and operation
@@ -192,7 +211,7 @@ typedef NS_ENUM(NSUInteger, LCCKChatMessageCellMenuActionType) {
     LCCKChatMessageCellMenuActionTypeCopy, /**< 复制 */
     LCCKChatMessageCellMenuActionTypeRelay, /**< 转发 */
 };
-
+static CGFloat const kLCCKVolumeMaxTimeLength = 60;
 static NSInteger const kLCCKOnePageSize = 10;
 static NSString *const LCCK_CONVERSATION_TYPE = @"type";
 static NSString *const LCCKInstallationKeyChannels = @"channels";

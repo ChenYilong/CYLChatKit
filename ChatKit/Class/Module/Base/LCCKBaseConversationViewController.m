@@ -27,6 +27,7 @@
 #else
     #import "MJRefresh.h"
 #endif
+#import "LCCKConstants.h"
 
 static void * const LCCKBaseConversationViewControllerRefreshContext = (void*)&LCCKBaseConversationViewControllerRefreshContext;
 static CGFloat const LCCKScrollViewInsetTop = 20.f;
@@ -46,7 +47,7 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
     }];
     [self.chatBar mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.and.right.and.bottom.equalTo(self.view);
-        make.height.mas_greaterThanOrEqualTo(@(kLCCKChatBarMinHeight));
+        make.height.mas_greaterThanOrEqualTo(@(self.chatBarMinHeight));
     }];
 }
 
@@ -148,6 +149,10 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
         [self.view bringSubviewToFront:_chatBar];
     }
     return _chatBar;
+}
+
+- (CGFloat)chatBarMinHeight {
+    return kLCCKChatBarMinHeight;
 }
 
 @end

@@ -7,8 +7,8 @@
 //
 
 #import "LCCKVCardView.h"
-#if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
 #else
 #import "LCChatKit.h"
 #endif
@@ -39,7 +39,8 @@
     LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
     if (avatarImageViewCornerRadiusBlock) {
         CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(self.avatarView.frame.size);
-        self.avatarView.lcck_cornerRadius = avatarImageViewCornerRadius;
+        self.avatarView.layer.cornerRadius = avatarImageViewCornerRadius;
+        self.avatarView.clipsToBounds = YES;
     }
     UITapGestureRecognizer *tapGestureRecognizer =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(vCardClicked)];
     [self addGestureRecognizer:tapGestureRecognizer];

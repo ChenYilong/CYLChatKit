@@ -9,8 +9,8 @@
 #import "LCCKConversationListCell.h"
 #import "LCCKBadgeView.h"
 
-#if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
 #else
 #import "LCChatKit.h"
 #endif
@@ -76,6 +76,9 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
     [self.contentView addSubview:self.messageTextLabel];
     [self.contentView addSubview:self.remindMuteImageView];
     [self.contentView addSubview:self.litteBadgeView];
+    [self.contentView bringSubviewToFront:self.litteBadgeView];
+    self.litteBadgeView.layer.zPosition = 65.f / 2;
+
 }
 
 - (UIImageView *)avatarImageView {

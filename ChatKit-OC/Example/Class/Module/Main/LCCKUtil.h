@@ -8,12 +8,14 @@
 
 @import Foundation;
 @import UIKit;
-#if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
 #else
 #import "LCChatKit.h"
 #endif
 @interface LCCKUtil : NSObject
+
++ (BOOL)isIPhoneX;
 
 + (NSError *)errorWithText:(NSString *)text;
 + (void)showProgressText:(NSString *)text duration:(NSTimeInterval)duration;

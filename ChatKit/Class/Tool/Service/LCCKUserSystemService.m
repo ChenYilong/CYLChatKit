@@ -27,13 +27,25 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
 }
 
 - (NSArray<id<LCCKUserDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)theError {
+    if (![LCCKSessionService sharedInstance].connect) {
+        NSInteger code = 0;
+        NSInteger subCode = code;
+        NSString *errorReasonText = @"session closed";
+        NSDictionary *errorInfo = @{
+                                    @"subCode" : @(subCode),
+                                    NSLocalizedDescriptionKey : errorReasonText,
+                                    };
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class])
+                                             code:code
+                                         userInfo:errorInfo];
+        if(error != NULL){
+            *theError = error;
+        }
+        return nil;
+    }
     __block NSArray<id<LCCKUserDelegate>> *blockUsers = [NSArray array];
-    if (!_fetchProfilesBlock && [LCCKSessionService sharedInstance].connect) {
-        // This enforces implementing `-setFetchProfilesBlock:`.
-        NSString *reason = [NSString stringWithFormat:@"You must implement `-setFetchProfilesBlock:` to allow ChatKit to get user information by user clientId."];
-        @throw [NSException exceptionWithName:NSGenericException
-                                       reason:reason
-                                     userInfo:nil];
+    if (!_fetchProfilesBlock) {
+        LCCKLog("You must implement `-setFetchProfilesBlock:` to allow ChatKit to get user information by user clientId.");
         return nil;
     }
     LCCKFetchProfilesCompletionHandler completionHandler = ^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
@@ -45,6 +57,20 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
 }
 
 - (void)getProfilesInBackgroundForUserIds:(NSArray<NSString *> *)userIds callback:(LCCKUserResultsCallBack)callback {
+    if (![LCCKSessionService sharedInstance].connect) {
+        NSInteger code = 0;
+        NSInteger subCode = code;
+        NSString *errorReasonText = @"session closed";
+        NSDictionary *errorInfo = @{
+                                    @"subCode" : @(subCode),
+                                    NSLocalizedDescriptionKey : errorReasonText,
+                                    };
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class])
+                                             code:code
+                                         userInfo:errorInfo];
+        !callback ?: callback(nil, error);
+        return;
+    }
     if (!userIds || userIds.count == 0) {
         dispatch_async(dispatch_get_main_queue(),^{
             NSInteger code = 0;
@@ -70,11 +96,7 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         if (!_fetchProfilesBlock) {
-            // This enforces implementing `-setFetchProfilesBlock:`.
-            NSString *reason = [NSString stringWithFormat:@"You must implement `-setFetchProfilesBlock:` to allow ChatKit to get user information by user clientId."];
-            @throw [NSException exceptionWithName:NSGenericException
-                                           reason:reason
-                                         userInfo:nil];
+            LCCKLog("You must implement `-setFetchProfilesBlock:` to allow ChatKit to get user information by user clientId.");
             return;
         }
         _fetchProfilesBlock(userIds, ^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
