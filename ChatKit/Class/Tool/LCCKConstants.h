@@ -2,7 +2,7 @@
 //  LCCKConstants.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/2/19.
+//  v2.1.1 Created by ElonChan on 18/6/19.
 //  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //  Common typdef and constants, and so on.
 

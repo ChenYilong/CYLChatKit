@@ -2,7 +2,7 @@
 //  AVIMMessage+LCCKExtension.m
 //  Pods
 //
-//  Created by 陈宜龙 on 16/8/20.
+//  Created by 陈宜龙 on 18/6/20.
 //
 //
 

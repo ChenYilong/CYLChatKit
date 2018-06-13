@@ -2,7 +2,7 @@
 //  LCCKInputViewPluginPickImage.m
 //  Pods
 //
-//  v0.8.5 Created by ElonChan on 16/8/11.
+//  v2.1.1 Created by ElonChan on 18/6/11.
 //
 //
 

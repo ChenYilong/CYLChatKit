@@ -2,7 +2,7 @@
 //  LCCKUtil.h
 //  LeanCloudChatKit-iOS
 //
-//  Created by ElonChan on 16/2/26.
+//  Created by ElonChan on 18/6/26.
 //  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 

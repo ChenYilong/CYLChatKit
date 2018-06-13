@@ -188,7 +188,7 @@ ChatKit 支持以下两种方式导入到您的项目中：
     gem install cocoapods
  ```
 
-  打开 Podfile，在您项目的 target 下加入以下内容。（在此以 v0.8.5 版本为例）
+  打开 Podfile，在您项目的 target 下加入以下内容。（在此以 v2.1.1 版本为例）
 
   在文件 `Podfile` 中加入以下内容：
 

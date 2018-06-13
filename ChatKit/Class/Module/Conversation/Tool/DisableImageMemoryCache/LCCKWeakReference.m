@@ -2,7 +2,7 @@
 //  LCCKWeakReference.m
 //  Kuber
 //
-//  v0.8.5 Created by Kuber on 16/4/29.
+//  v2.1.1 Created by Kuber on 16/4/29.
 //  Copyright © 2016年 Huaxu Technology. All rights reserved.
 //
 

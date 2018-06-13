@@ -2,7 +2,7 @@
 //  LCCKFaceManager.m
 //  LCCKChatBarExample
 //
-//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/25.
+//  v2.1.1 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/25.
 //  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
 //
 

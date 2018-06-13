@@ -2,7 +2,7 @@
 //  UIImage+LCCKExtension.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/5/7.
+//  v2.1.1 Created by ElonChan on 16/5/7.
 //  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 

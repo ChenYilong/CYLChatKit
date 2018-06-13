@@ -2,7 +2,7 @@
 //  LCCKInputViewPluginTest.m
 //  ChatKit-OC
 //
-//  Created by 都基鹏 on 16/8/16.
+//  Created by 都基鹏 on 18/6/16.
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 

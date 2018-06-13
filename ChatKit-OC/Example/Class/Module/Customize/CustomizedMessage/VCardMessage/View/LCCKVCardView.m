@@ -2,7 +2,7 @@
 //  LCCKVCardView.m
 //  ChatKit-OC
 //
-//  v0.8.5 Created by ElonChan on 16/8/15.
+//  v2.1.1 Created by ElonChan on 18/6/15.
 //  Copyright © 2016年 ElonChan . All rights reserved.
 //
 
