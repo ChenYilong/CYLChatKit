@@ -3,7 +3,7 @@
 //  iOS-Categories (https://github.com/shaojiankui/iOS-Categories)
 //
 //  Created by Jakey on 15/4/25.
-//  Copyright (c) 2015年 www.skyfox.org. All rights reserved.
+//  Copyright (c) 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //  https://github.com/632840804/HYBNSDateExtension
 
 #import "NSDate+Extension.h"

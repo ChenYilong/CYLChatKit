@@ -2,12 +2,12 @@ Pod::Spec.new do |s|
   s.name         = "CYLChatKit"
   s.version      = "2.1.1"
   s.summary      = "An IM App Framework, support sending text, pictures, audio, video, location messaging, managing address book, more interesting features."
-  s.homepage     = "https://github.com/ChenYilong/ChatKit-OC"
+  s.homepage     = "https://github.com/ChenYilong/CYLChatKit"
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
   s.authors      = { "ElonChan" => "luohanchenyilong@163.com" }
   s.platform     = :ios, '7.0'
   s.frameworks   = 'Foundation', 'CoreGraphics', 'UIKit', 'MobileCoreServices', 'AVFoundation', 'CoreLocation', 'MediaPlayer', 'CoreMedia', 'CoreText', 'AudioToolbox','MapKit','ImageIO','SystemConfiguration','CFNetwork','QuartzCore','Security','CoreTelephony'
-  s.source       = { :git => "git@github.com:ChenYilong/CYLChatKit.git", :tag => s.version.to_s }
+  s.source       = { :git => "https://github.com/ChenYilong/CYLChatKit.git", :tag => s.version.to_s }
   s.source_files  = 'ChatKit', 'ChatKit/**/*.{h,m}'
   s.vendored_frameworks = 'ChatKit/Class/Tool/Vendor/VoiceLib/lame.framework'
   s.resources    = 'ChatKit/Class/Resources/*', 'ChatKit/**/*.xib'

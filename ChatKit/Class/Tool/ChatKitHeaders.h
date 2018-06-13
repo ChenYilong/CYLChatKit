@@ -3,7 +3,7 @@
 //  LeanCloudIMKit-iOS
 //
 //  v0.8.5 Created by ElonChan on 16/3/11.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #if __has_include(<AVOSCloud/AVOSCloud.h>)

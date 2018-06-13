@@ -3,7 +3,7 @@
 //  ChatKit-OC
 //
 //  Created by 陈宜龙 on 12/14/16.
-//  Copyright © 2016 ElonChan. All rights reserved.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import <FXForms/FXForms.h>

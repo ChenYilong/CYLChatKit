@@ -3,7 +3,7 @@
 //  iOS-Categories (https://github.com/shaojiankui/iOS-Categories)
 //
 //  Created by Jakey on 14/12/30.
-//  Copyright (c) 2014年 www.skyfox.org. All rights reserved.
+//  Copyright (c) 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
