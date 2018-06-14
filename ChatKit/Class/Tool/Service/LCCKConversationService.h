@@ -189,8 +189,6 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
 
 - (NSArray<LCCKMessage *> *)failedMessagesByMessageIds:(NSArray *)messageIds;
 
-+ (void)cacheFileTypeMessagesInBackground:(NSArray<AVIMTypedMessage *> *)messages;
-
 @end
 
 @interface LCCKConversationService (LCCKDeprecated)

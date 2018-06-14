@@ -111,7 +111,7 @@
 - (void)customizeTabBarAppearance:(CYLTabBarController *)tabBarController {
     // Customize UITabBar height
     // 自定义 TabBar 高度
-    tabBarController.tabBarHeight = 40.f;
+    tabBarController.tabBarHeight =CYL_IS_IPHONE_X ? (40.f+ 34 ) : (40.f) ;
     
     // set the text color for unselected state
     // 普通状态下的文字属性

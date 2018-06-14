@@ -903,8 +903,13 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (void)fileMessageDidDownload:(LCCKChatMessageCell *)messageCell {
-    [self reloadAfterReceiveMessage];
+    if (messageCell.indexPath) {
+         [self.tableView reloadRowsAtIndexPaths:@[messageCell.indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    } else {
+        [self.tableView reloadData];
+    }
 }
+
 
 - (void)messageCell:(LCCKChatMessageCell *)messageCell didTapLinkText:(NSString *)linkText linkType:(MLLinkType)linkType {
     switch (linkType) {

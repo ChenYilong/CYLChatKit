@@ -131,6 +131,7 @@ static NSString *const LCCKNotificationContactListDataSourceUpdatedUserInfoDataS
 static NSString *const LCCKNotificationContactListDataSourceUserIdType = @"LCCKNotificationContactListDataSourceUserIdType";
 static NSString *const LCCKNotificationContactListDataSourceContactObjType = @"LCCKNotificationContactListDataSourceContactObjType";
 static NSString *const LCCKNotificationContactListDataSourceUpdatedUserInfoDataSourceTypeKey = @"LCCKNotificationContactListDataSourceUpdatedUserInfoDataSourceTypeKey";
+static NSString *const LCCKNotificationConversionImageMessageDidDownloaded = @"LCCKNotificationConversionImageMessageDidDownloaded";
 
 
 /**

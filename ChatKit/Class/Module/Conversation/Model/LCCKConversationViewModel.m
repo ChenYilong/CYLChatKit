@@ -79,6 +79,7 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageStatusChanged:) name:LCCKNotificationMessageRead object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageStatusChanged:) name:LCCKNotificationMessageDelivered object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundImageChanged:) name:LCCKNotificationConversationViewControllerBackgroundImageDidChanged object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fileMessageDidDownload:) name:LCCKNotificationConversionImageMessageDidDownloaded object:nil];
         __unsafe_unretained __typeof(self) weakSelf = self;
         [self cyl_executeAtDealloc:^{
             [[NSNotificationCenter defaultCenter] removeObserver:weakSelf];
@@ -88,6 +89,17 @@
 }
 
 #pragma mark - UITableViewDataSource & UITableViewDelegate
+
+- (void)fileMessageDidDownload:(NSNotification *)notification {
+    LCCKChatImageMessageCell *cell = notification.object;
+    if (!cell) {
+        return;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(fileMessageDidDownload:)]) {
+        [self.delegate performSelector:@selector(fileMessageDidDownload:) withObject:cell];
+    }
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.dataArray.count;
@@ -99,8 +111,10 @@
     LCCKChatMessageCell *messageCell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
     messageCell.tableView = self.parentConversationViewController.tableView;
     messageCell.indexPath = indexPath;
-    [messageCell configureCellWithData:message];
     messageCell.delegate = self.parentConversationViewController;
+    if ([messageCell respondsToSelector:@selector(configureCellWithData:)]) {
+        [messageCell configureCellWithData:message];
+    }
     return messageCell;
 }
 
@@ -514,8 +528,6 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
                                                              } else {
                                                                  !success ?: success(succeeded, nil);
                                                              }
-                                                             // cache file type messages even failed
-                                                             [LCCKConversationService cacheFileTypeMessagesInBackground:@[avimTypedMessage]];
                                                          }];
             
         };
@@ -689,7 +701,6 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
              !block ?: block(avimTypedMessages, error);
              return;
          }
-         [LCCKConversationService cacheFileTypeMessagesInBackground:avimTypedMessages];
          dispatch_async(dispatch_get_main_queue(),^{
              if (avimTypedMessages.count < kLCCKOnePageSize) {
                  self.parentConversationViewController.shouldLoadMoreMessagesScrollToTop = NO;

@@ -327,12 +327,7 @@
         }
         case kAVIMMessageMediaTypeImage: {
             AVIMImageMessage *imageMsg = (AVIMImageMessage *)message;
-            NSString *pathForFile = [LCCKCommonUtils getPathFromFile:imageMsg.file];;
-            NSFileManager *fileManager = [NSFileManager defaultManager];
-            NSString *imagePath;
-            if ([fileManager fileExistsAtPath:pathForFile]){
-                imagePath = pathForFile;
-            }
+            NSString *imagePath = [LCCKCommonUtils getPathFromFile:imageMsg.file];
             lcckMessage = [[LCCKMessage alloc] initWithPhoto:nil photoWidth:imageMsg.width photoHeight: imageMsg.height thumbnailPhoto:nil photoPath:imagePath thumbnailURL:nil originPhotoURL:[NSURL URLWithString:imageMsg.file.url] senderId:senderId sender:sender timestamp:time serverMessageId:serverMessageId];
             break;
         }

@@ -746,24 +746,6 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     });
 }
 
-+ (void)cacheFileTypeMessagesInBackground:(NSArray<AVIMTypedMessage *> *)messages {
-    for (AVIMTypedMessage *message in messages) {
-        if (message.mediaType == kAVIMMessageMediaTypeImage || message.mediaType == kAVIMMessageMediaTypeAudio) {
-            AVFile *file = message.file;
-            BOOL isDataAvailable = [LCCKCommonUtils isCacheDataAvailableForFile:file];
-            if (file && !isDataAvailable) {
-                NSError *error;
-                // 下载到本地
-                [file downloadWithCompletionHandler:^(NSURL * _Nullable filePath, NSError * _Nullable error) {
-                    if (error) {
-                        LCCKLog(@"download file error : %@", error);
-                    }
-                }];
-            }
-        }
-    }
-}
-
 - (AVIMClient *)client {
     if (!_client) {
         AVIMClient *client = [LCCKSessionService sharedInstance].client;

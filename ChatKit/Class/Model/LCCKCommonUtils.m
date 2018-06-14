@@ -11,16 +11,21 @@
 @implementation LCCKCommonUtils
 
 + (NSString *)getPathFromFile:(AVFile *)file {
-    NSString *localPath = [file persistentCachePath];
-    return localPath;
+    NSString *pathForFile = [file persistentCachePath];
+    pathForFile = (pathForFile.length > 0) ? pathForFile :@"";
+    NSString *imagePath = @"";
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:pathForFile]){
+        imagePath = pathForFile;
+    }
+    return imagePath;
 }
 
 + (BOOL)isCacheDataAvailableForFile:(AVFile *)file {
     NSString *objectId = file.objectId;
     NSString *localPath = [self getPathFromFile:file];
-    localPath = (localPath.length > 0) ? localPath :@"";
-    BOOL fileExistsAtPath = ([[NSFileManager defaultManager] fileExistsAtPath:localPath]);
-    if (objectId.length > 0 && fileExistsAtPath) {
+    NSData *data = [NSData dataWithContentsOfFile:localPath];
+    if (objectId.length > 0 && data.length > 0) {
         return YES;
     }
     return NO;

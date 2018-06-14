@@ -81,12 +81,19 @@
             break;
         }
         NSString *imageLocalPath = message.photoPath;
-        BOOL isLocalPath = ![imageLocalPath hasPrefix:@"http"];
+        
+        NSString *imageLocalOrURLPath = message.originPhotoURL.absoluteString;
+        if (imageLocalPath.length > 0) {
+            imageLocalOrURLPath = imageLocalPath;
+        }
+        
+        BOOL isLocalPath = ![imageLocalOrURLPath hasPrefix:@"http"];
         //note: this will ignore contentMode.
-        if (imageLocalPath && isLocalPath) {
+        if (imageLocalPath.length > 0 && isLocalPath) {
             NSData *imageData = [NSData dataWithContentsOfFile:imageLocalPath];
             UIImage *image = [UIImage imageWithData:imageData];
-            UIImage *resizedImage = [image lcck_imageByScalingAspectFill];
+            CGSize photoSize = CGSizeMake(message.photoWidth ?: 30, message.photoHeight ?: 30);
+            UIImage *resizedImage = [image lcck_imageByScalingAspectFillWithOriginSize:photoSize];
             self.messageImageView.image = resizedImage;
             message.photo = image;
             message.thumbnailPhoto = resizedImage;
@@ -94,46 +101,29 @@
         }
         // requied!
         if (message.originPhotoURL) {
-            UIImage *image = [self imageInBundleForImageName:@"Placeholder_Image"];
-            CGSize photoSize = CGSizeMake(message.photoWidth, message.photoHeight);
+            UIImage *image;
+            image = [self imageInBundleForImageName:@"Placeholder_Accept_Defeat"];
+            if (message.photoWidth > 0 && message.photoHeight > 0) {
+               image = [self imageInBundleForImageName:@"Placeholder_Image"];
+            }
+            CGSize photoSize = CGSizeMake(message.photoWidth ?: 30, message.photoHeight ?: 30);
             UIImage *newImage = [image lcck_imageByScalingAspectFillWithOriginSize:photoSize];
             self.messageImageView.contentMode = UIViewContentModeScaleAspectFit;
             UIEdgeInsets edgeMessageBubbleCustomize;
-            if (message.ownerType == LCCKMessageOwnerTypeSelf) {
-                UIEdgeInsets rightEdgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].rightHollowEdgeMessageBubbleCustomize;
-                edgeMessageBubbleCustomize = rightEdgeMessageBubbleCustomize;
-            } else {
-                UIEdgeInsets leftEdgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].leftHollowEdgeMessageBubbleCustomize;
-                edgeMessageBubbleCustomize = leftEdgeMessageBubbleCustomize;
-            }
-            
-            if (message.ownerType == LCCKMessageOwnerTypeSelf) {
-                [self.messageImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.edges.equalTo(self.messageContentView).with.insets(edgeMessageBubbleCustomize);
-                    make.height.mas_equalTo(newImage.size.height);
-                    make.width.mas_equalTo(newImage.size.width);
+            self.messageImageView.image = newImage;
+            AVIMImageMessage *imgMessage = message.message;
+            [imgMessage.file downloadWithCompletionHandler:^(NSURL * _Nullable filePath, NSError * _Nullable error) {
+                if (filePath.absoluteString.length > 0) {
+                    NSData *data = [NSData dataWithContentsOfURL:filePath];
+                    UIImage *image = [UIImage imageWithData:data];
+                    if (image){
+                        message.photo = image;
+                        message.thumbnailPhoto = [image lcck_imageByScalingAspectFillWithOriginSize:photoSize];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConversionImageMessageDidDownloaded object:self];
+
+                    }
+                }
                 }];
-            } else {
-                [self.messageImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.edges.equalTo(self.messageContentView).with.insets(edgeMessageBubbleCustomize);
-                    make.height.mas_equalTo(newImage.size.height);
-                    make.width.mas_equalTo(newImage.size.width);
-                }];
-            }
-            
-            [self.messageImageView sd_setImageWithURL:message.originPhotoURL placeholderImage:newImage
-                                            completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                                                dispatch_async(dispatch_get_main_queue(),^{
-                                                    if (image){
-                                                        message.photo = image;
-                                                        message.thumbnailPhoto = [image lcck_imageByScalingAspectFillWithOriginSize:photoSize];
-                                                        if ([self.delegate respondsToSelector:@selector(fileMessageDidDownload:)]) {
-                                                            [self.delegate fileMessageDidDownload:self];
-                                                        }
-                                                    }
-                                                });
-                                            }
-             ];
             break;
         }
     } while (NO);
