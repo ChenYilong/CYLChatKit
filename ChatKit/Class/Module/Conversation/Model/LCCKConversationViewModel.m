@@ -515,7 +515,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
                                                                  !success ?: success(succeeded, nil);
                                                              }
                                                              // cache file type messages even failed
-                                                             [LCCKConversationService cacheFileTypeMessages:@[avimTypedMessage] callback:nil];
+                                                             [LCCKConversationService cacheFileTypeMessagesInBackground:@[avimTypedMessage]];
                                                          }];
             
         };
@@ -689,12 +689,13 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
              !block ?: block(avimTypedMessages, error);
              return;
          }
-         [LCCKConversationService cacheFileTypeMessages:avimTypedMessages callback:^(BOOL succeeded, NSError *error) {
+         [LCCKConversationService cacheFileTypeMessagesInBackground:avimTypedMessages];
+         dispatch_async(dispatch_get_main_queue(),^{
              if (avimTypedMessages.count < kLCCKOnePageSize) {
                  self.parentConversationViewController.shouldLoadMoreMessagesScrollToTop = NO;
              }
              !block ?: block(avimTypedMessages, error);
-         }];
+         });
      }];
 }
 
@@ -727,7 +728,10 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         NSMutableArray *messages = [NSMutableArray arrayWithArray:oldMessages];
         [messages addObjectsFromArray:self.dataArray];
-        CGSize beforeContentSize = self.parentConversationViewController.tableView.contentSize;
+        __block CGSize beforeContentSize;
+        dispatch_async(dispatch_get_main_queue(),^{
+            beforeContentSize = self.parentConversationViewController.tableView.contentSize;
+        });
         NSMutableArray *indexPaths = [NSMutableArray arrayWithCapacity:oldMessages.count];
         [oldMessages enumerateObjectsUsingBlock:^(id message, NSUInteger idx, BOOL *stop) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:idx inSection:0];

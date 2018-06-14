@@ -206,7 +206,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userWillSendMsgWithoutPower) name:LCCKNotificationRecordNoPower object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveNewMsgForLengthOut) name:LCCKNotificationTextLengthOut object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveNewMsgForLengthOut) name:LCCKNotificationTextLengthOut object:nil];
     
     __unsafe_unretained __typeof(self) weakSelf = self;
     [self cyl_executeAtDealloc:^{
@@ -273,9 +273,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         });
     }
     //TODO:  群聊人数改变，改群名称
-    //    if (self.conversation.members.count > 2) {
-    //        self.navigationItem.titleView = nil;
-    //    }
     !self.viewDidDisappearBlock ?: self.viewDidDisappearBlock(self, animated);
 }
 
@@ -338,7 +335,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (void)sendVoiceMessageWithPath:(NSString *)voicePath time:(NSTimeInterval)recordingSeconds {
-
+    
     LCCKMessage *message = [[LCCKMessage alloc] initWithVoicePath:voicePath
                                                          voiceURL:nil
                                                     voiceDuration:[NSString stringWithFormat:@"%@", @(recordingSeconds)]
@@ -351,7 +348,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (void)sendLocationMessageWithLocationCoordinate:(CLLocationCoordinate2D)locationCoordinate locatioTitle:(NSString *)locationTitle {
-
+    
     LCCKMessage *message = [[LCCKMessage alloc] initWithLocalPositionPhoto:({
         NSString *imageName = @"message_sender_location";
         UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
@@ -564,8 +561,8 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     //peer初始化成功时也会对conversation赋值
     _conversation = conversation;
     [self saveCurrentConversationInfoIfExists];
-//    if (_conversation) {
-//    }
+    //    if (_conversation) {
+    //    }
     [self callbackCurrentConversationEvenNotExists:conversation callback:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             [self handleLoadHistoryMessagesHandlerIfIsJoined:isJoined];
@@ -840,21 +837,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         }
             break;
         default: {
-//            //TODO:自定义消息的点击事件
-//            NSString *formatString = @"\n\n\
-//            ------ BEGIN NSException Log ---------------\n \
-//            class name: %@                              \n \
-//            ------line: %@                              \n \
-//            ----reason: %@                              \n \
-//            ------ END -------------------------------- \n\n";
-//            NSString *reason = [NSString stringWithFormat:formatString,
-//                                @(__PRETTY_FUNCTION__),
-//                                @(__LINE__),
-//                                @"messageCell.messageType not handled"];
-//            //手动创建一个异常导致的崩溃事件 http://is.gd/EfVfN0
-//            @throw [NSException exceptionWithName:NSGenericException
-//                                           reason:reason
-//                                         userInfo:nil];
         }
             break;
     }
@@ -1009,31 +991,30 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         self.clientStatusView.hidden = NO;
     }
 }
- - (void)dealloc {
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-    }
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
- #pragma mark - Notification
+#pragma mark - Notification
 
- - (void)userWillSendMsgWithoutPower {
-        [self showWaring:@"需要开启麦克风权限"];
-    }
+- (void)userWillSendMsgWithoutPower {
+    [self showWaring:@"需要开启麦克风权限"];
+}
 
 - (void)recieveNewMsgForLengthOut {
     NSString *message = [NSString stringWithFormat:@"每次输入最多%@字~", @(LCCKNotificationTextLengthOutLength)];
     [self showWaring:message];
 }
 
- - (void)showWaring:(NSString *)message {
-        // 没有找到Toast 只能用弹框
-        LCCKAlertController *alert = [LCCKAlertController alertControllerWithTitle:nil
-                                                                                                              message:message
-                                                                                                       preferredStyle:LCCKAlertControllerStyleAlert];
-        NSString *cancelActionTitle = LCCKLocalizedStrings(@"ok");
-        LCCKAlertAction *cancelAction = [LCCKAlertAction actionWithTitle:cancelActionTitle style:LCCKAlertActionStyleDefault
-                                                                                                       handler:^(LCCKAlertAction * action) {}];
-        [alert addAction:cancelAction];
-        [alert showWithSender:nil controller:self animated:YES completion:NULL];
-    }
+- (void)showWaring:(NSString *)message {
+    LCCKAlertController *alert = [LCCKAlertController alertControllerWithTitle:nil
+                                                                       message:message
+                                                                preferredStyle:LCCKAlertControllerStyleAlert];
+    NSString *cancelActionTitle = LCCKLocalizedStrings(@"ok");
+    LCCKAlertAction *cancelAction = [LCCKAlertAction actionWithTitle:cancelActionTitle style:LCCKAlertActionStyleDefault
+                                                             handler:^(LCCKAlertAction * action) {}];
+    [alert addAction:cancelAction];
+    [alert showWithSender:nil controller:self animated:YES completion:NULL];
+}
 
 @end

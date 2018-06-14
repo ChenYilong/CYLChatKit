@@ -13,6 +13,7 @@
 #else
 #import "LCChatKit.h"
 #endif
+
 @interface LCCKUtil : NSObject
 
 + (BOOL)isIPhoneX;

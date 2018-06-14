@@ -24,6 +24,7 @@
 #import "LCCKMessage.h"
 #import "LCCKConversationListService.h"
 #import "AVIMMessage+LCCKExtension.h"
+#import "LCCKCommonUtils.h"
 
 NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceErrorDomain";
 
@@ -745,42 +746,22 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     });
 }
 
-+ (void)cacheFileTypeMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback {
-    NSString *queueBaseLabel = [NSString stringWithFormat:@"com.chatkit.%@", NSStringFromClass([self class])];
-    const char *queueName = [[NSString stringWithFormat:@"%@.ForBarrier",queueBaseLabel] UTF8String];
-    dispatch_queue_t queue = dispatch_queue_create(queueName, DISPATCH_QUEUE_CONCURRENT);
-    
++ (void)cacheFileTypeMessagesInBackground:(NSArray<AVIMTypedMessage *> *)messages {
     for (AVIMTypedMessage *message in messages) {
-        dispatch_async(queue, ^(void) {
-            if (message.mediaType == kAVIMMessageMediaTypeImage || message.mediaType == kAVIMMessageMediaTypeAudio) {
-                AVFile *file = message.file;
-                if (file && file.isDataAvailable == NO) {
-                    NSError *error;
-                    // 下载到本地
-                    NSData *data = [file getData:&error];
-                    if (error || data == nil) {
-                        LCCKLog(@"download file error : %@", error);
-                    }
-                }
-            } else if (message.mediaType == kAVIMMessageMediaTypeVideo) {
-                NSString *path = [[LCCKSettingService sharedInstance] videoPathOfMessage:(AVIMVideoMessage *)message];
-                if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
-                    NSError *error;
-                    NSData *data = [message.file getData:&error];
+        if (message.mediaType == kAVIMMessageMediaTypeImage || message.mediaType == kAVIMMessageMediaTypeAudio) {
+            AVFile *file = message.file;
+            BOOL isDataAvailable = [LCCKCommonUtils isCacheDataAvailableForFile:file];
+            if (file && !isDataAvailable) {
+                NSError *error;
+                // 下载到本地
+                [file downloadWithCompletionHandler:^(NSURL * _Nullable filePath, NSError * _Nullable error) {
                     if (error) {
                         LCCKLog(@"download file error : %@", error);
-                    } else {
-                        [data writeToFile:path atomically:YES];
                     }
-                }
+                }];
             }
-        });
+        }
     }
-    dispatch_barrier_async(queue, ^{
-        dispatch_async(dispatch_get_main_queue(),^{
-            !callback ?: callback(YES, nil);
-        });
-    });
 }
 
 - (AVIMClient *)client {

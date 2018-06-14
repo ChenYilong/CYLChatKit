@@ -98,7 +98,6 @@
             CGSize photoSize = CGSizeMake(message.photoWidth, message.photoHeight);
             UIImage *newImage = [image lcck_imageByScalingAspectFillWithOriginSize:photoSize];
             self.messageImageView.contentMode = UIViewContentModeScaleAspectFit;
-            
             UIEdgeInsets edgeMessageBubbleCustomize;
             if (message.ownerType == LCCKMessageOwnerTypeSelf) {
                 UIEdgeInsets rightEdgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].rightHollowEdgeMessageBubbleCustomize;
@@ -114,7 +113,7 @@
                     make.height.mas_equalTo(newImage.size.height);
                     make.width.mas_equalTo(newImage.size.width);
                 }];
-            }else {
+            } else {
                 [self.messageImageView mas_updateConstraints:^(MASConstraintMaker *make) {
                     make.edges.equalTo(self.messageContentView).with.insets(edgeMessageBubbleCustomize);
                     make.height.mas_equalTo(newImage.size.height);
@@ -122,23 +121,21 @@
                 }];
             }
             
-            [self.messageImageView  sd_setImageWithURL:message.originPhotoURL placeholderImage:newImage
-                                             completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                                                 dispatch_async(dispatch_get_main_queue(),^{
-                                                     if (image){
-                                                         message.photo = image;
-                                                         message.thumbnailPhoto = [image lcck_imageByScalingAspectFillWithOriginSize:photoSize];
-                                                         if ([self.delegate respondsToSelector:@selector(fileMessageDidDownload:)]) {
-                                                             [self.delegate fileMessageDidDownload:self];
-                                                         }
-                                                     }
-                                                 });
-                                                 
-                                             }
+            [self.messageImageView sd_setImageWithURL:message.originPhotoURL placeholderImage:newImage
+                                            completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                                                dispatch_async(dispatch_get_main_queue(),^{
+                                                    if (image){
+                                                        message.photo = image;
+                                                        message.thumbnailPhoto = [image lcck_imageByScalingAspectFillWithOriginSize:photoSize];
+                                                        if ([self.delegate respondsToSelector:@selector(fileMessageDidDownload:)]) {
+                                                            [self.delegate fileMessageDidDownload:self];
+                                                        }
+                                                    }
+                                                });
+                                            }
              ];
             break;
         }
-        
     } while (NO);
 }
 

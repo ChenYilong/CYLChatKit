@@ -18,6 +18,7 @@
 #import "UIImage+LCCKExtension.h"
 //#define LCCKIsDebugging 1
 #import "NSObject+LCCKExtension.h"
+#import "LCCKCommonUtils.h"
 
 @interface LCCKMessage()
 
@@ -304,9 +305,10 @@
             NSString *duration = [NSString stringWithFormat:@"%.0f", audioMsg.duration];
             NSString *voicePath;
             NSFileManager *fileManager = [NSFileManager defaultManager];
-            NSString *pathForFile = audioMsg.file.localPath;
+            NSString *localPath = [LCCKCommonUtils getPathFromFile:audioMsg.file];
+            NSString *pathForFile = localPath;
             if ([fileManager fileExistsAtPath:pathForFile]){
-                voicePath = audioMsg.file.localPath;
+                voicePath = localPath;
             } else {
                 voicePath = audioMsg.file.url;
             }
@@ -325,23 +327,15 @@
         }
         case kAVIMMessageMediaTypeImage: {
             AVIMImageMessage *imageMsg = (AVIMImageMessage *)message;
-            NSString *pathForFile = imageMsg.file.localPath;
+            NSString *pathForFile = [LCCKCommonUtils getPathFromFile:imageMsg.file];;
             NSFileManager *fileManager = [NSFileManager defaultManager];
             NSString *imagePath;
             if ([fileManager fileExistsAtPath:pathForFile]){
-                imagePath = imageMsg.file.localPath;
+                imagePath = pathForFile;
             }
             lcckMessage = [[LCCKMessage alloc] initWithPhoto:nil photoWidth:imageMsg.width photoHeight: imageMsg.height thumbnailPhoto:nil photoPath:imagePath thumbnailURL:nil originPhotoURL:[NSURL URLWithString:imageMsg.file.url] senderId:senderId sender:sender timestamp:time serverMessageId:serverMessageId];
             break;
         }
-            
-            //#import "AVIMEmotionMessage.h"
-            //        case kAVIMMessageMediaTypeEmotion: {
-            //            AVIMEmotionMessage *emotionMsg = (AVIMEmotionMessage *)message;
-            //            NSString *path = [[NSBundle mainBundle] pathForResource:emotionMsg.emotionPath ofType:@"gif"];
-            //            lcckMessage = [[LCCKMessage alloc] initWithEmotionPath:path sender:sender timestamp:time];
-            //            break;
-            //        }
         case kAVIMMessageMediaTypeVideo: {
             //TODO:
             break;

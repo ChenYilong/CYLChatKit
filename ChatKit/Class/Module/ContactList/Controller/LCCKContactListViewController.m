@@ -326,7 +326,7 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    LCCKContactCell *cell = [tableView dequeueReusableCellWithIdentifier:LCCKContactListViewControllerIdentifier forIndexPath:indexPath];
+    LCCKContactCell *cell = [tableView dequeueReusableCellWithIdentifier:LCCKContactListViewControllerIdentifier];
     id contact = [self contactAtIndexPath:indexPath tableView:tableView];
     NSURL *avatarURL = nil;
     NSString *name = nil;
