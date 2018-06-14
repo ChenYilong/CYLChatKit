@@ -45,6 +45,8 @@ static void * const LCCKTextFullScreenViewContentSizeContext = (void*)&LCCKTextF
         displayTextView.dataDetectorTypes = UIDataDetectorTypeAll;
         displayTextView.textContainerInset = UIEdgeInsetsMake(0,20,0,20);
         [self.backgroundView addSubview:displayTextView];
+        UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeFromWindow:)];
+        [displayTextView addGestureRecognizer:recognizer];
         _displayTextView = displayTextView;
     }
     return _displayTextView;
@@ -71,8 +73,7 @@ static void * const LCCKTextFullScreenViewContentSizeContext = (void*)&LCCKTextF
     if (_backgroundView == nil) {
         UIView *backgroundView = [[UIView alloc] initWithFrame:self.view.frame];
         backgroundView.backgroundColor = [UIColor blueColor];
-        UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeFromWindow:)];
-        [backgroundView addGestureRecognizer:recognizer];
+        
         [self.view addSubview:backgroundView];
         _backgroundView = backgroundView;
     }
