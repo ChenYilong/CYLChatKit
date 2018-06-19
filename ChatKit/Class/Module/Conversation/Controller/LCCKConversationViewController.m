@@ -597,6 +597,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
             }
             [self fetchConversationHandler:conversation];
             !callback ?: callback(YES, nil);
+            return;
         }];
     } else {
         [self fetchConversationHandler:conversation];

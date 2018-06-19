@@ -263,7 +263,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 - (BOOL)isAbleToTap {
     BOOL isAbleToTap = NO;
     //For Link handle
-    if (self.mediaType < 0 && ![self isKindOfClass:[LCCKChatTextMessageCell class]]) {
+    if (self.mediaType < 0) {
         isAbleToTap = YES;
     }
     return isAbleToTap;
@@ -289,6 +289,8 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 
     if (self.isAbleToTap) {
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+        tap.delegate = self;
+        tap.numberOfTapsRequired = 1;
         [self.contentView addGestureRecognizer:tap];
     }
     UITapGestureRecognizer *avatarImageViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(avatarImageViewHandleTap:)];
@@ -298,6 +300,17 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
     [recognizer setMinimumPressDuration:0.4f];
     [self addGestureRecognizer:recognizer];
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    //    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+    CGPoint tapPoint = [gestureRecognizer locationInView:self.contentView];
+    if (CGRectContainsPoint(self.avatarImageView.frame, tapPoint)) {
+        return NO;
+    } else if(CGRectContainsPoint(self.messageContentView.frame, tapPoint) && [self isKindOfClass:[LCCKChatTextMessageCell class]]) {
+        return NO;
+    }
+    return YES;
 }
 
 - (void)setup {
@@ -350,10 +363,9 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         CGPoint tapPoint = [tap locationInView:self.contentView];
         if (CGRectContainsPoint(self.messageContentView.frame, tapPoint)) {
             [self.delegate messageCellTappedMessage:self];
-        }  else if (!CGRectContainsPoint(self.avatarImageView.frame, tapPoint)) {
-            //FIXME:Never invoked
-            [self.delegate messageCellTappedBlank:self];
+            return;
         }
+        [self.delegate messageCellTappedBlank:self];
     }
 }
 

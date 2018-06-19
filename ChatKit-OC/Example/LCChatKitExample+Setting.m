@@ -234,7 +234,8 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
         if (!conversation.createAt) { //如果没有创建时间，直接return
             return;
         }
-        [[self class] lcck_showMessage:@"加载历史记录..." toView:aConversationController.view];
+        [[self class] lcck_hideHUDForView:aConversationController.view];
+        [[self class] lcck_showMessage:@"加载聊天记录..." toView:aConversationController.view];
         //判断会话的成员是否超过两个(即是否为群聊)
         if (conversation.members.count > 2) { //设置点击rightButton为群聊Style,和对应事件
             [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleGroupProfile
@@ -247,8 +248,6 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
             [aConversationController
              configureBarButtonItemStyle:LCCKBarButtonItemStyleSingleProfile
              action:^(__kindof LCCKBaseViewController *viewController, UIBarButtonItem *sender, UIEvent *event) {
-                 
-             
 //                 NSString *title = @"打开用户详情";
                  NSArray *members = conversation.members;
                  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT (SELF IN %@)", @[
@@ -307,9 +306,9 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
  */
 - (void)lcck_setupLoadLatestMessages {
     [[LCChatKit sharedInstance]
-setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationController,
+     setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationController,
                                     BOOL succeeded, NSError *error) {
-         [[self class] lcck_hideHUDForView:conversationController.view];
+
          NSString *title;
          LCCKMessageNotificationType type;
          if (succeeded) {
@@ -323,6 +322,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
          [LCCKUtil showNotificationWithTitle:title subtitle:nil type:type];
 #else
 #endif
+         [[self class] lcck_hideHUDForView:conversationController.view];
      }];
 }
 
