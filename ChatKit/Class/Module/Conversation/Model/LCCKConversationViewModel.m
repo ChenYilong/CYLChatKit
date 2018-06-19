@@ -80,9 +80,8 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageStatusChanged:) name:LCCKNotificationMessageDelivered object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundImageChanged:) name:LCCKNotificationConversationViewControllerBackgroundImageDidChanged object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fileMessageDidDownload:) name:LCCKNotificationConversionImageMessageDidDownloaded object:nil];
-        __unsafe_unretained __typeof(self) weakSelf = self;
-        [self cyl_executeAtDealloc:^{
-            [[NSNotificationCenter defaultCenter] removeObserver:weakSelf];
+        [self cyl_willDeallocWithSelfCallback:^(__unsafe_unretained id owner, NSUInteger identifier) {
+            [[NSNotificationCenter defaultCenter] removeObserver:owner];
         }];
     }
     return self;
@@ -487,23 +486,14 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
         //自定义消息的失败id
     }
     [self.delegate messageSendStateChanged:LCCKMessageSendStateSending withProgress:0.0f forIndex:[self.dataArray indexOfObject:aMessage]];
-    AVIMTypedMessage *avimTypedMessage;
-    if (![aMessage lcck_isCustomMessage]) {
-        LCCKMessage *message = (LCCKMessage *)aMessage;
-        message.conversationId = self.currentConversationId;
-
-        message.sendStatus = LCCKMessageSendStateSending;
-        id<LCCKUserDelegate> sender = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
-        message.sender = sender;
-        message.ownerType = LCCKMessageOwnerTypeSelf;
-        message.message = avimTypedMessage;
-        avimTypedMessage = [AVIMTypedMessage lcck_messageWithLCCKMessage:message];
-    } else {
-        avimTypedMessage = aMessage;
+    NSError *messageNULLError = nil;
+    id avimTypedMessage = [self avimTypedMessageFromLCCKMessage:aMessage theError:&messageNULLError];
+    if ([avimTypedMessage isMemberOfClass:[AVIMTypedMessage class]]) {
+        [avimTypedMessage lcck_setObject:@([self.parentConversationViewController getConversationIfExists].lcck_type) forKey:LCCKCustomMessageConversationTypeKey];
+        [avimTypedMessage setValue:[LCCKSessionService sharedInstance].clientId forKey:@"clientId"];//for LCCKSendMessageHookBlock
+        [self.avimTypedMessage addObject:avimTypedMessage];
     }
-    [avimTypedMessage lcck_setObject:@([self.parentConversationViewController getConversationIfExists].lcck_type) forKey:LCCKCustomMessageConversationTypeKey];
-    [avimTypedMessage setValue:[LCCKSessionService sharedInstance].clientId forKey:@"clientId"];//for LCCKSendMessageHookBlock
-    [self.avimTypedMessage addObject:avimTypedMessage];
+    
     [self preloadMessageToTableView:aMessage callback:^{
         if (!self.currentConversationId || self.currentConversationId.length == 0) {
             NSInteger code = 0;
@@ -524,12 +514,11 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
                                                     progressBlock:progressBlock
                                                          callback:^(BOOL succeeded, NSError *error) {
                                                              if (error) {
-                                                                 !failed ?: failed(succeeded, error);
+                                                                !failed ?: failed(succeeded, error);
                                                              } else {
                                                                  !success ?: success(succeeded, nil);
                                                              }
                                                          }];
-            
         };
         
         LCCKSendMessageHookBlock sendMessageHookBlock = [[LCCKConversationService sharedInstance] sendMessageHookBlock];
@@ -546,6 +535,39 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
             sendMessageHookBlock(self.parentConversationViewController, avimTypedMessage, completionHandler);
         }
     }];
+}
+
+- (AVIMTypedMessage *)avimTypedMessageFromLCCKMessage:(LCCKMessage *)aMessage
+                                             theError:(NSError **)theError {
+    AVIMTypedMessage *avimTypedMessage;
+    if (![aMessage lcck_isCustomMessage]) {
+        LCCKMessage *message = (LCCKMessage *)aMessage;
+        message.conversationId = self.currentConversationId;
+        message.sendStatus = LCCKMessageSendStateSending;
+        id<LCCKUserDelegate> sender = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
+        message.sender = sender;
+        message.ownerType = LCCKMessageOwnerTypeSelf;
+        message.message = avimTypedMessage;
+        avimTypedMessage = [AVIMTypedMessage lcck_messageWithLCCKMessage:message];
+    } else {
+        avimTypedMessage = aMessage;
+    }
+    if (!avimTypedMessage) {
+        NSInteger code = 0;
+        NSString *errorReasonText = @"message is nil";
+        NSDictionary *errorInfo = @{
+                                    @"code":@(code),
+                                    NSLocalizedDescriptionKey : errorReasonText,
+                                    };
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class])
+                                             code:code
+                                         userInfo:errorInfo];
+        if (theError != NULL) {
+            *theError = error;
+        }
+        return nil;
+    }
+    return avimTypedMessage;
 }
 
 - (void)sendLocalFeedbackTextMessge:(NSString *)localFeedbackTextMessge {
@@ -582,15 +604,17 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
 - (void)resendMessageAtIndexPath:(NSIndexPath *)indexPath {
     LCCKMessage *lcckMessage = self.dataArray[indexPath.row];
     NSUInteger row = indexPath.row;
+    LCCKMessage *message;
     @try {
-        LCCKMessage *message = self.dataArray[row - 1];
+        message = self.dataArray[row - 1];
+    } @catch (NSException *exception) {}
+    @try {
         if (message.mediaType == kAVIMMessageMediaTypeSystem && !message.isLocalMessage) {
             [self.dataArray lcck_removeMessageAtIndex:row - 1];
             [self.avimTypedMessage lcck_removeMessageAtIndex:row - 1];
             row -= 1;
         }
     } @catch (NSException *exception) {}
-    
     [self.dataArray lcck_removeMessageAtIndex:row];
     [self.avimTypedMessage lcck_removeMessageAtIndex:row];
     NSString *oldFailedMessageId = lcckMessage.localMessageId;

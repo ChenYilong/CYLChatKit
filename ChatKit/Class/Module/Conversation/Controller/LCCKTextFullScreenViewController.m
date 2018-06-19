@@ -34,9 +34,8 @@ static void * const LCCKTextFullScreenViewContentSizeContext = (void*)&LCCKTextF
     if (!_displayTextView) {
         UITextView *displayTextView = [[UITextView alloc] initWithFrame:self.view.frame];
         [displayTextView addObserver:self forKeyPath:@"contentSize" options:(NSKeyValueObservingOptionNew) context:LCCKTextFullScreenViewContentSizeContext];
-        __unsafe_unretained __typeof(self) weakSelf = self;
-        [self cyl_executeAtDealloc:^{
-            [displayTextView removeObserver:weakSelf forKeyPath:@"contentSize"];
+        [self cyl_willDeallocWithSelfCallback:^(__unsafe_unretained id owner, NSUInteger identifier) {
+            [displayTextView removeObserver:owner forKeyPath:@"contentSize"];
         }];
         displayTextView.contentSize = self.view.bounds.size;
         displayTextView.textColor = [UIColor blackColor];

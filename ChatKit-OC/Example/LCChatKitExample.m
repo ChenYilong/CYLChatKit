@@ -27,11 +27,6 @@
 #import "RedpacketConfig.h"
 
 @interface LCChatKitExample ()
-
-@property (nonatomic, strong) NSMutableArray *photos;
-@property (nonatomic, strong) NSMutableArray *thumbs;
-@property (nonatomic, strong) NSMutableArray *selections;
-
 @end
 
 @implementation LCChatKitExample

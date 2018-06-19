@@ -19,9 +19,11 @@
 #import "LCCKLoginViewController.h"
 #import "LCChatKitExample+Setting.h"
 //#import "MWPhotoBrowser.h"
+#import <CYLMWPhotoBrowser/MWPhotoBrowser.h>
 #import "NSObject+LCCKHUD.h"
 #import "LCCKGroupConversationDetailViewController.h"
 #import "LCCKSingleConversationDetailViewController.h"
+#import <objc/runtime.h>
 
 #warning TODO: CHANGE TO YOUR OWN AppId and AppKey
 static NSString *const LCCKAPPID = @"dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz";
@@ -330,9 +332,9 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
 - (void)lcck_setupPreviewImageMessage {
     [[LCChatKit sharedInstance] setPreviewImageMessageBlock:^(NSUInteger index, NSArray *allVisibleImages,
                                    NSArray *allVisibleThumbs, NSDictionary *userInfo){
-         //                        [self examplePreviewImageMessageWithInitialIndex:index
-         //                        allVisibleImages:allVisibleImages
-         //                        allVisibleThumbs:allVisibleThumbs];
+                                 [self examplePreviewImageMessageWithInitialIndex:index
+                                 allVisibleImages:allVisibleImages
+                                 allVisibleThumbs:allVisibleThumbs];
      }];
 }
 
@@ -779,8 +781,8 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     // Options
     startOnGrid = NO;
     displayNavArrows = YES;
-    self.photos = photos;
-    self.thumbs = thumbs;
+    [self setCYLPhotos:photos];
+    [self setCYLthumbs:thumbs];
     // Create browser
     MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
     browser.displayActionButton = displayActionButton;
@@ -795,40 +797,62 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     [browser setCurrentPhotoIndex:index];
     // Reset selections
     if (displaySelectionButtons) {
-        _selections = [[NSMutableArray alloc] initWithCapacity:[allVisibleImages count]];
+        [self setCYLSelections:[[NSMutableArray alloc] initWithCapacity:[allVisibleImages count]]];
         for (int i = 0; i < photos.count; i++) {
-            [_selections addObject:[NSNumber numberWithBool:NO]];
+            [self.cyl_selections addObject:[NSNumber numberWithBool:NO]];
         }
     }
-    [[self class] pushToViewController:browser];
+    [[self class] lcck_pushToViewController:browser];
 }
 
+- (NSMutableArray *)cyl_photos {
+    return objc_getAssociatedObject(self, @selector(cyl_photos));
+}
+
+- (void)setCYLPhotos:(NSMutableArray *)cyl_photos {
+    objc_setAssociatedObject(self, @selector(cyl_photos), cyl_photos, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSMutableArray *)cyl_thumbs {
+    return objc_getAssociatedObject(self, @selector(cyl_thumbs));
+}
+
+- (void)setCYLthumbs:(NSMutableArray *)cyl_thumbs {
+    objc_setAssociatedObject(self, @selector(cyl_thumbs), cyl_thumbs, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSMutableArray *)cyl_selections {
+    return objc_getAssociatedObject(self, @selector(cyl_selections));
+}
+
+- (void)setCYLSelections:(NSMutableArray *)cyl_selections {
+    objc_setAssociatedObject(self, @selector(cyl_selections), cyl_selections, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
 #pragma mark - MWPhotoBrowserDelegate
 
 - (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser {
-    return _photos.count;
+    return self.cyl_photos.count;
 }
 
 - (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
-    if (index < _photos.count)
-        return [_photos objectAtIndex:index];
+    if (index < self.cyl_photos.count)
+        return [self.cyl_photos objectAtIndex:index];
     return nil;
 }
 
 - (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser thumbPhotoAtIndex:(NSUInteger)index {
-    if (index < _thumbs.count)
-        return [_thumbs objectAtIndex:index];
+    if (index < self.cyl_thumbs.count)
+        return [self.cyl_thumbs objectAtIndex:index];
     return nil;
 }
 
 - (BOOL)photoBrowser:(MWPhotoBrowser *)photoBrowser isPhotoSelectedAtIndex:(NSUInteger)index {
-    return [[_selections objectAtIndex:index] boolValue];
+    return [[self.cyl_selections objectAtIndex:index] boolValue];
 }
 
 - (void)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index selectedChanged:(BOOL)selected {
-    [_selections replaceObjectAtIndex:index withObject:[NSNumber numberWithBool:selected]];
+    [self.cyl_selections replaceObjectAtIndex:index withObject:[NSNumber numberWithBool:selected]];
 }
- 
 */
 
 @end

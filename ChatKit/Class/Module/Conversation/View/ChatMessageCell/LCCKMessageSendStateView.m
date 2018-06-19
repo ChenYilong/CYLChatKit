@@ -33,9 +33,8 @@ static void * const LCCKSendImageViewShouldShowIndicatorViewContext = (void*)&LC
         [self addSubview:self.indicatorView = indicatorView];
         // KVO注册监听
         [self addObserver:self forKeyPath:@"showIndicatorView" options:NSKeyValueObservingOptionNew context:LCCKSendImageViewShouldShowIndicatorViewContext];
-        __unsafe_unretained __typeof(self) weakSelf = self;
-        [self cyl_executeAtDealloc:^{
-            [weakSelf removeObserver:weakSelf forKeyPath:@"showIndicatorView"];
+        [self cyl_willDeallocWithSelfCallback:^(__unsafe_unretained id owner, NSUInteger identifier) {
+            [owner removeObserver:owner forKeyPath:@"showIndicatorView"];
         }];
         [self addTarget:self action:@selector(failImageViewTap:) forControlEvents:UIControlEventTouchUpInside];
         

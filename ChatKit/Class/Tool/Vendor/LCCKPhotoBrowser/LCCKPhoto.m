@@ -126,7 +126,7 @@ caption = _caption, loadingInProgress = _loadingInProgress, placeholderFrame = _
 
 #pragma mark - Public methods
 - (BOOL)underlyingImageExisted {
-    return _underlyingImage != nil || [[NSFileManager defaultManager] fileExistsAtPath:_photoPath] || [[SDImageCache sharedImageCache] diskImageExistsWithKey:_photoURL.absoluteString];
+    return _underlyingImage != nil || [[NSFileManager defaultManager] fileExistsAtPath:_photoPath] || [[SDImageCache sharedImageCache] diskImageDataExistsWithKey:_photoURL.absoluteString];
 }
 
 #pragma mark - Private methods
@@ -176,7 +176,7 @@ caption = _caption, loadingInProgress = _loadingInProgress, placeholderFrame = _
     if ([[NSFileManager defaultManager] fileExistsAtPath:_photoPath]) {
         return [UIImage imageWithContentsOfFile:_photoPath];
     }
-    if ([[SDImageCache sharedImageCache] diskImageExistsWithKey:_photoURL.absoluteString]) {
+    if ([[SDImageCache sharedImageCache] diskImageDataExistsWithKey:_photoURL.absoluteString]) {
         return [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:_photoURL.absoluteString];
     }
     return _underlyingImage;
@@ -197,21 +197,20 @@ caption = _caption, loadingInProgress = _loadingInProgress, placeholderFrame = _
             [self performSelectorInBackground:@selector(loadImageFromFileAsync) withObject:nil];
         } else if (_photoURL) {
             // Load async from web (using SDWebImageManager)
-            SDWebImageManager *manager = [SDWebImageManager sharedManager];
-            [manager downloadImageWithURL:_photoURL options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+            
+            [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:_photoURL
+                                                                  options:0
+                                                                 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+                                                                     
                 CGFloat progress = ((CGFloat)receivedSize)/((CGFloat)expectedSize);
                 if (self.progressUpdateBlock) {
                     self.progressUpdateBlock(progress);
                 }
-            } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-//                if (image) {
-//                    self.underlyingImage = image;
-//                    [self performSelectorOnMainThread:@selector(imageLoadingComplete) withObject:nil waitUntilDone:NO];
-//                }
+            }
+                                                                completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
                 self.underlyingImage = image;
                 [self performSelectorOnMainThread:@selector(imageLoadingComplete) withObject:nil waitUntilDone:NO];
             }];
-
         } else {
             // Failed - no source
             self.underlyingImage = nil;

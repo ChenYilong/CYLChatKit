@@ -104,9 +104,8 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
     _userIds = userIds;
     //TODO:
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dataSourceUpdated:) name:LCCKNotificationContactListDataSourceUpdated object:nil];
-    __unsafe_unretained __typeof(self) weakSelf = self;
-    [self cyl_executeAtDealloc:^{
-        [[NSNotificationCenter defaultCenter] removeObserver:weakSelf];
+    [self cyl_willDeallocWithSelfCallback:^(__unsafe_unretained id owner, NSUInteger identifier) {
+        [[NSNotificationCenter defaultCenter] removeObserver:owner];
     }];
     return self;
 }

@@ -208,9 +208,8 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userWillSendMsgWithoutPower) name:LCCKNotificationRecordNoPower object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveNewMsgForLengthOut) name:LCCKNotificationTextLengthOut object:nil];
     
-    __unsafe_unretained __typeof(self) weakSelf = self;
-    [self cyl_executeAtDealloc:^{
-        !weakSelf.viewControllerWillDeallocBlock ?: weakSelf.viewControllerWillDeallocBlock(weakSelf);
+    [self cyl_willDeallocWithSelfCallback:^(__unsafe_unretained LCCKConversationViewController *owner, NSUInteger identifier) {
+        !owner.viewControllerWillDeallocBlock ?: owner.viewControllerWillDeallocBlock(owner);
     }];
     self.navigationController.interactivePopGestureRecognizer.delaysTouchesBegan = NO;
     self.tableView.delegate = self.chatViewModel;
@@ -319,7 +318,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                                                       photoHeight:nil
                                                    thumbnailPhoto:thumbnailPhoto
                                                         photoPath:path
-                                
                                                      thumbnailURL:nil
                                                    originPhotoURL:nil
                                                          senderId:self.userId
@@ -335,7 +333,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (void)sendVoiceMessageWithPath:(NSString *)voicePath time:(NSTimeInterval)recordingSeconds {
-    
     LCCKMessage *message = [[LCCKMessage alloc] initWithVoicePath:voicePath
                                                          voiceURL:nil
                                                     voiceDuration:[NSString stringWithFormat:@"%@", @(recordingSeconds)]
@@ -903,13 +900,8 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (void)fileMessageDidDownload:(LCCKChatMessageCell *)messageCell {
-    if (messageCell.indexPath) {
-         [self.tableView reloadRowsAtIndexPaths:@[messageCell.indexPath] withRowAnimation:UITableViewRowAnimationNone];
-    } else {
-        [self.tableView reloadData];
-    }
+    [self.tableView reloadData];
 }
-
 
 - (void)messageCell:(LCCKChatMessageCell *)messageCell didTapLinkText:(NSString *)linkText linkType:(MLLinkType)linkType {
     switch (linkType) {

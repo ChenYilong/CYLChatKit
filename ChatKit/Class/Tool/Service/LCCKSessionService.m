@@ -166,6 +166,10 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
     [self updateConnectStatus];
 }
 
+- (void)imClientClosed:(AVIMClient *)imClient error:(NSError * _Nullable)error {
+    [self updateConnectStatus];
+}
+
 - (void)handleSingleSignOnError:(NSError *)aError callback:(LCCKBooleanResultBlock)aCallback {
     if (aError.code == 4111) {
         [self resetService];
@@ -248,6 +252,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
     generateSignatureBlock(clientId, conversationId, action, clientIds, completionHandler);
     return signature_;
 }
+
 
 #pragma mark - AVIMMessageDelegate
 
@@ -502,5 +507,6 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
         return NO;
     }
 }
+
 
 @end
