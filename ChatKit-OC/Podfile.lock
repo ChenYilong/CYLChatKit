@@ -9,7 +9,7 @@ PODS:
     - AVOSCloudIM/_NOARC (= 11.0.0)
   - AVOSCloudIM/_NOARC (11.0.0):
     - AVOSCloud (= 11.0.0)
-  - CYLChatKit (2.1.7):
+  - CYLChatKit (2.1.8):
     - AVOSCloud (~> 11.0.0)
     - AVOSCloudIM (~> 11.0.0)
     - CYLDeallocBlockExecutor (~> 1.2.0)
@@ -19,9 +19,8 @@ PODS:
     - FMDB (~> 2.6.2)
     - Masonry (~> 1.0.1)
     - MJRefresh (~> 3.1.9)
-    - MLLabel (~> 1.9.2)
+    - MLLabel (~> 1.10.5)
     - pop (~> 1.0.9)
-    - SDWebImage (~> 4.4.1)
     - "UITableView+FDTemplateLayoutCell (~> 1.5.beta)"
   - CYLDeallocBlockExecutor (1.2.0)
   - CYLMWPhotoBrowser (2.1.2-0.0.4):
@@ -39,7 +38,7 @@ PODS:
   - Masonry (1.0.2)
   - MBProgressHUD (1.1.0)
   - MJRefresh (3.1.15.3)
-  - MLLabel (1.9.2)
+  - MLLabel (1.10.5)
   - MLPAutoCompleteTextField (1.5)
   - pop (1.0.10)
   - RedPacketAlipay (15.0.2)
@@ -91,7 +90,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AVOSCloud: 8ffa848f5f7391fc7594d3671a29cd6f8a14cc2a
   AVOSCloudIM: 465af27feb394e50e1b09a7fd2da4645be340cdb
-  CYLChatKit: cd790bbc5095b37a0aff0f603bf77bd0922c3faa
+  CYLChatKit: 5e871a15766726b8cc0b0dc7a38970aa6acfda55
   CYLDeallocBlockExecutor: 1f8e904d846b8dadff88b2e5c2817df974cb63a9
   CYLMWPhotoBrowser: 6eca47c1c6156ab8a7566d3ba77483e043f57e08
   CYLTabBarController: b6e0574c2f5592edfbfc71a1b2be8dc0374cf11a
@@ -103,7 +102,7 @@ SPEC CHECKSUMS:
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   MJRefresh: b48380ae2b927b46c4ef000de9adb8dc748e1df7
-  MLLabel: df58127ce0bd1f87890ecc3232db77a85ce4cd97
+  MLLabel: d76124055a2205e7f76878e62cd06ba925ba0c97
   MLPAutoCompleteTextField: ba4d507bbff2bd4f139d4197814fc8dd39caf77e
   pop: 82ca6b068ce9278fd350fd9dd09482a0ce9492e6
   RedPacketAlipay: a5de6db2e2671fc9255d6d396be869e3ba2f0489

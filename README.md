@@ -231,7 +231,7 @@ CocoaPods 中，有几种设置 SDK 版本的方法。如：
 我们建议您锁定版本，便于团队开发。如，指定 0.8.5 版本。
 
  ```shell
-pod 'ChatKit', '0.8.5'
+pod 'CYLChatKit', '~> 2.1.8'
  ```
 
  - 升级本地 CocoaPods 源
