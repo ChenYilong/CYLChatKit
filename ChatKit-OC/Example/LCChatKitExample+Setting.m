@@ -332,9 +332,9 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
 - (void)lcck_setupPreviewImageMessage {
     [[LCChatKit sharedInstance] setPreviewImageMessageBlock:^(NSUInteger index, NSArray *allVisibleImages,
                                    NSArray *allVisibleThumbs, NSDictionary *userInfo){
-                                 [self examplePreviewImageMessageWithInitialIndex:index
-                                 allVisibleImages:allVisibleImages
-                                 allVisibleThumbs:allVisibleThumbs];
+//                                 [self examplePreviewImageMessageWithInitialIndex:index
+//                                 allVisibleImages:allVisibleImages
+//                                 allVisibleThumbs:allVisibleThumbs];
      }];
 }
 
