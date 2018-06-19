@@ -80,7 +80,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
 
 #pragma mark - leanCloud的app信息设置
 - (void)lcck_setupAppInfo {
-    // [[LCChatKit sharedInstance] setDisablePreviewUserId:YES];
+     [[LCChatKit sharedInstance] setDisablePreviewUserId:YES];
 #ifndef __OPTIMIZE__
     //        [LCChatKit setAllLogsEnabled:YES];
     [[LCChatKit sharedInstance] setUseDevPushCerticate:YES];

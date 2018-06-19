@@ -120,7 +120,6 @@
         }
     }
 
-    
     LCCKConfigureCellBlock configureCellBlock = [[LCCKConversationListService sharedInstance] configureCellBlock];
     
     BOOL impDelegate = [self.conversationListViewController.delegate respondsToSelector:@selector(conversation:cell:tableView:cellForRowAtIndexPath:)];

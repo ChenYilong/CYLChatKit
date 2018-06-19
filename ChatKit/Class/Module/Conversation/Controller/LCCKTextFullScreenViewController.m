@@ -26,7 +26,8 @@ static void * const LCCKTextFullScreenViewContentSizeContext = (void*)&LCCKTextF
 @property (nonatomic, copy, readonly) NSDictionary *textStyle;
 @property (nonatomic, copy) LCCKRemoveFromWindowHandler removeFromWindowHandler;
 @end
-
+@interface LCCKTextFullScreenViewController()<UITextViewDelegate>
+@end
 @implementation LCCKTextFullScreenViewController
 @synthesize textStyle = _textStyle;
 
@@ -43,10 +44,12 @@ static void * const LCCKTextFullScreenViewContentSizeContext = (void*)&LCCKTextF
         displayTextView.backgroundColor = [UIColor whiteColor];
         displayTextView.dataDetectorTypes = UIDataDetectorTypeAll;
         displayTextView.textContainerInset = UIEdgeInsetsMake(0,20,0,20);
-        [self.backgroundView addSubview:displayTextView];
         UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeFromWindow:)];
-        [displayTextView addGestureRecognizer:recognizer];
-        _displayTextView = displayTextView;
+        recognizer.delegate = self;
+        recognizer.numberOfTapsRequired = 1;
+        [self.view addSubview:(_displayTextView = displayTextView)];
+        [_displayTextView addGestureRecognizer:recognizer];
+        [self.view bringSubviewToFront:_displayTextView];
     }
     return _displayTextView;
 }
@@ -62,21 +65,6 @@ static void * const LCCKTextFullScreenViewContentSizeContext = (void*)&LCCKTextF
                        NSParagraphStyleAttributeName: style};
     }
     return _textStyle;
-}
-/**
- *  lazy load backgroundView
- *
- *  @return UIView
- */
-- (UIView *)backgroundView {
-    if (_backgroundView == nil) {
-        UIView *backgroundView = [[UIView alloc] initWithFrame:self.view.frame];
-        backgroundView.backgroundColor = [UIColor blueColor];
-        
-        [self.view addSubview:backgroundView];
-        _backgroundView = backgroundView;
-    }
-    return _backgroundView;
 }
 
 - (void)setRemoveFromWindowHandler:(LCCKRemoveFromWindowHandler)removeFromWindowHandler {
@@ -97,8 +85,11 @@ static void * const LCCKTextFullScreenViewContentSizeContext = (void*)&LCCKTextF
     NSMutableAttributedString *attrS = [LCCKFaceManager emotionStrWithString:text];
     [attrS addAttributes:self.textStyle range:NSMakeRange(0, attrS.length)];
     self.displayTextView.attributedText = attrS;
-    
     return self;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return YES;
 }
 
 - (BOOL)prefersStatusBarHidden {
