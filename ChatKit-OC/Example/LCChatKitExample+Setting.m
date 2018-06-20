@@ -19,7 +19,7 @@
 #import "LCCKLoginViewController.h"
 #import "LCChatKitExample+Setting.h"
 //#import "MWPhotoBrowser.h"
-#import <CYLMWPhotoBrowser/MWPhotoBrowser.h>
+//#import <CYLMWPhotoBrowser/MWPhotoBrowser.h>
 #import "NSObject+LCCKHUD.h"
 #import "LCCKGroupConversationDetailViewController.h"
 #import "LCCKSingleConversationDetailViewController.h"

@@ -17,14 +17,14 @@ Pod::Spec.new do |s|
   s.dependency "AVOSCloudIM", "~> 11.0.0"
   s.dependency "MJRefresh" , "~> 3.1.9"
   s.dependency "Masonry" , "~> 1.0.1"
-
+  s.dependency "SDWebImage" , "~> 4.4.1"
   s.dependency "FMDB" , "~> 2.6.2"
   s.dependency "pop", "~> 1.0.9"
   s.dependency "UITableView+FDTemplateLayoutCell" , "~> 1.5.beta"
   s.dependency "FDStackView" , "~> 1.0"
   s.dependency "DACircularProgress" , "~> 2.3.1"
   s.dependency "MLLabel" , "~> 1.10.5"
-  s.dependency "CYLMWPhotoBrowser", "~> 2.1.2-0.0.4" #contains: #  s.dependency "SDWebImage" , "~> 4.4.1"
   s.dependency "CYLDeallocBlockExecutor", "~> 1.2.0"
+  s.dependency 'MBProgressHUD', '~> 1.1.0'
 
 end

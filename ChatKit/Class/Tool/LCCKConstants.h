@@ -82,6 +82,8 @@ static NSString *const LCCKNotificationUnreadsUpdated = @"LCCKNotificationUnread
  *  消息到来了，通知聊天页面和最近对话页面刷新
  */
 static NSString *const LCCKNotificationMessageReceived = @"LCCKNotificationMessageReceived";
+static NSString *const LCCKNotificationMessageSent = @"LCCKNotificationMessageSent";
+
 /**
  *  消息到来了，通知聊天页面和最近对话页面刷新
  */
@@ -379,7 +381,6 @@ typedef NS_ENUM(NSInteger, LCCKBubbleMessageMenuSelectedType) {
     LCCKBubbleMessageMenuSelectedTypeVoiceMore = 14,
 };
 
-
 #pragma mark - Succeed Message Store
 ///=============================================================================
 /// @name Succeed Message Store
@@ -391,24 +392,26 @@ typedef NS_ENUM(NSInteger, LCCKBubbleMessageMenuSelectedType) {
 #define LCCKConversationTableKeyUnreadCount @"unreadCount"
 #define LCCKConversationTableKeyMentioned   @"mentioned"
 #define LCCKConversationTableKeyDraft       @"draft"
-
+#define LCCKConversationTableKeyOpenedAt    @"openedAt"
 #define LCCKConversatoinTableCreateSQL                                       \
     @"CREATE TABLE IF NOT EXISTS " LCCKConversationTableName @" ("           \
         LCCKConversationTableKeyId           @" VARCHAR(63) PRIMARY KEY, "   \
         LCCKConversationTableKeyData         @" BLOB NOT NULL, "             \
         LCCKConversationTableKeyUnreadCount  @" INTEGER DEFAULT 0, "         \
         LCCKConversationTableKeyMentioned    @" BOOL DEFAULT FALSE, "        \
-        LCCKConversationTableKeyDraft        @" VARCHAR(63)"                 \
+        LCCKConversationTableKeyDraft        @" VARCHAR(63),"                 \
+        LCCKConversationTableKeyOpenedAt     @" VARCHAR(63)"                 \
     @")"
 
 #define LCCKConversationTableInsertSQL                           \
-    @"INSERT OR IGNORE INTO " LCCKConversationTableName @" ("    \
+    @"INSERT OR REPLACE INTO " LCCKConversationTableName @" ("   \
         LCCKConversationTableKeyId               @", "           \
         LCCKConversationTableKeyData             @", "           \
         LCCKConversationTableKeyUnreadCount      @", "           \
         LCCKConversationTableKeyMentioned        @", "           \
-        LCCKConversationTableKeyDraft                            \
-    @") VALUES(?, ?, ?, ?, ?)"
+        LCCKConversationTableKeyDraft            @", "           \
+        LCCKConversationTableKeyOpenedAt                         \
+    @") VALUES(?, ?, ?, ?, ?, ?)"
 
 #define LCCKConversationTableWhereClause                         \
     @" WHERE " LCCKConversationTableKeyId         @" = ?"
@@ -462,7 +465,8 @@ typedef NS_ENUM(NSInteger, LCCKBubbleMessageMenuSelectedType) {
 
 #define LCCKConversationTableUpdateDataSQL                       \
     @"UPDATE " LCCKConversationTableName @" "                    \
-    @"SET " LCCKConversationTableKeyData @" = ? "                \
+    @"SET " LCCKConversationTableKeyData @" = ?, "                \
+ LCCKConversationTableKeyOpenedAt @" = ? "                \
     LCCKConversationTableWhereClause                             \
 
 #pragma mark - Failed Message Store

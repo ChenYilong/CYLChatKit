@@ -265,11 +265,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    if (_conversation) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            [[LCCKConversationService sharedInstance] updateConversationAsReadWithLastMessage:_conversation.lcck_lastMessage];
-        });
-    }
     //TODO:  群聊人数改变，改群名称
     !self.viewDidDisappearBlock ?: self.viewDidDisappearBlock(self, animated);
 }
@@ -562,6 +557,9 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     //    }
     [self callbackCurrentConversationEvenNotExists:conversation callback:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+                [[LCCKConversationService sharedInstance] updateConversationAsReadWithLastMessage:_conversation.lcck_lastMessage];
+            });
             [self handleLoadHistoryMessagesHandlerIfIsJoined:isJoined];
         }
     }];
