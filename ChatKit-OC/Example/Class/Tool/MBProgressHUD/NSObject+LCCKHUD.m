@@ -115,6 +115,7 @@ static CGFloat const kFailureMessageTime = 0.3f;
 
 /** 显示菊花和文字(需要主动让它消失，HUD放到指定view中) */
 + (MBProgressHUD *)lcck_showMessage:(NSString *)message toView:(UIView *)view {
+    [self lcck_hideHUDForView:view];
     if (view == nil) {
         view = [[UIApplication sharedApplication].windows lastObject];
     }

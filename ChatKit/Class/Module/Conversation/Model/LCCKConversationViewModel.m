@@ -463,6 +463,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
       progressBlock:(AVProgressBlock)progressBlock
             success:(LCCKBooleanResultBlock)success
              failed:(LCCKBooleanResultBlock)failed {
+    //[[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationMessageSent object:nil];
     if (!aMessage) {
         NSInteger code = 0;
         NSString *errorReasonText = @"message is nil";

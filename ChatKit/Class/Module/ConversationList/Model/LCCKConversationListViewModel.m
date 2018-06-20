@@ -252,6 +252,7 @@
 
 - (void)refresh {
     self.freshing = YES;
+    //FIXME:  
     [[LCCKConversationListService sharedInstance] findRecentConversationsWithBlock:^(NSArray *conversations, NSInteger totalUnreadCount, NSError *error) {
         dispatch_block_t finishBlock = ^{
             self.freshing = NO;

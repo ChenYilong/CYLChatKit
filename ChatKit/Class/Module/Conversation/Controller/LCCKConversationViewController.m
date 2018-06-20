@@ -67,7 +67,6 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 @property (nonatomic, strong) NSMutableArray *photos;
 @property (nonatomic, strong) NSMutableArray *thumbs;
 @property (nonatomic, assign, getter=isFirstTimeJoinGroup) BOOL firstTimeJoinGroup;
-
 @end
 
 @implementation LCCKConversationViewController
@@ -266,7 +265,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    if (_conversation && (self.chatViewModel.avimTypedMessage.count > 0)) {
+    if (_conversation) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
             [[LCCKConversationService sharedInstance] updateConversationAsReadWithLastMessage:_conversation.lcck_lastMessage];
         });
@@ -440,6 +439,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (void)setupNavigationItemTitleWithConversation:(AVIMConversation *)conversation {
+    self.navigationItem.titleView = nil;
     LCCKConversationNavigationTitleView *navigationItemTitle = [[LCCKConversationNavigationTitleView alloc] initWithConversation:conversation navigationController:self.navigationController];
     navigationItemTitle.frame = CGRectZero;
     //仅修高度,xyw值不变
@@ -989,6 +989,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         self.clientStatusView.hidden = NO;
     }
 }
+
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }

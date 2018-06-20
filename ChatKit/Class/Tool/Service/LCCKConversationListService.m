@@ -35,6 +35,7 @@
 #import "LCCKUserSystemService.h"
 #import "LCCKSessionService.h"
 #import "AVIMMessage+LCCKExtension.h"
+#import "LCChatKit.h"
 
 @implementation LCCKConversationListService
 @synthesize didSelectConversationsListCellBlock = _didSelectConversationsListCellBlock;
@@ -45,71 +46,43 @@
 - (void)findRecentConversationsWithBlock:(LCCKRecentConversationsCallback)block {
     [self selectOrRefreshConversationsWithBlock:^(NSArray *conversations, NSError *error) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        NSMutableSet *userIds = [NSMutableSet set];
-        NSUInteger totalUnreadCount = 0;
-        for (AVIMConversation *conversation in conversations) {
-//            NSArray *lastestMessages = [conversation queryMessagesFromCacheWithLimit:1];
-//            if (lastestMessages.count > 0) {
-//                AVIMTypedMessage *avimTypedMessage = [lastestMessages[0] lcck_getValidTypedMessage];
-//                
-//                id visiableForPartClientIds = [avimTypedMessage.attributes
-//                                                     valueForKey:LCCKCustomMessageOnlyVisiableForPartClientIds];
-//                BOOL isArray = [visiableForPartClientIds isKindOfClass:[NSArray class]];
-//                BOOL isString = [visiableForPartClientIds isKindOfClass:[NSString class]];
-//                if (!visiableForPartClientIds) {
-//                    conversation.lcck_lastMessage = avimTypedMessage;
-//                } else if (isArray && ([(NSArray *)visiableForPartClientIds count] > 0)) {
-//                    BOOL visiableForCurrentClientId =
-//                    [visiableForPartClientIds containsObject:[LCChatKit sharedInstance].clientId];
-//                    if (visiableForCurrentClientId) {
-//                        conversation.lcck_lastMessage = avimTypedMessage;
-//                    }
-//                } else if (isString && ([(NSString *)visiableForPartClientIds length] > 0)) {
-//                    if ([visiableForPartClientIds isEqualToString:[LCChatKit sharedInstance].clientId]) {
-//                        conversation.lcck_lastMessage = avimTypedMessage;
-//                    }
-//                }
-//            }
-            if (conversation.lcck_type == LCCKConversationTypeSingle) {
-                [userIds addObject:conversation.lcck_peerId];
-            } else {
-                if (conversation.lastMessageAt) {
-                    NSString *userId = conversation.lcck_lastMessage.clientId;
-                    (!userId || !conversation.lcck_lastMessage) ?: [userIds addObject:userId];
+            NSMutableSet *userIds = [NSMutableSet set];
+            NSUInteger totalUnreadCount = 0;
+            for (AVIMConversation *conversation in conversations) {
+                if (conversation.lcck_type == LCCKConversationTypeSingle) {
+                    [userIds addObject:conversation.lcck_peerId];
+                } else {
+                    if (conversation.lastMessageAt) {
+                        NSString *userId = conversation.lcck_lastMessage.clientId;
+                        (!userId || !conversation.lcck_lastMessage) ?: [userIds addObject:userId];
+                    }
+                }
+                if (conversation.muted == NO && conversation.lcck_unreadCount > 0) {
+                    totalUnreadCount += conversation.lcck_unreadCount;
                 }
             }
-            if (conversation.muted == NO && conversation.lcck_unreadCount > 0) {
-                totalUnreadCount += conversation.lcck_unreadCount;
+            NSArray *sortedRooms = [conversations sortedArrayUsingComparator:^NSComparisonResult(AVIMConversation *conv1, AVIMConversation *conv2) {
+                return (NSComparisonResult)(conv2.lcck_lastMessage.sendTimestamp - conv1.lcck_lastMessage.sendTimestamp);
+            }];
+            dispatch_async(dispatch_get_main_queue(),^{
+                !block ?: block(sortedRooms, totalUnreadCount, error);
+            });
+            
+            if (userIds.count == 0) {
+                return;
             }
-        }
-        NSArray *sortedRooms = [conversations sortedArrayUsingComparator:^NSComparisonResult(AVIMConversation *conv1, AVIMConversation *conv2) {
-            return (NSComparisonResult)(conv2.lcck_lastMessage.sendTimestamp - conv1.lcck_lastMessage.sendTimestamp);
-        }];
-        dispatch_async(dispatch_get_main_queue(),^{
-            !block ?: block(sortedRooms, totalUnreadCount, error);
-        });
-        
-        if (userIds.count == 0) {
-            return;
-        }
-        
-        [[LCCKUserSystemService sharedInstance] cacheUsersWithIds:userIds callback:nil];
+            
+            [[LCCKUserSystemService sharedInstance] cacheUsersWithIds:userIds callback:nil];
         });
     }];
 }
 
-- (void)fetchRelationConversationsFromServer:(AVIMArrayResultBlock)block {
+- (void)fetchRelationConversationsFromServer:(BOOL)isFromServer callback:(AVIMArrayResultBlock)block {
     AVIMClient *client = [LCCKSessionService sharedInstance].client;
     AVIMConversationQuery *orConversationQuery = [client conversationQuery];
-
-//    
-//    AVIMConversationQuery *query2 = [client conversationQuery];
-////    query2.limit = 10;
-//    [query2 whereKey:@"sys" equalTo:@(YES)];
-//    
-//    AVIMConversationQuery *orConversationQuery = [AVIMConversationQuery orQueryWithSubqueries:@[ query1, query2 ]];
-    orConversationQuery.cachePolicy = kAVIMCachePolicyIgnoreCache;
+    orConversationQuery.cachePolicy = isFromServer ? kAVIMCachePolicyIgnoreCache :  kAVIMCachePolicyCacheOnly;
     orConversationQuery.option = AVIMConversationQueryOptionWithMessage;
+    orConversationQuery.limit = 100;
     [orConversationQuery findConversationsWithCallback:^(NSArray<AVIMConversation *> * _Nullable conversations, NSError * _Nullable error) {
         !block ?: block(conversations, error);
     }];
@@ -118,35 +91,61 @@
 static BOOL refreshedFromServer = NO;
 
 - (void)selectOrRefreshConversationsWithBlock:(AVIMArrayResultBlock)block {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        NSArray  *conversations = [[LCCKConversationService sharedInstance] allRecentConversations];
-        if (refreshedFromServer == NO && [LCCKSessionService sharedInstance].connect) {
-            NSMutableSet *conversationIds = [NSMutableSet set];
-            for (AVIMConversation *conversation in conversations) {
-                [conversationIds addObject:conversation.conversationId];
-            }
-            [[LCCKConversationService sharedInstance] fetchConversationsWithConversationIds:conversationIds callback:^(NSArray<AVIMConversation *> *objects, NSError *error) {
-                if (error) {
-                        !block ?: block(conversations, error);
-                } else {
-                    refreshedFromServer = YES;
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-                        [[LCCKConversationService sharedInstance] updateRecentConversation:objects];
-                        dispatch_async(dispatch_get_main_queue(),^{
-                            !block ?: block(conversations, error);
-                        });
-                    });
-                    
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+            NSArray *conversations = [[LCCKConversationService sharedInstance] allRecentConversations];
+            if (refreshedFromServer == NO && [LCCKSessionService sharedInstance].connect) {
+                NSMutableSet *conversationIds = [NSMutableSet set];
+                for (AVIMConversation *conversation in conversations) {
+                    [conversationIds addObject:conversation.conversationId];
                 }
-            }];
-        } else {
-            dispatch_async(dispatch_get_main_queue(),^{
-                !block ?: block(conversations, nil);
-            });
-        }
-    });
+                [[LCCKConversationService sharedInstance] fetchConversationsWithConversationIds:conversationIds callback:^(NSArray<AVIMConversation *> *objects, NSError *error) {
+                    if (error) {
+                            !block ?: block(conversations, error);
+                    } else {
+                        refreshedFromServer = YES;
+                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+                            [[LCCKConversationService sharedInstance] updateRecentConversation:objects];
+                            dispatch_async(dispatch_get_main_queue(),^{
+                                !block ?: block(conversations, error);
+                            });
+                        });
+    
+                    }
+                }];
+            } else {
+                dispatch_async(dispatch_get_main_queue(),^{
+                    !block ?: block(conversations, nil);
+                });
+            }
+        });
+    
+    
+////    if (refreshedFromServer == NO && [LCCKSessionService sharedInstance].connect) {
+//        [[LCCKConversationListService sharedInstance] fetchRelationConversationsFromServer:NO callback:^(NSArray * _Nullable conversations, NSError * _Nullable error) {
+//            dispatch_async(dispatch_get_main_queue(),^{
+//                !block ?: block(conversations, nil);
+//            });
+//        }];
+////    } else {
+////        dispatch_async(dispatch_get_main_queue(),^{
+////            NSInteger code = 0;
+////            NSInteger subCode = code;
+////            NSString *errorReasonText = @"error reason";
+////            NSDictionary *errorInfo = @{
+////                                        @"subCode" : @(subCode),
+////                                        NSLocalizedDescriptionKey : errorReasonText,
+////                                        };
+////            NSError *error = [NSError errorWithDomain:NSStringFromClass([self class])
+////                                                 code:code
+////                                             userInfo:errorInfo];
+////            dispatch_async(dispatch_get_main_queue(),^{
+////                !block ?: block(nil, error);
+////
+////            });
+////        });
+////    }
 }
-                   
+
 #pragma mark -
 #pragma mark - Setter Method
 

@@ -79,14 +79,13 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
     }
     [_client openWithOption:option callback:^(BOOL succeeded, NSError *error) {
         [self updateConnectStatus];
-        
         BOOL isFirstLaunchForClientId = [[LCChatKit sharedInstance] lcck_isFirstLaunchToEvent:clientId
                                                                                    evenUpdate:YES
                                                                                   firstLaunch:^BOOL(){
                                                                                       return YES;
                                                                                   }];
-        if (succeeded && isFirstLaunchForClientId) {
-            [[LCCKConversationListService sharedInstance] fetchRelationConversationsFromServer:^(NSArray * _Nullable conversations, NSError * _Nullable error) {
+        if (succeeded) {
+            [[LCCKConversationListService sharedInstance] fetchRelationConversationsFromServer:isFirstLaunchForClientId callback:^(NSArray * _Nullable conversations, NSError * _Nullable error) {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
                     [[LCCKConversationService sharedInstance] insertRecentConversations:conversations shouldRefreshWhenFinished:NO];
                     dispatch_async(dispatch_get_main_queue(),^{
@@ -193,7 +192,7 @@ NSString *const LCCKSessionServiceErrorDomain = @"LCCKSessionServiceErrorDomain"
                                                                        message:@""
                                                                 preferredStyle:LCCKAlertControllerStyleAlert];
     NSString *cancelActionTitle = LCCKLocalizedStrings(@"cancel") ?: @"取消";
-    LCCKAlertAction* cancelAction = [LCCKAlertAction actionWithTitle:cancelActionTitle style:LCCKAlertActionStyleDefault
+    LCCKAlertAction *cancelAction = [LCCKAlertAction actionWithTitle:cancelActionTitle style:LCCKAlertActionStyleDefault
                                                              handler:^(LCCKAlertAction * action) {
                                                                  NSInteger code = 0;
                                                                  NSString *errorReasonText = @"request force single sign on failed";

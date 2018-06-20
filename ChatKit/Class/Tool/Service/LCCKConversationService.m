@@ -208,7 +208,6 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 }
 
 - (void)updateConversationAsReadWithLastMessage:(__kindof AVIMMessage *)lastMessage {
-
     AVIMConversation *conversation = self.currentConversation;
     NSString *conversationId = conversation.conversationId;
     if (!conversation.createAt || !conversation.imClient) {

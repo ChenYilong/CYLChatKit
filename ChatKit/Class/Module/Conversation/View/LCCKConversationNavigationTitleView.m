@@ -63,16 +63,18 @@ static void * const LCCKConversationViewControllerMembersCountContext = (void*)&
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if(context == LCCKConversationViewControllerMutedContext) {
-        id newKey = change[NSKeyValueChangeNewKey];
-        BOOL muted = [newKey boolValue];
-        self.remindMuteImageView.hidden = !muted;
-        [self.containerView layoutIfNeeded];
-    } else if(context == LCCKConversationViewControllerNameContext) {
-        [self resetConversationNameWithMembersCountChanged:NO];
-    } else if (context == LCCKConversationViewControllerMembersCountContext) {
-        [self resetConversationName];
-    }
+    dispatch_async(dispatch_get_main_queue(),^{
+        if(context == LCCKConversationViewControllerMutedContext) {
+            id newKey = change[NSKeyValueChangeNewKey];
+            BOOL muted = [newKey boolValue];
+            self.remindMuteImageView.hidden = !muted;
+            [self.containerView layoutIfNeeded];
+        } else if(context == LCCKConversationViewControllerNameContext) {
+            [self resetConversationNameWithMembersCountChanged:NO];
+        } else if (context == LCCKConversationViewControllerMembersCountContext) {
+            [self resetConversationName];
+        }
+    });
 }
 
 - (instancetype)sharedInitWithConversation:(AVIMConversation *)conversation {
@@ -80,7 +82,6 @@ static void * const LCCKConversationViewControllerMembersCountContext = (void*)&
     [conversation addObserver:self forKeyPath:@"muted" options:NSKeyValueObservingOptionNew context:LCCKConversationViewControllerMutedContext];
     [conversation addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:LCCKConversationViewControllerNameContext];
     [conversation addObserver:self forKeyPath:@"members.@count" options:NSKeyValueObservingOptionNew context:LCCKConversationViewControllerMembersCountContext];
-
     [self cyl_willDeallocWithSelfCallback:^(__unsafe_unretained id owner, NSUInteger identifier) {
         [conversation removeObserver:owner forKeyPath:@"muted"];
         [conversation removeObserver:owner forKeyPath:@"name"];
@@ -148,6 +149,7 @@ static void * const LCCKConversationViewControllerMembersCountContext = (void*)&
 
 #pragma mark -
 #pragma mark - Private Methods
+//2018-06-20 02:01:09.641036+0800 ChatKit-OC[26054:8518941] *** -[LCCKConversationNavigationTitleView conversationNameView]: message sent to deallocated instance 0x7fa90694af80
 
 - (void)resetConversationName {
     [self resetConversationNameWithMembersCountChanged:YES];
