@@ -143,7 +143,7 @@ static const CGFloat Redpacket_SubMessage_Font_Size = 12.0f;
 - (void)onRedpacketTakenMessage:(RedpacketMessageModel *)redpacket {
     if (![self.delegate isKindOfClass:[LCCKConversationViewController class]]) return;
     
-    LCCKConversationViewController * conversationViewController = (LCCKConversationViewController*)self.delegate;
+    LCCKConversationViewController *conversationViewController = (LCCKConversationViewController*)self.delegate;
     if ([redpacket.currentUser.userId isEqualToString:redpacket.redpacketSender.userId]) {//如果发送者是自己
         [conversationViewController sendLocalFeedbackTextMessge:@"您抢了自己的红包"];
     }
@@ -175,7 +175,7 @@ static const CGFloat Redpacket_SubMessage_Font_Size = 12.0f;
 }
 
 - (UIImage*)imageNamed:(NSString*)imageNamed ofBundle:(NSString*)bundleName {
-    NSString *resPath = [NSString stringWithFormat:@"%@/%@",bundleName,imageNamed];
+    NSString *resPath = [NSString stringWithFormat:@"%@/%@", bundleName, imageNamed];
     UIImage *image = [UIImage imageNamed:resPath];
     return image;
 }

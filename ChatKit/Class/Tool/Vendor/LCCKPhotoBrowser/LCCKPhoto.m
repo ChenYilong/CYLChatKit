@@ -206,8 +206,8 @@ caption = _caption, loadingInProgress = _loadingInProgress, placeholderFrame = _
                 if (self.progressUpdateBlock) {
                     self.progressUpdateBlock(progress);
                 }
-            }
-                                                                completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+                                                                     
+                                                                 } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {                                                                     
                 self.underlyingImage = image;
                 [self performSelectorOnMainThread:@selector(imageLoadingComplete) withObject:nil waitUntilDone:NO];
             }];

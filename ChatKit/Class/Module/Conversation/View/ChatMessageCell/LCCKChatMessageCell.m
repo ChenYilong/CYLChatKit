@@ -40,18 +40,13 @@ static CGFloat const kAvatarImageViewWidth = 50.f;
 static CGFloat const kAvatarImageViewHeight = kAvatarImageViewWidth;
 static CGFloat const LCCKMessageSendStateViewWidthHeight = 30.f;
 static CGFloat const LCCKMessageSendStateViewLeftOrRightToMessageContentView = 2.f;
-static CGFloat const LCCKAvatarToMessageContent = 5.f;
 
-static CGFloat const LCCKAvatarBottomToMessageContentTop = -1.f;
-
-
-static CGFloat const LCCK_MSG_CELL_EDGES_OFFSET = 16;
 static CGFloat const LCCK_MSG_CELL_NICKNAME_HEIGHT = 16;
 static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 
 @interface LCCKChatMessageCell ()<LCCKSendImageViewDelegate>
 
-@property (nonatomic, strong, readwrite) LCCKMessage *message;
+//@property (nonatomic, strong, readwrite) LCCKMessage *message;
 @property (nonatomic, assign, readwrite) AVIMMessageMediaType mediaType;
 @property (nonatomic, strong) UIColor *conversationViewSenderNameTextColor;
 
@@ -158,7 +153,6 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
                 CGFloat width = [UIApplication sharedApplication].keyWindow.frame.size.width;
                 CGFloat height = [UIApplication sharedApplication].keyWindow.frame.size.height;
                 CGFloat widthLimit = MIN(width, height)/5 * 3;
-                
                 make.width.lessThanOrEqualTo(@(widthLimit)).priorityHigh();
                 make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-LCCK_MSG_CELL_EDGES_OFFSET).priorityLow();
             }];
@@ -268,6 +262,12 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     }
     return isAbleToTap;
 }
+- (UIImageView *)messageContentBackgroundImageView {
+    if (!_messageContentBackgroundImageView) {
+        _messageContentBackgroundImageView = [[UIImageView alloc] init];
+    }
+    return _messageContentBackgroundImageView;
+}
 
 - (void)addGeneralView {
     [self.contentView addSubview:self.avatarImageView];
@@ -285,7 +285,6 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     
     self.messageSendStateView.hidden = YES;
     self.messageReadStateImageView.hidden = YES;
-    
 
     if (self.isAbleToTap) {
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
@@ -293,6 +292,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         tap.numberOfTapsRequired = 1;
         [self.contentView addGestureRecognizer:tap];
     }
+    
     UITapGestureRecognizer *avatarImageViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(avatarImageViewHandleTap:)];
     self.avatarImageView.userInteractionEnabled = YES;
     [self.avatarImageView addGestureRecognizer:avatarImageViewTap];
@@ -303,7 +303,6 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-    //    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
     CGPoint tapPoint = [gestureRecognizer locationInView:self.contentView];
     if (CGRectContainsPoint(self.avatarImageView.frame, tapPoint)) {
         return NO;
@@ -453,13 +452,6 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         _messageSendStateView.delegate = self;
     }
     return _messageSendStateView;
-}
-
-- (UIImageView *)messageContentBackgroundImageView {
-    if (!_messageContentBackgroundImageView) {
-        _messageContentBackgroundImageView = [[UIImageView alloc] init];
-    }
-    return _messageContentBackgroundImageView;
 }
 
 - (LCCKConversationType)messageChatType {

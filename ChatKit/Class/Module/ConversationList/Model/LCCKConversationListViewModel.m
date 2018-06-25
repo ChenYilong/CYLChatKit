@@ -112,7 +112,7 @@
         cell.messageTextLabel.attributedText = [LCCKLastMessageTypeManager attributedStringWithMessage:conversation.lcck_lastMessage conversation:conversation userName:displayName];
         cell.timestampLabel.text = [conversation.lcck_lastMessageAt lcck_timeAgoSinceNow];
     }
-    if (conversation.lcck_unreadCount > 0) {
+    if (conversation.unreadMessagesCount > 0) {
         if (conversation.muted) {
             cell.litteBadgeView.hidden = NO;
         } else {

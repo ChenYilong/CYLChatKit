@@ -57,8 +57,8 @@
                         (!userId || !conversation.lcck_lastMessage) ?: [userIds addObject:userId];
                     }
                 }
-                if (conversation.muted == NO && conversation.lcck_unreadCount > 0) {
-                    totalUnreadCount += conversation.lcck_unreadCount;
+                if (conversation.muted == NO && conversation.unreadMessagesCount > 0) {
+                    totalUnreadCount += conversation.unreadMessagesCount;
                 }
             }
             NSArray *sortedRooms = [conversations sortedArrayUsingComparator:^NSComparisonResult(AVIMConversation *conv1, AVIMConversation *conv2) {
@@ -77,10 +77,10 @@
     }];
 }
 
-- (void)fetchRelationConversationsFromServer:(BOOL)isFromServer callback:(AVIMArrayResultBlock)block {
+- (void)fetchRelationConversationsFromServerCallback:(AVIMArrayResultBlock)block {
     AVIMClient *client = [LCCKSessionService sharedInstance].client;
     AVIMConversationQuery *orConversationQuery = [client conversationQuery];
-    orConversationQuery.cachePolicy = isFromServer ? kAVIMCachePolicyIgnoreCache :  kAVIMCachePolicyCacheOnly;
+    orConversationQuery.cachePolicy = kAVIMCachePolicyIgnoreCache;
     orConversationQuery.option = AVIMConversationQueryOptionWithMessage;
     orConversationQuery.limit = 100;
     [orConversationQuery findConversationsWithCallback:^(NSArray<AVIMConversation *> * _Nullable conversations, NSError * _Nullable error) {
@@ -118,32 +118,6 @@ static BOOL refreshedFromServer = NO;
                 });
             }
         });
-    
-    
-////    if (refreshedFromServer == NO && [LCCKSessionService sharedInstance].connect) {
-//        [[LCCKConversationListService sharedInstance] fetchRelationConversationsFromServer:NO callback:^(NSArray * _Nullable conversations, NSError * _Nullable error) {
-//            dispatch_async(dispatch_get_main_queue(),^{
-//                !block ?: block(conversations, nil);
-//            });
-//        }];
-////    } else {
-////        dispatch_async(dispatch_get_main_queue(),^{
-////            NSInteger code = 0;
-////            NSInteger subCode = code;
-////            NSString *errorReasonText = @"error reason";
-////            NSDictionary *errorInfo = @{
-////                                        @"subCode" : @(subCode),
-////                                        NSLocalizedDescriptionKey : errorReasonText,
-////                                        };
-////            NSError *error = [NSError errorWithDomain:NSStringFromClass([self class])
-////                                                 code:code
-////                                             userInfo:errorInfo];
-////            dispatch_async(dispatch_get_main_queue(),^{
-////                !block ?: block(nil, error);
-////
-////            });
-////        });
-////    }
 }
 
 #pragma mark -

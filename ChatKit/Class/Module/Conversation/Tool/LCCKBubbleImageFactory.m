@@ -71,8 +71,8 @@
     } else {
         messageTypeString = [messageTypeString stringByAppendingString:@"normal"];
     }
-    UIImage *bublleImage = [UIImage lcck_imageNamed:messageTypeString bundleName:@"MessageBubble" bundleForClass:[self class]];
-    return LCCK_STRETCH_IMAGE(bublleImage, bubbleImageCapInsets);
+    UIImage *bubbleImage = [UIImage lcck_imageNamed:messageTypeString bundleName:@"MessageBubble" bundleForClass:[self class]];
+    return LCCK_STRETCH_IMAGE(bubbleImage, bubbleImageCapInsets);
 }
 
 @end

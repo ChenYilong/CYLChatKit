@@ -14,20 +14,11 @@
 
 @interface LCCKMessage : NSObject <NSCoding, NSCopying, LCCKMessageDelegate>
 
-/// Width of the image in pixels.
-@property(nonatomic, assign, readonly) int photoWidth;
-
-/// Height of the image in pixels.
-@property(nonatomic, assign, readonly) int photoHeight;
 @property (nonatomic, strong) AVIMMessage *message;
 
 @property (nonatomic, copy, readonly) NSString *text;
 @property (nonatomic, copy, readonly) NSString *systemText;
-@property (nonatomic, strong, readwrite) UIImage *photo;
-@property (nonatomic, strong, readwrite) UIImage *thumbnailPhoto;
-@property (nonatomic, copy, readonly) NSString *photoPath;
-@property (nonatomic, strong, readonly) NSURL *thumbnailURL;
-@property (nonatomic, strong, readonly) NSURL *originPhotoURL;
+
 @property (nonatomic, strong, readonly) UIImage *videoConverPhoto;
 @property (nonatomic, copy, readonly) NSString *videoPath;
 @property (nonatomic, strong, readonly) NSURL *videoURL;
@@ -43,7 +34,6 @@
 @property (nonatomic, copy, readonly) NSString *geolocations;
 @property (nonatomic, strong, readonly) CLLocation *location;
 
-@property (nonatomic, assign, readonly) AVIMMessageMediaType mediaType;
 //@property (nonatomic, assign) LCCKConversationType messageGroupType;
 @property (nonatomic, assign, readonly) LCCKMessageReadState messageReadState;
 @property (nonatomic, copy, readonly) NSString *serverMessageId;

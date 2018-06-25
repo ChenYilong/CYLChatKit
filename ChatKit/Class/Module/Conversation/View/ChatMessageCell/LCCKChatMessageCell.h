@@ -28,6 +28,7 @@
     #import "MLLinkLabel.h"
 #endif
 
+
 @class LCCKChatMessageCell;
 
 @protocol LCCKChatMessageCellSubclassing <NSObject>
@@ -57,7 +58,8 @@
 + (void)registerCustomMessageCell;
 + (void)registerSubclass;
 - (void)addGeneralView;
-@property (nonatomic, strong, readonly) LCCKMessage *message;
+
+@property (nonatomic, strong) LCCKMessage *message;
 
 //FIXME:retain cycle
 @property (nonatomic, strong) UITableView *tableView;
@@ -129,3 +131,5 @@
 - (void)configureCellWithData:(id)message;
 
 @end
+
+

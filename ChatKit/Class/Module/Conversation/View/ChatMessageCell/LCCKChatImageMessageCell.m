@@ -83,10 +83,9 @@
         NSString *imageLocalPath = message.photoPath;
         
         NSString *imageLocalOrURLPath = message.originPhotoURL.absoluteString;
-        if (imageLocalPath.length > 0) {
+        if (imageLocalPath.length > 0 && [NSData dataWithContentsOfFile:imageLocalPath]) {
             imageLocalOrURLPath = imageLocalPath;
         }
-        
         BOOL isLocalPath = ![imageLocalOrURLPath hasPrefix:@"http"];
         //note: this will ignore contentMode.
         if (imageLocalPath.length > 0 && isLocalPath) {
@@ -109,9 +108,8 @@
             CGSize photoSize = CGSizeMake(message.photoWidth ?: 30, message.photoHeight ?: 30);
             UIImage *newImage = [image lcck_imageByScalingAspectFillWithOriginSize:photoSize];
             self.messageImageView.contentMode = UIViewContentModeScaleAspectFit;
-            UIEdgeInsets edgeMessageBubbleCustomize;
             self.messageImageView.image = newImage;
-            AVIMImageMessage *imgMessage = message.message;
+            AVIMImageMessage *imgMessage = (AVIMImageMessage *)message.message;
             [imgMessage.file downloadWithCompletionHandler:^(NSURL * _Nullable filePath, NSError * _Nullable error) {
                 if (filePath.absoluteString.length > 0) {
                     NSData *data = [NSData dataWithContentsOfURL:filePath];
@@ -120,16 +118,14 @@
                         message.photo = image;
                         message.thumbnailPhoto = [image lcck_imageByScalingAspectFillWithOriginSize:photoSize];
                         [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConversionImageMessageDidDownloaded object:self];
-
+                        
                     }
                 }
-                }];
+            }];
             break;
         }
     } while (NO);
 }
-
-
 
 - (UIImage *)imageInBundleForImageName:(NSString *)imageName {
     return ({

@@ -791,37 +791,20 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     }
     [self.chatBar close];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:messageCell];
-    LCCKMessage *message = [self.chatViewModel.dataArray lcck_messageAtIndex:indexPath.row];
+    id<LCCKMessageDelegate> message = [self.chatViewModel.dataArray lcck_messageAtIndex:indexPath.row];
     switch (messageCell.mediaType) {
         case kAVIMMessageMediaTypeAudio: {
-            NSString *voiceFileName = message.voicePath;//必须带后缀，.mp3；
+            LCCKMessage *voiceMessage = (LCCKMessage *)message;
+            NSString *voiceFileName = voiceMessage.voicePath;//必须带后缀，.mp3；
             [[LCCKAVAudioPlayer sharePlayer] playAudioWithURLString:voiceFileName identifier:message.messageId];
         }
             break;
         case kAVIMMessageMediaTypeImage: {
-            ///FIXME:4S等低端机型在图片超过1M时，有几率会Crash，尤其是全景图。
-            LCCKPreviewImageMessageBlock previewImageMessageBlock = [LCCKUIService sharedInstance].previewImageMessageBlock;
-            UIImageView *placeholderView = [(LCCKChatImageMessageCell *)messageCell messageImageView];
-            NSDictionary *userInfo = @{
-                                       /// 传递触发的UIViewController对象
-                                       LCCKPreviewImageMessageUserInfoKeyFromController : self,
-                                       /// 传递触发的UIView对象
-                                       LCCKPreviewImageMessageUserInfoKeyFromView : self.tableView,
-                                       LCCKPreviewImageMessageUserInfoKeyFromPlaceholderView : placeholderView
-                                       };
-            NSArray *allVisibleImages = nil;
-            NSArray *allVisibleThumbs = nil;
-            NSNumber *selectedMessageIndex = nil;
-            [self.chatViewModel getAllVisibleImagesForSelectedMessage:messageCell.message allVisibleImages:&allVisibleImages allVisibleThumbs:&allVisibleThumbs selectedMessageIndex:&selectedMessageIndex];
-            
-            if (previewImageMessageBlock) {
-                previewImageMessageBlock(selectedMessageIndex.unsignedIntegerValue, allVisibleImages, allVisibleThumbs, userInfo);
-            } else {
-                [self previewImageMessageWithInitialIndex:selectedMessageIndex.unsignedIntegerValue allVisibleImages:allVisibleImages allVisibleThumbs:allVisibleThumbs placeholderImageView:placeholderView fromViewController:self];
-            }
+            [self imageMessageCellTappedMessageCell:messageCell];
         }
             break;
         case kAVIMMessageMediaTypeLocation: {
+            LCCKMessage *locationMessage = (LCCKMessage *)message;
             NSDictionary *userInfo = @{
                                        /// 传递触发的UIViewController对象
                                        LCCKPreviewLocationMessageUserInfoKeyFromController : self,
@@ -829,14 +812,46 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                                        LCCKPreviewLocationMessageUserInfoKeyFromView : self.tableView,
                                        };
             LCCKPreviewLocationMessageBlock previewLocationMessageBlock = [LCCKUIService sharedInstance].previewLocationMessageBlock;
-            !previewLocationMessageBlock ?: previewLocationMessageBlock(message.location, message.geolocations, userInfo);
+            !previewLocationMessageBlock ?: previewLocationMessageBlock(locationMessage.location, locationMessage.geolocations, userInfo);
         }
             break;
         default: {
+            BOOL isImage;
+            @try {
+                isImage = (message.photo || message.photoPath.length > 0);
+            }
+            @catch (NSException *){}
+            if (isImage) {
+                [self imageMessageCellTappedMessageCell:messageCell];
+                
+            }
         }
             break;
     }
     [self.chatBar open];
+}
+
+
+- (void)imageMessageCellTappedMessageCell:(LCCKChatImageMessageCell *)messageCell {
+    ///FIXME:4S等低端机型在图片超过1M时，有几率会Crash，尤其是全景图。
+    LCCKPreviewImageMessageBlock previewImageMessageBlock = [LCCKUIService sharedInstance].previewImageMessageBlock;
+    UIImageView *placeholderView = [(LCCKChatImageMessageCell *)messageCell messageImageView];
+    NSDictionary *userInfo = @{
+                               /// 传递触发的UIViewController对象
+                               LCCKPreviewImageMessageUserInfoKeyFromController : self,
+                               /// 传递触发的UIView对象
+                               LCCKPreviewImageMessageUserInfoKeyFromView : self.tableView,
+                               LCCKPreviewImageMessageUserInfoKeyFromPlaceholderView : placeholderView
+                               };
+    NSArray *allVisibleImages = nil;
+    NSArray *allVisibleThumbs = nil;
+    NSNumber *selectedMessageIndex = nil;
+    [self.chatViewModel getAllVisibleImagesForSelectedMessage:messageCell.message allVisibleImages:&allVisibleImages allVisibleThumbs:&allVisibleThumbs selectedMessageIndex:&selectedMessageIndex];
+    if (previewImageMessageBlock) {
+        previewImageMessageBlock(selectedMessageIndex.unsignedIntegerValue, allVisibleImages, allVisibleThumbs, userInfo);
+    } else {
+        [self previewImageMessageWithInitialIndex:selectedMessageIndex.unsignedIntegerValue allVisibleImages:allVisibleImages allVisibleThumbs:allVisibleThumbs placeholderImageView:placeholderView fromViewController:self];
+    }
 }
 
 - (void)previewImageMessageWithInitialIndex:(NSUInteger)initialIndex
@@ -847,6 +862,9 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     // Browser
     NSMutableArray *photos = [[NSMutableArray alloc] initWithCapacity:[allVisibleImages count]];
     NSMutableArray *thumbs = [[NSMutableArray alloc] initWithCapacity:[allVisibleThumbs count]];
+    if (allVisibleImages.count == 0 && allVisibleThumbs.count == 0) {
+        return;
+    }
     LCCKPhoto *photo;
     for (NSUInteger index = 0; index < allVisibleImages.count; index++) {
         id image_ = allVisibleImages[index];

@@ -1388,8 +1388,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     id <LCCKPhoto> photo = [self photoAtIndex:_currentPageIndex];
 
     if ([self numberOfPhotos] > 0 && [photo underlyingImageExisted]) {
-        if(!_actionButtonTitles)
-        {
+        if(!_actionButtonTitles) {
             // Activity view
             NSMutableArray *activityItems = [NSMutableArray arrayWithObject:[photo underlyingImage]];
             if (photo.caption) [activityItems addObject:photo.caption];
@@ -1398,16 +1397,13 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 
             __typeof__(self) __weak selfBlock = self;
 
-			if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0"))
-			{
+			if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
                 // man
 				[self.activityViewController setCompletionWithItemsHandler:^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
 //					[selfBlock hideControlsAfterDelay];
 					selfBlock.activityViewController = nil;
 				}];
-			}
-			else
-			{
+			} else {
 				[self.activityViewController setCompletionHandler:^(NSString *activityType, BOOL completed) {
 //					[selfBlock hideControlsAfterDelay];
 					selfBlock.activityViewController = nil;
@@ -1423,16 +1419,13 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 										 inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny
 									   animated:YES];
 			}
-        }
-        else
-        {
+        } else {
             // Action sheet
             self.actionsSheet = [UIActionSheet new];
             self.actionsSheet.delegate = self;
             for(NSString *action in _actionButtonTitles) {
                 [self.actionsSheet addButtonWithTitle:action];
             }
-
             self.actionsSheet.cancelButtonIndex = [self.actionsSheet addButtonWithTitle:LCCKPhotoBrowserLocalizedStrings(@"Cancel")];
             self.actionsSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
 
@@ -1443,7 +1436,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
                 [_actionsSheet showInView:self.view];
             }
         }
-
         // Keep controls hidden
         [self setControlsHidden:NO animated:NO permanent:YES];
     }

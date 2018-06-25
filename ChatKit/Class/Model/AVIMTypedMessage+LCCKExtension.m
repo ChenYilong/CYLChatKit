@@ -27,7 +27,20 @@
         }
         case kAVIMMessageMediaTypeVideo:
         case kAVIMMessageMediaTypeImage: {
-            avimTypedMessage = [AVIMImageMessage messageWithText:nil attachedFilePath:message.photoPath attributes:nil];
+            
+            NSString *localPhotoPath = message.photoPath;
+            NSString *remotePhotoPath = message.originPhotoURL;
+
+            if ([remotePhotoPath hasPrefix:@"http"]) {
+                AVFile *file = [AVFile fileWithRemoteURL:[NSURL URLWithString:remotePhotoPath]];
+                avimTypedMessage = [AVIMImageMessage messageWithText:nil file:file attributes:nil];
+            } else if ([localPhotoPath hasPrefix:@"http"]) {
+                AVFile *file = [AVFile fileWithRemoteURL:[NSURL URLWithString:localPhotoPath]];
+                avimTypedMessage = [AVIMImageMessage messageWithText:nil file:file attributes:nil];
+            } else {
+                avimTypedMessage = [AVIMImageMessage messageWithText:nil attachedFilePath:message.photoPath attributes:nil];
+            }
+            
             break;
         }
         case kAVIMMessageMediaTypeAudio: {

@@ -682,6 +682,9 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
              BOOL succeed = [self.parentConversationViewController filterAVIMError:error];
              if (succeed) {
+                 [[self currentConversation] readInBackground];
+                [[self currentConversation] setUnreadMessagesMentioned:NO];
+                 
                  NSMutableArray *lcckSucceedMessags = [NSMutableArray lcck_messagesWithAVIMMessages:avimTypedMessages];
                  [self addMessagesFirstTime:lcckSucceedMessags];
                  NSMutableArray *allMessages = [NSMutableArray arrayWithArray:avimTypedMessages];
@@ -800,11 +803,32 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     NSMutableArray *allVisibleImages_ = [[NSMutableArray alloc] initWithCapacity:0];
     NSMutableArray *allVisibleThumbs_ = [[NSMutableArray alloc] initWithCapacity:0];
     NSUInteger idx = 0;
-    for (LCCKMessage *message_ in self.dataArray) {
+    for (NSObject<LCCKMessageDelegate> *message_ in self.dataArray) {
         if ([message_ lcck_isCustomMessage]) {
-            continue;
+////            AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)message_;
+//            NSString *imageLocalPath = message_.photoPath;
+//            BOOL isImageLocal;
+//            if ( (imageLocalPath.length >0 ) && ([NSData dataWithContentsOfFile:imageLocalPath])) {
+//                isImageLocal = YES;
+//            }
+//
+//            BOOL isRemoteImage = message_.originPhotoURL.absoluteString.length > 0;
+//            if (!isImageLocal && !isRemoteImage && !message_.photo) {
+//                continue;
+//            }
+            BOOL isImage;
+            @try {
+                isImage = (message_.photo || message_.photoPath.length > 0);
+            } @catch (NSException *){}
+            if (!isImage) {
+                continue;
+            }
         }
-        BOOL isImageType = (message_.mediaType == kAVIMMessageMediaTypeImage || message_.photo || message_.originPhotoURL);
+        
+        BOOL isImageType;
+        @try {
+          isImageType = (message_.mediaType == kAVIMMessageMediaTypeImage || message_.photo || message_.originPhotoURL);
+        } @catch (NSException *exception) {}
         if (isImageType) {
             UIImage *placeholderImage = ({
                 NSString *imageName = @"Placeholder_Accept_Defeat";

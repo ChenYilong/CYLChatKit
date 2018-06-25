@@ -84,8 +84,10 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 - (UIImageView *)avatarImageView {
     if (_avatarImageView == nil) {
         UIImageView *avatarImageView = [[UIImageView alloc] initWithFrame:CGRectMake(LCCKHorizontalSpacing, LCCKVerticalSpacing, LCCKImageSize, LCCKImageSize)];
+        avatarImageView.contentMode = UIViewContentModeScaleAspectFill;//防止特别长或者宽的图片显示不正常
         LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
         if (avatarImageViewCornerRadiusBlock) {
+//            avatarImageView.frame = CGRectMake(0, 0, LCCKImageSize, LCCKImageSize);
             CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatarImageView.frame.size);
             avatarImageView.lcck_cornerRadius = avatarImageViewCornerRadius;
         }

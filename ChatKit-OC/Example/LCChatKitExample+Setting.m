@@ -617,8 +617,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
 }
 
 + (void)lcck_exampleChangeGroupAvatarURLsForConversationId:(NSString *)conversationId
-                                              shouldInsert:(BOOL)shouldInsert 
-{
+                                              shouldInsert:(BOOL)shouldInsert {
 }
 
 /**
@@ -647,11 +646,11 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
                                   handle:&handler
                             conversation:conversation
                               controller:controller];
-    UITableViewRowAction *actionItemMore =
+    UITableViewRowAction *actionItemUnreadMessagesCount =
     [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault
                                        title:title
                                      handler:handler];
-    actionItemMore.backgroundColor = [UIColor colorWithRed:0.78f green:0.78f blue:0.8f alpha:1.0];
+    actionItemUnreadMessagesCount.backgroundColor = [UIColor colorWithRed:0.78f green:0.78f blue:0.8f alpha:1.0];
     UITableViewRowAction *actionItemDelete = [UITableViewRowAction
                                               rowActionWithStyle:UITableViewRowActionStyleDefault
                                               title:@"删除"
@@ -667,10 +666,12 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
                                                               shouldInsert:NO];
                                                          }];
     actionItemChangeGroupAvatar.backgroundColor = [UIColor colorWithRed:251 / 255.f green:186 / 255.f blue:11 / 255.f alpha:1.0];
+    
+    BOOL hasUnreadMessages = (conversation.unreadMessagesCount > 0);
     if (conversation.lcck_type == LCCKConversationTypeSingle) {
-        return @[ actionItemDelete, actionItemMore ];
+        return hasUnreadMessages ? @[ actionItemDelete, actionItemUnreadMessagesCount ] : @[ actionItemDelete ] ;
     }
-    return @[ actionItemDelete, actionItemMore, actionItemChangeGroupAvatar ];
+    return hasUnreadMessages ? @[ actionItemDelete, actionItemUnreadMessagesCount, actionItemChangeGroupAvatar ] : @[ actionItemDelete, actionItemChangeGroupAvatar ];
 }
 
 typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSIndexPath *indexPath);
@@ -681,7 +682,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
                           conversation:(AVIMConversation *)conversation
                             controller:(LCCKConversationListViewController *)controller {
     NSString *conversationId = conversation.conversationId;
-    if (conversation.lcck_unreadCount > 0) {
+//    if (conversation.unreadMessagesCount > 0) {
         if (title) {
             *title = @"标记为已读";
         }
@@ -689,15 +690,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
             [controller.tableView setEditing:NO animated:YES];
             [[LCChatKit sharedInstance] updateUnreadCountToZeroWithConversationId:conversationId];
         };
-    } else {
-        if (title) {
-            *title = @"标记为未读";
-        }
-        *handler = ^(UITableViewRowAction *action, NSIndexPath *indexPath) {
-            [controller.tableView setEditing:NO animated:YES];
-            [[LCChatKit sharedInstance] increaseUnreadCountWithConversationId:conversationId];
-        };
-    }
+//    }
 }
 
 #pragma mark 页面跳转

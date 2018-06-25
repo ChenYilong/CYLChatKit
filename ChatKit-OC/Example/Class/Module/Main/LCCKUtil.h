@@ -43,4 +43,8 @@
  */
 + (void)hideNotification;
 
++ (CGSize)sizeFromOSSURLString:(NSString *)URLString;
+
++ (BOOL)containsQRInfoFromOSSURLString:(NSString *)URLString;
+
 @end

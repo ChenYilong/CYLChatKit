@@ -46,35 +46,15 @@
     return isServerLate ? dateFromServer : dateFromCache;
 }
 
-- (NSInteger)lcck_unreadCount {
-    NSNumber *lcck_unreadCountObject = objc_getAssociatedObject(self, @selector(lcck_unreadCount));
-    return [lcck_unreadCountObject intValue];
-}
-
 - (NSString *)lcck_badgeText {
     NSString *badgeText;
-    NSUInteger unreadCount = self.lcck_unreadCount;
+    NSUInteger unreadCount = self.unreadMessagesCount;
     if (unreadCount > 99) {
         badgeText = LCCKBadgeTextForNumberGreaterThanLimit;
     } else {
         badgeText = [NSString stringWithFormat:@"%@", @(unreadCount)];
     }
     return badgeText;
-}
-
-- (void)setLcck_unreadCount:(NSInteger)lcck_unreadCount {
-    NSNumber *lcck_unreadCountObject = [NSNumber numberWithInteger:lcck_unreadCount];
-    objc_setAssociatedObject(self, @selector(lcck_unreadCount), lcck_unreadCountObject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (BOOL)lcck_mentioned {
-    NSNumber *lcck_mentionedObject = objc_getAssociatedObject(self, @selector(lcck_mentioned));
-    return [lcck_mentionedObject boolValue];
-}
-
-- (void)setLcck_mentioned:(BOOL)lcck_mentioned {
-    NSNumber *lcck_mentionedObject = [NSNumber numberWithBool:lcck_mentioned];
-    objc_setAssociatedObject(self, @selector(lcck_mentioned), lcck_mentionedObject, OBJC_ASSOCIATION_ASSIGN);
 }
 
 - (NSString *)lcck_draft {

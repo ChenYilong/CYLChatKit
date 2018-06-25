@@ -59,6 +59,10 @@
 @synthesize sendStatus = _sendStatus;
 @synthesize conversationId = _conversationId;
 @synthesize ownerType = _ownerType;
+@synthesize photoWidth = _photoWidth;
+@synthesize photoHeight = _photoHeight;
+@synthesize photo = _photo;
+@synthesize thumbnailPhoto = _thumbnailPhoto;
 
 - (instancetype)initWithText:(NSString *)text
                     senderId:(NSString *)senderId

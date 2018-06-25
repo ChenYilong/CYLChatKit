@@ -108,4 +108,63 @@
     return isIPhoneX;
 }
 
+/*!
+*
+* [self sizeFromOSSURLString:@"https://hdl-emas-app-bucket.oss-cn-beijing.aliyuncs.com/invest_card-containsqrinfo-501-767.png"];
+ */
++ (CGSize)sizeFromOSSURLString:(NSString *)URLString {
+    NSArray *array = [URLString componentsSeparatedByString:@"-"];
+    if (array.count < 2) {
+        return CGSizeZero;
+    }
+    id lastObject = array.lastObject;
+    id lastSecondObject = array[(array.count - 2)];
+    if ([[self class] isValidString:lastObject] && [[self class] isValidString:lastSecondObject]) {
+        CGFloat height = 0;
+        CGFloat width = 0;
+        width = [lastSecondObject floatValue];
+        NSArray *array = [lastObject componentsSeparatedByString:@"."];
+        if (array.count < 2) {
+            return CGSizeZero;
+        }
+        NSString *string = array[(array.count - 2)];
+        if ([[self class] isValidString:string]) {
+            height = [string floatValue];
+        }
+        if ((width > 0) && (height > 0)) {
+            LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@--%@", @(__PRETTY_FUNCTION__), @(__LINE__), @(width), @(height));
+            return CGSizeMake(width, height);
+        }
+    }
+    return CGSizeZero;
+}
+
++ (BOOL)containsQRInfoFromOSSURLString:(NSString *)URLString {
+    BOOL containsqrinfo = [URLString containsString:@"containsqrinfo"];
+    return containsqrinfo;
+}
+
++ (BOOL)isValidString:(id)notValidString {
+    if (!notValidString) {
+        return NO;
+    }
+    BOOL isKindOf = NO;
+    @try {
+        isKindOf = [notValidString isKindOfClass:[NSString class]];
+    } @catch (NSException *exception) {}
+    if (!isKindOf) {
+        return NO;
+    }
+    
+    NSInteger stringLength = 0;
+    @try {
+        stringLength = [notValidString length];
+    } @catch (NSException *exception) {}
+    if (stringLength == 0) {
+        return NO;
+    }
+    return YES;
+}
+
 @end
+
