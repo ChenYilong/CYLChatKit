@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "CYLChatKit"
-  s.version      = "2.1.10"
+  s.version      = "2.1.10.1"
   s.summary      = "An IM App Framework, support sending text, pictures, audio, video, location messaging, managing address book, more interesting features."
   s.homepage     = "https://github.com/ChenYilong/CYLChatKit"
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
@@ -15,8 +15,8 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.dependency "AVOSCloud" , "~> 11.1.2"
   s.dependency "AVOSCloudIM", "~> 11.1.2"
-  s.dependency "MJRefresh" , "~> 3.1.9"
-  s.dependency "Masonry" , "~> 1.0.1"
+  s.dependency "MJRefresh" , "~> 3.1.15.1"
+  s.dependency "Masonry" , "~> 1.1.0"
   s.dependency "SDWebImage" , "~> 4.4.1"
   s.dependency "FMDB" , "~> 2.6.2"
   s.dependency "pop", "~> 1.0.9"
