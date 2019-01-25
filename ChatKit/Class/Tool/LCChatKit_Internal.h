@@ -2,7 +2,7 @@
 //  LCChatKit_Internal.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/3/9.
+//  Created by 陈宜龙 on 16/3/9.
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 #import "LCChatKit.h"

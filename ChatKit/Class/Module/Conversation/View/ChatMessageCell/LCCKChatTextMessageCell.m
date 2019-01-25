@@ -2,29 +2,22 @@
 //  LCCKChatTextMessageCell.m
 //  LCCKChatExample
 //
-//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
+//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
-
 #import "LCCKChatTextMessageCell.h"
+
+#import "Masonry.h"
 #import "LCCKFaceManager.h"
-#import "LCCKWebViewController.h"
 
 @interface LCCKChatTextMessageCell ()
 
 /**
  *  用于显示文本消息的文字
  */
-@property (nonatomic, strong) MLLinkLabel *messageTextLabel;
+@property (nonatomic, strong) UILabel *messageTextLabel;
 @property (nonatomic, copy, readonly) NSDictionary *textStyle;
-@property (nonatomic, strong) NSArray *expressionData;
-@property (nonatomic, strong) UIColor *conversationViewMessageLinkColorLeft; /**< 左侧消息中链接文字颜色，如果没有该项，则使用统一的消息链接文字颜色 */
-@property (nonatomic, strong) UIColor *conversationViewMessageLinkColorRight; /**< 右侧消息中链接文字颜色，如果没有该项，则使用统一的消息链接文字颜色 */
-@property (nonatomic, strong) UIColor *conversationViewMessageLinkColor; /**< 右侧消息中链接文字颜色，如果没有该项，则使用统一的消息链接文字颜色 */
-
-//TODO:
-//ConversationView-Message-Middle-TextColor: 居中文本消息文字颜色
 
 @end
 
@@ -35,16 +28,8 @@
 
 - (void)updateConstraints {
     [super updateConstraints];
-    UIEdgeInsets edgeMessageBubbleCustomize;
-    if (self.messageOwner == LCCKMessageOwnerTypeSelf) {
-        UIEdgeInsets rightEdgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].rightEdgeMessageBubbleCustomize;
-        edgeMessageBubbleCustomize = rightEdgeMessageBubbleCustomize;
-    } else {
-        UIEdgeInsets leftEdgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].leftEdgeMessageBubbleCustomize;
-        edgeMessageBubbleCustomize = leftEdgeMessageBubbleCustomize;
-    }
     [self.messageTextLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.messageContentView).with.insets(edgeMessageBubbleCustomize);
+        make.edges.equalTo(self.messageContentView).with.insets(UIEdgeInsetsMake(8, 16, 8, 16));
     }];
 }
 
@@ -52,33 +37,10 @@
 
 - (void)setup {
     [self.messageContentView addSubview:self.messageTextLabel];
-    UIColor *linkColor = [UIColor blueColor];
-    if (self.messageOwner == LCCKMessageOwnerTypeSelf) {
-        self.messageTextLabel.textColor = self.conversationViewMessageRightTextColor;
-        if (self.conversationViewMessageLinkColorRight) {
-            linkColor = self.conversationViewMessageLinkColorRight;
-        } else if (self.conversationViewMessageLinkColor) {
-            linkColor = self.conversationViewMessageLinkColor;
-        }
-    } else {
-        self.messageTextLabel.textColor = self.conversationViewMessageLeftTextColor;
-        if (self.conversationViewMessageLinkColorLeft) {
-            linkColor = self.conversationViewMessageLinkColorLeft;
-        } else if (self.conversationViewMessageLinkColor) {
-            linkColor = self.conversationViewMessageLinkColor;
-        }
-    }
-    self.messageTextLabel.linkTextAttributes = @{ NSForegroundColorAttributeName : linkColor };
-    self.messageTextLabel.activeLinkTextAttributes = @{
-                                                       NSForegroundColorAttributeName : linkColor ,
-                                                       NSBackgroundColorAttributeName : kDefaultActiveLinkBackgroundColorForMLLinkLabel
-                                                       };
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapMessageContentViewGestureRecognizerHandle:)];
     tapGestureRecognizer.numberOfTapsRequired = 2;
     [self.messageContentView addGestureRecognizer:tapGestureRecognizer];
     [super setup];
-    [self addGeneralView];
-    
 }
 
 - (void)configureCellWithData:(LCCKMessage *)message {
@@ -90,18 +52,13 @@
 
 #pragma mark - Getters
 
-- (MLLinkLabel *)messageTextLabel {
+- (UILabel *)messageTextLabel {
     if (!_messageTextLabel) {
-        _messageTextLabel = [[MLLinkLabel alloc] init];
-        _messageTextLabel.font = [LCCKSettingService sharedInstance].defaultThemeTextMessageFont;
+        _messageTextLabel = [[UILabel alloc] init];
+        _messageTextLabel.textColor = [UIColor blackColor];
+        _messageTextLabel.font = [UIFont systemFontOfSize:16.0f];
         _messageTextLabel.numberOfLines = 0;
-        _messageTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        __weak __typeof(self) weakSelf = self;
-        [_messageTextLabel setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
-            if ([weakSelf.delegate respondsToSelector:@selector(messageCell:didTapLinkText:linkType:)]) {
-                [weakSelf.delegate messageCell:weakSelf didTapLinkText:linkText linkType:link.linkType];
-            }
-        }];
+        _messageTextLabel.lineBreakMode = NSLineBreakByWordWrapping;;
     }
     return _messageTextLabel;
 }
@@ -116,50 +73,21 @@
 
 - (NSDictionary *)textStyle {
     if (!_textStyle) {
-        UIFont *font = [LCCKSettingService sharedInstance].defaultThemeTextMessageFont;
+        UIFont *font = [UIFont systemFontOfSize:14.0f];
         NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         style.alignment = NSTextAlignmentLeft;
         style.paragraphSpacing = 0.25 * font.lineHeight;
         style.hyphenationFactor = 1.0;
         _textStyle = @{NSFontAttributeName: font,
-                       NSParagraphStyleAttributeName: style};
+                 NSParagraphStyleAttributeName: style};
     }
     return _textStyle;
 }
 
-#pragma mark -
-#pragma mark - LCCKChatMessageCellSubclassing Method
-
-+ (void)load {
-    [self registerSubclass];
-}
-
-+ (AVIMMessageMediaType)classMediaType {
-    return kAVIMMessageMediaTypeText;
-} 
-
-- (UIColor *)conversationViewMessageLinkColorLeft {
-    if (_conversationViewMessageLinkColorLeft) {
-        return _conversationViewMessageLinkColorLeft;
-    }
-    _conversationViewMessageLinkColorLeft = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-Message-LinkColor-Left"];
-    return _conversationViewMessageLinkColorLeft;
-}
-
-- (UIColor *)conversationViewMessageLinkColorRight {
-    if (_conversationViewMessageLinkColorRight) {
-        return  _conversationViewMessageLinkColorRight;
-    }
-    _conversationViewMessageLinkColorRight = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-Message-LinkColor-Right"];
-    return _conversationViewMessageLinkColorRight;
-}
-
-- (UIColor *)conversationViewMessageLinkColor {
-    if (_conversationViewMessageLinkColor) {
-        return _conversationViewMessageLinkColor;
-    }
-    _conversationViewMessageLinkColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-Message-LinkColor"];
-    return _conversationViewMessageLinkColor;
-}
+//-(void)prepareForReuse {
+//    [super prepareForReuse];
+//    self.nicknameLabel = @"";
+//    self.avatorButton = nil;
+//}
 
 @end

@@ -2,16 +2,12 @@
 //  LCCKLocationController.m
 //  LCCKChatBarExample
 //
-//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/24.
+//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/24.
 //  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
 #import "LCCKLocationController.h"
-#if __has_include(<Masonry/Masonry.h>)
-#import <Masonry/Masonry.h>
-#else
 #import "Masonry.h"
-#endif
 #import "UIImage+LCCKExtension.h"
 
 static CGFloat const LCCKLocationPOIListCellHeight = 40.f;
@@ -221,14 +217,14 @@ static CGFloat const LCCKLocationPOIListCellHeight = 40.f;
 
 
 - (void)cancel {
-    if ([self.delegate respondsToSelector:@selector(cancelLocation)]) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(cancelLocation)]) {
         [self.delegate cancelLocation];
     }
 }
 
 - (void)sendLocation {
     if (self.placemarks.count > self.selectedIndexPath.row) {
-        if ([self.delegate respondsToSelector:@selector(sendLocation:)]) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(sendLocation:)]) {
             [self.delegate sendLocation:self.placemarks[self.selectedIndexPath.row]];
         }
     }

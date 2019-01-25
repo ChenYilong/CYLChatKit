@@ -2,10 +2,12 @@
 //  LCCKSessionService.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan  on 16/3/1.
+//  Created by ElonChan on 16/3/1.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
+@import Foundation;
+@import UIKit;
 #import "LCCKServiceDefinition.h"
 
 /*!
@@ -26,9 +28,5 @@ FOUNDATION_EXTERN NSString *const LCCKSessionServiceErrorDemain;
  *  是否和聊天服务器连通
  */
 @property (nonatomic, assign, readonly) BOOL connect;
-
-@property (nonatomic, copy) void (^ memberInfoChangedBlock)(AVIMConversation *, NSString *, NSString *, AVIMConversationMemberRole);
-
-- (void)reconnectForViewController:(UIViewController *)reconnectForViewController callback:(LCCKBooleanResultBlock)aCallback;
 
 @end

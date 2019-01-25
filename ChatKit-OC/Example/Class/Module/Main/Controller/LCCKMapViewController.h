@@ -2,11 +2,13 @@
 //  LCCKMapViewController.h
 //  LeanCloudIMKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/3/30.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  Created by 陈宜龙 on 16/3/30.
+//  Copyright © 2016年 ElonChan. All rights reserved.
 //
-#import <MapKit/MapKit.h>
-#import <CoreLocation/CoreLocation.h>
+
+@import UIKit;
+@import MapKit;
+@import CoreLocation;
 
 @interface LCCKMapViewController : UIViewController
 

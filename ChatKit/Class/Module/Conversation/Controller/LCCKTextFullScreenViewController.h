@@ -2,8 +2,8 @@
 //  LCCKTextFullScreenViewController.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/3/23.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  Created by 陈宜龙 on 16/3/23.
+//  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
 #import "LCCKBaseViewController.h"

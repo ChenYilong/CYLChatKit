@@ -2,19 +2,36 @@
 //  LCCKUser.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/3/9.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  Created by 陈宜龙 on 16/3/9.
+//  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-
 #if __has_include(<ChatKit/LCChatKit.h>)
-    #import <ChatKit/LCChatKit.h>
+#import <ChatKit/LCChatKit.h>
 #else
-    #import "LCChatKit.h"
+#import "LCChatKit.h"
 #endif
+@interface LCCKUser : AVUser <LCCKUserModelDelegate, LCCKUserModelDelegate, NSCoding, NSCopying>
 
-@interface LCCKUser : NSObject <LCCKUserDelegate>
+/*!
+ * @brief The user's id
+ */
+@property (nonatomic, copy, readonly) NSString *userId;
+
+/*!
+ * @brief The user's name
+ */
+@property (nonatomic, copy, readonly) NSString *name;
+
+/*!
+ * @brief String of the user's avator URL
+ * @attention Its type is NSString, not NSURL
+ */
+@property (nonatomic, copy, readonly) NSURL *avatorURL;
+
+- (instancetype)initWithUserId:(NSString *)userId name:(NSString *)name avatorURL:(NSURL *)avatorURL;
++ (instancetype)initWithUserId:(NSString *)userId name:(NSString *)name avatorURL:(NSURL *)avatorURL;
 
 /**
  *  检查与 aPerson 是否表示同一对象

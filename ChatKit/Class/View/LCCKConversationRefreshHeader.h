@@ -1,16 +1,12 @@
 //
-//  LCCKBaseConversationViewController.h
-//  LeanCloudChatKit-iOS
+//  MJDIYHeader.h
+//  MJRefreshExample
 //
-//  v0.8.5 Created by ElonChan on 16/3/21.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  Created by MJ Lee on 15/6/13.
+//  Copyright © 2015年 小码哥. All rights reserved.
 //
 
-#if __has_include(<MJRefresh/MJRefresh.h>)
-    #import <MJRefresh/MJRefresh.h>
-#else
-    #import "MJRefresh.h"
-#endif
+#import "MJRefresh.h"
 
 @interface LCCKConversationRefreshHeader : MJRefreshHeader
 

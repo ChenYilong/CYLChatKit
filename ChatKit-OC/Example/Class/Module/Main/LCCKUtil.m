@@ -7,8 +7,8 @@
 //
 
 #import "LCCKUtil.h"
+#import "MBProgressHUD.h"
 #import "TWMessageBarManager.h"
-//#import "MBProgressHUD.h"
 #if __has_include(<ChatKit/LCChatKit.h>)
 #import <ChatKit/LCChatKit.h>
 #else
@@ -21,7 +21,7 @@
     NSInteger code = 0;
     NSString *errorReasonText = text;
     NSDictionary *errorInfo = @{
-                                @"code" : @(code),
+                                @"code":@(code),
                                 NSLocalizedDescriptionKey : errorReasonText,
                                 };
     NSError *error = [NSError errorWithDomain:@"LeanCloudChatKitExample"
@@ -79,8 +79,8 @@
             type_ = TWMessageBarMessageTypeInfo;
             break;
     }
-    [[TWMessageBarManager sharedInstance] showMessageWithTitle:title
-                                                   description:subtitle
+    [[TWMessageBarManager sharedInstance] showMessageWithTitle:localize(@"message.bar.info.title", title)
+                                                   description:localize(@"message.bar.info.message", subtitle)
                                                           type:type_
                                                       duration:duration
                                                       callback:nil];

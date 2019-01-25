@@ -1,9 +1,9 @@
 //
-//  LCChatKitExample.m
-//  LeanCloudChatKit-iOS
+//  LCCKTabBarControllerConfig.h
+//  CYLTabBarController
 //
-//  v0.8.5 Created by ElonChan on 16/2/24.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  Created by ElonChan on 15/11/3.
+//  Copyright © 2015年 微博@iOS程序犭袁. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

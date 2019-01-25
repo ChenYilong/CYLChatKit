@@ -2,18 +2,13 @@
 //  LCCKConversationService.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/3/1.
+//  Created by ElonChan on 16/3/1.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import "LCCKServiceDefinition.h"
-
-#if __has_include(<ChatKit/LCChatKit.h>)
-    #import <ChatKit/LCChatKit.h>
-#else
-    #import "LCChatKit.h"
-#endif
+#import <AVOSCloud/AVOSCloud.h>
 
 @class LCCKMessage;
 
@@ -27,20 +22,15 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
 @interface LCCKConversationService : LCCKSingleton <LCCKConversationService>
 
 /**
- *  当前正在聊天的 conversationId，当前不在聊天界面则为nil。如果想判断当前是否在对话页面，请判断该值是否为nil。
+ *  当前正在聊天的 conversationId
  */
-@property (nonatomic, strong) NSString *currentConversationId;
+@property (nonatomic, strong) NSString *chattingConversationId;
 
 /**
  *  推送弹框点击时记录的 convid
  */
 @property (nonatomic, strong) NSString *remoteNotificationConversationId;
 
-@property (nonatomic, assign, readonly, getter=isChatting) BOOL chatting;
-
-/*!
- * 只要进过聊天页面，这个值总不为nil。当前不在聊天界面则为nil，这是因为考虑到可能会在对话页面，Present其它页面，比如联系人列表，需要用到currentConversation信息，所以如果想判断当前是否在对话页面，请判断currentConversationId是否为nil。
- */
 @property (nonatomic, strong) AVIMConversation *currentConversation;
 
 /*!
@@ -48,8 +38,7 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  *  @param conversationId   对话的 id
  *  @param callback
  */
-- (void)fetchConversationWithConversationId:(NSString *)conversationId callback:(LCCKConversationResultBlock)callback;
-- (void)fetchConversationsWithConversationIds:(NSSet *)conversationIds callback:(LCCKArrayResultBlock)callback;
+- (void)fecthConversationWithConversationId:(NSString *)conversationId callback:(LCCKConversationResultBlock)callback;
 
 /*!
  *  根据 peerId 获取对话,
@@ -57,37 +46,23 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  *  @param peerId   对方的 id
  *  @param callback
  */
-- (void)fetchConversationWithPeerId:(NSString *)peerId callback:(LCCKConversationResultBlock)callback;
+- (void)fecthConversationWithPeerId:(NSString *)peerId callback:(LCCKConversationResultBlock)callback;
 
-- (void)sendMessage:(AVIMTypedMessage*)message
-       conversation:(AVIMConversation *)conversation
+- (void)sendMessage:(AVIMTypedMessage*)message conversation:(AVIMConversation *)conversation
       progressBlock:(AVProgressBlock)progressBlock
            callback:(LCCKBooleanResultBlock)block;
-
-//FIXME:AVIMMessageSendOption-->AVIMMessageOption
-- (void)sendMessage:(AVIMTypedMessage*)message
-       conversation:(AVIMConversation *)conversation
-            options:(AVIMMessageSendOption)options
-      progressBlock:(AVProgressBlock)progressBlock
-           callback:(LCCKBooleanResultBlock)block;
-
-- (void)queryTypedMessagesWithConversation:(AVIMConversation *)conversation
-                                 messageId:(NSString *)messageId
-                                 timestamp:(int64_t)timestamp
-                                     limit:(NSInteger)limit
-                                     block:(LCCKArrayResultBlock)block;
+- (void)sendWelcomeMessageToPeerId:(NSString *)peerId text:(NSString *)text block:(LCCKBooleanResultBlock)block;
+- (void)queryTypedMessagesWithConversation:(AVIMConversation *)conversation timestamp:(int64_t)timestamp limit:(NSInteger)limit block:(LCCKArrayResultBlock)block;
 
 /**
- *  删除对话对应的UIProfile缓存，比如当用户信息发生变化时
- *  @param  conversation 对话，可以是单聊，也可是群聊
+ *  删除会话对应的UIProfile缓存，比如当用户信息发生变化时
+ *  @param  conversation 会话，可以是单聊，也可是群聊
  */
-- (void)removeCacheForConversationId:(NSString *)conversationID;
-- (void)updateConversationAsReadWithLastMessage:(__kindof AVIMMessage *)lastMessage;
-
-#pragma mark - 最近对话的本地缓存，最近对话将保存在本地数据库中
-///=============================================================================
-/// @name 最近对话的本地缓存，最近对话将保存在本地数据库中
-///=============================================================================
+- (void)removeCacheForConversation:(AVIMConversation *)conversation;
+- (void)updateConversationAsRead;
+///--------------------------------------------------------------------------------------------
+///---------------------最近对话的本地缓存，最近对话将保存在本地数据库中-------------------------------
+///--------------------------------------------------------------------------------------------
 
 /**
  *  会在 openClient 时调用
@@ -95,36 +70,25 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  */
 - (void)setupDatabaseWithUserId:(NSString *)userId;
 
-- (void)insertRecentConversation:(AVIMConversation *)conversation shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
-- (void)insertRecentConversations:(NSArray<AVIMConversation *> *)conversations;
-- (void)insertRecentConversations:(NSArray<AVIMConversation *> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
-- (void)increaseUnreadCount:(NSUInteger)increaseUnreadCount withConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
+/**
+ *  插入一条最近对话
+ *  @param conversation
+ */
+- (void)insertRecentConversation:(AVIMConversation *)conversation;
+
 /**
  *  更新 mentioned 值，当接收到消息发现 @了我的时候，设为 YES，进入聊天页面，设为 NO
  *  @param mentioned  要更新的值
  *  @param conversation 相应对话
  */
-- (void)updateMentioned:(BOOL)mentioned conversationId:(NSString *)conversationId;
-- (void)updateMentioned:(BOOL)mentioned conversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
-/**
- *  更新 draft 值
- *  @param draft  要更新的值
- *  @param conversation 相应对话
- */
-- (void)updateDraft:(NSString *)draft conversationId:(NSString *)conversationId;
-- (void)updateDraft:(NSString *)draft conversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
+- (void)updateMentioned:(BOOL)mentioned conversation:(AVIMConversation *)conversation;
 
 /**
  *  更新每条最近对话记录里的 conversation 值，也即某对话的名字、成员可能变了，需要更新应用打开时，第一次加载最近对话列表时，会去向服务器要对话的最新数据，然后更新
  *  @param conversations 要更新的对话
  */
 - (void)updateRecentConversation:(NSArray *)conversations;
-- (void)updateRecentConversation:(NSArray *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
-- (void)increaseUnreadCountWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 
-- (void)deleteRecentConversationWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
-- (void)updateUnreadCountToZeroWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
- 
 /**
  *  从数据库查找所有的对话，即所有的最近对话
  *  @return 对话数据
@@ -136,14 +100,12 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  *  @param conversation 某对话
  *  @return
  */
-- (BOOL)isRecentConversationExistWithConversationId:(NSString *)conversationId;
+- (BOOL)isRecentConversationExist:(AVIMConversation *)conversation;
 
-- (NSString *)draftWithConversationId:(NSString *)conversationId;
 
-#pragma mark - FailedMessageStore
-///=============================================================================
-/// @name FailedMessageStore
-///=============================================================================
+///---------------------------------------------------------------------
+///---------------------FailedMessageStore-------------------------------
+///---------------------------------------------------------------------
 
 /*!
  *  失败消息的管理类，职责：
@@ -183,20 +145,7 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  *  @param conversationId 对话的 id
  *  @return 消息数组
  */
-- (NSArray<LCCKMessage *> *)failedMessagesByConversationId:(NSString *)conversationId;
-
-- (NSArray<LCCKMessage *> *)failedMessageIdsByConversationId:(NSString *)conversationId;
-
-- (NSArray<LCCKMessage *> *)failedMessagesByMessageIds:(NSArray *)messageIds;
-
-+ (void)cacheFileTypeMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback;
-
-@end
-
-@interface LCCKConversationService (LCCKDeprecated)
-
-- (void)fecthConversationWithConversationId:(NSString *)conversationId callback:(LCCKConversationResultBlock)callback LCCK_DEPRECATED("deprecated after v0.8.11, use `-fetchConversationWithConversationId:callback:` instead");
-
-- (void)fecthConversationWithPeerId:(NSString *)peerId callback:(LCCKConversationResultBlock)callback LCCK_DEPRECATED("deprecated after v0.8.11, use `-fetchConversationWithPeerId:callback:` instead");
+- (NSArray *)failedMessagesByConversationId:(NSString *)conversationId;
++ (void)cacheMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(AVBooleanResultBlock)callback;
 
 @end

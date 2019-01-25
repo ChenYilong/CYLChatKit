@@ -2,7 +2,7 @@
 //  LCCKFacePageView.h
 //  LCCKFaceItemExample
 //
-//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/12.
+//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/12.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 

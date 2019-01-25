@@ -2,7 +2,7 @@
 //  LCCKAVAudioPlayer.m
 //  LCCKChatExample
 //
-//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
+//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/18.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -39,9 +39,8 @@ NSString *const kLCCKAudioDataKey;
 
 + (void)initialize {
     //配置播放器配置
-//    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error: nil];
-    //FIXME: Delegate is deprecated
-//    [[AVAudioSession sharedInstance] setDelegate:self];
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error: nil];
+    [[AVAudioSession sharedInstance] setDelegate:self];
 }
 
 + (instancetype)sharePlayer{
@@ -58,6 +57,7 @@ NSString *const kLCCKAudioDataKey;
         //添加应用进入后台通知
         UIApplication *app = [UIApplication sharedApplication];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:app];
+               _index = NSUIntegerMax;
     }
     return self;
 }
@@ -69,7 +69,8 @@ NSString *const kLCCKAudioDataKey;
  */
 - (NSOperationQueue *)audioDataOperationQueue {
     if (_audioDataOperationQueue == nil) {
-        NSOperationQueue *audioDataOperationQueue  = [[NSOperationQueue alloc] init];
+        NSOperationQueue *audioDataOperationQueue = [[NSOperationQueue alloc] init];
+        audioDataOperationQueue = [[NSOperationQueue alloc] init];
         audioDataOperationQueue.name = @"com.LeanCloud.LCCKAVAudipPlayer.loadAudioDataQueue";
         _audioDataOperationQueue = audioDataOperationQueue;
     }
@@ -81,20 +82,20 @@ NSString *const kLCCKAudioDataKey;
     [[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:UIApplicationWillResignActiveNotification];
     
     [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceProximityStateDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceProximityStateDidChangeNotification object:nil];
     
 }
 
 #pragma mark - Public Methods
 
-- (void)playAudioWithURLString:(NSString *)URLString identifier:(NSString *)identifier {
+- (void)playAudioWithURLString:(NSString *)URLString atIndex:(NSUInteger)index{
     
     if (!URLString) {
         return;
     }
     
     //如果来自同一个URLString并且index相同,则直接取消
-    if ([self.URLString isEqualToString:URLString] && self.identifier == identifier) {
+    if ([self.URLString isEqualToString:URLString] && self.index == index) {
         [self stopAudioPlayer];
         [self setAudioPlayerState:LCCKVoiceMessageStateCancel];
         return;
@@ -102,11 +103,11 @@ NSString *const kLCCKAudioDataKey;
     
     //TODO 从URL中读取音频data
     self.URLString = URLString;
-    self.identifier = identifier;
+    self.index = index;
     
     NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:^{
         [self setAudioPlayerState:LCCKVoiceMessageStateDownloading];
-        NSData *audioData = [self audioDataFromURLString:URLString identifier:identifier];
+        NSData *audioData = [self audioDataFromURLString:URLString atIndex:index];
         if (!audioData) {
             [self setAudioPlayerState:LCCKVoiceMessageStateCancel];
             return;
@@ -116,7 +117,7 @@ NSString *const kLCCKAudioDataKey;
         });
     }];
     
-    [blockOperation setName:[[NSString stringWithFormat:@"%@_%@",self.URLString, self.identifier] lcck_MD5String]];
+    [blockOperation setName:[[NSString stringWithFormat:@"%@_%ld",self.URLString, self.index] lcck_MD5String]];
     
     [self.audioDataOperationQueue addOperation:blockOperation];
     
@@ -142,7 +143,7 @@ NSString *const kLCCKAudioDataKey;
 
 #pragma mark - Private Methods
 
-- (NSData *)audioDataFromURLString:(NSString *)URLString identifier:(NSString *)identifier {
+- (NSData *)audioDataFromURLString:(NSString *)URLString atIndex:(NSUInteger)index{
     NSData *audioData;
     
     //1.检查URLString是本地文件还是网络文件
@@ -163,7 +164,7 @@ NSString *const kLCCKAudioDataKey;
     
     //4.判断audioData是否读取成功,成功则添加对应的audioDataKey
     if (audioData) {
-        objc_setAssociatedObject(audioData, &kLCCKAudioDataKey, [[NSString stringWithFormat:@"%@_%@",URLString,identifier] lcck_MD5String], OBJC_ASSOCIATION_COPY);
+        objc_setAssociatedObject(audioData, &kLCCKAudioDataKey, [[NSString stringWithFormat:@"%@_%ld",URLString,index] lcck_MD5String], OBJC_ASSOCIATION_COPY);
     }
 
     return audioData;
@@ -174,7 +175,7 @@ NSString *const kLCCKAudioDataKey;
     
     NSString *audioURLMD5String = objc_getAssociatedObject(audioData, &kLCCKAudioDataKey);
     
-    if (![[[NSString stringWithFormat:@"%@_%@",self.URLString,self.identifier] lcck_MD5String] isEqualToString:audioURLMD5String]) {
+    if (![[[NSString stringWithFormat:@"%@_%ld",self.URLString,self.index] lcck_MD5String] isEqualToString:audioURLMD5String]) {
         return;
     }
 
@@ -195,7 +196,7 @@ NSString *const kLCCKAudioDataKey;
 
 - (void)cancelOperation {
     for (NSOperation *operation in self.audioDataOperationQueue.operations) {
-        if ([operation.name isEqualToString:[[NSString stringWithFormat:@"%@_%@",self.URLString, self.identifier] lcck_MD5String]]) {
+        if ([operation.name isEqualToString:[[NSString stringWithFormat:@"%@_%ld",self.URLString,self.index] lcck_MD5String]]) {
             [operation cancel];
             break;
         }
@@ -219,6 +220,8 @@ NSString *const kLCCKAudioDataKey;
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     [self cancelOperation];
+    [self stopAudioPlayer];
+    [self setAudioPlayerState:LCCKVoiceMessageStateCancel];
 }
 
 - (void)proximityStateChanged:(NSNotification *)notification {
@@ -235,6 +238,7 @@ NSString *const kLCCKAudioDataKey;
 #pragma mark - Getters
 
 - (NSString *)cachePath {
+    
     if (!_cachePath) {
         _cachePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"com.LeanCloud.LCCKChat.audioCache"];
         if (![[NSFileManager defaultManager] fileExistsAtPath:_cachePath]) {
@@ -248,7 +252,7 @@ NSString *const kLCCKAudioDataKey;
 
 - (void)setURLString:(NSString *)URLString {
     if (_URLString) {
-        //说明当前有正在播放, 或者正在加载的视频,取消 operation(如果没有在执行任务),停止播放
+        //说明当前有正在播放,或者正在加载的视频,取消operation(如果没有在执行任务),停止播放
         [self cancelOperation];
         [self stopAudioPlayer];
         [self setAudioPlayerState:LCCKVoiceMessageStateCancel];
@@ -258,9 +262,12 @@ NSString *const kLCCKAudioDataKey;
 
 - (void)setAudioPlayerState:(LCCKVoiceMessageState)audioPlayerState {
     _audioPlayerState = audioPlayerState;
+    if (self.delegate && [self.delegate respondsToSelector:@selector(audioPlayerStateDidChanged:forIndex:)]) {
+        [self.delegate audioPlayerStateDidChanged:_audioPlayerState forIndex:self.index];
+    }
     if (_audioPlayerState == LCCKVoiceMessageStateCancel || _audioPlayerState == LCCKVoiceMessageStateNormal) {
         _URLString = nil;
-        _identifier = nil;
+        _index = NSUIntegerMax;
     }
 }
 

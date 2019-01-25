@@ -2,7 +2,7 @@
 //  LCCKFaceManager.h
 //  LCCKChatBarExample
 //
-//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/25.
+//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/25.
 //  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -32,7 +32,6 @@
  *  @return 所有的表情图片名称
  */
 + (NSArray *)emojiFaces;
-@property (strong, nonatomic, readonly) NSMutableArray *emojiFaceArrays;
 
 + (UIImage *)faceImageWithFaceID:(NSUInteger)faceID;
 + (NSString *)faceNameWithFaceID:(NSUInteger)faceID;
@@ -44,7 +43,7 @@
  *  @return 处理后的文字
  */
 + (NSMutableAttributedString *)emotionStrWithString:(NSString *)text;
-+ (void)configEmotionWithMutableAttributedString:(NSMutableAttributedString *)attributeString;
+
 #pragma mark - 最近表情相关处理
 
 /**

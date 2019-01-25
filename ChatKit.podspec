@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "ChatKit"
-  s.version      = "2.3.10"
+  s.version      = "0.0.4"
   s.summary      = "An IM App Framework, support sending text, pictures, audio, video, location messaging, managing address book, more interesting features."
   s.homepage     = "https://github.com/LeanCloud/ChatKit-OC"
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
@@ -10,21 +10,14 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/LeanCloud/ChatKit-OC.git", :tag => s.version.to_s }
   s.source_files  = 'ChatKit', 'ChatKit/**/*.{h,m}'
   s.vendored_frameworks = 'ChatKit/Class/Tool/Vendor/VoiceLib/lame.framework'
-  s.resources    = 'ChatKit/Class/Resources/*', 'ChatKit/**/*.xib'
-
+  s.resources    = 'ChatKit/Class/Resources/*'
   s.requires_arc = true
-  s.dependency "AVOSCloud" , "~> 11.4.9"
-  s.dependency "AVOSCloudIM", "~> 11.4.9"
-  s.dependency "MJRefresh" , "~> 3.1.9"
-  s.dependency "Masonry" , "~> 1.0.1"
-  s.dependency "SDWebImage" , "~> 3.8.0"
-  s.dependency "FMDB" , "~> 2.6.2"
-  s.dependency "pop", "~> 1.0.9"
-  s.dependency "UITableView+FDTemplateLayoutCell" , "~> 1.5.beta"
-  s.dependency "FDStackView" , "~> 1.0"
-  s.dependency "DACircularProgress" , "~> 2.3.1"
-  s.dependency "MLLabel" , "~> 1.10.5"
-  s.dependency "MWPhotoBrowser", "~> 2.1.2"
-  s.dependency "CYLDeallocBlockExecutor", "~> 1.1.2"
+  s.dependency 'AVOSCloud'
+  s.dependency 'AVOSCloudIM'
+  s.dependency 'MJRefresh'
+  s.dependency 'Masonry'
+  s.dependency 'SDWebImage'
+  s.dependency 'FMDB'
+  s.dependency 'UITableView+FDTemplateLayoutCell'
 
 end

@@ -2,7 +2,7 @@
 //  LCCKChatMessageCell.m
 //  LCCKChatExample
 //
-//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
+//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -14,6 +14,7 @@
 #import "LCCKChatSystemMessageCell.h"
 #import "LCCKChatLocationMessageCell.h"
 
+#import "Masonry.h"
 #import <objc/runtime.h>
 #import "LCCKBubbleImageFactory.h"
 
@@ -23,76 +24,23 @@
 #import "UIImageView+WebCache.h"
 #endif
 
-#if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
-#else
 #import "LCChatKit.h"
-#endif
-
 #import "UIImageView+LCCKExtension.h"
 #import "UIImage+LCCKExtension.h"
-#import "NSObject+LCCKExtension.h"
-#import "LCCKConstants.h"
-
-NSMutableDictionary const *LCCKChatMessageCellMediaTypeDict = nil;
 
 static CGFloat const kAvatarImageViewWidth = 50.f;
-static CGFloat const kAvatarImageViewHeight = kAvatarImageViewWidth;
-static CGFloat const LCCKMessageSendStateViewWidthHeight = 30.f;
-static CGFloat const LCCKMessageSendStateViewLeftOrRightToMessageContentView = 2.f;
-static CGFloat const LCCKAvatarToMessageContent = 5.f;
+static CGFloat const kAvatarImageViewHeight = 50.f;
 
-static CGFloat const LCCKAvatarBottomToMessageContentTop = -1.f;
-
-
-static CGFloat const LCCK_MSG_CELL_EDGES_OFFSET = 16;
-static CGFloat const LCCK_MSG_CELL_NICKNAME_HEIGHT = 16;
-static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
-
-@interface LCCKChatMessageCell ()<LCCKSendImageViewDelegate>
+@interface LCCKChatMessageCell ()
 
 @property (nonatomic, strong, readwrite) LCCKMessage *message;
-@property (nonatomic, assign, readwrite) AVIMMessageMediaType mediaType;
-@property (nonatomic, strong) UIColor *conversationViewSenderNameTextColor;
 
 @end
 
 @implementation LCCKChatMessageCell
 
-+ (void)registerCustomMessageCell {
-    [self registerSubclass];
-}
-
-+ (void)registerSubclass {
-    if ([self conformsToProtocol:@protocol(LCCKChatMessageCellSubclassing)]) {
-        Class<LCCKChatMessageCellSubclassing> class = self;
-        AVIMMessageMediaType mediaType = [class classMediaType];
-        [self registerClass:class forMediaType:mediaType];
-    }
-}
-
-+ (Class)classForMediaType:(AVIMMessageMediaType)mediaType {
-    NSNumber *key = [NSNumber numberWithInteger:mediaType];
-    Class class = [LCCKChatMessageCellMediaTypeDict objectForKey:key];
-    if (!class) {
-        class = self;
-    }
-    return class;
-}
-
-+ (void)registerClass:(Class)class forMediaType:(AVIMMessageMediaType)mediaType {
-    if (!LCCKChatMessageCellMediaTypeDict) {
-        LCCKChatMessageCellMediaTypeDict = [[NSMutableDictionary alloc] init];
-    }
-    NSNumber *key = [NSNumber numberWithInteger:mediaType];
-    Class c = [LCCKChatMessageCellMediaTypeDict objectForKey:key];
-    if (!c || [class isSubclassOfClass:c]) {
-        [LCCKChatMessageCellMediaTypeDict setObject:class forKey:key];
-    }
-}
-
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+    if ([super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self setup];
     }
     return self;
@@ -110,7 +58,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 #pragma mark - Life Cycle
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
+    if ([super initWithFrame:frame]) {
         [self setup];
     }
     return self;
@@ -118,126 +66,93 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 
 #pragma mark - Override Methods
 
-- (BOOL)showName {
-    BOOL isMessageOwner = self.messageOwner == LCCKMessageOwnerTypeOther;
-    BOOL isMessageChatTypeGroup = self.messageChatType == LCCKConversationTypeGroup;
-    if (isMessageOwner && isMessageChatTypeGroup) {
-        self.nickNameLabel.hidden = NO;
-        return YES;
-    }
-    self.nickNameLabel.hidden = YES;
-    return NO;
-}
 
 - (void)updateConstraints {
     [super updateConstraints];
-    if (self.messageOwner == LCCKMessageOwnerTypeSystem || self.messageOwner == LCCKMessageOwnerTypeUnknown) {
+    if (self.messageOwner == LCCKMessageOwnerSystem || self.messageOwner == LCCKMessageOwnerUnknown) {
         return;
     }
-    if (self.messageOwner == LCCKMessageOwnerTypeSelf) {
-        if (self.avatarImageView.superview) {
-            [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.right.equalTo(self.contentView.mas_right).with.offset(-LCCK_MSG_CELL_EDGES_OFFSET);
-                make.top.equalTo(self.contentView.mas_top).with.offset(LCCK_MSG_CELL_EDGES_OFFSET);
-                make.width.equalTo(@(kAvatarImageViewWidth));
-                make.height.equalTo(@(kAvatarImageViewHeight));
-            }];
-        }
-        if (self.nickNameLabel.superview) {
-            [self.nickNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.top.equalTo(self.avatarImageView.mas_top);
-                make.right.equalTo(self.avatarImageView.mas_left).with.offset(-LCCK_MSG_CELL_EDGES_OFFSET);
-                make.width.mas_lessThanOrEqualTo(@120);
-                make.height.equalTo(@0);
-            }];
-        }
-        if (self.messageContentView.superview) {
-            [self.messageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.right.equalTo(self.avatarImageView.mas_left).with.offset(-LCCKAvatarToMessageContent);
-                make.top.equalTo(self.nickNameLabel.mas_bottom).with.offset(self.showName ? 0 : LCCKAvatarBottomToMessageContentTop);
-                CGFloat width = [UIApplication sharedApplication].keyWindow.frame.size.width;
-                CGFloat height = [UIApplication sharedApplication].keyWindow.frame.size.height;
-                CGFloat widthLimit = MIN(width, height)/5 * 3;
-                
-                make.width.lessThanOrEqualTo(@(widthLimit)).priorityHigh();
-                make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-LCCK_MSG_CELL_EDGES_OFFSET).priorityLow();
-            }];
-        }
-        if (self.messageSendStateView.superview) {
-            [self.messageSendStateView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.right.equalTo(self.messageContentView.mas_left).with.offset(-LCCKMessageSendStateViewLeftOrRightToMessageContentView);
-                make.centerY.equalTo(self.messageContentView.mas_centerY);
-                make.width.equalTo(@(LCCKMessageSendStateViewWidthHeight));
-                make.height.equalTo(@(LCCKMessageSendStateViewWidthHeight));
-            }];
-        }
-        if (self.messageReadStateImageView.superview) {
-            [self.messageReadStateImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.right.equalTo(self.messageContentView.mas_left).with.offset(-8);
-                make.centerY.equalTo(self.messageContentView.mas_centerY);
-                make.width.equalTo(@10);
-                make.height.equalTo(@10);
-            }];
-        }
-    } else if (self.messageOwner == LCCKMessageOwnerTypeOther){
-        if (self.avatarImageView.superview) {
-            [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.equalTo(self.contentView.mas_left).with.offset(LCCK_MSG_CELL_EDGES_OFFSET);
-                make.top.equalTo(self.contentView.mas_top).with.offset(LCCK_MSG_CELL_EDGES_OFFSET);
-                make.width.equalTo(@(kAvatarImageViewWidth));
-                make.height.equalTo(@(kAvatarImageViewHeight));
-            }];
-        }
-        if (self.nickNameLabel.superview) {
-            [self.nickNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.top.equalTo(self.avatarImageView.mas_top);
-                make.left.equalTo(self.avatarImageView.mas_right).with.offset(LCCK_MSG_CELL_EDGES_OFFSET);
-                make.width.mas_lessThanOrEqualTo(@120);
-                make.height.equalTo(self.messageChatType == LCCKConversationTypeGroup ? @(LCCK_MSG_CELL_NICKNAME_HEIGHT) : @0);
-            }];
-        }
-        if (self.messageContentView.superview) {
-            [self.messageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.equalTo(self.avatarImageView.mas_right).with.offset(LCCKAvatarToMessageContent);
-                make.top.equalTo(self.nickNameLabel.mas_bottom).with.offset(self.showName ? 0 : LCCKAvatarBottomToMessageContentTop);
-                CGFloat width = [UIApplication sharedApplication].keyWindow.frame.size.width;
-                CGFloat height = [UIApplication sharedApplication].keyWindow.frame.size.height;
-                CGFloat widthLimit = MIN(width, height)/5 * 3;
-                make.width.lessThanOrEqualTo(@(widthLimit)).priorityHigh();
-                make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-LCCK_MSG_CELL_EDGES_OFFSET).priorityLow();
-            }];
-        }
-        if (self.messageSendStateView.superview) {
-            [self.messageSendStateView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.equalTo(self.messageContentView.mas_right).with.offset(LCCKMessageSendStateViewLeftOrRightToMessageContentView);
-                make.centerY.equalTo(self.messageContentView.mas_centerY);
-                make.width.equalTo(@(LCCKMessageSendStateViewWidthHeight));
-                make.height.equalTo(@(LCCKMessageSendStateViewWidthHeight));
-            }];
-        }
-        if (self.messageReadStateImageView.superview) {
-            [self.messageReadStateImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.equalTo(self.messageContentView.mas_right).with.offset(8);
-                make.centerY.equalTo(self.messageContentView.mas_centerY);
-                make.width.equalTo(@10);
-                make.height.equalTo(@10);
-            }];
-        }
+    if (self.messageOwner == LCCKMessageOwnerSelf) {
+        [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(self.contentView.mas_right).with.offset(-16);
+            make.top.equalTo(self.contentView.mas_top).with.offset(16);
+            make.width.equalTo(@(kAvatarImageViewWidth));
+            make.height.equalTo(@(kAvatarImageViewHeight));
+        }];
+        
+        [self.nicknameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.avatarImageView.mas_top);
+            make.right.equalTo(self.avatarImageView.mas_left).with.offset(-16);
+            make.width.mas_lessThanOrEqualTo(@120);
+            make.height.equalTo(self.messageChatType == LCCKConversationTypeGroup ? @16 : @0);
+        }];
+        
+        [self.messageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(self.avatarImageView.mas_left).with.offset(-16);
+            make.top.equalTo(self.nicknameLabel.mas_bottom).with.offset(4);
+            make.width.lessThanOrEqualTo(@LCCKMessageCellLimit).priorityHigh();
+            make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-16).priorityLow();
+        }];
+        
+        [self.messageSendStateImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(self.messageContentView.mas_left).with.offset(-8);
+            make.centerY.equalTo(self.messageContentView.mas_centerY);
+            make.width.equalTo(@20);
+            make.height.equalTo(@20);
+        }];
+        
+        [self.messageReadStateImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(self.messageContentView.mas_left).with.offset(-8);
+            make.centerY.equalTo(self.messageContentView.mas_centerY);
+            make.width.equalTo(@10);
+            make.height.equalTo(@10);
+        }];
+    } else if (self.messageOwner == LCCKMessageOwnerOther){
+        [self.avatarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.contentView.mas_left).with.offset(16);
+            make.top.equalTo(self.contentView.mas_top).with.offset(16);
+            make.width.equalTo(@(kAvatarImageViewWidth));
+            make.height.equalTo(@(kAvatarImageViewHeight));
+        }];
+        
+        [self.nicknameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.avatarImageView.mas_top);
+            make.left.equalTo(self.avatarImageView.mas_right).with.offset(16);
+            make.width.mas_lessThanOrEqualTo(@120);
+            make.height.equalTo(self.messageChatType == LCCKConversationTypeGroup ? @16 : @0);
+        }];
+        
+        [self.messageContentView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.avatarImageView.mas_right).with.offset(16);
+            make.top.equalTo(self.nicknameLabel.mas_bottom).with.offset(4);
+            make.width.lessThanOrEqualTo(@LCCKMessageCellLimit).priorityHigh();
+            make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-16).priorityLow();
+        }];
+        
+        [self.messageSendStateImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.messageContentView.mas_right).with.offset(8);
+            make.centerY.equalTo(self.messageContentView.mas_centerY);
+            make.width.equalTo(@20);
+            make.height.equalTo(@20);
+        }];
+        
+        [self.messageReadStateImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.messageContentView.mas_right).with.offset(8);
+            make.centerY.equalTo(self.messageContentView.mas_centerY);
+            make.width.equalTo(@10);
+            make.height.equalTo(@10);
+        }];
     }
+    [self.messageContentBackgroundImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.messageContentView);
+    }];
     
-    if (self.messageContentBackgroundImageView.superview) {
-        [self.messageContentBackgroundImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(self.messageContentView);
+    if (self.messageChatType == LCCKConversationTypeSingle) {
+        [self.nicknameLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.equalTo(@0);
         }];
     }
     
-    if (!self.showName) {
-        if (self.nickNameLabel.superview) {
-            [self.nickNameLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.height.equalTo(@0);
-            }];
-        }
-    }
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -258,89 +173,55 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     self.messageContentBackgroundImageView.highlighted = NO;
 }
 
+
 #pragma mark - Private Methods
 
-- (BOOL)isAbleToTap {
-    BOOL isAbleToTap = NO;
-    //For Link handle
-    if (self.mediaType < 0 && ![self isKindOfClass:[LCCKChatTextMessageCell class]]) {
-        isAbleToTap = YES;
-    }
-    return isAbleToTap;
-}
-
-- (void)addGeneralView {
+- (void)setup {
+    
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    self.backgroundColor = [UIColor clearColor];
+    
     [self.contentView addSubview:self.avatarImageView];
-    [self.contentView addSubview:self.nickNameLabel];
+    [self.contentView addSubview:self.nicknameLabel];
     [self.contentView addSubview:self.messageContentView];
     [self.contentView addSubview:self.messageReadStateImageView];
-    [self.contentView addSubview:self.messageSendStateView];
+    [self.contentView addSubview:self.messageSendStateImageView];
     
-    [self.messageContentBackgroundImageView setImage:[LCCKBubbleImageFactory bubbleImageViewForType:self.messageOwner messageType:self.mediaType isHighlighted:NO]];
-    [self.messageContentBackgroundImageView setHighlightedImage:[LCCKBubbleImageFactory bubbleImageViewForType:self.messageOwner messageType:self.mediaType isHighlighted:YES]];
+    self.messageSendStateImageView.hidden = YES;
+    self.messageReadStateImageView.hidden = YES;
+    
+    [self.messageContentBackgroundImageView setImage:[LCCKBubbleImageFactory bubbleImageViewForType:self.messageOwner messageType:self.messageType isHighlighted:NO]];
+    [self.messageContentBackgroundImageView setHighlightedImage:[LCCKBubbleImageFactory bubbleImageViewForType:self.messageOwner messageType:self.messageType isHighlighted:YES]];
     
     self.messageContentView.layer.mask.contents = (__bridge id _Nullable)(self.messageContentBackgroundImageView.image.CGImage);
     [self.contentView insertSubview:self.messageContentBackgroundImageView belowSubview:self.messageContentView];
+    
     [self updateConstraintsIfNeeded];
     
-    self.messageSendStateView.hidden = YES;
-    self.messageReadStateImageView.hidden = YES;
-    
-
-    if (self.isAbleToTap) {
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-        [self.contentView addGestureRecognizer:tap];
-    }
-    UITapGestureRecognizer *avatarImageViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(avatarImageViewHandleTap:)];
-    self.avatarImageView.userInteractionEnabled = YES;
-    [self.avatarImageView addGestureRecognizer:avatarImageViewTap];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    [self.contentView addGestureRecognizer:tap];
     
     UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
     [recognizer setMinimumPressDuration:0.4f];
     [self addGestureRecognizer:recognizer];
-}
-
-- (void)setup {
-    if (![self conformsToProtocol:@protocol(LCCKChatMessageCellSubclassing)]) {
-        [NSException raise:@"LCCKChatMessageCellNotSubclassException" format:@"Class does not conform LCCKChatMessageCellSubclassing protocol."];
-    }
-    self.mediaType = [[self class] classMediaType];
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
-    self.backgroundColor = [UIColor clearColor];;
+    
 }
 
 #pragma mark - Public Methods
 
-- (void)configureCellWithData:(id)message {
-    NSString *nickName = nil;
-    NSURL *avatarURL = nil;
-    LCCKMessageSendState sendStatus;
-    if ([message lcck_isCustomMessage]) {
-        NSString *senderClientId = [(AVIMTypedMessage *)message clientId];
-        NSError *error;
-        //TODO:如果我正在群里聊天，这时有人进入群聊，需要异步获取头像等信息，模仿ConversationList的做法。
-        [[LCCKUserSystemService sharedInstance] getCachedProfileIfExists:senderClientId name:&nickName avatarURL:&avatarURL error:&error];
-        if (!nickName)  { nickName = senderClientId; }
-        self.message = nil;
-        sendStatus = (LCCKMessageSendState)[(AVIMTypedMessage *)message status];
-    } else {
-        self.message = message;
-        nickName = self.message.localDisplayName;
-        avatarURL = self.message.sender.avatarURL;
-        sendStatus = self.message.sendStatus;
-        //FIXME: SDK 暂不支持已读未读
-        //        if ([(LCCKMessage *)message messageReadState]) {
-        //            self.messageReadState = self.message.messageReadState;
-        //        }
-    }
-    self.nickNameLabel.text = nickName;
-    [self.avatarImageView sd_setImageWithURL:avatarURL
+- (void)configureCellWithData:(LCCKMessage *)message {
+    self.message = message;
+    self.nicknameLabel.text = self.message.sender;
+    [self.avatarImageView sd_setImageWithURL:self.message.avatorURL
                             placeholderImage:({
-        NSString *imageName = @"Placeholder_Avatar";
+        NSString *imageName = @"Placeholder_Avator";
         UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"Placeholder" bundleForClass:[self class]];
         image;})
      ];
-    self.messageSendState = sendStatus;
+    if (message.messageReadState) {
+        self.messageReadState = self.message.messageReadState;
+    }
+    self.messageSendState = self.message.status;
 }
 
 #pragma mark - Private Methods
@@ -350,16 +231,11 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         CGPoint tapPoint = [tap locationInView:self.contentView];
         if (CGRectContainsPoint(self.messageContentView.frame, tapPoint)) {
             [self.delegate messageCellTappedMessage:self];
-        }  else if (!CGRectContainsPoint(self.avatarImageView.frame, tapPoint)) {
-            //FIXME:Never invoked
+        }  else if (CGRectContainsPoint(self.avatarImageView.frame, tapPoint)) {
+            [self.delegate messageCellTappedHead:self];
+        } else {
             [self.delegate messageCellTappedBlank:self];
         }
-    }
-}
-
-- (void)avatarImageViewHandleTap:(UITapGestureRecognizer *)tap {
-    if (tap.state == UIGestureRecognizerStateEnded) {
-        [self.delegate messageCellTappedHead:self];
     }
 }
 
@@ -367,16 +243,16 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 
 - (void)setMessageSendState:(LCCKMessageSendState)messageSendState {
     _messageSendState = messageSendState;
-    if (self.messageOwner == LCCKMessageOwnerTypeOther) {
-        self.messageSendStateView.hidden = YES;
+    if (self.messageOwner == LCCKMessageOwnerOther) {
+        self.messageSendStateImageView.hidden = YES;
     }
-    self.messageSendStateView.messageSendState = messageSendState;
+    self.messageSendStateImageView.messageSendState = messageSendState;
 }
 
 - (void)setMessageReadState:(LCCKMessageReadState)messageReadState {
     _messageReadState = messageReadState;
-    if (self.messageOwner == LCCKMessageOwnerTypeSelf) {
-        self.messageSendStateView.hidden = YES;
+    if (self.messageOwner == LCCKMessageOwnerSelf) {
+        self.messageSendStateImageView.hidden = YES;
     }
     switch (_messageReadState) {
             case LCCKMessageUnRead:
@@ -398,22 +274,21 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         if (avatarImageViewCornerRadiusBlock) {
             CGSize avatarImageViewSize = CGSizeMake(kAvatarImageViewWidth, kAvatarImageViewHeight);
             CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatarImageViewSize);
-            self.avatarImageView.lcck_cornerRadius = avatarImageViewCornerRadius;
+            [_avatarImageView lcck_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
         }
         [self bringSubviewToFront:_avatarImageView];
     }
     return _avatarImageView;
 }
 
-- (UILabel *)nickNameLabel {
-    if (!_nickNameLabel) {
-        _nickNameLabel = [[UILabel alloc] init];
-        _nickNameLabel.font = [UIFont systemFontOfSize:LCCK_MSG_CELL_NICKNAME_FONT_SIZE];
-        _nickNameLabel.textColor = self.conversationViewSenderNameTextColor;
-        _nickNameLabel.text = @"nickname";
-        [_nickNameLabel sizeToFit];
+- (UILabel *)nicknameLabel {
+    if (!_nicknameLabel) {
+        _nicknameLabel = [[UILabel alloc] init];
+        _nicknameLabel.font = [UIFont systemFontOfSize:12.0f];
+        _nicknameLabel.textColor = [UIColor blackColor];
+        _nicknameLabel.text = @"nickname";
     }
-    return _nickNameLabel;
+    return _nicknameLabel;
 }
 
 - (LCCKContentView *)messageContentView {
@@ -430,12 +305,11 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     return _messageReadStateImageView;
 }
 
-- (LCCKMessageSendStateView *)messageSendStateView {
-    if (!_messageSendStateView) {
-        _messageSendStateView = [[LCCKMessageSendStateView alloc] init];
-        _messageSendStateView.delegate = self;
+- (LCCKSendImageView *)messageSendStateImageView {
+    if (!_messageSendStateImageView) {
+        _messageSendStateImageView = [[LCCKSendImageView alloc] init];
     }
-    return _messageSendStateView;
+    return _messageSendStateImageView;
 }
 
 - (UIImageView *)messageContentBackgroundImageView {
@@ -445,67 +319,76 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     return _messageContentBackgroundImageView;
 }
 
+- (LCCKMessageType)messageType {
+    if ([self isKindOfClass:[LCCKChatTextMessageCell class]]) {
+        return LCCKMessageTypeText;
+    } else if ([self isKindOfClass:[LCCKChatImageMessageCell class]]) {
+        return LCCKMessageTypeImage;
+    } else if ([self isKindOfClass:[LCCKChatVoiceMessageCell class]]) {
+        return LCCKMessageTypeVoice;
+    } else if ([self isKindOfClass:[LCCKChatLocationMessageCell class]]) {
+        return LCCKMessageTypeLocation;
+    } else if ([self isKindOfClass:[LCCKChatSystemMessageCell class]]) {
+        return LCCKMessageTypeSystem;
+    }
+    return LCCKMessageTypeUnknow;
+}
+
 - (LCCKConversationType)messageChatType {
-    if ([self.reuseIdentifier lcck_containsString:LCCKCellIdentifierGroup]) {
+    if ([self.reuseIdentifier containsString:@"GroupCell"]) {
         return LCCKConversationTypeGroup;
     }
     return LCCKConversationTypeSingle;
 }
 
-- (LCCKMessageOwnerType)messageOwner {
-    if ([self.reuseIdentifier lcck_containsString:LCCKCellIdentifierOwnerSelf]) {
-        return LCCKMessageOwnerTypeSelf;
-    } else if ([self.reuseIdentifier lcck_containsString:LCCKCellIdentifierOwnerOther]) {
-        return LCCKMessageOwnerTypeOther;
-    } else if ([self.reuseIdentifier lcck_containsString:LCCKCellIdentifierOwnerSystem]) {
-        return LCCKMessageOwnerTypeSystem;
+- (LCCKMessageOwner)messageOwner {
+    if ([self.reuseIdentifier containsString:@"OwnerSelf"]) {
+        return LCCKMessageOwnerSelf;
+    } else if ([self.reuseIdentifier containsString:@"OwnerOther"]) {
+        return LCCKMessageOwnerOther;
+    } else if ([self.reuseIdentifier containsString:@"OwnerSystem"]) {
+        return LCCKMessageOwnerSystem;
     }
-    return LCCKMessageOwnerTypeUnknown;
+    return LCCKMessageOwnerUnknown;
 }
 
-- (void)handleLongPress:(UILongPressGestureRecognizer *)longPressGes
-{
+- (void)handleLongPress:(UILongPressGestureRecognizer *)longPressGes {
     if (longPressGes.state == UIGestureRecognizerStateBegan) {
         CGPoint longPressPoint = [longPressGes locationInView:self.contentView];
         if (!CGRectContainsPoint(self.messageContentView.frame, longPressPoint)) {
-            if (CGRectContainsPoint(self.avatarImageView.frame, longPressPoint)) {
-                if ([self.delegate respondsToSelector:@selector(avatarImageViewLongPressed:)]) {
-                    [self.delegate avatarImageViewLongPressed:self];
-                }
-            }
             return;
         }
-        [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
-        NSUInteger delaySeconds = LCCKAnimateDuration;
-        dispatch_time_t when = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delaySeconds * NSEC_PER_SEC));
-        dispatch_after(when, dispatch_get_main_queue(), ^{
-            [self becomeFirstResponder];
-            LCCKLongPressMessageBlock longPressMessageBlock = [LCChatKit sharedInstance].longPressMessageBlock;
-            NSDictionary *userInfo = @{ LCCKLongPressMessageUserInfoKeyFromController: self.delegate,
-                                        LCCKLongPressMessageUserInfoKeyFromView: self.tableView,
-                                        LCCKLongPressMessageUserInfoKeyMessageOwner: @(self.messageOwner),
-                                        LCCKLongPressMessageUserInfoKeyMessageCell: self };
-            NSArray *menuItems = [NSArray array];
-            if (longPressMessageBlock) {
-                menuItems = longPressMessageBlock(self.message, userInfo);
-            } else {
-                LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"copy") block:^{
-                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                    [pasteboard setString:[self.message text]];
-                }];
-                if (self.mediaType == kAVIMMessageMediaTypeText) {
-                    menuItems = @[copyItem];
-                }
+        [self becomeFirstResponder];
+        LCCKLongPressMessageBlock longPressMessageBlock = [LCChatKit sharedInstance].longPressMessageBlock;
+        NSArray *menuItems = [NSArray array];
+        NSDictionary *userInfo = @{
+                                   LCCKLongPressMessageUserInfoKeyFromController : self,
+                                   LCCKLongPressMessageUserInfoKeyFromView : self.tableView,
+                                   };
+        if (longPressMessageBlock) {
+            menuItems = longPressMessageBlock(self.message, userInfo);
+        } else {
+            LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"copy", @"LCChatKitString", @"复制文本消息")
+                                                               block:^{
+                                                                   UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                                                                   [pasteboard setString:[self.message text]];
+                                                               }];
+            //TODO:添加“转发”
+            if (self.messageType == LCCKMessageTypeText) {
+                menuItems = @[ copyItem ];
             }
-            UIMenuController *menuController = [UIMenuController sharedMenuController];
-            [menuController setMenuItems:menuItems];
-            [menuController setArrowDirection:UIMenuControllerArrowDown];
-            UITableView *tableView = self.tableView;
-            CGRect targetRect = [self convertRect:self.messageContentView.frame toView:tableView];
-            [menuController setTargetRect:targetRect inView:tableView];
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleMenuWillShowNotification:) name:UIMenuControllerWillShowMenuNotification object:nil];
-            [menuController setMenuVisible:YES animated:YES];
-        });
+        }
+        UIMenuController *menuController = [UIMenuController sharedMenuController];
+        [menuController setMenuItems:menuItems];
+        [menuController setArrowDirection:UIMenuControllerArrowDown];
+        UITableView *tableView = self.tableView;
+        CGRect targetRect = [self convertRect:self.messageContentView.frame toView:tableView];
+        [menuController setTargetRect:targetRect inView:tableView];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(handleMenuWillShowNotification:)
+                                                     name:UIMenuControllerWillShowMenuNotification
+                                                   object:nil];
+        [menuController setMenuVisible:YES animated:YES];
     }
 }
 
@@ -526,39 +409,6 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
                                              selector:@selector(handleMenuWillHideNotification:)
                                                  name:UIMenuControllerWillHideMenuNotification
                                                object:nil];
-}
-
-#pragma mark -
-#pragma mark - LCCKSendImageViewDelegate Method
-
-- (void)resendMessage:(id)sender {
-    if ([self.delegate respondsToSelector:@selector(resendMessage:)]) {
-        [self.delegate resendMessage:self];
-    }
-}
-
-- (UIColor *)conversationViewSenderNameTextColor {
-    if (_conversationViewSenderNameTextColor) {
-        return _conversationViewSenderNameTextColor;
-    }
-    _conversationViewSenderNameTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-SenderName-TextColor"];
-    return _conversationViewSenderNameTextColor;
-}
-
-- (UIColor *)conversationViewMessageRightTextColor {
-    if (_conversationViewMessageRightTextColor) {
-        return _conversationViewMessageRightTextColor;
-    }
-    _conversationViewMessageRightTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-Message-Right-TextColor"];
-    return _conversationViewMessageRightTextColor;
-}
-
-- (UIColor *)conversationViewMessageLeftTextColor {
-    if (_conversationViewMessageLeftTextColor) {
-        return _conversationViewMessageLeftTextColor;
-    }
-    _conversationViewMessageLeftTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationView-Message-Left-TextColor"];
-    return _conversationViewMessageLeftTextColor;
 }
 
 @end

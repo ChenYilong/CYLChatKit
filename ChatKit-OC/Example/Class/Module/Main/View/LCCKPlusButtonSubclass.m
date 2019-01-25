@@ -18,8 +18,8 @@
 #pragma mark -
 #pragma mark - Life Cycle
 
-+ (void)load {
-    [super registerPlusButton];
++(void)load {
+    [super registerSubclass];
 }
 
 #pragma mark -
@@ -35,6 +35,8 @@
     return self;
 }
 
+
+
 #pragma mark -
 #pragma mark - Public Methods
 
@@ -43,7 +45,8 @@
  Create a custom UIButton without title and add it to the center of our tab bar
  *
  */
-+ (instancetype)plusButton {
++ (instancetype)plusButton
+{
 
     UIImage *buttonImage = [UIImage imageNamed:@"tabbar_compose_button"];
     UIImage *highlightImage = [UIImage imageNamed:@"tabbar_compose_button_highlighted"];
@@ -67,14 +70,21 @@
 #pragma mark - Event Response
 
 - (void)clickPublish {
-    //如果提示群已满，可以换一个id
-    //普通群人数上限是500，暂态聊天室无人数限制
-    [LCChatKitExample exampleOpenConversationViewControllerWithConversaionId:@"581966d28159ccabfc3bf892" fromNavigationController:nil];
+    [LCChatKitExample exampleOpenConversationViewControllerWithConversaionId:@"570da6a9daeb3a63ca5b07b0" fromNavigationController:nil];
 }
 
-+ (CGFloat)constantOfPlusButtonCenterYOffsetForTabBarHeight:(CGFloat)tabBarHeight {
-    return 2;
+#pragma mark - UIActionSheetDelegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    NSLog(@"buttonIndex = %ld", buttonIndex);
 }
 
+//+ (NSUInteger)indexOfPlusButtonInTabBar {
+//    return 3;
+//}
+
+//+ (CGFloat)multiplerInCenterY {
+//    return  0.5;
+//}
 
 @end

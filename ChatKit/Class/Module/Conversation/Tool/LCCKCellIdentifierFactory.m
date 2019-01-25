@@ -2,101 +2,77 @@
 //  UITableViewCell+LCCKCellIdentifier.m
 //  LCCKChatBarExample
 //
-//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/23.
+//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/23.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
 #import "LCCKCellIdentifierFactory.h"
 #import "LCCKMessage.h"
-#import "NSObject+LCCKExtension.h"
-#import <AVOSCloudIM/AVIMConversation.h>
-#import "AVIMTypedMessage+LCCKExtension.h"
-#import "LCCKConstants.h"
 
 @implementation LCCKCellIdentifierFactory
 
-+ (NSString *)cellIdentifierForMessageConfiguration:(id)message conversationType:(LCCKConversationType)conversationType {
++ (NSString *)cellIdentifierForMessageConfiguration:(LCCKMessage *)message {
+    LCCKMessageType messageType = message.messageMediaType;
+    LCCKMessageOwner messageOwner = message.bubbleMessageType;
+    LCCKConversationType messageChat = message.messageGroupType;
+    NSString *identifierKey = @"LCCKChatMessageCell";
+    NSString *ownerKey;
+    NSString *typeKey;
     NSString *groupKey;
-    switch (conversationType) {
+    switch (messageOwner) {
+        case LCCKMessageOwnerSystem:
+            ownerKey = @"OwnerSystem";
+            break;
+        case LCCKMessageOwnerOther:
+            ownerKey = @"OwnerOther";
+            break;
+        case LCCKMessageOwnerSelf:
+            ownerKey = @"OwnerSelf";
+            break;
+        default:
+            NSAssert(NO, @"Message Owner Unknow");
+            break;
+    }
+    
+    switch (messageType) {
+        case LCCKMessageTypeVoice:
+            typeKey = @"VoiceMessage";
+            break;
+        case LCCKMessageTypeImage:
+            typeKey = @"ImageMessage";
+            break;
+        case LCCKMessageTypeLocation:
+            typeKey = @"LocationMessage";
+            break;
+        case LCCKMessageTypeSystem:
+            typeKey = @"SystemMessage";
+            break;
+        case LCCKMessageTypeText:
+            typeKey = @"TextMessage";
+            break;
+        case LCCKMessageTypeEmotion:
+        case LCCKMessageTypeVideo:
+        case LCCKMessageTypeUnknow:
+            //TODO:
+            typeKey = @"TextMessage";
+//        default:
+//            NSAssert(NO, @"Message Type Unknow");
+            break;
+    }
+    switch (messageChat) {
         case LCCKConversationTypeGroup:
-            groupKey = LCCKCellIdentifierGroup;
+            groupKey = @"GroupCell";
             break;
         case LCCKConversationTypeSingle:
-            groupKey = LCCKCellIdentifierSingle;
+            groupKey = @"SingleCell";
             break;
         default:
             groupKey = @"";
             break;
     }
-    
-    if ([message lcck_isCustomMessage]) {
-        return [self cellIdentifierForCustomMessageConfiguration:(AVIMTypedMessage *)message groupKey:groupKey];
-    }
-    return [self cellIdentifierForDefaultMessageConfiguration:(LCCKMessage *)message groupKey:groupKey];
-}
-
-+ (NSString *)cellIdentifierForDefaultMessageConfiguration:(LCCKMessage *)message groupKey:(NSString *)groupKey {
-    LCCKMessageOwnerType messageOwner = message.ownerType;
-    AVIMMessageMediaType messageType = message.mediaType;
-    if ([message lcck_isCustomLCCKMessage]) {
-        messageType = kAVIMMessageMediaTypeText;
-    }
-    NSNumber *key = [NSNumber numberWithInteger:messageType];
-    Class aClass = [LCCKChatMessageCellMediaTypeDict objectForKey:key];
-    NSString *typeKey = NSStringFromClass(aClass);
-    NSString *ownerKey;
-    switch (messageOwner) {
-        case LCCKMessageOwnerTypeSystem:
-            ownerKey = LCCKCellIdentifierOwnerSystem;
-            break;
-        case LCCKMessageOwnerTypeOther:
-            ownerKey = LCCKCellIdentifierOwnerOther;
-            break;
-        case LCCKMessageOwnerTypeSelf:
-            ownerKey = LCCKCellIdentifierOwnerSelf;
-            break;
-        default:
-            NSAssert(NO, @"Message Owner Unknow");
-            break;
-    }
-    NSAssert(typeKey.length > 0, @"🔴类名与方法名：%@（在第%@行），描述：%@,%@", @(__PRETTY_FUNCTION__), @(__LINE__), @(message.mediaType), NSStringFromClass([message class]));
-    NSString *cellIdentifier = [NSString stringWithFormat:@"%@_%@_%@", typeKey, ownerKey, groupKey];
+    NSString *cellIdentifier = [NSString stringWithFormat:@"%@_%@_%@_%@",identifierKey,ownerKey,typeKey,groupKey];
     return cellIdentifier;
 }
 
-+ (NSString *)cellIdentifierForCustomMessageConfiguration:(AVIMTypedMessage *)message groupKey:(NSString *)groupKey {
-    AVIMMessageIOType messageOwner = message.ioType;
-    AVIMMessageMediaType messageType = message.mediaType;
-    if (![message lcck_isSupportThisCustomMessage]) {
-        messageType = kAVIMMessageMediaTypeText;
-    }
-    NSNumber *key = [NSNumber numberWithInteger:messageType];
-    NSString *typeKey = NSStringFromClass([LCCKChatMessageCellMediaTypeDict objectForKey:key]);
-    NSAssert(typeKey.length > 0, @"🔴类名与方法名：%@（在第%@行），描述：%@,%@", @(__PRETTY_FUNCTION__), @(__LINE__), @(message.mediaType), NSStringFromClass([message class]));
-    NSString *ownerKey;
-    switch (messageOwner) {
-        case AVIMMessageIOTypeOut:
-            ownerKey = LCCKCellIdentifierOwnerSelf;
-            break;
-        case AVIMMessageIOTypeIn:
-            ownerKey = LCCKCellIdentifierOwnerOther;
-            break;
-        default:
-            NSAssert(NO, @"Message Owner Unknow");
-            break;
-    }
-    
-    NSString *cellIdentifier = [NSString stringWithFormat:@"%@_%@_%@", typeKey, ownerKey, groupKey];
-    return cellIdentifier;
-}
-
-+ (NSString *)cacheKeyForMessage:(id)message {
-    if (![message lcck_isCustomMessage]) {
-        LCCKMessage *message_ = (LCCKMessage *)message;
-        return message_.messageId ?: message_.systemText;
-    }
-    AVIMTypedMessage *message_ = (AVIMTypedMessage *)message;
-    return message_.messageId;
-}
 
 @end

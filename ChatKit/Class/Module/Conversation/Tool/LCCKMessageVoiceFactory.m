@@ -2,8 +2,8 @@
 //  LCCKMessageVoiceFactory.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/3/21.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  Created by 陈宜龙 on 16/3/21.
+//  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
 #import "LCCKMessageVoiceFactory.h"
@@ -11,14 +11,14 @@
 
 @implementation LCCKMessageVoiceFactory
 
-+ (UIImageView *)messageVoiceAnimationImageViewWithBubbleMessageType:(LCCKMessageOwnerType)owner {
++ (UIImageView *)messageVoiceAnimationImageViewWithBubbleMessageType:(LCCKMessageOwner)owner {
     UIImageView *messageVoiceAniamtionImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
     NSString *imageSepatorName;
     switch (owner) {
-        case LCCKMessageOwnerTypeSelf:
+        case LCCKMessageOwnerSelf:
             imageSepatorName = @"Sender";
             break;
-        case LCCKMessageOwnerTypeOther:
+        case LCCKMessageOwnerOther:
             imageSepatorName = @"Receiver";
             break;
         default:
@@ -42,8 +42,9 @@
     return messageVoiceAniamtionImageView;
 }
 
+
 + (UIImage *)imageInBundleForImageName:(NSString *)imageName {
-    UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
+    UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"VoiceMessageSource" bundleForClass:[self class]];
     return  image;
 }
 

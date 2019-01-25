@@ -2,7 +2,7 @@
 //  LCCKChatFaceView.h
 //  LCCKChatBarExample
 //
-//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/21.
+//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/21.
 //  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -13,7 +13,6 @@ typedef NS_ENUM(NSUInteger, LCCKShowFaceViewType) {
     LCCKShowRecentFace,
     LCCKShowGifFace,
 };
-#define kLCCKTopLineBackgroundColor [UIColor colorWithRed:184/255.0f green:184/255.0f blue:184/255.0f alpha:1.0f]
 
 @protocol LCCKChatFaceViewDelegate <NSObject>
 

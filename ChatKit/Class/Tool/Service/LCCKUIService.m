@@ -2,7 +2,7 @@
 //  LCCKUIService.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/3/1.
+//  Created by ElonChan on 16/3/1.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -10,45 +10,51 @@
 
 NSString *const LCCKUIServiceErrorDomain = @"LCCKUIServiceErrorDomain";
 
+@interface LCCKUIService ()
+
+@property (nonatomic, copy) LCCKPreviewImageMessageBlock previewImageMessageBlock;
+@property (nonatomic, copy) LCCKPreviewLocationMessageBlock previewLocationMessageBlock;
+@property (nonatomic, copy) LCCKOpenProfileBlock openProfileBlock;
+@property (nonatomic, copy) LCCKUnreadCountChangedBlock unreadCountChangedBlock;
+@property (nonatomic, assign, readwrite) LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock;
+@property (nonatomic, copy, readwrite) LCCKLongPressMessageBlock longPressMessageBlock;
+
+@end
+
+@interface LCCKUIService ()
+
+@property (nonatomic, copy) LCCKShowNotificationBlock showNotificationBlock;
+
+@end
+
 @implementation LCCKUIService
-@synthesize openProfileBlock = _openProfileBlock;
-@synthesize previewImageMessageBlock = _previewImageMessageBlock;
-@synthesize previewLocationMessageBlock = _previewLocationMessageBlock;
-@synthesize longPressMessageBlock = _longPressMessageBlock;
-@synthesize showNotificationBlock = _showNotificationBlock;
-@synthesize HUDActionBlock = _HUDActionBlock;
-@synthesize avatarImageViewCornerRadiusBlock = _avatarImageViewCornerRadiusBlock;
 
 - (void)setPreviewImageMessageBlock:(LCCKPreviewImageMessageBlock)previewImageMessageBlock {
-    _previewImageMessageBlock = [previewImageMessageBlock copy];
+    _previewImageMessageBlock = previewImageMessageBlock;
 }
 
 - (void)setPreviewLocationMessageBlock:(LCCKPreviewLocationMessageBlock)previewLocationMessageBlock {
-    _previewLocationMessageBlock = [previewLocationMessageBlock copy];
+    _previewLocationMessageBlock = previewLocationMessageBlock;
 }
 
 - (void)setOpenProfileBlock:(LCCKOpenProfileBlock)openProfileBlock {
-    _openProfileBlock = [openProfileBlock copy];
+    _openProfileBlock = openProfileBlock;
 }
 
 - (void)setShowNotificationBlock:(LCCKShowNotificationBlock)showNotificationBlock {
-    _showNotificationBlock = [showNotificationBlock copy];
-}
-
-- (void)setHUDActionBlock:(LCCKHUDActionBlock)HUDActionBlock {
-    _HUDActionBlock = [HUDActionBlock copy];
+    _showNotificationBlock = showNotificationBlock;
 }
 
 - (void)setUnreadCountChangedBlock:(LCCKUnreadCountChangedBlock)unreadCountChangedBlock {
-    _unreadCountChangedBlock = [unreadCountChangedBlock copy];
+    _unreadCountChangedBlock = unreadCountChangedBlock;
 }
 
 - (void)setAvatarImageViewCornerRadiusBlock:(LCCKAvatarImageViewCornerRadiusBlock)avatarImageViewCornerRadiusBlock {
-    _avatarImageViewCornerRadiusBlock = [avatarImageViewCornerRadiusBlock copy];
+    _avatarImageViewCornerRadiusBlock = avatarImageViewCornerRadiusBlock;
 }
 
 - (void)setLongPressMessageBlock:(LCCKLongPressMessageBlock)longPressMessageBlock {
-    _longPressMessageBlock = [longPressMessageBlock copy];
+    _longPressMessageBlock = longPressMessageBlock;
 }
 
 @end

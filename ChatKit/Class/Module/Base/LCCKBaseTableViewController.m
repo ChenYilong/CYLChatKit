@@ -2,8 +2,8 @@
 //  LCCKBaseTableViewController.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/3/9.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  Created by 陈宜龙 on 16/3/9.
+//  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
 
@@ -40,7 +40,7 @@
         CGRect tableViewFrame = self.view.bounds;
         UITableView *tableView = [[UITableView alloc] initWithFrame:tableViewFrame style:self.tableViewStyle];
         tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        tableView.backgroundColor = [UIColor clearColor];
+        tableView.backgroundColor = self.view.backgroundColor;
         tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
         if (self.tableViewStyle == UITableViewStyleGrouped) {
             UIView *backgroundView = [[UIView alloc] initWithFrame:tableView.bounds];
@@ -51,17 +51,6 @@
         tableView.dataSource = self;
         tableView.tableFooterView = [[UIView alloc] init];
         tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
-        
-        /*
-         in iOS 11, estimating height is open in default.
-         if not close, the UITableView's `estimating height` will conflict with `FDTemplateLayoutCell`.
-         */
-        ///
-        tableView.estimatedRowHeight = 0;
-        tableView.estimatedSectionFooterHeight = 0;
-        tableView.estimatedSectionHeaderHeight = 0;
-        ///
-        
         [self.view addSubview:_tableView = tableView];
     }
     return _tableView;
@@ -78,24 +67,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
-    //view在导航栏下方
-    self.edgesForExtendedLayout = UIRectEdgeNone;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStatusView) name:LCCKNotificationConnectivityUpdated object:nil];
-    if (self.viewControllerStyle == LCCKViewControllerStylePresenting) {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(dismissViewController:)];
-    }
-    self.checkSessionStatus = YES;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
-}
-
-- (void)dismissViewController:(id)sender {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (BOOL)prefersStatusBarHidden {
-    return NO;
+    // Do any additional setup after loading the view.
 }
 
 - (void)dealloc {
@@ -131,18 +104,17 @@
     return _clientStatusView;
 }
 
-- (void)updateStatusView {}
+- (void)updateStatusView {
+}
 
 - (void)statusViewClicked:(id)sender {
-    [[LCCKSessionService sharedInstance] reconnectForViewController:self callback:nil];
-}
-
-- (void)applicationDidBecomeActive:(NSNotification*)note {
-    self.checkSessionStatus = YES;
-}
-
-- (void)applicationWillResignActive:(NSNotification*)note {
-    self.checkSessionStatus = NO;
+    LCCKSessionNotOpenedHandler sessionNotOpenedHandler = [LCCKSessionService sharedInstance].sessionNotOpenedHandler;
+    LCCKBooleanResultBlock callback = ^(BOOL succeeded, NSError *error) {
+        if (!succeeded) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    };
+    !sessionNotOpenedHandler ?: sessionNotOpenedHandler(self, callback);
 }
 
 @end

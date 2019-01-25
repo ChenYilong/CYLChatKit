@@ -1,8 +1,8 @@
 //
 //  LCCKUserSystemService.m
-//  ChatKit-iOS
+//  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/2/22.
+//  Created by ElonChan on 16/2/22.
 //  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
@@ -13,83 +13,48 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
 
 @interface LCCKUserSystemService ()
 
-@property (nonatomic, strong) NSMutableDictionary<NSString *, id<LCCKUserDelegate>> *cachedUsers;
-
-@property (nonatomic, strong) dispatch_queue_t isolationQueue;
+@property (nonatomic, copy, readwrite) LCCKFetchProfilesBlock fetchProfilesBlock;
+@property (nonatomic, strong) NSMutableDictionary *cachedUsers;
 
 @end
 
 @implementation LCCKUserSystemService
-@synthesize fetchProfilesBlock = _fetchProfilesBlock;
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        NSString *queueBaseLabel = [NSString stringWithFormat:@"com.ChatKit.%@", NSStringFromClass([self class])];
-        const char *queueName = [[NSString stringWithFormat:@"%@.ForIsolation",queueBaseLabel] UTF8String];
-        self->_isolationQueue = dispatch_queue_create(queueName, NULL);
-    }
-    return self;
-}
-
-- (void)setFetchProfilesBlock:(LCCKFetchProfilesBlock)fetchProfilesBlock {
-    _fetchProfilesBlock = fetchProfilesBlock;
-}
-
-- (NSArray<id<LCCKUserDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)theError {
-    __block NSArray<id<LCCKUserDelegate>> *blockUsers = [NSArray array];
-    if (!_fetchProfilesBlock && [LCCKSessionService sharedInstance].connect) {
+- (NSArray<id<LCCKUserModelDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)theError {
+    __block NSArray<id<LCCKUserModelDelegate>> *blockUsers = [NSArray array];
+    if (!_fetchProfilesBlock) {
         // This enforces implementing `-setFetchProfilesBlock:`.
-        NSString *reason = [NSString stringWithFormat:@"You must implement `-setFetchProfilesBlock:` to allow ChatKit to get user information by user clientId."];
+        NSString *reason = [NSString stringWithFormat:@"You must implement `-setFetchProfilesBlock:` to allow LeanCloudChatKit to get user information by user id."];
         @throw [NSException exceptionWithName:NSGenericException
                                        reason:reason
                                      userInfo:nil];
         return nil;
     }
-    LCCKFetchProfilesCompletionHandler completionHandler = ^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
+    LCCKFetchProfilesCallBack callback = ^(NSArray<id<LCCKUserModelDelegate>> *users, NSError *error) {
         blockUsers = users;
         [self cacheUsers:users];
     };
-    _fetchProfilesBlock(userIds, completionHandler);
+    _fetchProfilesBlock(userIds, callback);
+    
     return blockUsers;
 }
 
 - (void)getProfilesInBackgroundForUserIds:(NSArray<NSString *> *)userIds callback:(LCCKUserResultsCallBack)callback {
-    if (!userIds || userIds.count == 0) {
-        dispatch_async(dispatch_get_main_queue(),^{
-            NSInteger code = 0;
-            NSString *errorReasonText = @"members is 0";
-            NSDictionary *errorInfo = @{
-                                        @"code":@(code),
-                                        NSLocalizedDescriptionKey : errorReasonText,
-                                        };
-            NSError *error = [NSError errorWithDomain:LCCKUserSystemServiceErrorDomain
-                                                 code:code
-                                             userInfo:errorInfo];
-            !callback ?: callback(nil, error);
-        });
-        return;
-    }
-    NSError *error = nil;
-    NSArray *cachedProfiles = [self getCachedProfilesIfExists:userIds error:&error];
-    if (cachedProfiles.count == userIds.count) {
-        dispatch_async(dispatch_get_main_queue(),^{
-            !callback ?: callback(cachedProfiles, nil);
-        });
+    if (userIds.count == 0) {
         return;
     }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         if (!_fetchProfilesBlock) {
             // This enforces implementing `-setFetchProfilesBlock:`.
-            NSString *reason = [NSString stringWithFormat:@"You must implement `-setFetchProfilesBlock:` to allow ChatKit to get user information by user clientId."];
+            NSString *reason = [NSString stringWithFormat:@"You must implement `-setFetchProfilesBlock:` to allow LeanCloudChatKit to get user information by user id."];
             @throw [NSException exceptionWithName:NSGenericException
                                            reason:reason
                                          userInfo:nil];
             return;
         }
-        _fetchProfilesBlock(userIds, ^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
-            if (!error && users && (users.count > 0)) {
+        
+        _fetchProfilesBlock(userIds, ^(NSArray<id<LCCKUserModelDelegate>> *users, NSError *error) {
+            if (!error && (users.count > 0)) {
                 [self cacheUsers:users];
                 dispatch_async(dispatch_get_main_queue(),^{
                     !callback ?: callback(users, nil);
@@ -103,25 +68,24 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     });
 }
 
-- (id<LCCKUserDelegate>)getProfileForUserId:(NSString *)userId error:(NSError * __autoreleasing *)theError {
+- (id<LCCKUserModelDelegate>)getProfileForUserId:(NSString *)userId error:(NSError * __autoreleasing *)theError {
     if (!userId) {
         NSInteger code = 0;
         NSString *errorReasonText = @"UserId is nil";
         NSDictionary *errorInfo = @{
-                                    @"code" : @(code),
+                                    @"code":@(code),
                                     NSLocalizedDescriptionKey : errorReasonText,
                                     };
         NSError *error = [NSError errorWithDomain:LCCKUserSystemServiceErrorDomain
                                              code:code
                                          userInfo:errorInfo];
-        
-        if (theError == nil) {
+        if (*theError == nil) {
             *theError = error;
         }
         return nil;
     }
     
-    id<LCCKUserDelegate> user = [self getCachedProfileIfExists:userId error:nil];
+    id<LCCKUserModelDelegate> user = [self getCachedProfileIfExists:userId error:nil];
     if (user) {
         return user;
     }
@@ -137,7 +101,7 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
         NSInteger code = 0;
         NSString *errorReasonText = @"UserId is nil";
         NSDictionary *errorInfo = @{
-                                    @"code" : @(code),
+                                    @"code":@(code),
                                     NSLocalizedDescriptionKey : errorReasonText,
                                     };
         NSError *error = [NSError errorWithDomain:LCCKUserSystemServiceErrorDomain
@@ -146,8 +110,8 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
         !callback ?: callback(nil, error);
         return;
     }
-    [self getProfilesInBackgroundForUserIds:@[userId] callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
-        if (!error && users && (users.count > 0)) {
+    [self getProfilesInBackgroundForUserIds:@[userId] callback:^(NSArray<id<LCCKUserModelDelegate>> *users, NSError *error) {
+        if (!error && (users.count > 0)) {
             !callback ?: callback(users[0], nil);
             return;
         }
@@ -155,56 +119,19 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     }];
 }
 
-- (NSArray<id<LCCKUserDelegate>> *)getCachedProfilesIfExists:(NSArray<NSString *> *)userIds shouldSameCount:(BOOL)shouldSameCount error:(NSError * __autoreleasing *)theError {
-    NSArray *cachedProfiles = [self getCachedProfilesIfExists:userIds error:theError];
-    if (!shouldSameCount) {
-        return cachedProfiles;
-    }
-    if (cachedProfiles.count == userIds.count) {
-        return cachedProfiles;
-    }
-    return nil;
-}
-
-- (NSArray<id<LCCKUserDelegate>> *)getCachedProfilesIfExists:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)theError {
-    if (!userIds || userIds.count == 0) {
-        NSInteger code = 0;
-        NSString *errorReasonText = @"UserIds is nil";
-        NSDictionary *errorInfo = @{
-                                    @"code" : @(code),
-                                    NSLocalizedDescriptionKey : errorReasonText,
-                                    };
-        NSError *error = [NSError errorWithDomain:LCCKUserSystemServiceErrorDomain
-                                             code:code
-                                         userInfo:errorInfo];
-        if (theError) {
-            *theError = error;
-        }
-        return nil;
-    }
-    NSMutableArray *cachedProfiles = [NSMutableArray arrayWithCapacity:self.cachedUsers.count * 0.5];
-    NSArray *allCachedUserIds = [self.cachedUsers allKeys];
-    [userIds enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([allCachedUserIds containsObject:obj]) {
-            [cachedProfiles addObject:[self getUserForClientId:obj]];
-        }
-    }];
-    return [cachedProfiles copy];
-}
-
-- (void)getCachedProfileIfExists:(NSString *)userId name:(NSString **)name avatarURL:(NSURL **)avatarURL error:(NSError * __autoreleasing *)theError {
+- (void)getCachedProfileIfExists:(NSString *)userId name:(NSString **)name avatorURL:(NSURL **)avatorURL error:(NSError * __autoreleasing *)theError {
     if (userId) {
         NSString *userName_ = nil;
-        NSURL *avatarURL_ = nil;
-        id<LCCKUserDelegate> user = [self getUserForClientId:userId];
+        NSURL *avatorURL_ = nil;
+        id<LCCKUserModelDelegate> user = self.cachedUsers[userId];
         userName_ = user.name;
-        avatarURL_ = user.avatarURL;
-        if (userName_ || avatarURL_) {
-            if (name) {
+        avatorURL_ = user.avatorURL;
+        if (userName_ || avatorURL_) {
+            if (*name == nil) {
                 *name = userName_;
             }
-            if (avatarURL) {
-                *avatarURL = avatarURL_;
+            if (*avatorURL == nil) {
+                *avatorURL = avatorURL_;
             }
             return;
         }
@@ -213,57 +140,49 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     NSInteger code = 0;
     NSString *errorReasonText = @"No cached profile";
     NSDictionary *errorInfo = @{
-                                @"code" : @(code),
+                                @"code":@(code),
                                 NSLocalizedDescriptionKey : errorReasonText,
                                 };
     NSError *error = [NSError errorWithDomain:LCCKUserSystemServiceErrorDomain
                                          code:code
                                      userInfo:errorInfo];
-    if (theError) {
+    if (*theError == nil) {
         *theError = error;
     }
 }
 
 - (void)removeCachedProfileForPeerId:(NSString *)peerId {
-    NSString *clientId_ = [peerId copy];
-    if (!clientId_) {
-        return;
-    }
-    dispatch_async(self.isolationQueue, ^(){
-        [self.cachedUsers removeObjectForKey:peerId];
-    });
+    [self.cachedUsers removeObjectForKey:peerId];
 }
 
 - (void)removeAllCachedProfiles {
-    dispatch_async(self.isolationQueue, ^(){
-        self.cachedUsers = nil;
-    });
+    self.cachedUsers = nil;
 }
 
-- (id<LCCKUserDelegate>)fetchCurrentUser {
+- (id<LCCKUserModelDelegate>)fetchCurrentUser {
     NSError *error = nil;
-    id<LCCKUserDelegate> user = [[LCCKUserSystemService sharedInstance] getCachedProfileIfExists:[LCCKSessionService sharedInstance].clientId error:&error];
+    id<LCCKUserModelDelegate> user = [[LCCKUserSystemService sharedInstance] getCachedProfileIfExists:[LCCKSessionService sharedInstance].clientId error:&error];
     if (!error) {
         return user;
     }
     error = nil;
-    id<LCCKUserDelegate> currentUser = [[LCCKUserSystemService sharedInstance] getProfileForUserId:[LCCKSessionService sharedInstance].clientId error:&error];
+    id<LCCKUserModelDelegate> currentUser = [[LCCKUserSystemService sharedInstance] getProfileForUserId:[LCCKSessionService sharedInstance].clientId error:&error];
     if (!error) {
         return currentUser;
     }
-    //    NSLog(@"%@", error);
+//    NSLog(@"%@", error);
     return nil;
 }
 
 - (void)fetchCurrentUserInBackground:(LCCKUserResultCallBack)callback {
     NSError *error = nil;
-    id<LCCKUserDelegate> user = [[LCCKUserSystemService sharedInstance] getCachedProfileIfExists:[LCCKSessionService sharedInstance].clientId error:&error];
+    id<LCCKUserModelDelegate> user = [[LCCKUserSystemService sharedInstance] getCachedProfileIfExists:[LCCKSessionService sharedInstance].clientId error:&error];
     if (!error) {
         !callback ?: callback(user, nil);
         return;
     }
     
-    [[LCCKUserSystemService sharedInstance] getProfileInBackgroundForUserId:[LCCKSessionService sharedInstance].clientId callback:^(id<LCCKUserDelegate> user, NSError *error) {
+    [[LCCKUserSystemService sharedInstance] getProfileInBackgroundForUserId:[LCCKSessionService sharedInstance].clientId callback:^(id<LCCKUserModelDelegate> user, NSError *error) {
         if (!error) {
             !callback ?: callback(user, nil);
             return;
@@ -272,10 +191,11 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     }];
 }
 
-- (id<LCCKUserDelegate>)getCachedProfileIfExists:(NSString *)userId error:(NSError * __autoreleasing *)theError {
-    id<LCCKUserDelegate> user;
+
+- (id<LCCKUserModelDelegate>)getCachedProfileIfExists:(NSString *)userId error:(NSError * __autoreleasing *)theError {
+    id<LCCKUserModelDelegate> user;
     if (userId) {
-        user = [self getUserForClientId:userId];
+        user = self.cachedUsers[userId];
     }
     if (user) {
         return user;
@@ -283,7 +203,7 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     NSInteger code = 0;
     NSString *errorReasonText = @"No cached profile";
     NSDictionary *errorInfo = @{
-                                @"code" : @(code),
+                                @"code":@(code),
                                 NSLocalizedDescriptionKey : errorReasonText,
                                 };
     NSError *error = [NSError errorWithDomain:LCCKUserSystemServiceErrorDomain
@@ -295,7 +215,7 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     return nil;
 }
 
-- (void)cacheUsersWithIds:(NSSet<id<LCCKUserDelegate>> *)userIds callback:(LCCKBooleanResultBlock)callback {
+- (void)cacheUsersWithIds:(NSSet<id<LCCKUserModelDelegate>> *)userIds callback:(LCCKBooleanResultBlock)callback {
     NSMutableSet *uncachedUserIds = [[NSMutableSet alloc] init];
     for (NSString *userId in userIds) {
         if ([self getCachedProfileIfExists:userId error:nil] == nil) {
@@ -303,37 +223,20 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
         }
     }
     if ([uncachedUserIds count] > 0) {
-        [self getProfilesInBackgroundForUserIds:[[NSMutableArray alloc] initWithArray:[uncachedUserIds allObjects]] callback:^(NSArray<id<LCCKUserDelegate>> *users, NSError *error) {
+        [self getProfilesInBackgroundForUserIds:[[NSMutableArray alloc] initWithArray:[uncachedUserIds allObjects]] callback:^(NSArray<id<LCCKUserModelDelegate>> *users, NSError *error) {
             if (users) {
                 [self cacheUsers:users];
             }
-            !callback ?: callback(YES, error);
+            callback(YES, error);
         }];
     } else {
-        !callback ?: callback(YES, nil);
+        callback(YES, nil);
     }
 }
 
-//TODO:改为异步操作，启用本地缓存。只在关键操作时更新本地缓存，比如：签名机制对应的几个操作：加人、踢人等。
-- (void)cacheUsers:(NSArray<id<LCCKUserDelegate>> *)users {
-    if (users.count > 0) {
-        for (id<LCCKUserDelegate> user in users) {
-            @try {
-                [self setUser:user forClientId:user.clientId];
-            } @catch (NSException *exception) {
-                NSString *formatString = @"\n\n\
-                ------ BEGIN NSException Log ---------------\n \
-                class name: %@                              \n \
-                ------line: %@                              \n \
-                ----reason: %@                              \n \
-                ------ END -------------------------------- \n\n";
-                NSString *errorReasonText = [NSString stringWithFormat:formatString,
-                                             @(__PRETTY_FUNCTION__),
-                                             @(__LINE__),
-                                             @"User's clientId can not be nil, please make sure when you set `setFetchProfilesBlock:`"];
-                LCCKLog(@"%@", errorReasonText);
-            }
-        }
+- (void)cacheUsers:(NSArray<id<LCCKUserModelDelegate>> *)users {
+    for (id<LCCKUserModelDelegate> user in users) {
+        self.cachedUsers[user.userId] = user;
     }
 }
 
@@ -352,32 +255,6 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     return _cachedUsers;
 }
 
-#pragma mark -
-#pragma mark - set or get cached user Method
 
-- (void)setUser:(id<LCCKUserDelegate>)user forClientId:(NSString *)clientId {
-    NSString *clientId_ = [clientId copy];
-    if (!clientId_) {
-        return;
-    }
-    dispatch_async(self.isolationQueue, ^(){
-        if (!user) {
-            [self.cachedUsers removeObjectForKey:clientId_];
-        } else {
-            [self.cachedUsers setObject:user forKey:clientId_];
-        }
-    });
-}
-
-- (id<LCCKUserDelegate>)getUserForClientId:(NSString *)clientId {
-    if (!clientId) {
-        return nil;
-    }
-    __block id<LCCKUserDelegate> user = nil;
-    dispatch_sync(self.isolationQueue, ^(){
-        user = self.cachedUsers[clientId];
-    });
-    return user;
-}
 
 @end

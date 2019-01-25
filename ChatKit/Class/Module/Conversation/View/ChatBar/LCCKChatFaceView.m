@@ -2,7 +2,7 @@
 //  LCCKChatFaceView.m
 //  LCCKChatBarExample
 //
-//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/21.
+//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/21.
 //  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
@@ -11,11 +11,6 @@
 #import "LCCKSwipeView.h"
 #import "LCCKFacePageView.h"
 #import "UIImage+LCCKExtension.h"
-#if __has_include(<Masonry/Masonry.h>)
-#import <Masonry/Masonry.h>
-#else
-#import "Masonry.h"
-#endif
 
 @interface LCCKChatFaceView ()<UIScrollViewDelegate,LCCKSwipeViewDelegate,LCCKSwipeViewDataSource,LCCKFacePageViewDelegate>
 
@@ -40,7 +35,7 @@
 @implementation LCCKChatFaceView
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
+    if ([super initWithFrame:frame]) {
         [self setup];
     }
     return self;
@@ -76,11 +71,7 @@
 - (void)selectedFaceImageWithFaceID:(NSUInteger)faceID {
     NSString *faceName = [LCCKFaceManager faceNameWithFaceID:faceID];
     if (faceID != 999) {
-        [LCCKFaceManager saveRecentFace:@{
-                                          @"face_id" : [NSString stringWithFormat:@"%ld",faceID],
-                                          @"face_name" : faceName
-                                          }
-         ];
+        [LCCKFaceManager saveRecentFace:@{@"face_id":[NSString stringWithFormat:@"%ld",faceID],@"face_name":faceName}];
     }
     if (self.delegate && [self.delegate respondsToSelector:@selector(faceViewSendFace:)]) {
         [self.delegate faceViewSendFace:faceName];
@@ -88,34 +79,8 @@
 }
 
 #pragma mark - Private Methods
-- (void)setupConstraints {
-//    [super updateConstraints];
-    [self.swipeView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.and.width.mas_equalTo(self);
-        make.bottom.mas_equalTo(self).offset(-40);
-        make.top.mas_equalTo(self);
-    }];
-    [self.pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.and.width.mas_equalTo(self);
-        make.bottom.mas_equalTo(self.swipeView.mas_bottom);
-        make.height.mas_equalTo(10);
-    }];
-    
-    [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.and.width.and.bottom.mas_equalTo(self);
-        make.height.mas_equalTo(40);
-    }];
-}
 
 - (void)setup{
-    UIImageView *topLine = [[UIImageView alloc] init];//WithFrame:CGRectMake(0, 0, self.frame.size.width - 70, 1.0f)];
-    topLine.backgroundColor = kLCCKTopLineBackgroundColor;
-    [self addSubview:topLine];
-    [topLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.and.top.and.width.mas_equalTo(self);
-        make.height.mas_equalTo(.5f);
-    }];
-
     [self addSubview:self.swipeView];
     [self addSubview:self.pageControl];
     [self addSubview:self.bottomView];
@@ -123,7 +88,7 @@
     self.faceViewType = LCCKShowEmojiFace;
     [self setupFaceView];
     self.userInteractionEnabled = YES;
-    [self setupConstraints];
+    
 }
 
 - (void)setupFaceView {
@@ -146,17 +111,16 @@
     self.pageCount = 1;
     [self.faceArray removeAllObjects];
     [self.faceArray addObjectsFromArray:[LCCKFaceManager recentFaces]];
+    
 }
 
 /**
  *  初始化所有的emoji表情数组,添加删除按钮
  */
 - (void)setupEmojiFaces{
-    CGFloat width = [UIApplication sharedApplication].keyWindow.frame.size.width;
-    CGFloat height = [UIApplication sharedApplication].keyWindow.frame.size.height;
-
-    self.maxRows =  height > 480 ? 3 : 4;
-    self.columnPerRow = width > 320 ? 8 : 7;
+    
+    self.maxRows = 3;
+    self.columnPerRow = [UIScreen mainScreen].bounds.size.width > 320 ? 8 : 7;
     
     //计算每一页最多显示多少个表情  - 1(删除按钮)
     NSInteger pageItemCount = self.itemsPerPage - 1;
@@ -173,16 +137,9 @@
     //循环,给每一页末尾加上一个delete图片,如果是最后一页直接在最后一个加上delete图片
     for (int i = 0; i < self.pageCount; i++) {
         if (self.pageCount - 1 == i) {
-            [self.faceArray addObject:@{
-                                        @"face_id" : @"999",
-                                        @"face_name" : @"删除"
-                                        }];
+            [self.faceArray addObject:@{@"face_id":@"999",@"face_name":@"删除"}];
         } else {
-            [self.faceArray insertObject:@{
-                                           @"face_id" : @"999",
-                                           @"face_name" : @"删除"
-                                           }
-                                 atIndex:(i + 1) * pageItemCount + i];
+            [self.faceArray insertObject:@{@"face_id":@"999",@"face_name":@"删除"} atIndex:(i + 1) * pageItemCount + i];
         }
     }
 }
@@ -212,7 +169,7 @@
 
 - (LCCKSwipeView *)swipeView {
     if (!_swipeView) {
-        _swipeView = [[LCCKSwipeView alloc] init];
+        _swipeView = [[LCCKSwipeView alloc] initWithFrame:CGRectMake(0, 10, self.frame.size.width, self.frame.size.height - 60)];
         _swipeView.delegate = self;
         _swipeView.dataSource = self;
     }
@@ -221,39 +178,29 @@
 
 - (UIPageControl *)pageControl{
     if (!_pageControl) {
-        _pageControl = [[UIPageControl alloc] init];
+        _pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, self.swipeView.frame.size.height, self.frame.size.width, 20)];
         _pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
         _pageControl.currentPageIndicatorTintColor = [UIColor darkGrayColor];
         _pageControl.hidesForSinglePage = YES;
-//        _swipeView.backgroundColor = [UIColor whiteColor];
-//        _pageControl.autoresizingMask = UIViewAutoresizingFlexibleWidth ;
     }
     return _pageControl;
 }
 
 - (UIView *)bottomView {
     if (!_bottomView) {
-        _bottomView = [[UIView alloc] init];//WithFrame:CGRectMake(0, self.frame.size.height - 40, self.frame.size.width, 40)];
-//        _bottomView.backgroundColor = [UIColor redColor];
-//        _bottomView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
-        UIImageView *topLine = [[UIImageView alloc] init];//WithFrame:CGRectMake(0, 0, self.frame.size.width - 70, 1.0f)];
-        topLine.backgroundColor = kLCCKTopLineBackgroundColor;
+        _bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - 40, self.frame.size.width, 40)];
+        
+        UIImageView *topLine = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width - 70, 1.0f)];
+        topLine.backgroundColor = [UIColor lightGrayColor];
         [_bottomView addSubview:topLine];
-        [topLine mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.and.top.mas_equalTo(_bottomView);
-            make.height.mas_equalTo(.5f);
-            make.width.mas_equalTo(_bottomView).offset(-70);
-        }];
-        UIButton *sendButton = [[UIButton alloc] init];//WithFrame:CGRectMake(self.frame.size.width - 70, 0, 70, 40)];
+        
+        UIButton *sendButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - 70, 0, 70, 40)];
         sendButton.backgroundColor = [UIColor colorWithRed:0.0f/255.0f green:70.0f/255.0f blue:1.0f alpha:1.0f];
         [sendButton setTitle:@"发送" forState:UIControlStateNormal];
         [sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [sendButton addTarget:self action:@selector(sendAction:) forControlEvents:UIControlEventTouchUpInside];
         [_bottomView addSubview:self.sendButton = sendButton];
-        [sendButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.and.bottom.and.right.mas_equalTo(_bottomView);
-            make.left.mas_equalTo(_bottomView.mas_right).offset(-70);
-        }];
+        
         UIButton *recentButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [recentButton setBackgroundImage:[self imageInBundlePathForImageName:@"chat_bar_recent_normal"] forState:UIControlStateNormal];
         [recentButton setBackgroundImage:[self imageInBundlePathForImageName:@"chat_bar_recent_highlight"] forState:UIControlStateHighlighted];
@@ -261,12 +208,9 @@
         recentButton.tag = LCCKShowRecentFace;
         [recentButton addTarget:self action:@selector(changeFaceType:) forControlEvents:UIControlEventTouchUpInside];
         [recentButton sizeToFit];
-//        [_bottomView addSubview:self.recentButton = recentButton];
-//        [recentButton setFrame:CGRectMake(0, _bottomView.frame.size.height/2-recentButton.frame.size.height/2, recentButton.frame.size.width, recentButton.frame.size.height)];
-//        [recentButton mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.left.mas_equalTo(_bottomView);
-//            make.centerY.mas_equalTo(_bottomView);
-//        }];
+        [_bottomView addSubview:self.recentButton = recentButton];
+        [recentButton setFrame:CGRectMake(0, _bottomView.frame.size.height/2-recentButton.frame.size.height/2, recentButton.frame.size.width, recentButton.frame.size.height)];
+        
         UIButton *emojiButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [emojiButton setBackgroundImage:[self imageInBundlePathForImageName:@"chat_bar_emoji_normal"] forState:UIControlStateNormal];
         [emojiButton setBackgroundImage:[self imageInBundlePathForImageName:@"chat_bar_emoji_highlight"] forState:UIControlStateHighlighted];
@@ -275,13 +219,8 @@
         [emojiButton addTarget:self action:@selector(changeFaceType:) forControlEvents:UIControlEventTouchUpInside];
         [emojiButton sizeToFit];
         emojiButton.selected = YES;
-//        [_bottomView addSubview:self.emojiButton = emojiButton];
-//        [emojiButton setFrame:CGRectMake(recentButton.frame.size.width, _bottomView.frame.size.height/2-emojiButton.frame.size.height/2, emojiButton.frame.size.width, emojiButton.frame.size.height)];
-//        [emojiButton mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.left.mas_equalTo(_bottomView);
-//            make.centerY.mas_equalTo(_bottomView);
-//        }];
-
+        [_bottomView addSubview:self.emojiButton = emojiButton];
+        [emojiButton setFrame:CGRectMake(recentButton.frame.size.width, _bottomView.frame.size.height/2-emojiButton.frame.size.height/2, emojiButton.frame.size.width, emojiButton.frame.size.height)];
     }
     return _bottomView;
 }
@@ -300,3 +239,4 @@
 }
 
 @end
+    

@@ -2,16 +2,13 @@
 //  LCCKStatusView.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/3/11.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  Created by 陈宜龙 on 16/3/11.
+//  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
 #import "LCCKStatusView.h"
-#if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
-#else
 #import "LCChatKit.h"
-#endif
+#import "UIImage+LCCKExtension.h"
 
 static CGFloat LCCKStatusImageViewHeight = 20;
 static CGFloat LCCKHorizontalSpacing = 15;
@@ -37,7 +34,7 @@ static CGFloat LCCKHorizontalLittleSpacing = 5;
 
 - (void)setup {
     self.backgroundColor = [UIColor colorWithRed:255 / 255.0 green:199 / 255.0 blue:199 / 255.0 alpha:1];
-    self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+
     [self addSubview:self.statusImageView];
     [self addSubview:self.statusLabel];
 }
@@ -60,7 +57,7 @@ static CGFloat LCCKHorizontalLittleSpacing = 5;
         _statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_statusImageView.frame) + LCCKHorizontalLittleSpacing, 0, self.frame.size.width - CGRectGetMaxX(_statusImageView.frame) - LCCKHorizontalSpacing - LCCKHorizontalLittleSpacing, LCCKStatusViewHight)];
         _statusLabel.font = [UIFont systemFontOfSize:15.0];
         _statusLabel.textColor = [UIColor grayColor];
-        _statusLabel.text = LCCKLocalizedStrings(@"netDisconnected");
+        _statusLabel.text = @"会话断开，请检查网络";
     }
     return _statusLabel;
 }

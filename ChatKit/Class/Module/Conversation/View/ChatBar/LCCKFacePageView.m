@@ -2,14 +2,13 @@
 //  LCCKFacePageView.m
 //  LCCKFaceItemExample
 //
-//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/12.
+//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/12.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
 #import "LCCKFacePageView.h"
 #import "LCCKFaceManager.h"
 #import "UIImage+LCCKExtension.h"
-#import "LCCKConstants.h"
 
 /**
  *  预览表情显示的View
@@ -24,13 +23,14 @@
 @implementation LCCKFacePreviewView
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
+    if ([super initWithFrame:frame]) {
         [self setup];
     }
     return self;
 }
 
 - (void)setup{
+    
     UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:({
         NSString *imageName = @"preview_background";
         UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"ChatKeyboard" bundleForClass:[self class]];
@@ -56,7 +56,7 @@
     [self.faceImageView setImage:image];
     [self.faceImageView sizeToFit];
     self.faceImageView.center = self.backgroundImageView.center;
-    [UIView animateWithDuration:LCCKAnimateDuration animations:^{
+    [UIView animateWithDuration:.3 animations:^{
         self.faceImageView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.3, 1.3);
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:.2 animations:^{
@@ -77,19 +77,13 @@
 @implementation LCCKFacePageView
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
+    if ([super initWithFrame:frame]) {
         self.imageViews = [NSMutableArray array];
         
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
         [self addGestureRecognizer:longPress];
         self.userInteractionEnabled = YES;
-        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification
-                                                          object:nil
-                                                           queue:[NSOperationQueue mainQueue]
-                                                      usingBlock:^(NSNotification * _Nonnull note) {
-                                                          [self.facePreviewView removeFromSuperview];
-                                                      }];
-
+        
         [self setup];
     }
     return self;

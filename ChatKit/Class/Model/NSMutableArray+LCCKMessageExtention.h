@@ -2,8 +2,8 @@
 //  NSMutableArray+LCCKMessageExtention.h
 //  ChatKit
 //
-//  v0.8.5 Created by ElonChan on 16/5/26.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  Created by 陈宜龙 on 16/5/26.
+//  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
