@@ -1,7 +1,7 @@
 # ChatKit 快速入门 · iOS
 
 <p align="center">
-<a href=""><img src="https://img.shields.io/badge/pod-v0.8.11-brightgreen.svg"></a> <a href=""><img src="https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5618733984.svg"></a> <a href=""><img src="https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5618733984.svg"></a> <a href="https://github.com/leancloud/ChatKit-OC/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat">
+<a href=""><img src="https://img.shields.io/badge/pod-v0.8.11-brightgreen.svg"></a> <a href=""><img src="https://img.shields.io/badge/platform-iOS%2015.0%2B-ff69b5618733984.svg"></a> <a href=""><img src="https://img.shields.io/badge/platform-iOS%2015.0%2B-ff69b5618733984.svg"></a> <a href="https://github.com/leancloud/ChatKit-OC/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat">
 </a>
 
 在使用中有任何问题都可以提 issue，同时也欢迎提 PR。
@@ -487,6 +487,8 @@ typedef NS_ENUM(NSInteger, LCCKBarButtonItemStyle) {
 具体以  [这里](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit.podspec) 为准。
 
 ## 常见问题
+
+> **Platform requirement:** Current Xcode projects and the CocoaPods spec require iOS 15.0 or later. The iOS 7 compatibility note below is historical and does not apply to current releases.
 
 **ChatKit 组件收费么？**<br/>
 ChatKit 是完全开源并且免费给开发者使用，使用聊天所产生的费用以 [这里](https://leancloud.cn/pricing.html) 为准。
