@@ -15,18 +15,21 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
 ## Objective-C and API rules
 
 - Follow the established `LCCK` prefix for ChatKit-owned public classes, protocols, enums, and constants. Keep vendor code and third-party APIs unchanged.
+- New class and protocol files must use the prefix already established by this repository (`LCCK`), and each header/implementation filename must match its primary type. Do not copy the `CYL` prefix from another project into CYLChatKit.
+- Name new category files `Type+LCCKExtension.h` / `.m`; prefix new category methods with `lcck_`. Use a different project prefix only when that prefix is already the convention in the target repository. Do not rename released symbols to normalize naming.
+- Write repository instructions, skills, comments, and user-facing documentation in English.
 - Preserve existing public names, including historical spellings, to avoid breaking clients. New identifiers should follow the naming skill.
-- Keep headers and implementations named after their primary class; category files use `Type+LCCKExtension`.
 - Use full HTTPS GitHub issue URLs in code comments that explain issue-specific fixes.
-- Write new comments and repository instructions in English.
 
 ## Xcode and CocoaPods configuration
 
 - Both Xcode projects use `objectVersion = 46` and `compatibilityVersion = "Xcode 3.2"`. Do not introduce synchronized-folder groups or newer project-format-only keys.
-- The library, demo, podspec, and both Podfiles use iOS 15.0 as their minimum deployment target. Keep the values aligned.
+- Keep all project- and target-level iOS deployment settings at iOS 15.0, aligned with the podspec and both Podfiles. Check every build configuration, not just the first matching setting.
+- Preserve explicit file references and target membership. Do not add `PBXFileSystemSynchronizedRootGroup` or `PBXFileSystemSynchronizedBuildFileExceptionSet`, `preferredProjectObjectVersion`, or top-level `validationLevel`.
 - Preserve the existing scheme, target, bundle identifier, signing, and source membership unless the task specifically requires changing them.
 - When changing a project file, validate both project parsing and the effective deployment targets. Do not let Xcode rewrite unrelated project sections.
 - If dependency declarations change, update the corresponding lockfile with CocoaPods; do not make unrelated dependency upgrades.
+- Before committing Xcode project changes, verify both `.pbxproj` files retain the required format, parse them with `xcodeproj`, and run `xcodebuild -list` for both projects. Report any build failure separately from project parsing.
 
 ## Git changes
 
