@@ -1,7 +1,7 @@
 # UI Issue Fix Tracker
 
 Tracking 301 issues: 295 from `leancloud/ChatKit-OC` and 6 from `ChenYilong/CYLChatKit`.
-UI assessment: 150 UI-related issues; evidence-based average progress **9.33%** (1400/15000 points).
+UI assessment: 150 UI-related issues; evidence-based average progress **11.33%** (1700/15000 points).
 The source snapshot merge is recorded in [commit 90e4409b504c](https://github.com/ChenYilong/CYLChatKit/commit/90e4409b504ccfed2285b4a7e023ec0cef2054c6).
 
 ## Assessment rules
@@ -81,11 +81,11 @@ The source snapshot merge is recorded in [commit 90e4409b504c](https://github.co
 | [leancloud/ChatKit-OC #332 (closed)](https://github.com/leancloud/ChatKit-OC/issues/332) | — | Upstream is closed, but no matching fix commit or implementation was verified in this target repository. Score: 0%. |
 | [leancloud/ChatKit-OC #331 (closed)](https://github.com/leancloud/ChatKit-OC/issues/331) | — | Upstream is closed, but no matching fix commit or implementation was verified in this target repository. Score: 0%. |
 | [leancloud/ChatKit-OC #330 (open)](https://github.com/leancloud/ChatKit-OC/issues/330) | — | Not UI-related; no fix required under this UI-only scope (N/A). |
-| [leancloud/ChatKit-OC #329 (open)](https://github.com/leancloud/ChatKit-OC/issues/329) | — | No issue-specific fix commit or verified implementation was identified in this merge. Score: 0%. |
+| [leancloud/ChatKit-OC #329 (open)](https://github.com/leancloud/ChatKit-OC/issues/329) | [Keyboard frame conversion](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit/Class/Module/Conversation/View/ChatBar/LCCKChatBar.m#L542) | The keyboard end frame is converted into the chat bar container's coordinates and only its actual bottom overlap is applied; the code links this correction to the issue. Score: 100%. |
 | [leancloud/ChatKit-OC #328 (open)](https://github.com/leancloud/ChatKit-OC/issues/328) | — | Not UI-related; no fix required under this UI-only scope (N/A). |
-| [leancloud/ChatKit-OC #327 (open)](https://github.com/leancloud/ChatKit-OC/issues/327) | — | No verified fix for the disappearing image-selection button is present in this merge. Score: 0%. |
+| [leancloud/ChatKit-OC #327 (open)](https://github.com/leancloud/ChatKit-OC/issues/327) | [More-panel constraints](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit/Class/Module/Conversation/View/ChatBar/LCCKChatBar.m#L780) | Rebuilds the panel constraints as a single set before animating it into view, preventing the competing Masonry top constraints that disrupted the image-selection panel; the code links this fix to the issue. Score: 100%. |
 | [leancloud/ChatKit-OC #326 (open)](https://github.com/leancloud/ChatKit-OC/issues/326) | — | No issue-specific fix commit or verified implementation was identified in this merge. Score: 0%. |
-| [leancloud/ChatKit-OC #325 (open)](https://github.com/leancloud/ChatKit-OC/issues/325) | — | No issue-specific fix commit or verified implementation was identified in this merge. Score: 0%. |
+| [leancloud/ChatKit-OC #325 (open)](https://github.com/leancloud/ChatKit-OC/issues/325) | [Function-panel constraints](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit/Class/Module/Conversation/View/ChatBar/LCCKChatBar.m#L780) | Replaces the off-screen more-panel constraint instead of adding a second active top constraint; the face panel uses the same exclusive transition. The implementation links the reported warning to the issue. Score: 100%. |
 | [leancloud/ChatKit-OC #324 (closed)](https://github.com/leancloud/ChatKit-OC/issues/324) | — | Upstream is closed, but no matching fix commit or implementation was verified in this target repository. Score: 0%. |
 | [leancloud/ChatKit-OC #322 (open)](https://github.com/leancloud/ChatKit-OC/issues/322) | — | Not UI-related; no fix required under this UI-only scope (N/A). |
 | [leancloud/ChatKit-OC #321 (open)](https://github.com/leancloud/ChatKit-OC/issues/321) | — | Not UI-related; no fix required under this UI-only scope (N/A). |

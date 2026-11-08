@@ -529,7 +529,21 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         return;
     }
     CGFloat oldHeight = self.keyboardSize.height;
-    self.keyboardSize = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    CGRect keyboardFrame = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    UIView *containerView = self.superview;
+    if (containerView) {
+        CGRect keyboardFrameInContainer = [containerView convertRect:keyboardFrame fromView:nil];
+        CGRect intersection = CGRectIntersection(containerView.bounds, keyboardFrameInContainer);
+        CGFloat bottomOverlap = !CGRectIsNull(intersection)
+            && CGRectGetMaxY(intersection) >= CGRectGetMaxY(containerView.bounds) - 1.0
+            ? CGRectGetHeight(intersection)
+            : 0;
+        // Keyboard frames are screen-based; convert them before offsetting the chat bar to avoid overshooting.
+        // https://github.com/leancloud/ChatKit-OC/issues/329
+        self.keyboardSize = CGSizeMake(CGRectIsNull(intersection) ? 0 : CGRectGetWidth(intersection), bottomOverlap);
+    } else {
+        self.keyboardSize = keyboardFrame.size;
+    }
     //兼容搜狗输入法：一次键盘事件会通知两次，且键盘高度不一。
     if (self.keyboardSize.height != oldHeight) {
         _showType = LCCKFunctionViewShowNothing;
@@ -718,16 +732,20 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 - (void)showFaceView:(BOOL)show {
     if (show) {
         self.faceView.hidden = NO;
-        [UIView animateWithDuration:LCCKAnimateDuration animations:^{
-            [self.faceView mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.top.mas_equalTo(self.superview.mas_bottom).offset(-kFunctionViewHeight);
-            }];
-            [self.faceView layoutIfNeeded];
-        } completion:nil];
-        
-        [self.faceView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(self.inputBarBackgroundView.mas_bottom);
+        [self.faceView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.width.and.left.mas_equalTo(self);
+            make.height.mas_equalTo(kFunctionViewHeight);
+            make.top.mas_equalTo(self.superview.mas_bottom);
         }];
+        [self.superview layoutIfNeeded];
+        [UIView animateWithDuration:LCCKAnimateDuration animations:^{
+            [self.faceView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.width.and.left.mas_equalTo(self);
+                make.height.mas_equalTo(kFunctionViewHeight);
+                make.top.mas_equalTo(self.inputBarBackgroundView.mas_bottom);
+            }];
+            [self.superview layoutIfNeeded];
+        } completion:nil];
     } else if (self.faceView.superview) {
         self.faceView.hidden = YES;
         [self.faceView mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -752,17 +770,23 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 - (void)showMoreView:(BOOL)show {
     if (show) {
         self.moreView.hidden = NO;
-        // Related report about the image-selection panel's constraints: https://github.com/leancloud/ChatKit-OC/issues/327
-        [UIView animateWithDuration:LCCKAnimateDuration animations:^{
-            [self.moreView mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.top.mas_equalTo(self.superview.mas_bottom).offset(-kFunctionViewHeight);
-            }];
-            [self.moreView layoutIfNeeded];
-        } completion:nil];
-        
-        [self.moreView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(self.inputBarBackgroundView.mas_bottom);
+        [self.moreView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.width.and.left.mas_equalTo(self);
+            make.height.mas_equalTo(kFunctionViewHeight);
+            make.top.mas_equalTo(self.superview.mas_bottom);
         }];
+        [self.superview layoutIfNeeded];
+        // Replace the off-screen constraint before animating so the panel has only one active top constraint.
+        // https://github.com/leancloud/ChatKit-OC/issues/325
+        // Related image-selection panel report: https://github.com/leancloud/ChatKit-OC/issues/327
+        [UIView animateWithDuration:LCCKAnimateDuration animations:^{
+            [self.moreView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.width.and.left.mas_equalTo(self);
+                make.height.mas_equalTo(kFunctionViewHeight);
+                make.top.mas_equalTo(self.inputBarBackgroundView.mas_bottom);
+            }];
+            [self.superview layoutIfNeeded];
+        } completion:nil];
     } else if (self.moreView.superview) {
         self.moreView.hidden = YES;
         [self.moreView mas_remakeConstraints:^(MASConstraintMaker *make) {
