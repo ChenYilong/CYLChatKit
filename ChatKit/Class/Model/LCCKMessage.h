@@ -20,6 +20,7 @@
 /// Height of the image in pixels.
 @property(nonatomic, assign, readonly) int photoHeight;
 
+@property (nonatomic, strong) AVIMMessage *message;
 
 @property (nonatomic, copy, readonly) NSString *text;
 @property (nonatomic, copy, readonly) NSString *systemText;
