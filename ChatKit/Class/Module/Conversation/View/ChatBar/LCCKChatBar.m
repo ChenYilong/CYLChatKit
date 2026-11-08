@@ -2,7 +2,7 @@
 //  LCCKChatBar.m
 //  LCCKChatBarExample
 //
-//  v2.1.1 Created by ElonChan ( https://github.com/ChenYilong/LCCKChatKit ) on 15/8/17.
+//  v2.1.1 Created by ElonChan ( https://github.com/ChenYilong/CYLChatKit ) on 15/8/17.
 //  Copyright (c) 2018 ChenYilong（wechat id：chenyilong1010） . All rights reserved.
 //
 
