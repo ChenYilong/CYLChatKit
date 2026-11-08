@@ -36,7 +36,7 @@
 
 NSMutableDictionary const *LCCKChatMessageCellMediaTypeDict = nil;
 
-static CGFloat const kAvatarImageViewWidth = 40.f;
+static CGFloat const kAvatarImageViewWidth = 50.f;
 static CGFloat const kAvatarImageViewHeight = kAvatarImageViewWidth;
 static CGFloat const LCCKMessageSendStateViewWidthHeight = 30.f;
 static CGFloat const LCCKMessageSendStateViewLeftOrRightToMessageContentView = 2.f;
@@ -392,16 +392,15 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 
 - (UIImageView *)avatarImageView {
     if (!_avatarImageView) {
+        _avatarImageView = [[UIImageView alloc] init];
+        _avatarImageView.contentMode = UIViewContentModeScaleAspectFit;
         LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
         if (avatarImageViewCornerRadiusBlock) {
-            _avatarImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, kAvatarImageViewWidth, kAvatarImageViewHeight)];
-            _avatarImageView.contentMode = UIViewContentModeScaleAspectFit;
             CGSize avatarImageViewSize = CGSizeMake(kAvatarImageViewWidth, kAvatarImageViewHeight);
             CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatarImageViewSize);
-            self.avatarImageView.lcck_cornerRadius = avatarImageViewCornerRadius;
-        } else {
-            _avatarImageView = [[UIImageView alloc] init];
-            _avatarImageView.contentMode = UIViewContentModeScaleAspectFit;
+            //导致CPU消耗达到100% 暂时替换
+            self.avatarImageView.layer.cornerRadius = avatarImageViewCornerRadius;
+            self.avatarImageView.clipsToBounds = YES;
         }
         [self bringSubviewToFront:_avatarImageView];
     }
@@ -428,11 +427,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 
 - (UIImageView *)messageReadStateImageView {
     if (!_messageReadStateImageView) {
-        _messageReadStateImageView = [[UIImageView alloc] initWithImage:({
-            NSString *imageName = @"VoiceMessage_Unread";
-            UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
-            image;})
-                                      ];
+        _messageReadStateImageView = [[UIImageView alloc] init];
     }
     return _messageReadStateImageView;
 }
@@ -470,8 +465,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     return LCCKMessageOwnerTypeUnknown;
 }
 
-- (void)handleLongPress:(UILongPressGestureRecognizer *)longPressGes
-{
+- (void)handleLongPress:(UILongPressGestureRecognizer *)longPressGes {
     if (longPressGes.state == UIGestureRecognizerStateBegan) {
         CGPoint longPressPoint = [longPressGes locationInView:self.contentView];
         if (!CGRectContainsPoint(self.messageContentView.frame, longPressPoint)) {
@@ -488,20 +482,22 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         dispatch_after(when, dispatch_get_main_queue(), ^{
             [self becomeFirstResponder];
             LCCKLongPressMessageBlock longPressMessageBlock = [LCChatKit sharedInstance].longPressMessageBlock;
-            NSDictionary *userInfo = @{ LCCKLongPressMessageUserInfoKeyFromController: self.delegate,
-                                        LCCKLongPressMessageUserInfoKeyFromView: self.tableView,
-                                        LCCKLongPressMessageUserInfoKeyMessageOwner: @(self.messageOwner),
-                                        LCCKLongPressMessageUserInfoKeyMessageCell: self };
             NSArray *menuItems = [NSArray array];
+            NSDictionary *userInfo = @{
+                                       LCCKLongPressMessageUserInfoKeyFromController : self.delegate,
+                                       LCCKLongPressMessageUserInfoKeyFromView : self.tableView,
+                                       };
             if (longPressMessageBlock) {
                 menuItems = longPressMessageBlock(self.message, userInfo);
             } else {
-                LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"copy") block:^{
-                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                    [pasteboard setString:[self.message text]];
-                }];
+                LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"copy")
+                                                                       block:^{
+                                                                           UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                                                                           [pasteboard setString:[self.message text]];
+                                                                       }];
+                //TODO:添加“转发”
                 if (self.mediaType == kAVIMMessageMediaTypeText) {
-                    menuItems = @[copyItem];
+                    menuItems = @[ copyItem ];
                 }
             }
             UIMenuController *menuController = [UIMenuController sharedMenuController];
@@ -510,7 +506,10 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
             UITableView *tableView = self.tableView;
             CGRect targetRect = [self convertRect:self.messageContentView.frame toView:tableView];
             [menuController setTargetRect:targetRect inView:tableView];
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleMenuWillShowNotification:) name:UIMenuControllerWillShowMenuNotification object:nil];
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(handleMenuWillShowNotification:)
+                                                         name:UIMenuControllerWillShowMenuNotification
+                                                       object:nil];
             [menuController setMenuVisible:YES animated:YES];
         });
     }

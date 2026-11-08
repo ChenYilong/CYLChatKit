@@ -9,8 +9,6 @@
 #import "LCCKChatBar.h"
 #import "LCCKChatMoreView.h"
 #import "LCCKChatFaceView.h"
-#import "AGEmojiKeyBoardView.h"
-
 #import "LCCKProgressHUD.h"
 #import "Mp3Recorder.h"
 #if __has_include(<Masonry/Masonry.h>)
@@ -25,9 +23,8 @@
 
 NSString *const kLCCKBatchDeleteTextPrefix = @"kLCCKBatchDeleteTextPrefix";
 NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
-static CGFloat const kLCCKVolumeMaxTimeLength = 15;
 
-@interface LCCKChatBar () <UITextViewDelegate, UINavigationControllerDelegate, Mp3RecorderDelegate, LCCKChatFaceViewDelegate,AGEmojiKeyboardViewDelegate,AGEmojiKeyboardViewDataSource>
+@interface LCCKChatBar () <UITextViewDelegate, UINavigationControllerDelegate, Mp3RecorderDelegate, LCCKChatFaceViewDelegate>
 
 @property (strong, nonatomic) Mp3Recorder *MP3;
 @property (nonatomic, strong) UIView *inputBarBackgroundView; /**< 输入栏目背景视图 */
@@ -37,7 +34,6 @@ static CGFloat const kLCCKVolumeMaxTimeLength = 15;
 @property (strong, nonatomic) UIButton *faceButton; /**< 表情按钮 */
 @property (strong, nonatomic) UIButton *moreButton; /**< 更多按钮 */
 @property (weak, nonatomic) LCCKChatFaceView *faceView; /**< 当前活跃的底部view,用来指向faceView */
-@property (weak, nonatomic) AGEmojiKeyboardView *emojiView; /**< 当前活跃的底部view,用来指向emojiView */
 @property (weak, nonatomic) LCCKChatMoreView *moreView; /**< 当前活跃的底部view,用来指向moreView */
 
 @property (assign, nonatomic, readonly) CGFloat bottomHeight;
@@ -49,6 +45,7 @@ static CGFloat const kLCCKVolumeMaxTimeLength = 15;
 @property (assign, nonatomic) CGFloat oldTextViewHeight;
 @property (nonatomic, assign, getter=shouldAllowTextViewContentOffset) BOOL allowTextViewContentOffset;
 @property (nonatomic, assign, getter=isClosed) BOOL close;
+@property (nonatomic, assign) BOOL isTimeOut;//是否超时
 
 #pragma mark - MessageInputView Customize UI
 ///=============================================================================
@@ -60,9 +57,6 @@ static CGFloat const kLCCKVolumeMaxTimeLength = 15;
 @property (nonatomic, strong) UIColor *messageInputViewTextFieldBackgroundColor;
 @property (nonatomic, strong) UIColor *messageInputViewRecordTextColor;
 //TODO:MessageInputView-Tint-Color
-
-@property (nonatomic, strong) NSMutableSet<NSString *> *mentionSet;
-@property (nonatomic, assign) CGFloat volumeTimeLength;
 
 @end
 
@@ -114,18 +108,12 @@ static CGFloat const kLCCKVolumeMaxTimeLength = 15;
         make.edges.mas_equalTo(self.textView).insets(UIEdgeInsetsMake(voiceRecordButtoInsets, voiceRecordButtoInsets, voiceRecordButtoInsets, voiceRecordButtoInsets));
     }];
     
-//    [self.faceView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.width.and.left.mas_equalTo(self);
-//        make.height.mas_equalTo(kFunctionViewHeight);
-//        make.top.mas_equalTo(self.mas_bottom);
-//    }];
-
-    [self.emojiView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.faceView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.and.left.mas_equalTo(self);
         make.height.mas_equalTo(kFunctionViewHeight);
         make.top.mas_equalTo(self.mas_bottom);
     }];
-
+    
     [self.moreView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.and.left.mas_equalTo(self);
         make.height.mas_equalTo(kFunctionViewHeight);
@@ -136,8 +124,8 @@ static CGFloat const kLCCKVolumeMaxTimeLength = 15;
 - (void)dealloc {
     self.delegate = nil;
     _faceView.delegate = nil;
-//    self.emojiView.delegate = nil;
-//    self.emojiView.dataSource = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:LCCKNotificationRecordTimeOut object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
@@ -219,8 +207,8 @@ static CGFloat const kLCCKVolumeMaxTimeLength = 15;
     [self textViewDidChange:textView shouldCacheText:YES];
 }
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range deleteBatchOfTextWithPrefix:(NSString *)prefix suffix:(NSString *)suffix
-{
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range deleteBatchOfTextWithPrefix:(NSString *)prefix
+          suffix:(NSString *)suffix {
     NSString *substringOfText = [textView.text substringWithRange:range];
     if ([substringOfText isEqualToString:suffix]) {
         NSUInteger location = range.location;
@@ -241,11 +229,7 @@ static CGFloat const kLCCKVolumeMaxTimeLength = 15;
                 }
             }
         }
-        if ([prefix isEqualToString:@"@"] && [suffix isEqualToString:@" "]) {
-            NSString *atPeerId = [textView.text substringWithRange:NSMakeRange(location, length)];
-            NSString *peerId = [[atPeerId substringToIndex:atPeerId.length - 1] substringFromIndex:1];
-            [self.mentionSet removeObject:peerId];
-        }
+        
         textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(location, length) withString:@""];
         [textView setSelectedRange:NSMakeRange(location, 0)];
         [self textViewDidChange:self.textView];
@@ -264,6 +248,19 @@ static CGFloat const kLCCKVolumeMaxTimeLength = 15;
 
 #pragma mark -
 #pragma mark - Private Methods
+
+- (BOOL)judgeAVAudioSession {
+    __block BOOL bCanRecord = YES;
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    [audioSession requestRecordPermission:^(BOOL granted) {
+        if (granted) {
+            bCanRecord = YES;
+        } else {
+            bCanRecord = NO;
+        }
+    }];
+    return bCanRecord;
+}
 
 - (void)updateChatBarConstraintsIfNeeded {
     NSString *reason = [NSString stringWithFormat:@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"Should update on main thread"];
@@ -364,19 +361,12 @@ static CGFloat const kLCCKVolumeMaxTimeLength = 15;
 }
 
 - (void)failRecord {
-    [LCCKProgressHUD dismissWithProgressState:LCCKProgressError];
+    // 此回调在录音时长小于1时调用 应该提示Short而不是Error
+    [LCCKProgressHUD dismissWithProgressState:LCCKProgressShort];
 }
 
 - (void)beginConvert {
     [LCCKProgressHUD changeSubTitle:@"正在转换..."];
-}
-
-- (void)realTimeVolumeSize:(float)size timeLength:(NSTimeInterval)timeLength {
-    [LCCKProgressHUD realtimeChangeVolumeImageView:size timeLength:timeLength];
-    self.volumeTimeLength = timeLength/10.0;
-    if (self.volumeTimeLength >= kLCCKVolumeMaxTimeLength) {
-        [self.MP3 stopRecord];
-    }
 }
 
 #pragma mark - LCCKChatFaceViewDelegate
@@ -389,24 +379,6 @@ static CGFloat const kLCCKVolumeMaxTimeLength = 15;
         if (!text || text.length == 0) {
             return;
         }
-        if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendMessage:mentionList:)]) {
-            [self.delegate chatBar:self sendMessage:text mentionList:@[]];
-        }
-        self.textView.text = @"";
-        self.cachedText = @"";
-        self.showType = LCCKFunctionViewShowFace;
-    } else {
-        [self appendString:faceName beginInputing:NO];
-    }
-}
-
-#pragma mark - AGEmojiKeyboardViewDelegate and AGEmojiKeyboardViewDataSource
-- (void)emojiKeyBoardView:(AGEmojiKeyboardView *)emojiKeyBoardView didUseEmoji:(NSString *)emoji {
-    if ([emoji isEqualToString:@"发送"]) {
-        NSString *text = self.textView.text;
-        if (!text || text.length == 0) {
-            return;
-        }
         if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendMessage:)]) {
             [self.delegate chatBar:self sendMessage:text];
         }
@@ -414,74 +386,8 @@ static CGFloat const kLCCKVolumeMaxTimeLength = 15;
         self.cachedText = @"";
         self.showType = LCCKFunctionViewShowFace;
     } else {
-        [self appendString:emoji beginInputing:NO];
+        [self appendString:faceName beginInputing:NO];
     }
-}
-
-- (void)emojiKeyBoardViewDidPressBackSpace:(AGEmojiKeyboardView *)emojiKeyBoardView {
-    NSString *chatText = self.textView.text;
-//    if (chatText.length >= 2) {
-////        [chatText.]
-//        NSString *subStr = [chatText substringFromIndex:chatText.length-2];
-//        if ([(DXFaceView *)self.faceView stringIsFace:subStr]) {
-//            self.textView.text = [chatText substringToIndex:chatText.length-2];
-//            return;
-//        }
-//    }
-//
-//    if (chatText.length > 0) {
-//        self.inputTextView.text = [chatText substringToIndex:chatText.length-1];
-//    }
-    if (chatText.length >= 2) {
-        self.textView.text = [chatText substringToIndex:chatText.length-2];
-        [self textViewDidChange:self.textView];
-    }
-}
-
-- (UIColor *)randomColor {
-    return [UIColor colorWithRed:drand48()
-                           green:drand48()
-                            blue:drand48()
-                           alpha:drand48()];
-}
-
-- (UIImage *)randomImage {
-    CGSize size = CGSizeMake(30, 10);
-    UIGraphicsBeginImageContextWithOptions(size , NO, 0);
-
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    UIColor *fillColor = [self randomColor];
-    CGContextSetFillColorWithColor(context, [fillColor CGColor]);
-    CGRect rect = CGRectMake(0, 0, size.width, size.height);
-    CGContextFillRect(context, rect);
-
-    fillColor = [self randomColor];
-    CGContextSetFillColorWithColor(context, [fillColor CGColor]);
-    CGFloat xxx = 3;
-    rect = CGRectMake(xxx, xxx, size.width - 2 * xxx, size.height - 2 * xxx);
-    CGContextFillRect(context, rect);
-
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return img;
-}
-
-- (UIImage *)emojiKeyboardView:(AGEmojiKeyboardView *)emojiKeyboardView imageForSelectedCategory:(AGEmojiKeyboardViewCategoryImage)category {
-    UIImage *img = [self randomImage];
-    [img imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    return img;
-}
-
-- (UIImage *)emojiKeyboardView:(AGEmojiKeyboardView *)emojiKeyboardView imageForNonSelectedCategory:(AGEmojiKeyboardViewCategoryImage)category {
-    UIImage *img = [self randomImage];
-    [img imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    return img;
-}
-
-- (UIImage *)backSpaceButtonImageForEmojiKeyboardView:(AGEmojiKeyboardView *)emojiKeyboardView {
-    UIImage *img = [UIImage imageNamed:@"[删除]"];
-    [img imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    return img;
 }
 
 #pragma mark - Public Methods
@@ -526,12 +432,6 @@ static CGFloat const kLCCKVolumeMaxTimeLength = 15;
 }
 
 - (void)appendString:(NSString *)string {
-    [self appendString:string beginInputing:YES];
-}
-
-- (void)appendString:(NSString *)string mentionList:(NSArray<NSString *> *)mentionList
-{
-    [self.mentionSet addObjectsFromArray:mentionList];
     [self appendString:string beginInputing:YES];
 }
 
@@ -591,11 +491,11 @@ static CGFloat const kLCCKVolumeMaxTimeLength = 15;
 
 - (void)setup {
     self.close = NO;
+    self.isTimeOut = NO;
     self.oldTextViewHeight = kLCCKChatBarTextViewFrameMinHeight;
     self.allowTextViewContentOffset = YES;
     self.MP3 = [[Mp3Recorder alloc] initWithDelegate:self];
     [self faceView];
-    [self emojiView];
     [self moreView];
     [self addSubview:self.inputBarBackgroundView];
     
@@ -612,32 +512,35 @@ static CGFloat const kLCCKVolumeMaxTimeLength = 15;
         make.left.and.right.and.top.equalTo(self.inputBarBackgroundView);
         make.height.mas_equalTo(.5f);
     }];
+    
+    //修复录音时点击Home键 在返回App后 仍然显示录音动效的问题
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeBackgroundCancelRecordVoice) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appRecieveMsgFromRecordTimer) name:LCCKNotificationRecordTimeOut object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     self.backgroundColor = self.messageInputViewBackgroundColor;
     [self setupConstraints];
-    
-    self.mentionSet = [NSMutableSet set];
 }
 
 /**
  *  开始录音
  */
 - (void)startRecordVoice {
-    [LCCKProgressHUD show];
-    self.voiceRecordButton.highlighted = YES;
-    self.volumeTimeLength = 0.0;
-    [self.MP3 startRecord];
+    // 判断权限
+    if ([self judgeAVAudioSession]) {
+        [LCCKProgressHUD show];
+        self.voiceRecordButton.highlighted = YES;
+        [self.MP3 startRecord];
+    } else {
+        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationRecordNoPower object:nil];
+    }
 }
 
 /**
  *  取消录音
  */
 - (void)cancelRecordVoice {
-    if (self.volumeTimeLength >= kLCCKVolumeMaxTimeLength) {
-        return;
-    }
-    [LCCKProgressHUD dismissWithMessage:@""];
+    [LCCKProgressHUD dismissWithMessage:@"取消录音"];
     self.voiceRecordButton.highlighted = NO;
     [self.MP3 cancelRecord];
 }
@@ -646,30 +549,44 @@ static CGFloat const kLCCKVolumeMaxTimeLength = 15;
  *  录音结束
  */
 - (void)confirmRecordVoice {
-    if (self.volumeTimeLength >= kLCCKVolumeMaxTimeLength) {
-        return;
+    if (self.isTimeOut == NO) {
+        [self.MP3 stopRecord];
+    } else {
+        self.isTimeOut = NO;
     }
-    [self.MP3 stopRecord];
 }
-
 /**
  *  更新录音显示状态,手指向上滑动后提示松开取消录音
  */
 - (void)updateCancelRecordVoice {
-    if (self.volumeTimeLength >= kLCCKVolumeMaxTimeLength) {
-        return;
-    }
-    [LCCKProgressHUD changeSubTitle:@"松开手指,取消发送"];
+    [LCCKProgressHUD changeSubTitle:@"松开取消录音"];
 }
 
 /**
  *  更新录音状态,手指重新滑动到范围内,提示向上取消录音
  */
 - (void)updateContinueRecordVoice {
-    if (self.volumeTimeLength >= kLCCKVolumeMaxTimeLength) {
-        return;
+    [LCCKProgressHUD changeSubTitle:@"向上滑动取消录音"];
+}
+
+/**
+ *  进入后台 取消当前的录音
+ */
+- (void)appBecomeBackgroundCancelRecordVoice {
+    [self cancelRecordVoice];
+}
+
+/**
+ *  倒计时结束 完成当前的录音
+ */
+- (void)appRecieveMsgFromRecordTimer
+{
+    if (self.voiceRecordButton.highlighted == YES) {
+        self.voiceRecordButton.selected = NO;
+        self.voiceRecordButton.highlighted = NO;
+        [self.MP3 stopRecord];
+        self.isTimeOut = YES;
     }
-    [LCCKProgressHUD changeSubTitle:@"手指上滑,取消发送"];
 }
 
 - (void)setShowType:(LCCKFunctionViewShowType)showType {
@@ -730,47 +647,26 @@ static CGFloat const kLCCKVolumeMaxTimeLength = 15;
 }
 
 - (void)showFaceView:(BOOL)show {
-//    if (show) {
-//        self.faceView.hidden = NO;
-//        [UIView animateWithDuration:LCCKAnimateDuration animations:^{
-//            [self.faceView mas_updateConstraints:^(MASConstraintMaker *make) {
-//                make.top.mas_equalTo(self.superview.mas_bottom).offset(-kFunctionViewHeight);
-//            }];
-//            [self.faceView layoutIfNeeded];
-//        } completion:nil];
-//        
-//        [self.faceView mas_updateConstraints:^(MASConstraintMaker *make) {
-//            make.top.mas_equalTo(self.inputBarBackgroundView.mas_bottom);
-//        }];
-//    } else if (self.faceView.superview) {
-//        self.faceView.hidden = YES;
-//        [self.faceView mas_remakeConstraints:^(MASConstraintMaker *make) {
-//            make.width.and.left.mas_equalTo(self);
-//            make.height.mas_equalTo(kFunctionViewHeight);
-//            make.top.mas_equalTo(self.mas_bottom);
-//        }];
-//        [self.faceView layoutIfNeeded];
-//    }
     if (show) {
-        self.emojiView.hidden = NO;
+        self.faceView.hidden = NO;
         [UIView animateWithDuration:LCCKAnimateDuration animations:^{
-            [self.emojiView mas_updateConstraints:^(MASConstraintMaker *make) {
+            [self.faceView mas_updateConstraints:^(MASConstraintMaker *make) {
                 make.top.mas_equalTo(self.superview.mas_bottom).offset(-kFunctionViewHeight);
             }];
-            [self.emojiView layoutIfNeeded];
+            [self.faceView layoutIfNeeded];
         } completion:nil];
-
-        [self.emojiView mas_updateConstraints:^(MASConstraintMaker *make) {
+        
+        [self.faceView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(self.inputBarBackgroundView.mas_bottom);
         }];
-    } else if (self.emojiView.superview) {
-        self.emojiView.hidden = YES;
-        [self.emojiView mas_remakeConstraints:^(MASConstraintMaker *make) {
+    } else if (self.faceView.superview) {
+        self.faceView.hidden = YES;
+        [self.faceView mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.width.and.left.mas_equalTo(self);
             make.height.mas_equalTo(kFunctionViewHeight);
             make.top.mas_equalTo(self.mas_bottom);
         }];
-        [self.emojiView layoutIfNeeded];
+        [self.faceView layoutIfNeeded];
     }
 }
 
@@ -818,10 +714,12 @@ static CGFloat const kLCCKVolumeMaxTimeLength = 15;
     if (!text || text.length == 0 || [text lcck_isSpace]) {
         return;
     }
-    NSArray<NSString *> *mentionList = self.mentionSet.allObjects;
-    [self.mentionSet removeAllObjects];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendMessage:mentionList:)]) {
-        [self.delegate chatBar:self sendMessage:text mentionList:mentionList];
+    if (text.length > 1000) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationTextLengthOut object:nil];
+        return;
+    }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendMessage:)]) {
+        [self.delegate chatBar:self sendMessage:text];
     }
     self.textView.text = @"";
     self.cachedText = @"";
@@ -875,17 +773,6 @@ static CGFloat const kLCCKVolumeMaxTimeLength = 15;
         [self addSubview:(_faceView = faceView)];
     }
     return _faceView;
-}
-
-- (AGEmojiKeyboardView *)emojiView {
-    if (!_emojiView) {
-        AGEmojiKeyboardView *emojiKeyboardView = [[AGEmojiKeyboardView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 216) dataSource:self];
-        emojiKeyboardView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-        emojiKeyboardView.delegate = self;
-        emojiKeyboardView.hidden = YES;
-        [self addSubview:(_emojiView = emojiKeyboardView)];
-    }
-    return _emojiView;
 }
 
 - (LCCKChatMoreView *)moreView {
@@ -978,13 +865,8 @@ static CGFloat const kLCCKVolumeMaxTimeLength = 15;
 }
 
 - (CGFloat)bottomHeight {
-//    if (self.faceView.superview || self.moreView.superview) {
-//        return MAX(self.keyboardSize.height, MAX(self.faceView.frame.size.height, self.moreView.frame.size.height));
-//    } else {
-//        return MAX(self.keyboardSize.height, CGFLOAT_MIN);
-//    }
-    if (self.emojiView.superview || self.moreView.superview) {
-        return MAX(self.keyboardSize.height, MAX(self.emojiView.frame.size.height, self.moreView.frame.size.height));
+    if (self.faceView.superview || self.moreView.superview) {
+        return MAX(self.keyboardSize.height, MAX(self.faceView.frame.size.height, self.moreView.frame.size.height));
     } else {
         return MAX(self.keyboardSize.height, CGFLOAT_MIN);
     }
