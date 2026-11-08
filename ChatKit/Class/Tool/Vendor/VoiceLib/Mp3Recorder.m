@@ -2,7 +2,7 @@
 //  Mp3Recorder.m
 //  BloodSugar
 //
-//  Created by PeterPan on 14-3-24.
+//  v0.8.5 Created by PeterPan on 14-3-24.
 //  Copyright (c) 2014年 shake. All rights reserved.
 //
 
@@ -18,9 +18,7 @@
 @interface Mp3Recorder()<AVAudioRecorderDelegate>
 @property (nonatomic, strong) AVAudioSession *session;
 @property (nonatomic, strong) AVAudioRecorder *recorder;
-//开启timer实时把音量大小数据传出去
-@property (strong, nonatomic) NSTimer *timer;
-@property (assign, nonatomic) NSTimeInterval seconds;
+@property (nonatomic, strong) NSTimer *timer;
 @end
 
 @implementation Mp3Recorder
@@ -53,9 +51,17 @@
                                             settings:settings
                                                error:&recorderSetupError];
     if (recorderSetupError) {
-        NSLog(@"%@",recorderSetupError);
+        //NSLog(@"%@",recorderSetupError);
     }
     _recorder.meteringEnabled = YES;
+    if(_timer) {
+        [_timer invalidate];
+        _timer = nil;
+    }
+    _timer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(levelTimerCallback:) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
+    
+    
     _recorder.delegate = self;
     [_recorder prepareToRecord];
 }
@@ -66,26 +72,26 @@
     NSError *sessionError;
     [_session setCategory:AVAudioSessionCategoryPlayAndRecord error:&sessionError];
     
-    if(_session == nil)
-        NSLog(@"Error creating session: %@", [sessionError description]);
-    else
+    if(_session == nil) {
+        //NSLog(@"Error creating session: %@", [sessionError description]);
+    } else {
         [_session setActive:YES error:nil];
+    }
 }
 
 - (void)startRecord
 {
+    if(_recorder && [_recorder isRecording]) return;
+
     [self setSesstion];
     [self setRecorder];
     [_recorder record];
-    self.seconds = 0;
-    [self timer];
 }
 
 
 - (void)stopRecord
 {
-    [self.timer invalidate];
-    self.timer = nil;
+    if(!_recorder || ![_recorder isRecording] || !_timer) return;
     
     double cTime = _recorder.currentTime;
     [_recorder stop];
@@ -93,21 +99,29 @@
     if (cTime > 1) {
         [self audio_PCMtoMP3];
     } else {
+        
         [_recorder deleteRecording];
-        // 时长小于1调用failRecord
-        if ([_delegate respondsToSelector:@selector(failRecord)]) {
-            [_delegate failRecord];
+        if(self.delegate && [self.delegate respondsToSelector:@selector(tooShortFailRecord)]) {
+            [self.delegate tooShortFailRecord];
         }
+    }
+    if(_timer) {
+        [_timer invalidate];
+        _timer = nil;
     }
 }
 
 - (void)cancelRecord
 {
-    [self.timer invalidate];
-    self.timer = nil;
-    
+    if(!_recorder || ![_recorder isRecording] || !_timer) return;
+
     [_recorder stop];
     [_recorder deleteRecording];
+    if(_timer) {
+        [_timer invalidate];
+        _timer = nil;
+    }
+
 }
 
 - (void)deleteMp3Cache
@@ -125,7 +139,7 @@
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if([fileManager removeItemAtPath:path error:nil])
     {
-        NSLog(@"删除以前的mp3文件");
+        //NSLog(@"删除以前的mp3文件");
     }
 }
 
@@ -135,10 +149,12 @@
     NSString *cafFilePath = [self cafPath];
     NSString *mp3FilePath = [[self mp3Path] stringByAppendingPathComponent:[self randomMP3FileName]];
 
-    NSLog(@"MP3转换开始");
-    if (_delegate && [_delegate respondsToSelector:@selector(beginConvert)]) {
-        [_delegate beginConvert];
+    ////NSLog(@"MP3转换开始");
+    
+    if(self.delegate && [self.delegate respondsToSelector:@selector(beginConvert)]) {
+        [self.delegate beginConvert];
     }
+
     @try {
         int read, write;
         
@@ -172,14 +188,14 @@
         fclose(pcm);
     }
     @catch (NSException *exception) {
-        NSLog(@"%@",[exception description]);
+        //NSLog(@"%@",[exception description]);
         mp3FilePath = nil;
     }
     @finally {
         [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error: nil];
-        NSLog(@"MP3转换结束");
-        if (_delegate && [_delegate respondsToSelector:@selector(endConvertWithMP3FileName:)]) {
-            [_delegate endConvertWithMP3FileName:mp3FilePath];
+        //NSLog(@"MP3转换结束");
+        if (self.delegate && [self.delegate respondsToSelector:@selector(endConvertWithMP3FileName:)]) {
+            [self.delegate endConvertWithMP3FileName:mp3FilePath];
         }
         [self deleteCafCache];
     }
@@ -187,29 +203,46 @@
     
 }
 
-- (void)timerAction {
-    self.seconds++;
-    if (_delegate && [_delegate respondsToSelector:@selector(realTimeVolumeSize:timeLength:)]) {
-        [_recorder updateMeters];
-        [_delegate realTimeVolumeSize:[_recorder averagePowerForChannel:1] timeLength:self.seconds];
-    }
-}
-
-#pragma mark - Getters
-- (NSTimer *)timer{
-    if (_timer) {
-        [_timer invalidate];
-        _timer = nil;
-    }
-    _timer = [NSTimer scheduledTimerWithTimeInterval:0.1
-                                              target:self
-                                            selector:@selector(timerAction)
-                                            userInfo:nil
-                                             repeats:YES];
-    return _timer;
-}
-
 #pragma mark - Path Utils
+
+/* 该方法确实会随环境音量变化而变化，但具体分贝值是否准确暂时没有研究 */
+- (void)levelTimerCallback:(NSTimer *)timer {
+    [self.recorder updateMeters];
+    
+    float   level;                // The linear 0.0 .. 1.0 value we need.
+    float   minDecibels = -80.0f; // Or use -60dB, which I measured in a silent room.
+    float   decibels    = [self.recorder averagePowerForChannel:0];
+    
+    if (decibels < minDecibels)
+    {
+        level = 0.0f;
+    }
+    else if (decibels >= 0.0f)
+    {
+        level = 1.0f;
+    }
+    else
+    {
+        float   root            = 2.0f;
+        float   minAmp          = powf(10.0f, 0.05f * minDecibels);
+        float   inverseAmpRange = 1.0f / (1.0f - minAmp);
+        float   amp             = powf(10.0f, 0.05f * decibels);
+        float   adjAmp          = (amp - minAmp) * inverseAmpRange;
+        
+        level = powf(adjAmp, 1.0f / root);
+    }
+    
+    /* 
+     level 范围[0 ~ 1], 转为[0 ~120] 之间
+     */
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(self.delegate && [self.delegate respondsToSelector:@selector(averagePowerWithVolume:)]) {
+            [self.delegate averagePowerWithVolume:level*120];
+        }
+    });
+}
+
 - (NSString *)cafPath {
     NSString *cafPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"tmp.caf"];
     return cafPath;
@@ -227,6 +260,14 @@
     NSTimeInterval timeInterval = [[NSDate date] timeIntervalSince1970];
     NSString *fileName = [NSString stringWithFormat:@"record_%.0f.mp3",timeInterval];
     return fileName;
+}
+
+- (void)dealloc
+{
+    if(_timer) {
+        [_timer invalidate];
+        _timer = nil;
+    }
 }
 
 @end
