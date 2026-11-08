@@ -27,6 +27,8 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 @interface LCCKChatBar () <UITextViewDelegate, UINavigationControllerDelegate, Mp3RecorderDelegate, LCCKChatFaceViewDelegate>
 
 @property (strong, nonatomic) Mp3Recorder *MP3;
+@property (strong, nonatomic) NSTimer *recordingTimeoutTimer;
+@property (assign, nonatomic) BOOL recordingDidReachTimeLimit;
 @property (nonatomic, strong) UIView *inputBarBackgroundView; /**< 输入栏目背景视图 */
 @property (strong, nonatomic) UIButton *voiceButton; /**< 切换录音模式按钮 */
 @property (strong, nonatomic) UIButton *voiceRecordButton; /**< 录音按钮 */
@@ -342,6 +344,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 #pragma mark - MP3RecordedDelegate
 
 - (void)endConvertWithMP3FileName:(NSString *)fileName {
+    [self invalidateRecordingTimeoutTimer];
     if (fileName) {
         [LCCKProgressHUD dismissWithProgressState:LCCKProgressSuccess];
         [self sendVoiceMessage:fileName seconds:[LCCKProgressHUD seconds]];
@@ -351,6 +354,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 }
 
 - (void)failRecord {
+    [self invalidateRecordingTimeoutTimer];
     [LCCKProgressHUD dismissWithProgressState:LCCKProgressError];
 }
 
@@ -526,9 +530,18 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     if (self.isGaming) {
         _startVoiceWhenGaming();
     }else{
+        [self invalidateRecordingTimeoutTimer];
+        self.recordingDidReachTimeLimit = NO;
         [LCCKProgressHUD show];
         self.voiceRecordButton.highlighted = YES;
         [self.MP3 startRecord];
+        NSTimer *timer = [NSTimer timerWithTimeInterval:60
+                                                 target:self
+                                               selector:@selector(recordingTimeLimitDidExpire)
+                                               userInfo:nil
+                                                repeats:NO];
+        self.recordingTimeoutTimer = timer;
+        [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
     }
 }
 
@@ -536,6 +549,10 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
  *  取消录音
  */
 - (void)cancelRecordVoice {
+    [self invalidateRecordingTimeoutTimer];
+    if (self.recordingDidReachTimeLimit) {
+        return;
+    }
     [LCCKProgressHUD dismissWithMessage:@"取消录音"];
     self.voiceRecordButton.highlighted = NO;
     [self.MP3 cancelRecord];
@@ -545,7 +562,26 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
  *  录音结束
  */
 - (void)confirmRecordVoice {
+    if (self.recordingDidReachTimeLimit) {
+        return;
+    }
+    [self invalidateRecordingTimeoutTimer];
+    self.voiceRecordButton.highlighted = NO;
     [self.MP3 stopRecord];
+}
+
+- (void)recordingTimeLimitDidExpire {
+    self.recordingTimeoutTimer = nil;
+    self.recordingDidReachTimeLimit = YES;
+    self.voiceRecordButton.highlighted = NO;
+    // The HUD counts down from 60 seconds; stop the recorder when it expires.
+    // https://github.com/leancloud/ChatKit-OC/issues/414
+    [self.MP3 stopRecord];
+}
+
+- (void)invalidateRecordingTimeoutTimer {
+    [self.recordingTimeoutTimer invalidate];
+    self.recordingTimeoutTimer = nil;
 }
 
 /**

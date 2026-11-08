@@ -1,0 +1,48 @@
+Pod::Spec.new do |s|
+  s.name         = "CYLChatKit"
+  s.version      = "2.3.11"
+  s.summary      = "Customizable iOS chat UI framework with messaging and conversation management"
+  s.description  = "[EN]An iOS chat UI framework with conversation lists, text, image, audio, video, and location messages, plus contact management.  [CN]为 iOS 应用提供可定制的聊天界面、会话管理和多类型消息支持。"
+  s.homepage     = "https://github.com/ChenYilong/CYLChatKit"
+  s.license      = { :type => 'MIT', :file => 'LICENSE' }
+  s.author       = { "ChenYilong" => "luohanchenyilong@163.com" }
+  s.social_media_url = 'http://weibo.com/luohanchenyilong/'
+  s.platform     = :ios, '15.0'
+  s.swift_versions = ['5.0']
+  s.source       = { :git => "https://github.com/ChenYilong/CYLChatKit.git", :tag => s.version.to_s }
+  s.requires_arc = true
+  s.default_subspec = 'Core'
+  s.static_framework = true
+
+  s.subspec 'Core' do |core|
+    core.source_files = 'ChatKit', 'ChatKit/**/*.{h,m}'
+    core.public_header_files = 'ChatKit/**/*.h'
+    core.vendored_frameworks = 'ChatKit/Class/Tool/Vendor/VoiceLib/lame.framework'
+    core.resources = 'ChatKit/Class/Resources/*', 'ChatKit/**/*.xib'
+    core.frameworks = 'Foundation', 'CoreGraphics', 'UIKit', 'MobileCoreServices', 'AVFoundation', 'CoreLocation', 'MediaPlayer', 'CoreMedia', 'CoreText', 'AudioToolbox', 'MapKit', 'ImageIO', 'SystemConfiguration', 'CFNetwork', 'QuartzCore', 'Security', 'CoreTelephony'
+
+    core.dependency "AVOSCloud", "~> 11.5.1"
+    core.dependency "AVOSCloudIM", "~> 11.5.1"
+    core.dependency "MJRefresh"
+    core.dependency "Masonry", "~> 1.0.1"
+    core.dependency "SDWebImage", "~> 3.8.0"
+    core.dependency "FMDB", "~> 2.6.2"
+    core.dependency "pop", "~> 1.0.9"
+    core.dependency "UITableView+FDTemplateLayoutCell"
+    core.dependency "FDStackView", "~> 1.0"
+    core.dependency "DACircularProgress", "~> 2.3.1"
+    core.dependency "MLLabel", "~> 1.10.5"
+    core.dependency "MWPhotoBrowser", "~> 2.1.2"
+    core.dependency "CYLDeallocBlockExecutor", "~> 1.1.2"
+  end
+
+  s.pod_target_xcconfig = {
+    'DEFINES_MODULE' => 'YES',
+    'OTHER_LIBTOOLFLAGS' => '-no_warning_for_no_symbols',
+    'WARNING_CFLAGS' => [
+      '-Werror=undeclared-selector',
+      '-Werror=incomplete-implementation'
+    ]
+  }
+
+end

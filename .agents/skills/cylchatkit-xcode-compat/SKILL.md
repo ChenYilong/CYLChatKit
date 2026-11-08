@@ -28,7 +28,7 @@ Do not save these projects with a newer Xcode if it rewrites the project format 
 iOS 15.0 is the project minimum. Keep all of these aligned:
 
 - Every `IPHONEOS_DEPLOYMENT_TARGET` in both `.pbxproj` files.
-- `ChatKit.podspec`.
+- `CYLChatKit.podspec`.
 - `ChatKit/Podfile`.
 - `ChatKit-OC/Podfile`.
 

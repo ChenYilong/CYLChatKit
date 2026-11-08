@@ -1,20 +1,21 @@
 target 'ChatKit-OC' do
+  project 'ChatKit-OC.xcodeproj'
   platform :ios, '15.0'
   inhibit_all_warnings!
 
   #=========================================================
   #======================== Lib Dependency =================
   #=========================================================
-  pod 'ChatKit', :path => '../'
+  pod 'CYLChatKit', :path => '../'
 
   #=========================================================
   #======================== Demo Dependency ================
   #=========================================================
 
-  pod 'CYLTabBarController', '1.9.0'
+  pod 'CYLTabBarController', '1.99.72'
   pod 'TWMessageBarManager', '1.8.1'
   pod 'MLPAutoCompleteTextField', '1.5'
-  pod 'FTPopOverMenu', '1.3.2'
+  pod 'FTPopOverMenu', '2.1.4'
   pod 'FXForms', '1.2.14'
 end
 

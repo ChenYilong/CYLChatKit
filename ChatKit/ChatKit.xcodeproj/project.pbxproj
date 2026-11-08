@@ -504,6 +504,7 @@
 		9AC44E9F1E15154300619112 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AC44D7F1E15154300619112 /* README.md */; };
 		A16B478E229429CA00A222B8 /* Lan.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A16B478D229429CA00A222B8 /* Lan.bundle */; };
 		A16B496122966BE500A222B8 /* EmojiLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A16B496322966BE500A222B8 /* EmojiLocalizable.strings */; };
+		E6E190C7D2A26EEF593AB9CD /* libPods-ChatKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9601FCE9729A0FE4669D33E /* libPods-ChatKit.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1024,6 +1025,7 @@
 				9A0B72641CED685F004FDACC /* CoreTelephony.framework in Frameworks */,
 				9A0B72621CED6858004FDACC /* MobileCoreServices.framework in Frameworks */,
 				9A0B72601CED6851004FDACC /* SystemConfiguration.framework in Frameworks */,
+				E6E190C7D2A26EEF593AB9CD /* libPods-ChatKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2376,10 +2378,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9A60608A1CEC831800D14D73 /* Build configuration list for PBXNativeTarget "ChatKit" */;
 			buildPhases = (
+				CBB4CB539ABA0E97CAB3A695 /* [CP] Check Pods Manifest.lock */,
 				9A60607D1CEC831800D14D73 /* Sources */,
 				9A60607E1CEC831800D14D73 /* Frameworks */,
 				9A60607F1CEC831800D14D73 /* Headers */,
 				9A6060801CEC831800D14D73 /* Resources */,
+				C1C3B08671982C663E4B4292 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2493,6 +2497,57 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C1C3B08671982C663E4B4292 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChatKit/Pods-ChatKit-resources.sh",
+				"${PODS_ROOT}/AVOSCloud/AVOS/AVOSCloud/AVOSCloud_Art.inc",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FMDB/FMDB_Privacy.bundle",
+				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MJRefresh/MJRefresh.Privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage/SDWebImage.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AVOSCloud_Art.inc",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FMDB_Privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.Privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SDWebImage.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChatKit/Pods-ChatKit-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CBB4CB539ABA0E97CAB3A695 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ChatKit-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9A60607D1CEC831800D14D73 /* Sources */ = {

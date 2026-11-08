@@ -184,12 +184,12 @@ ChatKit 支持以下两种方式导入到您的项目中：
     gem install cocoapods
  ```
 
-  打开 Podfile，在您项目的 target 下加入以下内容。（在此以 v0.8.5 版本为例）
+  打开 Podfile，在您项目的 target 下加入以下内容。
 
   在文件 `Podfile` 中加入以下内容：
 
  ```shell
-    pod 'ChatKit', '0.8.5'
+    pod 'CYLChatKit', '2.3.11'
  ```
 
   然后在终端中运行以下命令：
@@ -212,7 +212,7 @@ ChatKit 支持以下两种方式导入到您的项目中：
 然后在需要的地方导入 ChatKit：
 
   ```Objective-C
-     #import <ChatKit/LCChatKit.h>
+     #import <CYLChatKit/LCChatKit.h>
   ```
 
 
@@ -227,7 +227,7 @@ CocoaPods 中，有几种设置 SDK 版本的方法。如：
 我们建议您锁定版本，便于团队开发。如，指定 0.8.5 版本。
 
  ```shell
-pod 'ChatKit', '0.8.5'
+pod 'CYLChatKit', '2.3.11'
  ```
 
  - 升级本地 CocoaPods 源

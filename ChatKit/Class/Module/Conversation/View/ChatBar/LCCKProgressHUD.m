@@ -60,18 +60,24 @@
 - (void)timerAction {
     self.angle -= 3;
     self.seconds ++ ;
+    float second = MAX(0, 60.0 - self.seconds / 10.0);
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:0.09];
     UIView.AnimationRepeatAutoreverses = YES;
     self.edgeImageView.transform = CGAffineTransformMakeRotation(self.angle * (M_PI / 180.0f));
-    float second = [self.centerLabel.text floatValue];
     if (second <= 10.0f) {
         self.centerLabel.textColor = [UIColor redColor];
     } else {
         self.centerLabel.textColor = [UIColor yellowColor];
     }
-    self.centerLabel.text = [NSString stringWithFormat:@"%.1f",second-0.1];
+    self.centerLabel.text = [NSString stringWithFormat:@"%.1f", second];
     [UIView commitAnimations];
+    if (self.seconds >= 600) {
+        // Keep the displayed duration at zero instead of counting into negatives.
+        // https://github.com/leancloud/ChatKit-OC/issues/414
+        [_timer invalidate];
+        _timer = nil;
+    }
 }
 
 - (void)setSubTitle:(NSString *)subTitle {
@@ -135,11 +141,12 @@
         [_timer invalidate];
         _timer = nil;
     }
-    _timer = [NSTimer scheduledTimerWithTimeInterval:0.1
-                                               target:self
-                                             selector:@selector(timerAction)
-                                             userInfo:nil
-                                              repeats:YES];
+    _timer = [NSTimer timerWithTimeInterval:0.1
+                                     target:self
+                                   selector:@selector(timerAction)
+                                   userInfo:nil
+                                    repeats:YES];
+    [[NSRunLoop mainRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
     return _timer;
 }
 

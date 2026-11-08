@@ -6,7 +6,7 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
 
 - `ChatKit/` contains the library, its Xcode project, and library Podfile.
 - `ChatKit-OC/` contains the demo, its Xcode project, and demo Podfile.
-- `ChatKit.podspec` defines the published library target.
+- `CYLChatKit.podspec` defines the published library target.
 - For behavior, code is authoritative; keep related project configuration and documentation consistent with it.
 - Read the applicable project skill before changing Xcode settings or introducing public Objective-C symbols:
   - `.agents/skills/cylchatkit-xcode-compat/SKILL.md`

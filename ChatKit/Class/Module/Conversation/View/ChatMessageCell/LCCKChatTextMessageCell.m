@@ -59,6 +59,12 @@
         _messageTextLabel.font = [UIFont systemFontOfSize:16.0f];
         _messageTextLabel.numberOfLines = 0;
         _messageTextLabel.lineBreakMode = NSLineBreakByWordWrapping;;
+        [_messageTextLabel setContentHuggingPriority:UILayoutPriorityDefaultHigh
+                                             forAxis:UILayoutConstraintAxisHorizontal];
+        [_messageTextLabel setContentCompressionResistancePriority:UILayoutPriorityDefaultLow
+                                                         forAxis:UILayoutConstraintAxisHorizontal];
+        // Let short text determine the bubble width while longer text wraps at the cell limit.
+        // https://github.com/leancloud/ChatKit-OC/issues/341
     }
     return _messageTextLabel;
 }

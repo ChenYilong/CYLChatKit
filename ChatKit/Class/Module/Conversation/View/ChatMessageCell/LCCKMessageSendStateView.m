@@ -88,6 +88,11 @@ static void * const LCCKSendImageViewShouldShowIndicatorViewContext = (void*)&LC
             self.hidden = YES;
             break;
     }
+    self.hidden = !(_messageSendState == LCCKMessageSendStateSending ||
+                    _messageSendState == LCCKMessageSendStateFailed);
+    [self showErrorIcon:_messageSendState == LCCKMessageSendStateFailed];
+    // Restore the failed state even when KVO sees no transition from a reused cell.
+    // https://github.com/leancloud/ChatKit-OC/issues/402
 }
 
 //- (void)setMessageSendState:(LCCKMessageSendState)messageSendState {

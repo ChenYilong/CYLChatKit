@@ -1,0 +1,54 @@
+PODS:
+  - AVOSCloud (12.3.3)
+  - AVOSCloudIM (12.3.3):
+    - AVOSCloud (= 12.3.3)
+    - AVOSCloudIM/_ARC (= 12.3.3)
+    - AVOSCloudIM/_NOARC (= 12.3.3)
+  - AVOSCloudIM/_ARC (12.3.3):
+    - AVOSCloud (= 12.3.3)
+    - AVOSCloudIM/_NOARC (= 12.3.3)
+  - AVOSCloudIM/_NOARC (12.3.3):
+    - AVOSCloud (= 12.3.3)
+  - FMDB (2.7.12):
+    - FMDB/standard (= 2.7.12)
+  - FMDB/Core (2.7.12)
+  - FMDB/standard (2.7.12):
+    - FMDB/Core
+  - Masonry (1.1.0)
+  - MJRefresh (3.7.9)
+  - SDWebImage (5.21.7):
+    - SDWebImage/Core (= 5.21.7)
+  - SDWebImage/Core (5.21.7)
+  - "UITableView+FDTemplateLayoutCell (1.6)"
+
+DEPENDENCIES:
+  - AVOSCloud (= 12.3.3)
+  - AVOSCloudIM (= 12.3.3)
+  - FMDB (= 2.7.12)
+  - Masonry (= 1.1.0)
+  - MJRefresh (= 3.7.9)
+  - SDWebImage (= 5.21.7)
+  - "UITableView+FDTemplateLayoutCell (= 1.6)"
+
+SPEC REPOS:
+  trunk:
+    - AVOSCloud
+    - AVOSCloudIM
+    - FMDB
+    - Masonry
+    - MJRefresh
+    - SDWebImage
+    - "UITableView+FDTemplateLayoutCell"
+
+SPEC CHECKSUMS:
+  AVOSCloud: 70bbf2d1ffcf587cb69e1eb3fff8f4e29046da44
+  AVOSCloudIM: 9adac46ff9cc9895ba5464bb199d1cbe53090bfa
+  FMDB: 728731dd336af3936ce00f91d9d8495f5718a0e6
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  MJRefresh: ff9e531227924c84ce459338414550a05d2aea78
+  SDWebImage: e9fc87c1aab89a8ab1bbd74eba378c6f53be8abf
+  "UITableView+FDTemplateLayoutCell": 5c949b4a5059c404b442926c0e80f81d10a2d66f
+
+PODFILE CHECKSUM: cd7627a9030814a11b0e7646a816e72ea07ecdd4
+
+COCOAPODS: 1.17.0
