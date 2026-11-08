@@ -547,6 +547,14 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
         avimTypedMessage = aMessage;
     }
     [avimTypedMessage lcck_setObject:@([self.parentConversationViewController getConversationIfExists].lcck_type) forKey:LCCKCustomMessageConversationTypeKey];
+    [avimTypedMessage lcck_setObject:self.parentConversationViewController.selfSex forKey:@"USER_SEX"];
+    [avimTypedMessage lcck_setObject:self.parentConversationViewController.selfIcon forKey:@"USER_ICON"];
+    [avimTypedMessage lcck_setObject:self.parentConversationViewController.selfName forKey:@"USER_NAME"];
+    [avimTypedMessage lcck_setObject:self.parentConversationViewController.selfID forKey:@"USER_ID"];
+    [avimTypedMessage lcck_setObject:self.parentConversationViewController.messageType forKey:@"MSG_TYPE"];
+    [avimTypedMessage lcck_setObject:self.parentConversationViewController.messageFromApp forKey:@"APP"];
+    [avimTypedMessage lcck_setObject:self.currentConversationId forKey:@"CONVERSATION_ID"];
+    
     [avimTypedMessage setValue:[LCCKSessionService sharedInstance].clientId forKey:@"clientId"];//for LCCKSendMessageHookBlock
     if (mentionList.count > 0) {
         avimTypedMessage.mentionList = mentionList;

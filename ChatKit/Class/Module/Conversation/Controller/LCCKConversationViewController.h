@@ -20,6 +20,25 @@ typedef void (^LCCKConversationHandler) (AVIMConversation *conversation, LCCKCon
  */
 @property (nonatomic, copy, readonly) NSString *conversationId;
 
+// 消息的类型：私聊还是群聊
+@property (nonatomic, copy) NSString *messageType;
+
+// 消息的来源：狼人杀还是小语 werewolf | xiaoyu
+@property (nonatomic, copy) NSString *messageFromApp;
+
+// 对方的信息
+@property (nonatomic, copy) NSString *peerIcon;
+@property (nonatomic, copy) NSString *peerName;
+@property (nonatomic, copy) NSString *peerID;
+@property (nonatomic, copy) NSString *peerSex;
+
+// 自己的信息
+@property (nonatomic, copy) NSString *selfIcon;
+@property (nonatomic, copy) NSString *selfName;
+@property (nonatomic, copy) NSString *selfID;
+@property (nonatomic, copy) NSString *selfSex;
+
+
 /*!
  *  @brief Id of the peer, single conversation should be initialized with this property.
  *  @details Initialization method is `-initWithPeerId:`.

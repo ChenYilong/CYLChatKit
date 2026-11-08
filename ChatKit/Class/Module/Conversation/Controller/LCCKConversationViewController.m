@@ -48,6 +48,7 @@
 #endif
 
 NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationViewControllerErrorDomain";
+NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 
 @interface LCCKConversationViewController () <LCCKChatBarDelegate, LCCKChatMessageCellDelegate, LCCKConversationViewModelDelegate, LCCKPhotoBrowserDelegate>
 
@@ -72,6 +73,76 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 @end
 
 @implementation LCCKConversationViewController
+
+- (NSString *) peerIcon {
+    if (_peerIcon == nil) {
+        _peerIcon = @"";
+    }
+    return _peerIcon;
+}
+
+- (NSString *)peerName {
+    if (_peerName == nil) {
+        _peerName = @"";
+    }
+    return _peerName;
+}
+
+- (NSString *)peerID {
+    if (_peerID == nil) {
+        _peerID = @"";
+    }
+    return _peerID;
+}
+
+- (NSString *)peerSex {
+    if (_peerSex == nil) {
+        _peerSex = @"";
+    }
+    return _peerSex;
+}
+
+- (NSString *)messageType {
+    if (_messageType == nil) {
+        _messageType = @"";
+    }
+    return _messageType;
+}
+
+- (NSString *)messageFromApp {
+    if (_messageFromApp == nil) {
+        _messageFromApp = @"";
+    }
+    return _messageFromApp;
+}
+
+- (NSString *)selfIcon {
+    if (_selfIcon == nil) {
+        _selfIcon = @"";
+    }
+    return _selfIcon;
+}
+
+- (NSString *)selfName {
+    if (_selfName == nil) {
+        _selfName = @"";
+    }
+    return _selfName;
+}
+
+- (NSString *)selfID {
+    if (_selfID == nil) {
+        _selfID = @"";
+    }
+    return _selfID;
+}
+
+- (NSString *)selfSex {
+    if (_selfSex == nil) {
+        _selfSex = @"";
+    }
+    return _selfSex;
+}
 
 - (void)setFetchConversationHandler:(LCCKFetchConversationHandler)fetchConversationHandler {
     _fetchConversationHandler = fetchConversationHandler;
@@ -205,6 +276,12 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         chatViewModel.delegate = self;
         _chatViewModel = chatViewModel;
     }
+    _chatViewModel.peerSex = self.peerSex;
+    _chatViewModel.peerIcon = self.peerIcon;
+    _chatViewModel.peerName = self.peerName;
+    _chatViewModel.peerID = self.peerID;
+    _chatViewModel.messageType = self.messageType;
+    _chatViewModel.messageFromApp = self.messageFromApp;
     return _chatViewModel;
 }
 
@@ -301,6 +378,9 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 
 - (void)sendTextMessage:(NSString *)text mentionList:(NSArray<NSString *> *)mentionList
 {
+    if (self.conversationId == nil) {
+        return;
+    }
     if ([text length] > 0 ) {
         LCCKMessage *lcckMessage = [[LCCKMessage alloc] initWithText:text
                                                             senderId:self.userId
@@ -308,7 +388,24 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                                                            timestamp:LCCK_CURRENT_TIMESTAMP
                                                      serverMessageId:nil];
         [self makeSureSendValidMessage:lcckMessage afterFetchedConversationShouldWithAssert:NO];
+
         [self.chatViewModel sendMessage:lcckMessage mentionList:mentionList];
+        
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:RNNotificationName
+         object:@{
+           @"USER_SEX": self.peerSex,
+           @"READ":@YES,
+           @"MSG_TYPE": self.messageType,
+           @"APP": self.messageFromApp,
+           @"USER_ICON": self.peerIcon,
+           @"USER_NAME": self.peerName,
+           @"CONVERSATION_ID": self.conversationId,
+           @"USER_ID": self.peerID,
+           @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
+           @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
+           @"CHAT_MESSAGE":[NSString stringWithFormat:@"%@", text]
+       }];
     }
 }
 
@@ -324,6 +421,9 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (void)sendImageMessageData:(NSData *)imageData {
+    if (self.conversationId == nil) {
+        return;
+    }
     NSString *path = [[LCCKSettingService sharedInstance] tmpPath];
     NSError *error;
     [imageData writeToFile:path options:NSDataWritingAtomic error:&error];
@@ -344,12 +444,31 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                                 ];
         [self makeSureSendValidMessage:message afterFetchedConversationShouldWithAssert:NO];
         [self.chatViewModel sendMessage:message];
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:RNNotificationName
+         object:@{
+           @"USER_SEX": self.peerSex,
+           @"USER_ICON": self.peerIcon,
+           @"READ":@YES,
+           @"MSG_TYPE": self.messageType,
+           @"APP": self.messageFromApp,
+           @"USER_NAME": self.peerName,
+           @"CONVERSATION_ID": self.conversationId,
+           @"USER_ID": self.peerID,
+           @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
+           @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
+           @"CHAT_MESSAGE":@"图片消息"
+       }];
     } else {
         [self alert:@"write image to file error"];
     }
 }
 
 - (void)sendVoiceMessageWithPath:(NSString *)voicePath time:(NSTimeInterval)recordingSeconds {
+
+    if (self.conversationId == nil) {
+        return;
+    }
 
     LCCKMessage *message = [[LCCKMessage alloc] initWithVoicePath:voicePath
                                                          voiceURL:nil
@@ -359,6 +478,21 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                                                         timestamp:LCCK_CURRENT_TIMESTAMP
                                                   serverMessageId:nil];
     [self makeSureSendValidMessage:message afterFetchedConversationShouldWithAssert:NO];
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:RNNotificationName
+     object:@{
+          @"USER_SEX": self.peerSex,
+          @"USER_ICON": self.peerIcon,
+          @"USER_NAME": self.peerName,
+          @"CONVERSATION_ID": self.conversationId,
+          @"READ":@YES,
+          @"MSG_TYPE": self.messageType,
+          @"APP": self.messageFromApp,
+          @"USER_ID": self.peerID,
+          @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
+          @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
+          @"CHAT_MESSAGE":@"语音消息"
+    }];
     [self.chatViewModel sendMessage:message];
 }
 
@@ -384,6 +518,12 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 }
 
 - (void)sendCustomMessage:(AVIMTypedMessage *)customMessage {
+    if (self.conversationId == nil) {
+        return;
+    }
+    if (!self.isAvailable) {
+        return;
+    }
     [self makeSureSendValidMessageAfterFetchedConversation:customMessage];
     [self.chatViewModel sendCustomMessage:customMessage];
 }
@@ -392,6 +532,12 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
             progressBlock:(AVProgressBlock)progressBlock
                   success:(LCCKBooleanResultBlock)success
                    failed:(LCCKBooleanResultBlock)failed {
+    if (self.conversationId == nil) {
+        return;
+    }
+    if (!self.isAvailable) {
+        return;
+    }
     [self makeSureSendValidMessageAfterFetchedConversation:customMessage];
     [self.chatViewModel sendCustomMessage:customMessage progressBlock:progressBlock success:success failed:failed];
 }
@@ -413,10 +559,11 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                             @(__LINE__),
                             @"Remember to check if `isAvailable` is ture, making sure sending message after conversation has been fetched"];
         if (!withAssert) {
-            LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), reason);
+            LCCKLog(@"�类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), reason);
             return;
         }
-        NSAssert(NO, reason);
+//        NSAssert(NO, reason);
+        return;
     }
     if ([message isKindOfClass:[LCCKMessage class]]) {
         return;
@@ -611,7 +758,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     if (conversation.createAt) {
         if (!conversation.imClient) {
             [conversation setValue:[LCCKSessionService sharedInstance].client forKey:@"imClient"];
-            LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
+            LCCKLog(@"�类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
         }
         BOOL hasDraft = (conversation.lcck_draft.length > 0);
         if (hasDraft) {
@@ -678,11 +825,11 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     }
     __weak __typeof(self) weakSelf = self;
     [self.chatViewModel loadMessagesFirstTimeWithCallback:^(BOOL succeeded, id object, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(),^{
-            [weakSelf loadLatestMessagesHandler:succeeded error:error];
-            BOOL isFirstTimeMeet = (([object count] == 0) && succeeded);
-            [self sendWelcomeMessageIfNeeded:isFirstTimeMeet];
-        });
+//        dispatch_async(dispatch_get_main_queue(),^{
+//            [weakSelf loadLatestMessagesHandler:succeeded error:error];
+//            BOOL isFirstTimeMeet = (([object count] == 0) && succeeded);
+//            [self sendWelcomeMessageIfNeeded:isFirstTimeMeet];
+//        });
     }];
 }
 
@@ -795,7 +942,15 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 
 - (void)messageCellTappedHead:(LCCKChatMessageCell *)messageCell {
     LCCKOpenProfileBlock openProfileBlock = [LCCKUIService sharedInstance].openProfileBlock;
-    !openProfileBlock ?: openProfileBlock(messageCell.message.senderId, messageCell.message.sender, self);
+    if ([messageCell.message lcck_isCustomMessage]) {
+        id<LCCKUserDelegate> sender = [[LCCKUserSystemService sharedInstance] getProfileForUserId:self.conversation.lcck_peerId error:nil];
+        if (sender != nil) {
+            //!openProfileBlock ?: openProfileBlock(self.conversation.lcck_peerId, sender, self);
+            !openProfileBlock ?: openProfileBlock(((AVIMMessage *)messageCell.message).clientId, sender, self);
+        }
+    }else{
+        !openProfileBlock ?: openProfileBlock(messageCell.message.senderId, messageCell.message.sender, self);
+    }
 }
 
 - (void)messageCellTappedBlank:(LCCKChatMessageCell *)messageCell {
