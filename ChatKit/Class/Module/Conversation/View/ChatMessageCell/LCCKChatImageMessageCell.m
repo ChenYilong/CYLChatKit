@@ -32,6 +32,8 @@
  */
 @property (nonatomic, weak) UILabel *messageProgressLabel;
 
+- (void)updateMessageImageViewWithImage:(UIImage *)image;
+
 @end
 
 @implementation LCCKChatImageMessageCell
@@ -61,6 +63,24 @@
     [self addGeneralView];
 }
 
+- (void)updateMessageImageViewWithImage:(UIImage *)image {
+    if (!image) {
+        return;
+    }
+    self.messageImageView.image = image;
+    UIEdgeInsets edgeMessageBubbleCustomize;
+    if (self.messageOwner == LCCKMessageOwnerTypeSelf) {
+        edgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].rightHollowEdgeMessageBubbleCustomize;
+    } else {
+        edgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].leftHollowEdgeMessageBubbleCustomize;
+    }
+    [self.messageImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.messageContentView).with.insets(edgeMessageBubbleCustomize);
+        make.width.mas_equalTo(image.size.width);
+        make.height.mas_equalTo(image.size.height);
+    }];
+}
+
 - (void)singleTapMessageImageViewGestureRecognizerHandler:(UITapGestureRecognizer *)tapGestureRecognizer {
     if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
         if ([self.delegate respondsToSelector:@selector(messageCellTappedMessage:)]) {
@@ -73,11 +93,8 @@
     [super configureCellWithData:message];
     UIImage *thumbnailPhoto = message.thumbnailPhoto;
     do {
-        if (self.messageImageView.image && (self.messageImageView.image == thumbnailPhoto)) {
-            break;
-        }
         if (thumbnailPhoto) {
-            self.messageImageView.image = thumbnailPhoto;
+            [self updateMessageImageViewWithImage:thumbnailPhoto];
             break;
         }
         NSString *imageLocalPath = message.photoPath;
@@ -87,7 +104,7 @@
             NSData *imageData = [NSData dataWithContentsOfFile:imageLocalPath];
             UIImage *image = [UIImage imageWithData:imageData];
             UIImage *resizedImage = [image lcck_imageByScalingAspectFill];
-            self.messageImageView.image = resizedImage;
+            [self updateMessageImageViewWithImage:resizedImage];
             message.photo = image;
             message.thumbnailPhoto = resizedImage;
             break;
@@ -95,41 +112,22 @@
         // requied!
         if (message.originPhotoURL) {
             UIImage *image = [self imageInBundleForImageName:@"Placeholder_Image"];
-            // Keep the placeholder at the message's target dimensions and refresh its row after download.
+            // Use a bounded placeholder until the downloaded image supplies the actual dimensions.
             // https://github.com/leancloud/ChatKit-OC/issues/279
-            CGSize photoSize = CGSizeMake(message.photoWidth, message.photoHeight);
-            UIImage *newImage = [image lcck_imageByScalingAspectFillWithOriginSize:photoSize];
-            self.messageImageView.contentMode = UIViewContentModeScaleAspectFit;
-            
-            UIEdgeInsets edgeMessageBubbleCustomize;
-            if (message.ownerType == LCCKMessageOwnerTypeSelf) {
-                UIEdgeInsets rightEdgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].rightHollowEdgeMessageBubbleCustomize;
-                edgeMessageBubbleCustomize = rightEdgeMessageBubbleCustomize;
-            } else {
-                UIEdgeInsets leftEdgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].leftHollowEdgeMessageBubbleCustomize;
-                edgeMessageBubbleCustomize = leftEdgeMessageBubbleCustomize;
-            }
-            
-            if (message.ownerType == LCCKMessageOwnerTypeSelf) {
-                [self.messageImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.edges.equalTo(self.messageContentView).with.insets(edgeMessageBubbleCustomize);
-                    make.height.mas_equalTo(newImage.size.height);
-                    make.width.mas_equalTo(newImage.size.width);
-                }];
-            }else {
-                [self.messageImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.edges.equalTo(self.messageContentView).with.insets(edgeMessageBubbleCustomize);
-                    make.height.mas_equalTo(newImage.size.height);
-                    make.width.mas_equalTo(newImage.size.width);
-                }];
-            }
+            // https://github.com/ChenYilong/CYLChatKit/issues/6
+            UIImage *newImage = [image lcck_imageByScalingAspectFill];
+            [self updateMessageImageViewWithImage:newImage];
             
             [self.messageImageView  sd_setImageWithURL:message.originPhotoURL placeholderImage:newImage
                                              completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                                                  dispatch_async(dispatch_get_main_queue(),^{
                                                      if (image){
                                                          message.photo = image;
-                                                         message.thumbnailPhoto = [image lcck_imageByScalingAspectFillWithOriginSize:photoSize];
+                                                         UIImage *thumbnailPhoto = [image lcck_imageByScalingAspectFill];
+                                                         message.thumbnailPhoto = thumbnailPhoto;
+                                                         if (self.message == message) {
+                                                             [self updateMessageImageViewWithImage:thumbnailPhoto];
+                                                         }
                                                          if ([self.delegate respondsToSelector:@selector(fileMessageDidDownload:)]) {
                                                              [self.delegate fileMessageDidDownload:self];
                                                          }

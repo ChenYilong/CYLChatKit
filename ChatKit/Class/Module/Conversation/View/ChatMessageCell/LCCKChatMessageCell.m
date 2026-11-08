@@ -441,12 +441,13 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 - (UIImageView *)avatarImageView {
     if (!_avatarImageView) {
         _avatarImageView = [[UIImageView alloc] init];
-        _avatarImageView.contentMode = UIViewContentModeScaleAspectFit;
+        _avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
         LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
         if (avatarImageViewCornerRadiusBlock) {
             CGSize avatarImageViewSize = CGSizeMake(kAvatarImageViewWidth, kAvatarImageViewHeight);
             CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatarImageViewSize);
-            //导致CPU消耗达到100% 暂时替换
+            // https://github.com/leancloud/ChatKit-OC/issues/347
+            // https://github.com/leancloud/ChatKit-OC/issues/348
             self.avatarImageView.layer.cornerRadius = avatarImageViewCornerRadius;
             self.avatarImageView.clipsToBounds = YES;
         }
@@ -616,4 +617,3 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 }
 
 @end
-

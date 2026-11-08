@@ -653,16 +653,17 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 - (void)showMoreView:(BOOL)show {
     if (show) {
         self.moreView.hidden = NO;
-        [UIView animateWithDuration:LCCKAnimateDuration animations:^{
-            [self.moreView mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.top.mas_equalTo(self.superview.mas_bottom).offset(-kFunctionViewHeight);
-            }];
-            [self.moreView layoutIfNeeded];
-        } completion:nil];
-        
-        [self.moreView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(self.inputBarBackgroundView.mas_bottom);
+        [self.superview layoutIfNeeded];
+        // Replace the offscreen top constraint instead of accumulating competing top constraints.
+        // https://github.com/leancloud/ChatKit-OC/issues/327
+        [self.moreView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.width.and.left.mas_equalTo(self);
+            make.height.mas_equalTo(kFunctionViewHeight);
+            make.top.mas_equalTo(self.superview.mas_bottom).offset(-kFunctionViewHeight);
         }];
+        [UIView animateWithDuration:LCCKAnimateDuration animations:^{
+            [self.superview layoutIfNeeded];
+        } completion:nil];
     } else if (self.moreView.superview) {
         self.moreView.hidden = YES;
         [self.moreView mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -807,6 +808,9 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         [_voiceRecordButton setTitle:[NSBundle lcck_getLocalizedString:@"松开 结束" class:[self class]] forState:UIControlStateHighlighted];
         [_voiceRecordButton addTarget:self action:@selector(startRecordVoice) forControlEvents:UIControlEventTouchDown];
         [_voiceRecordButton addTarget:self action:@selector(cancelRecordVoice) forControlEvents:UIControlEventTouchUpOutside];
+        // https://github.com/ChenYilong/CYLChatKit/issues/3
+        // https://github.com/leancloud/ChatKit-OC/issues/269
+        [_voiceRecordButton addTarget:self action:@selector(cancelRecordVoice) forControlEvents:UIControlEventTouchCancel];
         [_voiceRecordButton addTarget:self action:@selector(confirmRecordVoice) forControlEvents:UIControlEventTouchUpInside];
         [_voiceRecordButton addTarget:self action:@selector(updateCancelRecordVoice) forControlEvents:UIControlEventTouchDragExit];
         [_voiceRecordButton addTarget:self action:@selector(updateContinueRecordVoice) forControlEvents:UIControlEventTouchDragEnter];

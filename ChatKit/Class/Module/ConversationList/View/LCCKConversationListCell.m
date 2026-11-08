@@ -63,11 +63,15 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 - (UIImageView *)avatorImageView {
     if (_avatorImageView == nil) {
         UIImageView *avatorImageView = [[UIImageView alloc] initWithFrame:CGRectMake(LCCKHorizontalSpacing, LCCKVerticalSpacing, LCCKImageSize, LCCKImageSize)];
+        avatorImageView.contentMode = UIViewContentModeScaleAspectFill;
         LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
         if (avatarImageViewCornerRadiusBlock) {
             CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatorImageView.frame.size);
-            [avatorImageView lcck_cornerRadiusAdvance:avatarImageViewCornerRadius rectCornerType:UIRectCornerAllCorners];
-
+            // Use layer clipping so asynchronous avatar updates do not redraw and flash.
+            // https://github.com/leancloud/ChatKit-OC/issues/348
+            // https://github.com/leancloud/ChatKit-OC/issues/385
+            avatorImageView.layer.cornerRadius = avatarImageViewCornerRadius;
+            avatorImageView.clipsToBounds = YES;
         }
         _avatorImageView = avatorImageView;
     }

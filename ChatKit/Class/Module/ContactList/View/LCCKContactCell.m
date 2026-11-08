@@ -41,17 +41,22 @@
 }
 
 - (void)setup {
-    LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
-    if (avatarImageViewCornerRadiusBlock) {
-        CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(self.avatarImageView.frame.size);
-        self.avatarImageView.lcck_cornerRadius = avatarImageViewCornerRadius;
-    }
+    self.avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
+    self.avatarImageView.clipsToBounds = YES;
     NSString *selectionStatusButtonNormalImageName = @"CellGraySelected";
     NSString *selectionStatusButtonSelectedImageName = @"CellBlueSelected";
     UIImage *selectionStatusButtonNormalImage = [UIImage lcck_imageNamed:selectionStatusButtonNormalImageName bundleName:@"Other" bundleForClass:[LCChatKit class]];
     UIImage *selectionStatusButtonSelectedImage = [UIImage lcck_imageNamed:selectionStatusButtonSelectedImageName bundleName:@"Other" bundleForClass:[LCChatKit class]];
     [self.selectionStatusButton setImage:selectionStatusButtonNormalImage forState:UIControlStateNormal];
     [self.selectionStatusButton setImage:selectionStatusButtonSelectedImage forState:UIControlStateSelected];
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
+    self.avatarImageView.layer.cornerRadius = avatarImageViewCornerRadiusBlock ? avatarImageViewCornerRadiusBlock(self.avatarImageView.bounds.size) : 0;
+    // Apply the radius after Auto Layout establishes the avatar bounds.
+    // https://github.com/leancloud/ChatKit-OC/issues/347
 }
 
 - (void)configureWithAvatarURL:(NSURL *)avatarURL title:(NSString *)title subtitle:(NSString *)subtitle model:(LCCKContactListMode)model {

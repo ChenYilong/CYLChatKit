@@ -20,12 +20,9 @@
 @property (assign, nonatomic) LCCKProgressState progressState;
 @property (assign, nonatomic) NSTimeInterval seconds;
 
-@property (nonatomic, strong, readonly) UIWindow *overlayWindow;
-
 @end
 
 @implementation LCCKProgressHUD
-@synthesize overlayWindow = _overlayWindow;
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
@@ -103,17 +100,9 @@
                          }
                          completion:^(BOOL finished){
                              if(self.alpha == 0) {
+                                 // This HUD is hosted in the app's key window; do not create another key window on dismissal.
+                                 // https://github.com/leancloud/ChatKit-OC/issues/420
                                  [self removeFromSuperview];
-                                 
-                                 NSMutableArray *windows = [[NSMutableArray alloc] initWithArray:[UIApplication sharedApplication].windows];
-                                 [windows removeObject:self.overlayWindow];
-                                 
-                                 [windows enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(UIWindow *window, NSUInteger idx, BOOL *stop) {
-                                     if([window isKindOfClass:[UIWindow class]] && window.windowLevel == UIWindowLevelNormal) {
-                                         [window makeKeyWindow];
-                                         *stop = YES;
-                                     }
-                                 }];
                              }
                          }];
     });
@@ -204,16 +193,6 @@
         _subTitleLabel.textColor = [UIColor whiteColor];
     }
     return _subTitleLabel;
-}
-
-- (UIWindow *)overlayWindow {
-    if(!_overlayWindow) {
-        _overlayWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        _overlayWindow.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        _overlayWindow.userInteractionEnabled = NO;
-        [_overlayWindow makeKeyAndVisible];
-    }
-    return _overlayWindow;
 }
 
 #pragma mark - Class Methods
