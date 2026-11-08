@@ -1,7 +1,7 @@
 # UI Issue Fix Tracker
 
 Tracking 301 issues: 295 from `leancloud/ChatKit-OC` and 6 from `ChenYilong/CYLChatKit`.
-UI assessment: 151 UI-related issues; evidence-based average progress **5%** (825/15100 points).
+UI assessment: 151 UI-related issues; evidence-based average progress **7%** (1125/15100 points).
 The source snapshot merge is recorded in [commit 90e4409b504c](https://github.com/ChenYilong/CYLChatKit/commit/90e4409b504ccfed2285b4a7e023ec0cef2054c6).
 
 ## Assessment rules
@@ -11,12 +11,13 @@ The source snapshot merge is recorded in [commit 90e4409b504c](https://github.co
 - UI scope is screened for explicit user-visible rendering, layout, or interaction behavior in the issue title and description; ambiguous reports without that evidence are marked out of scope.
 - `100%` requires an issue-specific fix commit identified in repository history. `75%` means related implementation is merged but the reported behavior still needs runtime verification. `0%` means unresolved or not verifiably fixed.
 - Issue IDs and canonical HTTPS links are used so repository-authored tracker text stays English. Missing fix-commit links mean no matching fix commit was verified.
+
 | Issue | Fix commit | Assessment |
 |---|---|---|
 | [ChenYilong/CYLChatKit #6 (open)](https://github.com/ChenYilong/CYLChatKit/issues/6) | [merge 90e4409b504c](https://github.com/ChenYilong/CYLChatKit/commit/90e4409b504ccfed2285b4a7e023ec0cef2054c6) | Image sizing code is present in the merge; unknown-dimension behavior is not runtime-verified. Score: 75%. |
 | [ChenYilong/CYLChatKit #5 (open)](https://github.com/ChenYilong/CYLChatKit/issues/5) | — | Not UI-related; no fix required under this UI-only scope (N/A). |
 | [ChenYilong/CYLChatKit #4 (open)](https://github.com/ChenYilong/CYLChatKit/issues/4) | [merge 90e4409b504c](https://github.com/ChenYilong/CYLChatKit/commit/90e4409b504ccfed2285b4a7e023ec0cef2054c6) | Avatar sizing code is present in the merge; device-size behavior is not runtime-verified. Score: 75%. |
-| [ChenYilong/CYLChatKit #3 (open)](https://github.com/ChenYilong/CYLChatKit/issues/3) | — | Recording cancellation still lacks TouchCancel handling, so an interrupted recording is not fixed. Score: 0%. |
+| [ChenYilong/CYLChatKit #3 (open)](https://github.com/ChenYilong/CYLChatKit/issues/3) | [voice recording fix 0a8f74e2f4ec](https://github.com/ChenYilong/CYLChatKit/commit/0a8f74e2f4ecfcbc5b384103130f4d0a907411f1) | Restored recording cancellation on TouchCancel and app backgrounding; runtime gesture behavior still needs verification. Score: 75%. |
 | [ChenYilong/CYLChatKit #2 (open)](https://github.com/ChenYilong/CYLChatKit/issues/2) | — | Not UI-related; no fix required under this UI-only scope (N/A). |
 | [ChenYilong/CYLChatKit #1 (open)](https://github.com/ChenYilong/CYLChatKit/issues/1) | — | Not UI-related; no fix required under this UI-only scope (N/A). |
 | [leancloud/ChatKit-OC #430 (open)](https://github.com/leancloud/ChatKit-OC/issues/430) | — | Not UI-related; no fix required under this UI-only scope (N/A). |
@@ -26,10 +27,10 @@ The source snapshot merge is recorded in [commit 90e4409b504c](https://github.co
 | [leancloud/ChatKit-OC #423 (open)](https://github.com/leancloud/ChatKit-OC/issues/423) | — | Not UI-related; no fix required under this UI-only scope (N/A). |
 | [leancloud/ChatKit-OC #422 (open)](https://github.com/leancloud/ChatKit-OC/issues/422) | — | Not UI-related; no fix required under this UI-only scope (N/A). |
 | [leancloud/ChatKit-OC #421 (open)](https://github.com/leancloud/ChatKit-OC/issues/421) | — | Not UI-related; no fix required under this UI-only scope (N/A). |
-| [leancloud/ChatKit-OC #420 (open)](https://github.com/leancloud/ChatKit-OC/issues/420) | — | Overlay-window/key-window restoration remains unverified and the existing ordering can prevent correct restoration. Score: 0%. |
+| [leancloud/ChatKit-OC #420 (open)](https://github.com/leancloud/ChatKit-OC/issues/420) | [voice recording fix 0a8f74e2f4ec](https://github.com/ChenYilong/CYLChatKit/commit/0a8f74e2f4ecfcbc5b384103130f4d0a907411f1) | Removed creation of an extra key window during HUD dismissal; runtime window behavior still needs verification. Score: 75%. |
 | [leancloud/ChatKit-OC #418 (open)](https://github.com/leancloud/ChatKit-OC/issues/418) | — | Not UI-related; no fix required under this UI-only scope (N/A). |
 | [leancloud/ChatKit-OC #417 (open)](https://github.com/leancloud/ChatKit-OC/issues/417) | — | No issue-specific fix commit or verified implementation was identified in this merge. Score: 0%. |
-| [leancloud/ChatKit-OC #414 (open)](https://github.com/leancloud/ChatKit-OC/issues/414) | — | The HUD countdown still lacks a verified timeout dismissal; the negative/continuing timer report remains open. Score: 0%. |
+| [leancloud/ChatKit-OC #414 (open)](https://github.com/leancloud/ChatKit-OC/issues/414) | [voice recording fix 0a8f74e2f4ec](https://github.com/ChenYilong/CYLChatKit/commit/0a8f74e2f4ecfcbc5b384103130f4d0a907411f1) | Clamped the HUD countdown to zero and stopped recording at the configured 60-second limit; runtime timer behavior still needs verification. Score: 75%. |
 | [leancloud/ChatKit-OC #413 (open)](https://github.com/leancloud/ChatKit-OC/issues/413) | — | Not UI-related; no fix required under this UI-only scope (N/A). |
 | [leancloud/ChatKit-OC #405 (open)](https://github.com/leancloud/ChatKit-OC/issues/405) | — | Not UI-related; no fix required under this UI-only scope (N/A). |
 | [leancloud/ChatKit-OC #402 (open)](https://github.com/leancloud/ChatKit-OC/issues/402) | — | Failed text-message rendering has not been verified end to end. Score: 0%. |
@@ -133,7 +134,7 @@ The source snapshot merge is recorded in [commit 90e4409b504c](https://github.co
 | [leancloud/ChatKit-OC #273 (closed)](https://github.com/leancloud/ChatKit-OC/issues/273) | [commit 5c44e1321111](https://github.com/ChenYilong/CYLChatKit/commit/5c44e1321111a4c424a40b6338b73b877f4a4ec0) | Not UI-related; no fix required under this UI-only scope (N/A). |
 | [leancloud/ChatKit-OC #271 (open)](https://github.com/leancloud/ChatKit-OC/issues/271) | — | Not UI-related; no fix required under this UI-only scope (N/A). |
 | [leancloud/ChatKit-OC #270 (open)](https://github.com/leancloud/ChatKit-OC/issues/270) | — | Not UI-related; no fix required under this UI-only scope (N/A). |
-| [leancloud/ChatKit-OC #269 (open)](https://github.com/leancloud/ChatKit-OC/issues/269) | — | The microphone permission callback still returns before the asynchronous permission result is known. Score: 0%. |
+| [leancloud/ChatKit-OC #269 (open)](https://github.com/leancloud/ChatKit-OC/issues/269) | [voice recording fix 0a8f74e2f4ec](https://github.com/ChenYilong/CYLChatKit/commit/0a8f74e2f4ecfcbc5b384103130f4d0a907411f1) | Handles microphone authorization asynchronously and requires a fresh press after permission is granted; runtime permission flow still needs verification. Score: 75%. |
 | [leancloud/ChatKit-OC #268 (closed)](https://github.com/leancloud/ChatKit-OC/issues/268) | [commit 250c131d5777](https://github.com/ChenYilong/CYLChatKit/commit/250c131d5777ab5be42f60dc4dfb92fb753c55fe) | Verified issue-specific fix commit in repository history (100%). |
 | [leancloud/ChatKit-OC #267 (closed)](https://github.com/leancloud/ChatKit-OC/issues/267) | — | Not UI-related; no fix required under this UI-only scope (N/A). |
 | [leancloud/ChatKit-OC #266 (open)](https://github.com/leancloud/ChatKit-OC/issues/266) | — | Not UI-related; no fix required under this UI-only scope (N/A). |
