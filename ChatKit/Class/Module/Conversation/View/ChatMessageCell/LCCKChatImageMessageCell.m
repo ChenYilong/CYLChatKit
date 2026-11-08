@@ -2,18 +2,18 @@
 //  LCCKChatImageMessageCell.m
 //  LCCKChatExample
 //
-//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/16.
+//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/16.
 //  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
 //
 
 #import "LCCKChatImageMessageCell.h"
-#import "Masonry.h"
+#import "UIImage+LCCKExtension.h"
+
 #if __has_include(<SDWebImage/UIImageView+WebCache.h>)
 #import <SDWebImage/UIImageView+WebCache.h>
 #else
 #import "UIImageView+WebCache.h"
 #endif
-#import "UIImage+LCCKExtension.h"
 
 @interface LCCKChatImageMessageCell ()
 
@@ -38,36 +38,39 @@
 
 #pragma mark - Override Methods
 
-- (void)updateConstraints {
-    [super updateConstraints];
-    [self.messageImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.messageContentView);
-        make.height.lessThanOrEqualTo(@200);
-    }];
-}
-
 #pragma mark - Public Methods
 
 - (void)setup {
     [self.messageContentView addSubview:self.messageImageView];
     [self.messageContentView addSubview:self.messageProgressView];
+    UIEdgeInsets edgeMessageBubbleCustomize;
+    if (self.messageOwner == LCCKMessageOwnerTypeSelf) {
+        UIEdgeInsets rightEdgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].rightHollowEdgeMessageBubbleCustomize;
+        edgeMessageBubbleCustomize = rightEdgeMessageBubbleCustomize;
+    } else {
+        UIEdgeInsets leftEdgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].leftHollowEdgeMessageBubbleCustomize;
+        edgeMessageBubbleCustomize = leftEdgeMessageBubbleCustomize;
+    }
+    [self.messageImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.messageContentView).with.insets(edgeMessageBubbleCustomize);
+        make.height.lessThanOrEqualTo(@200).priorityHigh();
+    }];
     UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapMessageImageViewGestureRecognizerHandler:)];
     [self.messageContentView addGestureRecognizer:recognizer];
     [super setup];
+    [self addGeneralView];
 }
 
 - (void)singleTapMessageImageViewGestureRecognizerHandler:(UITapGestureRecognizer *)tapGestureRecognizer {
     if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
         if ([self.delegate respondsToSelector:@selector(messageCellTappedMessage:)]) {
             [self.delegate messageCellTappedMessage:self];
-            [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
         }
     }
 }
 
 - (void)configureCellWithData:(LCCKMessage *)message {
     [super configureCellWithData:message];
-//    self.messageImageView.image = [self imageInBundleForImageName:@"Placeholder_Accept_Defeat"];
     UIImage *thumbnailPhoto = message.thumbnailPhoto;
     do {
         if (self.messageImageView.image && (self.messageImageView.image == thumbnailPhoto)) {
@@ -89,13 +92,45 @@
             message.thumbnailPhoto = resizedImage;
             break;
         }
+        // requied!
         if (message.originPhotoURL) {
-            [self.messageImageView  sd_setImageWithURL:message.originPhotoURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Accept_Defeat"]
+            UIImage *image = [self imageInBundleForImageName:@"Placeholder_Image"];
+            CGSize photoSize = CGSizeMake(message.photoWidth, message.photoHeight);
+            UIImage *newImage = [image lcck_imageByScalingAspectFillWithOriginSize:photoSize];
+            self.messageImageView.contentMode = UIViewContentModeScaleAspectFit;
+            
+            UIEdgeInsets edgeMessageBubbleCustomize;
+            if (message.ownerType == LCCKMessageOwnerTypeSelf) {
+                UIEdgeInsets rightEdgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].rightHollowEdgeMessageBubbleCustomize;
+                edgeMessageBubbleCustomize = rightEdgeMessageBubbleCustomize;
+            } else {
+                UIEdgeInsets leftEdgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].leftHollowEdgeMessageBubbleCustomize;
+                edgeMessageBubbleCustomize = leftEdgeMessageBubbleCustomize;
+            }
+            
+            if (message.ownerType == LCCKMessageOwnerTypeSelf) {
+                [self.messageImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+                    make.edges.equalTo(self.messageContentView).with.insets(edgeMessageBubbleCustomize);
+                    make.height.mas_equalTo(newImage.size.height);
+                    make.width.mas_equalTo(newImage.size.width);
+                }];
+            }else {
+                [self.messageImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+                    make.edges.equalTo(self.messageContentView).with.insets(edgeMessageBubbleCustomize);
+                    make.height.mas_equalTo(newImage.size.height);
+                    make.width.mas_equalTo(newImage.size.width);
+                }];
+            }
+            
+            [self.messageImageView  sd_setImageWithURL:message.originPhotoURL placeholderImage:newImage
                                              completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                                                  dispatch_async(dispatch_get_main_queue(),^{
                                                      if (image){
                                                          message.photo = image;
-                                                         message.thumbnailPhoto = [image lcck_imageByScalingAspectFill];;
+                                                         message.thumbnailPhoto = [image lcck_imageByScalingAspectFillWithOriginSize:photoSize];
+                                                         if ([self.delegate respondsToSelector:@selector(fileMessageDidDownload:)]) {
+                                                             [self.delegate fileMessageDidDownload:self];
+                                                         }
                                                      }
                                                  });
                                                  
@@ -107,6 +142,8 @@
     } while (NO);
 }
 
+
+
 - (UIImage *)imageInBundleForImageName:(NSString *)imageName {
     return ({
         UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"Placeholder" bundleForClass:[self class]];
@@ -117,7 +154,7 @@
 
 - (void)setUploadProgress:(CGFloat)uploadProgress {
     [self setMessageSendState:LCCKMessageSendStateSending];
-    [self.messageProgressView setFrame:CGRectMake(0, 0, self.messageImageView.bounds.size.width, self.messageImageView.bounds.size.height * (1 - uploadProgress))];
+    [self.messageProgressView setFrame:CGRectMake(self.messageImageView.frame.origin.x, self.messageImageView.frame.origin.y, self.messageImageView.bounds.size.width, self.messageImageView.bounds.size.height * (1 - uploadProgress))];
     [self.messageProgressLabel setText:[NSString stringWithFormat:@"%.0f%%",uploadProgress * 100]];
 }
 
@@ -127,7 +164,7 @@
         if (!self.messageProgressView.superview) {
             [self.messageContentView addSubview:self.messageProgressView];
         }
-        [self.messageProgressLabel setFrame:CGRectMake(0, self.messageImageView.image.size.height/2 - 8, self.messageImageView.image.size.width, 16)];
+        [self.messageProgressLabel setFrame:CGRectMake(self.messageImageView.frame.origin.y, self.messageImageView.image.size.height/2 - 8, self.messageImageView.image.size.width, 16)];
     } else {
         [self removeProgressView];
     }
@@ -135,7 +172,7 @@
 
 - (void)removeProgressView {
     [self.messageProgressView removeFromSuperview];
-     [[self.messageProgressView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [[self.messageProgressView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     self.messageProgressView = nil;
     self.messageProgressLabel = nil;
 }
@@ -145,7 +182,8 @@
 - (UIImageView *)messageImageView {
     if (!_messageImageView) {
         _messageImageView = [[UIImageView alloc] init];
-        _messageImageView.contentMode = UIViewContentModeScaleAspectFill;
+        //FIXME:这一行可以不需要
+        _messageImageView.contentMode = UIViewContentModeScaleAspectFit;
     }
     return _messageImageView;
     
@@ -166,5 +204,16 @@
     return _messageProgressView;
 }
 
+#pragma mark -
+#pragma mark - LCCKChatMessageCellSubclassing Method
+
++ (void)load {
+    [self registerSubclass];
+}
+
++ (AVIMMessageMediaType)classMediaType {
+    return kAVIMMessageMediaTypeImage;
+}
 
 @end
+
