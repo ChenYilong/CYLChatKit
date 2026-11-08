@@ -37,6 +37,9 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
 }
 
 - (NSArray<id<LCCKUserDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)theError {
+    // This network-only path bypasses cached profiles and refreshes the cache with the fetched user data.
+    // Use it when the latest server-side avatar/profile is needed.
+    // https://github.com/leancloud/ChatKit-OC/issues/299
     if (![LCCKSessionService sharedInstance].connect) {
         NSInteger code = 0;
         NSInteger subCode = code;
