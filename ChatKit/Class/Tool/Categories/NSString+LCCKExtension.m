@@ -2,8 +2,8 @@
 //  NSString+LCCKExtension.m
 //  ChatKit
 //
-//  v0.8.5 Created by ElonChan on 16/7/12.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v2.1.1 Created by ElonChan on 16/7/12.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import "NSString+LCCKExtension.h"
@@ -45,6 +45,9 @@ NSString *const LCCKPhoneRegex =  @"\\d{3,4}[- ]?\\d{7,8}";
 }
 
 - (BOOL)lcck_isSpace {
+    if (!self) {
+        return YES;
+    }
     NSCharacterSet *set = [NSCharacterSet whitespaceCharacterSet];
     if ([[self stringByTrimmingCharactersInSet: set] length] == 0) {
         return YES;

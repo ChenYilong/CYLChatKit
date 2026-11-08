@@ -2,31 +2,17 @@
 //  Mp3Recorder.h
 //  BloodSugar
 //
-//  Created by PeterPan on 14-3-24.
+//  v2.1.1 Created by PeterPan on 14-3-24.
 //  Copyright (c) 2014年 shake. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
 @protocol Mp3RecorderDelegate <NSObject>
-/**
- 失败 时间太短
- */
-- (void)tooShortFailRecord;
-
-/**
- 成功 转换格式成功
- @param fileName 文件路径
- */
-- (void)endConvertWithMP3FileName:(NSString *)fileName;
-/**
- 音量 变化
-
- @param volume 音量
- */
-- (void)averagePowerWithVolume:(CGFloat)volume;
-@optional
+- (void)failRecord;
 - (void)beginConvert;
+- (void)endConvertWithMP3FileName:(NSString *)fileName;
+- (void)realTimeVolumeSize:(float)size timeLength:(NSTimeInterval)timeLength;
 @end
 
 @interface Mp3Recorder : NSObject

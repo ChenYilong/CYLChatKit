@@ -2,52 +2,77 @@
 //  LCCKBubbleImageFactory.m
 //  LeanCloudChatKit-iOS
 //
-//  Created by 陈宜龙 on 16/3/21.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v2.1.1 Created by ElonChan on 16/3/21.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import "LCCKBubbleImageFactory.h"
 #import "LCCKConstants.h"
 #import "UIImage+LCCKExtension.h"
+#import "LCCKSettingService.h"
 
 @implementation LCCKBubbleImageFactory
 
-+ (UIImage *)bubbleImageViewForType:(LCCKMessageOwner)owner
-                        messageType:(LCCKMessageType)messageType
++ (UIImage *)bubbleImageViewForType:(LCCKMessageOwnerType)owner
+                        messageType:(AVIMMessageMediaType)messageMediaType
                       isHighlighted:(BOOL)isHighlighted {
+    BOOL isCustomMessage = NO;
     NSString *messageTypeString = @"message_";
-    switch (messageType) {
-        case LCCKMessageTypeImage:
-            messageTypeString = [messageTypeString stringByAppendingString:@"image_"];;
+    switch (messageMediaType) {
+        case kAVIMMessageMediaTypeImage:
+        case kAVIMMessageMediaTypeLocation:
+            messageTypeString = [messageTypeString stringByAppendingString:@"hollow_"];
             break;
-            
         default:
             break;
     }
+    UIEdgeInsets bubbleImageCapInsets = UIEdgeInsetsZero;
     switch (owner) {
-        case LCCKMessageOwnerSelf:
-            // 发送 ==> @"MessageBubble_Sender"
+        case LCCKMessageOwnerTypeSelf: {
+            // 发送
+            switch (messageMediaType) {
+                case kAVIMMessageMediaTypeImage:
+                case kAVIMMessageMediaTypeLocation:
+                    bubbleImageCapInsets = [LCCKSettingService sharedInstance].rightHollowCapMessageBubbleCustomize;
+                    break;
+                default:
+                    bubbleImageCapInsets = [LCCKSettingService sharedInstance].rightCapMessageBubbleCustomize;
+                    break;
+            }
             messageTypeString = [messageTypeString stringByAppendingString:@"sender_"];
             break;
-        case LCCKMessageOwnerOther:
+        }
+        case LCCKMessageOwnerTypeOther: {
             // 接收
+            switch (messageMediaType) {
+                case kAVIMMessageMediaTypeImage:
+                case kAVIMMessageMediaTypeLocation:
+                    bubbleImageCapInsets = [LCCKSettingService sharedInstance].leftHollowCapMessageBubbleCustomize;
+                    break;
+                default:
+                    bubbleImageCapInsets = [LCCKSettingService sharedInstance].leftCapMessageBubbleCustomize;
+                    break;
+            }
             messageTypeString = [messageTypeString stringByAppendingString:@"receiver_"];
             break;
-            case LCCKMessageOwnerSystem:
-            case LCCKMessageOwnerUnknown:
-            //TODO:
+        }
+        case LCCKMessageOwnerTypeSystem:
+            break;
+        case LCCKMessageOwnerTypeUnknown:
+            isCustomMessage = YES;
             break;
     }
-   
+    if (isCustomMessage) {
+        return nil;
+    }
     messageTypeString = [messageTypeString stringByAppendingString:@"background_"];
     if (isHighlighted) {
         messageTypeString = [messageTypeString stringByAppendingString:@"highlight"];
     } else {
         messageTypeString = [messageTypeString stringByAppendingString:@"normal"];
     }
-    UIImage *bublleImage = [UIImage lcck_imageNamed:messageTypeString bundleName:@"MessageBubble" bundleForClass:[self class]];
-    UIEdgeInsets bubbleImageEdgeInsets = UIEdgeInsetsMake(30, 16, 16, 24);
-    return LCCK_STRETCH_IMAGE(bublleImage, bubbleImageEdgeInsets);
+    UIImage *bubbleImage = [UIImage lcck_imageNamed:messageTypeString bundleName:@"MessageBubble" bundleForClass:[self class]];
+    return LCCK_STRETCH_IMAGE(bubbleImage, bubbleImageCapInsets);
 }
 
 @end

@@ -2,8 +2,8 @@
 //  LCCKConstants.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/2/19.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v2.1.1 Created by ElonChan on 18/6/19.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //  Common typdef and constants, and so on.
 
 #import "LCCKUserDelegate.h"
@@ -41,6 +41,13 @@ typedef void (^LCCKProgressBlock)(NSInteger percentDone);
 ///=============================================================================
 /// @name Common Define
 ///=============================================================================
+static CGFloat const LCCKAvatarToMessageContent = 5.f;
+static CGFloat const LCCKAvatarBottomToMessageContentTop = -1.f;
+static CGFloat const LCCK_MSG_CELL_EDGES_OFFSET = 16;
+
+#define CYL_STATUSBAR_HEIGHT ([UIApplication sharedApplication].statusBarFrame.size.height)
+#define CYL_IS_iPHONEX ((CYL_STATUSBAR_HEIGHT == 44) ? YES : NO)
+static NSInteger const CYL_iPHONEX_OFFSET = 34;
 
 static NSString *const LCCKBadgeTextForNumberGreaterThanLimit = @"···";
 
@@ -48,7 +55,7 @@ static NSString *const LCCKBadgeTextForNumberGreaterThanLimit = @"···";
 
 #ifndef LCCKLocalizedStrings
 #define LCCKLocalizedStrings(key) \
-    NSLocalizedStringFromTableInBundle(key, @"LCChatKitString", [NSBundle lcck_bundleForName:@"Other" class:[LCCKContact class]], nil)
+    NSLocalizedStringFromTableInBundle(key, @"LCChatKitString", [NSBundle lcck_bundleForName:@"Other" class:[LCChatKit class]], nil)
 #endif
 
 
@@ -65,26 +72,12 @@ static NSString *const LCCKBadgeTextForNumberGreaterThanLimit = @"···";
 #define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 #define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
 
+static NSString * const LCCKNotificationSessionResumed = @"LCCKNotificationSessionResumed";
+
 #pragma mark - Notification Name
 ///=============================================================================
 /// @name Notification Name
 ///=============================================================================
-
-
-/**
- *  发送语音消息没有权限。通知界面提醒用户
- */
-static NSString *const LCCKNotificationRecordNoPower = @"LCCKChatBarRecordVoiceNoPower";
-
-/**
- *  发送文本消息过长。通知界面提醒用户
- */
-static NSString *const LCCKNotificationTextLengthOut = @"LCCKChatBarTextLengthOut";
-
-/**
- *  发送语音消息倒计时结束。通知UI停止动效
- */
-static NSString *const LCCKNotificationRecordTimeOut = @"LCCKChatBarRecordVoiceTimeOut";
 
 /**
  *  未读数改变了。通知去服务器同步 installation 的badge
@@ -95,6 +88,14 @@ static NSString *const LCCKNotificationUnreadsUpdated = @"LCCKNotificationUnread
  *  消息到来了，通知聊天页面和最近对话页面刷新
  */
 static NSString *const LCCKNotificationMessageReceived = @"LCCKNotificationMessageReceived";
+
+/**
+ *  消息被修改了，通知聊天页面和最近对话页面刷新
+ */
+static NSString *const LCCKNotificationMessageUpdated = @"LCCKNotificationMessageUpdated";
+
+static NSString *const LCCKNotificationMessageSent = @"LCCKNotificationMessageSent";
+
 /**
  *  消息到来了，通知聊天页面和最近对话页面刷新
  */
@@ -144,7 +145,24 @@ static NSString *const LCCKNotificationContactListDataSourceUpdatedUserInfoDataS
 static NSString *const LCCKNotificationContactListDataSourceUserIdType = @"LCCKNotificationContactListDataSourceUserIdType";
 static NSString *const LCCKNotificationContactListDataSourceContactObjType = @"LCCKNotificationContactListDataSourceContactObjType";
 static NSString *const LCCKNotificationContactListDataSourceUpdatedUserInfoDataSourceTypeKey = @"LCCKNotificationContactListDataSourceUpdatedUserInfoDataSourceTypeKey";
+static NSString *const LCCKNotificationConversionImageMessageDidDownloaded = @"LCCKNotificationConversionImageMessageDidDownloaded";
 
+
+/**
+   *  发送语音消息没有权限。通知界面提醒用户
+   */
+static NSString *const LCCKNotificationRecordNoPower = @"LCCKChatBarRecordVoiceNoPower";
+
+/**
+   *  发送文本消息过长。通知界面提醒用户
+   */
+static NSString *const LCCKNotificationTextLengthOut = @"LCCKChatBarTextLengthOut";
+
+/**
+   *  发送语音消息倒计时结束。通知UI停止动效
+   */
+static NSString *const LCCKNotificationRecordTimeOut = @"LCCKChatBarRecordVoiceTimeOut";
+static NSInteger const LCCKNotificationTextLengthOutLength = 1000;
 #pragma mark - Conversation Enum : Message Type and operation
 ///=============================================================================
 /// @name Conversation Enum : Message Type and operation
@@ -208,7 +226,7 @@ typedef NS_ENUM(NSUInteger, LCCKChatMessageCellMenuActionType) {
     LCCKChatMessageCellMenuActionTypeCopy, /**< 复制 */
     LCCKChatMessageCellMenuActionTypeRelay, /**< 转发 */
 };
-
+static CGFloat const kLCCKVolumeMaxTimeLength = 60;
 static NSInteger const kLCCKOnePageSize = 10;
 static NSString *const LCCK_CONVERSATION_TYPE = @"type";
 static NSString *const LCCKInstallationKeyChannels = @"channels";
@@ -374,7 +392,6 @@ typedef NS_ENUM(NSInteger, LCCKBubbleMessageMenuSelectedType) {
     LCCKBubbleMessageMenuSelectedTypeVoiceTurnToText = 13,
     LCCKBubbleMessageMenuSelectedTypeVoiceMore = 14,
 };
-
 
 #pragma mark - Succeed Message Store
 ///=============================================================================

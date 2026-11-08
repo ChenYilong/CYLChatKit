@@ -1,0 +1,36 @@
+# folder-cover: ChatKit-new-version/Class/Tool/Vendor/LCCKWebViewController/LCCKWebViewController
+# 文件夹封面（Folder notes：点击文件夹即打开），参照 English/chunking/chunking.base。
+# 显示本文件夹的文件 + 子文件夹封面卡片；图片显示原图，笔记显示第一张嵌入图。
+# 首行路径由 .claude/hooks/folder_assets.py 维护，文件夹改名/移动后自动修正。
+filters:
+  and:
+    - 'file.path != "ChatKit-new-version/Class/Tool/Vendor/LCCKWebViewController/LCCKWebViewController/LCCKWebViewController.base"'
+    - file.basename != "instructions"
+    - or:
+        - 'file.folder == "ChatKit-new-version/Class/Tool/Vendor/LCCKWebViewController/LCCKWebViewController"'
+        - and:
+            - 'file.folder == "ChatKit-new-version/Class/Tool/Vendor/LCCKWebViewController/LCCKWebViewController/" + file.basename'
+            - '["md", "canvas", "base"].contains(file.ext)'
+formulas:
+  cover: 'if(["png", "jpg", "jpeg", "gif", "webp", "svg", "bmp", "avif"].contains(file.ext.lower()), file.asLink(), if(file.embeds.length > 0, file.embeds[0], ""))'
+  类型: 'if(file.folder == "ChatKit-new-version/Class/Tool/Vendor/LCCKWebViewController/LCCKWebViewController", file.ext, "子文件夹")'
+views:
+  - type: cards
+    name: 封面
+    image: formula.cover
+    imageFit: contain
+    order:
+      - file.name
+    sort:
+      - property: file.name
+        direction: ASC
+  - type: table
+    name: 列表
+    order:
+      - file.name
+      - formula.类型
+      - file.mtime
+      - file.size
+    sort:
+      - property: file.name
+        direction: ASC

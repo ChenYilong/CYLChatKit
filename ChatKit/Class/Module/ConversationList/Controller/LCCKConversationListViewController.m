@@ -2,8 +2,8 @@
 //  LCCKConversationListViewController.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/2/22.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v2.1.1 Created by ElonChan on 18/6/22.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import "LCCKConversationListViewController.h"
@@ -11,7 +11,7 @@
 #import "LCCKSessionService.h"
 #import "LCCKConversationService.h"
 #import "LCCKConversationListViewModel.h"
-
+#import <CYLTableViewPlaceHolder/CYLTableViewPlaceHolder.h>
 #if __has_include(<MJRefresh/MJRefresh.h>)
     #import <MJRefresh/MJRefresh.h>
 #else
@@ -117,9 +117,9 @@
 }
 
 - (void)updateStatusView {
-//    if (!self.shouldCheckSessionStatus) {
-//        return;
-//    }
+    if (!self.shouldCheckSessionStatus) {
+        return;
+    }
     BOOL isConnected = [LCCKSessionService sharedInstance].connect;
     if (isConnected) {
         self.tableView.tableHeaderView = nil ;

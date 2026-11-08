@@ -2,8 +2,8 @@
 //  LCCKContactCell.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/3/9.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v2.1.1 Created by ElonChan on 16/3/9.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import "LCCKContactCell.h"
@@ -14,8 +14,8 @@
     #import "UIImageView+WebCache.h"
 #endif
 
-#if __has_include(<ChatKit/LCChatKit.h>)
-    #import <ChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+    #import <CYLChatKit/LCChatKit.h>
 #else
     #import "LCChatKit.h"
 #endif
@@ -41,22 +41,19 @@
 }
 
 - (void)setup {
-    self.avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
-    self.avatarImageView.clipsToBounds = YES;
+    LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
+    if (avatarImageViewCornerRadiusBlock) {
+        CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(self.avatarImageView.frame.size);
+        // Related avatar corner-radius report: https://github.com/leancloud/ChatKit-OC/issues/347
+        self.avatarImageView.layer.cornerRadius = avatarImageViewCornerRadius;
+        self.avatarImageView.clipsToBounds = YES;
+    }
     NSString *selectionStatusButtonNormalImageName = @"CellGraySelected";
     NSString *selectionStatusButtonSelectedImageName = @"CellBlueSelected";
     UIImage *selectionStatusButtonNormalImage = [UIImage lcck_imageNamed:selectionStatusButtonNormalImageName bundleName:@"Other" bundleForClass:[LCChatKit class]];
     UIImage *selectionStatusButtonSelectedImage = [UIImage lcck_imageNamed:selectionStatusButtonSelectedImageName bundleName:@"Other" bundleForClass:[LCChatKit class]];
     [self.selectionStatusButton setImage:selectionStatusButtonNormalImage forState:UIControlStateNormal];
     [self.selectionStatusButton setImage:selectionStatusButtonSelectedImage forState:UIControlStateSelected];
-}
-
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
-    self.avatarImageView.layer.cornerRadius = avatarImageViewCornerRadiusBlock ? avatarImageViewCornerRadiusBlock(self.avatarImageView.bounds.size) : 0;
-    // Apply the radius after Auto Layout establishes the avatar bounds.
-    // https://github.com/leancloud/ChatKit-OC/issues/347
 }
 
 - (void)configureWithAvatarURL:(NSURL *)avatarURL title:(NSString *)title subtitle:(NSString *)subtitle model:(LCCKContactListMode)model {

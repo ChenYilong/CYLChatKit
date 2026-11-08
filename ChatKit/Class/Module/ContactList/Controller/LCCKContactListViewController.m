@@ -2,8 +2,8 @@
 //  LCCKContactListViewController.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/2/22.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v2.1.1 Created by ElonChan on 18/6/22.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import "LCCKContactListViewController.h"
@@ -104,12 +104,8 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
     _userIds = userIds;
     //TODO:
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dataSourceUpdated:) name:LCCKNotificationContactListDataSourceUpdated object:nil];
-    __weak __typeof(self) weakSelf = self;
-    [self cyl_executeAtDealloc:^{
-        id ss = weakSelf;
-        if (ss) {
-            [[NSNotificationCenter defaultCenter] removeObserver:ss];
-        }
+    [self cyl_willDeallocWithSelfCallback:^(__unsafe_unretained id owner, NSUInteger identifier) {
+        [[NSNotificationCenter defaultCenter] removeObserver:owner];
     }];
     return self;
 }
@@ -329,7 +325,7 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    LCCKContactCell *cell = [tableView dequeueReusableCellWithIdentifier:LCCKContactListViewControllerIdentifier forIndexPath:indexPath];
+    LCCKContactCell *cell = [tableView dequeueReusableCellWithIdentifier:LCCKContactListViewControllerIdentifier];
     id contact = [self contactAtIndexPath:indexPath tableView:tableView];
     NSURL *avatarURL = nil;
     NSString *name = nil;
@@ -404,7 +400,7 @@ static NSString *const LCCKContactListViewControllerIdentifier = @"LCCKContactLi
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    LCCKContactCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    LCCKContactCell *cell = [tableView dequeueReusableCellWithIdentifier:LCCKContactListViewControllerIdentifier];
     NSString *clientId = [self currentClientIdAtIndexPath:indexPath tableView:tableView];
     if (self.mode == LCCKContactListModeSingleSelection) {
         if (clientId == self.selectedContact) {

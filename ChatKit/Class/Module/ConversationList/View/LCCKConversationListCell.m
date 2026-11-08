@@ -2,26 +2,40 @@
 //  LCCKConversationListCell.m
 //  LeanCloudChatKit-iOS
 //
-//  Created by 陈宜龙 on 16/3/22.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v2.1.1 Created by ElonChan on 16/3/22.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import "LCCKConversationListCell.h"
 #import "LCCKBadgeView.h"
+
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
+#else
 #import "LCChatKit.h"
+#endif
+
 #import "UIImageView+LCCKExtension.h"
 
 static CGFloat LCCKImageSize = 45;
 static CGFloat LCCKVerticalSpacing = 8;
 static CGFloat LCCKHorizontalSpacing = 10;
 static CGFloat LCCKTimestampeLabelWidth = 100;
-
+static CGFloat LCCKAutoResizingDefaultScreenWidth = 320;
 static CGFloat LCCKNameLabelHeightProportion = 3.0 / 5;
 static CGFloat LCCKNameLabelHeight;
 static CGFloat LCCKMessageLabelHeight;
 static CGFloat LCCKLittleBadgeSize = 10;
+static CGFloat LCCKRemindMuteSize = 18;
 
 CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCKVerticalSpacing * 2;
+
+@interface LCCKConversationListCell ()
+
+@property (nonatomic, strong) UIColor *conversationListUnreadBackgroundColor;
+@property (nonatomic, strong) UIColor *conversationListUnreadTextColor;
+
+@end
 
 @implementation LCCKConversationListCell
 
@@ -50,41 +64,68 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 }
 
 - (void)setup {
+    self.backgroundColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-CellBackgroundColor"];
+    UIView *selectionColor = [[UIView alloc] init];
+    selectionColor.backgroundColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-CellBackgroundColor_Highlighted"];
+    self.selectedBackgroundView = selectionColor;
     LCCKNameLabelHeight = LCCKImageSize * LCCKNameLabelHeightProportion;
     LCCKMessageLabelHeight = LCCKImageSize - LCCKNameLabelHeight;
-    [self addSubview:self.avatorImageView];
-    [self.avatorImageView addSubview:self.badgeView];
-    [self addSubview:self.timestampLabel];
-    [self.contentView addSubview:self.litteBadgeView];
+    [self.contentView addSubview:self.avatarImageView];
+    [self.contentView addSubview:self.timestampLabel];
     [self.contentView addSubview:self.nameLabel];
     [self.contentView addSubview:self.messageTextLabel];
+    [self.contentView addSubview:self.remindMuteImageView];
+    [self.contentView addSubview:self.litteBadgeView];
+    [self.contentView bringSubviewToFront:self.litteBadgeView];
+    [self.avatarImageView addSubview:self.officialSignImageView];
+    self.litteBadgeView.layer.zPosition = 65.f / 2;
+
 }
 
-- (UIImageView *)avatorImageView {
-    if (_avatorImageView == nil) {
-        UIImageView *avatorImageView = [[UIImageView alloc] initWithFrame:CGRectMake(LCCKHorizontalSpacing, LCCKVerticalSpacing, LCCKImageSize, LCCKImageSize)];
-        avatorImageView.contentMode = UIViewContentModeScaleAspectFill;
+- (UIImageView *)officialSignImageView {
+    if (!_officialSignImageView) {
+        UIImageView *officialSignImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 25, 12.5)];
+        [officialSignImageView sd_setImageWithURL:[NSURL URLWithString:@"https://hdl-middletier-prd.oss-cn-beijing.aliyuncs.com/app-img/v2/my/my_official.png"]];
+        _officialSignImageView = officialSignImageView;
+        _officialSignImageView.hidden = YES;
+    }
+    return _officialSignImageView;
+}
+
+- (UIImageView *)avatarImageView {
+    if (_avatarImageView == nil) {
+        UIImageView *avatarImageView = [[UIImageView alloc] initWithFrame:CGRectMake(LCCKHorizontalSpacing, LCCKVerticalSpacing, LCCKImageSize, LCCKImageSize)];
+        avatarImageView.contentMode = UIViewContentModeScaleAspectFill;//防止特别长或者宽的图片显示不正常
         LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
         if (avatarImageViewCornerRadiusBlock) {
-            CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatorImageView.frame.size);
-            // Use layer clipping so asynchronous avatar updates do not redraw and flash.
-            // https://github.com/leancloud/ChatKit-OC/issues/348
-            // https://github.com/leancloud/ChatKit-OC/issues/385
-            avatorImageView.layer.cornerRadius = avatarImageViewCornerRadius;
-            avatorImageView.clipsToBounds = YES;
+            CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatarImageView.frame.size);
+            // Related avatar rounding and refresh-flicker reports: https://github.com/leancloud/ChatKit-OC/issues/348 and https://github.com/leancloud/ChatKit-OC/issues/385
+            avatarImageView.lcck_cornerRadius = avatarImageViewCornerRadius;
         }
-        _avatorImageView = avatorImageView;
+        
+        UITapGestureRecognizer *avatarImageViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(avatarImageViewHandleTap:)];
+        avatarImageView.userInteractionEnabled = YES;
+        [avatarImageView addGestureRecognizer:avatarImageViewTap];
+        
+        _avatarImageView = avatarImageView;
     }
-    return _avatorImageView;
+    return _avatarImageView;
 }
+
+- (void)avatarImageViewHandleTap:(UITapGestureRecognizer *)tap {
+    if (tap.state == UIGestureRecognizerStateEnded) {
+        LCCKOpenProfileBlock openProfileBlock = [LCCKUIService sharedInstance].openProfileBlock;
+        !openProfileBlock ?: openProfileBlock(self.clientId, nil, nil);
+    }
+}
+
 
 - (UIView *)litteBadgeView {
     if (_litteBadgeView == nil) {
         UIView *litteBadgeView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, LCCKLittleBadgeSize, LCCKLittleBadgeSize)];
         litteBadgeView.backgroundColor = [UIColor redColor];
-        litteBadgeView.layer.masksToBounds = YES;
         litteBadgeView.layer.cornerRadius = LCCKLittleBadgeSize / 2;
-        litteBadgeView.center = CGPointMake(CGRectGetMaxX(_avatorImageView.frame), CGRectGetMinY(_avatorImageView.frame));
+        litteBadgeView.center = CGPointMake(CGRectGetMaxX(_avatarImageView.frame), CGRectGetMinY(_avatarImageView.frame));
         litteBadgeView.hidden = YES;
         _litteBadgeView = litteBadgeView;
     }
@@ -93,10 +134,11 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 
 - (UILabel *)timestampLabel {
     if (_timestampLabel == nil) {
-        UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth([UIScreen mainScreen].bounds) - LCCKHorizontalSpacing - LCCKTimestampeLabelWidth, CGRectGetMinY(_avatorImageView.frame), LCCKTimestampeLabelWidth, LCCKNameLabelHeight)];
+        UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(LCCKAutoResizingDefaultScreenWidth - LCCKHorizontalSpacing - LCCKTimestampeLabelWidth, CGRectGetMinY(_avatarImageView.frame), LCCKTimestampeLabelWidth, LCCKNameLabelHeight)];
         timestampLabel.font = [UIFont systemFontOfSize:13];
         timestampLabel.textAlignment = NSTextAlignmentRight;
-        timestampLabel.textColor = [UIColor grayColor];
+        timestampLabel.textColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-CellMinor"];
+        timestampLabel.autoresizingMask =  UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
         _timestampLabel = timestampLabel;
     }
     return _timestampLabel;
@@ -104,8 +146,10 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 
 - (UILabel *)nameLabel {
     if (_nameLabel == nil) {
-        UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_avatorImageView.frame) + LCCKHorizontalSpacing, CGRectGetMinY(_avatorImageView.frame), CGRectGetMinX(_timestampLabel.frame) - LCCKHorizontalSpacing * 3 - LCCKImageSize, LCCKNameLabelHeight)];
+        UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_avatarImageView.frame) + LCCKHorizontalSpacing, CGRectGetMinY(_avatarImageView.frame), CGRectGetMinX(_timestampLabel.frame) - LCCKHorizontalSpacing * 3 - LCCKImageSize, LCCKNameLabelHeight)];
         nameLabel.font = [UIFont systemFontOfSize:17];
+        nameLabel.textColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-CellTitle"];
+        nameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _nameLabel = nameLabel;
     }
     return _nameLabel;
@@ -113,27 +157,63 @@ CGFloat const LCCKConversationListCellDefaultHeight = 61; //LCCKImageSize + LCCK
 
 - (UILabel *)messageTextLabel {
     if (_messageTextLabel == nil) {
-        UILabel *messageTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_nameLabel.frame), CGRectGetMaxY(_nameLabel.frame), CGRectGetWidth([UIScreen mainScreen].bounds)- 3 * LCCKHorizontalSpacing - LCCKImageSize, LCCKMessageLabelHeight)];
+        UILabel *messageTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_nameLabel.frame), CGRectGetMaxY(_nameLabel.frame), LCCKAutoResizingDefaultScreenWidth - 4 * LCCKHorizontalSpacing - LCCKImageSize - LCCKRemindMuteSize, LCCKMessageLabelHeight)];
         messageTextLabel.backgroundColor = [UIColor clearColor];
+        messageTextLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        messageTextLabel.textColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-CellDetail"];
         _messageTextLabel = messageTextLabel;
     }
     return _messageTextLabel;
 }
 
+- (UIButton *)remindMuteImageView {
+    if (_remindMuteImageView == nil) {
+        UIButton *remindMuteImageView = [UIButton buttonWithType:UIButtonTypeCustom];
+        remindMuteImageView.frame = CGRectMake(CGRectGetMaxX(_messageTextLabel.frame) + LCCKHorizontalSpacing, CGRectGetMinY(_messageTextLabel.frame), LCCKRemindMuteSize, LCCKRemindMuteSize);
+        NSString *remindMuteImageName = @"Connectkeyboad_banner_mute";
+//        remindMuteImageView.imageEdgeInsets = UIEdgeInsetsMake(2.5, 2.5, 2.5, 2.5);
+        UIImage *remindMuteImage = [UIImage lcck_imageNamed:remindMuteImageName bundleName:@"Other" bundleForClass:[LCChatKit class]];
+        [remindMuteImageView setImage:remindMuteImage forState:UIControlStateNormal];
+        remindMuteImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        remindMuteImageView.hidden = YES;
+        _remindMuteImageView = remindMuteImageView;
+    }
+    return _remindMuteImageView;
+}
+
 - (LCCKBadgeView *)badgeView {
     if (_badgeView == nil) {
-        LCCKBadgeView *badgeView = [[LCCKBadgeView alloc] initWithParentView:self.avatorImageView
+        LCCKBadgeView *badgeView = [[LCCKBadgeView alloc] initWithParentView:self.avatarImageView
                                                                alignment:LCCKBadgeViewAlignmentTopRight];
-        [self.avatorImageView addSubview:(_badgeView = badgeView)];
-        [self.avatorImageView bringSubviewToFront:_badgeView];
+        badgeView.badgeBackgroundColor = self.conversationListUnreadBackgroundColor;
+        badgeView.badgeTextColor = self.conversationListUnreadTextColor;
+        [self.avatarImageView addSubview:(_badgeView = badgeView)];
+        [self.avatarImageView bringSubviewToFront:_badgeView];
     }
     return _badgeView;
+}
+
+- (UIColor *)conversationListUnreadBackgroundColor {
+    if (_conversationListUnreadBackgroundColor) {
+        return _conversationListUnreadBackgroundColor;
+    }
+    _conversationListUnreadBackgroundColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationList-UnreadBackground"];
+    return _conversationListUnreadBackgroundColor;
+}
+
+- (UIColor *)conversationListUnreadTextColor {
+    if (_conversationListUnreadTextColor) {
+        return _conversationListUnreadTextColor;
+    }
+    _conversationListUnreadTextColor = [[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"ConversationList-UnreadText"];
+    return _conversationListUnreadTextColor;
 }
 
 - (void)prepareForReuse {
     [super prepareForReuse];
     self.badgeView.badgeText = nil;
-    self.badgeView = nil;
+// 长列表下会引起badgeView频繁创建和销毁，导致卡顿
+//    self.badgeView = nil;
     self.litteBadgeView.hidden = YES;
     self.messageTextLabel.text = nil;
     self.timestampLabel.text = nil;

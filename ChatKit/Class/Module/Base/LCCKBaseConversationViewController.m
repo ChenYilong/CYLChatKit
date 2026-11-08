@@ -2,7 +2,7 @@
 //  LCCKBaseConversationViewController.m
 //  LeanCloudIMKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/3/21.
+//  v2.1.1 Created by ElonChan on 16/3/21.
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 //#define LCCKDebugging 1
@@ -27,6 +27,7 @@
 #else
     #import "MJRefresh.h"
 #endif
+#import "LCCKConstants.h"
 
 static void * const LCCKBaseConversationViewControllerRefreshContext = (void*)&LCCKBaseConversationViewControllerRefreshContext;
 static CGFloat const LCCKScrollViewInsetTop = 20.f;
@@ -46,7 +47,7 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
     }];
     [self.chatBar mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.and.right.and.bottom.equalTo(self.view);
-        make.height.mas_greaterThanOrEqualTo(@(kLCCKChatBarMinHeight));
+        make.height.mas_greaterThanOrEqualTo(@(self.chatBarMinHeight));
     }];
 }
 
@@ -56,12 +57,8 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     // KVO注册监听
     [self addObserver:self forKeyPath:@"loadingMoreMessage" options:NSKeyValueObservingOptionNew context:LCCKBaseConversationViewControllerRefreshContext];
-    __weak __typeof(self) weakSelf = self;
-    [self cyl_executeAtDealloc:^{
-        NSObject *ss = weakSelf;
-        if (ss) {
-            [ss removeObserver:ss forKeyPath:@"loadingMoreMessage"];
-        }
+    [self cyl_willDeallocWithSelfCallback:^(__unsafe_unretained id owner, NSUInteger identifier) {
+        [owner removeObserver:owner forKeyPath:@"loadingMoreMessage"];
     }];
     [LCCKCellRegisterController registerChatMessageCellClassForTableView:self.tableView];
 //    [self setTableViewInsetsWithBottomValue:kLCCKChatBarMinHeight];
@@ -142,18 +139,6 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
     }
 }
 
-- (void)newScrollToBottomAnimated:(BOOL)animated {
-    if (!self.allowScrollToBottom) {
-        return;
-    }
-    NSInteger rows = [self.tableView numberOfRowsInSection:0];
-    if (rows > 0) {
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:rows - 1 inSection:0]
-                              atScrollPosition:UITableViewScrollPositionBottom
-                                      animated:animated];
-    }
-}
-
 #pragma mark - Getters
 
 - (LCCKChatBar *)chatBar {
@@ -163,6 +148,10 @@ static CGFloat const LCCKScrollViewInsetTop = 20.f;
         [self.view bringSubviewToFront:_chatBar];
     }
     return _chatBar;
+}
+
+- (CGFloat)chatBarMinHeight {
+    return kLCCKChatBarMinHeight;
 }
 
 @end

@@ -2,8 +2,8 @@
 //  LCCKLocationManager.m
 //  LCCKLocationManagerDemo
 //
-//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/7/31.
-//  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
+//  v2.1.1 Created by ElonChan ( https://github.com/ChenYilong/CYLChatKit ) on 15/7/31.
+//  Copyright (c) 2018 ChenYilong（wechat id：chenyilong1010） . All rights reserved.
 //
 
 #import "LCCKLocationManager.h"
@@ -57,7 +57,7 @@
     //取出经纬度
     CLLocationCoordinate2D coordinate = manager.location.coordinate;
     // 3.打印经纬度
-    NSLog(@"didUpdateLocations------%f %f", coordinate.latitude, coordinate.longitude);
+//    NSLog(@"didUpdateLocations------%f %f", coordinate.latitude, coordinate.longitude);
     if (self.locationCompleteBlock) {
         self.locationCompleteBlock(coordinate);
     }
@@ -208,11 +208,11 @@
     return _geocoder;
 }
 
-- (CGFloat)latitude {
+- (CLLocationDegrees)latitude {
     return self.locationManager.location.coordinate.latitude;
 }
 
-- (CGFloat)longitude {
+- (CLLocationDegrees)longitude {
     return self.locationManager.location.coordinate.longitude;
 }
 

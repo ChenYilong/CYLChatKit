@@ -2,8 +2,8 @@
 //  LCCKProgressHUD.h
 //  LCCKChatBarExample
 //
-//  Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/17.
-//  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
+//  v2.1.1 Created by ElonChan ( https://github.com/ChenYilong/CYLChatKit ) on 15/8/17.
+//  Copyright (c) 2018 ChenYilong（wechat id：chenyilong1010） . All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -31,7 +31,7 @@ typedef NS_ENUM(NSUInteger, LCCKProgressState){
 /**
  *  上次成功录音时长
  *
- *  @return 
+ *  @return
  */
 + (NSTimeInterval)seconds;
 
@@ -70,3 +70,4 @@ typedef NS_ENUM(NSUInteger, LCCKProgressState){
 + (void)realtimeChangeVolumeImageView:(float)volume timeLength:(NSTimeInterval)timeLength;
 
 @end
+

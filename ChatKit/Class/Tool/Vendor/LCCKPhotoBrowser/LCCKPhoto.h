@@ -29,6 +29,7 @@ typedef void (^LCCKProgressUpdateBlock)(CGFloat progress);
 @property (nonatomic, strong) NSString *caption;
 @property (nonatomic, strong) NSURL *photoURL;
 @property (nonatomic, strong) UIImage *placeholderImage;
+@property (nonatomic, strong) UIImage *underlyingImage;
 @property (nonatomic, strong) UIImageView *placeholderImageView;
 @property (nonatomic, assign, readonly) CGRect placeholderFrame;
 @property (nonatomic, assign, readonly) BOOL loadingInProgress;

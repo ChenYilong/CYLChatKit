@@ -2,8 +2,8 @@
 //  LCCKBaseViewController.m
 //  LeanCloudChatKit-iOS
 //
-//  Created by ElonChan on 16/2/26.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v2.1.1 Created by ElonChan  on 18/6/26.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import "LCCKBaseViewController.h"
@@ -13,56 +13,19 @@
 
 @interface LCCKBaseViewController ()
 
-@property (nonatomic, copy, readwrite) LCCKViewDidLoadBlock viewDidLoadBlock;
-@property (nonatomic, copy, readwrite) LCCKViewWillAppearBlock viewWillAppearBlock;
-@property (nonatomic, copy, readwrite) LCCKViewDidAppearBlock viewDidAppearBlock;
-@property (nonatomic, copy, readwrite) LCCKViewWillDisappearBlock viewWillDisappearBlock;
-@property (nonatomic, copy, readwrite) LCCKViewDidDisappearBlock viewDidDisappearBlock;
-@property (nonatomic, copy, readwrite) LCCKViewControllerWillDeallocBlock viewControllerWillDeallocBlock;
-@property (nonatomic, copy, readwrite) LCCKViewDidReceiveMemoryWarningBlock didReceiveMemoryWarningBlock;
-@property (nonatomic, copy) LCCKBarButtonItemActionBlock barbuttonItemAction;
+@property (nonatomic, copy) LCCKBarButtonItemActionBlock barButtonItemAction;
 
 @end
 
 @implementation LCCKBaseViewController
-
-#pragma mark -
-#pragma mark - UIViewController Life
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
-    !self.viewDidLoadBlock ?: self.viewDidLoadBlock(self);
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    !self.viewWillAppearBlock ?: self.viewWillAppearBlock(self, animated);
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    !self.viewDidAppearBlock ?: self.viewDidAppearBlock(self, animated);
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    !self.viewWillDisappearBlock ?: self.viewWillDisappearBlock(self, animated);
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    !self.viewDidDisappearBlock ?: self.viewDidDisappearBlock(self, animated);
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    !self.didReceiveMemoryWarningBlock ?: self.didReceiveMemoryWarningBlock(self);
-}
-
--(void)dealloc {
-    !self.viewControllerWillDeallocBlock ?: self.viewControllerWillDeallocBlock(self);
-}
+@synthesize viewDidLoadBlock = _viewDidLoadBlock;
+@synthesize viewWillAppearBlock = _viewWillAppearBlock;
+@synthesize viewDidAppearBlock = _viewDidAppearBlock;
+@synthesize viewWillDisappearBlock = _viewWillDisappearBlock;
+@synthesize viewDidDisappearBlock = _viewDidDisappearBlock;
+@synthesize viewDidDismissBlock = _viewDidDismissBlock;
+@synthesize viewControllerWillDeallocBlock = _viewControllerWillDeallocBlock;
+@synthesize didReceiveMemoryWarningBlock = _didReceiveMemoryWarningBlock;
 
 #pragma mark -
 #pragma mark - UIViewController Life Event Block
@@ -87,6 +50,11 @@
     _viewDidDisappearBlock = viewDidDisappearBlock;
 }
 
+- (void)setViewDidDismissBlock:(LCCKViewDidDismissBlock)viewDidDismissBlock {
+    _viewDidDismissBlock = viewDidDismissBlock;
+}
+
+
 - (void)setViewControllerWillDeallocBlock:(LCCKViewControllerWillDeallocBlock)viewControllerWillDeallocBlock {
     _viewControllerWillDeallocBlock = viewControllerWillDeallocBlock;
 }
@@ -94,9 +62,10 @@
 - (void)setViewDidReceiveMemoryWarningBlock:(LCCKViewDidReceiveMemoryWarningBlock)didReceiveMemoryWarningBlock {
     _didReceiveMemoryWarningBlock = didReceiveMemoryWarningBlock;
 }
-- (void)clickedBarButtonItemAction {
-    if (self.barbuttonItemAction) {
-        self.barbuttonItemAction();
+
+- (void)clickedBarButtonItemAction:(UIBarButtonItem *)sender event:(UIEvent *)event {
+    if (self.barButtonItemAction) {
+        self.barButtonItemAction(self, sender, event);
     }
 }
 
@@ -130,14 +99,8 @@
             icon = @"barbuttonicon_Operate";
             break;
     }
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage lcck_imageNamed:icon bundleName:@"BarButtonIcon" bundleForClass:[self class]] style:UIBarButtonItemStylePlain target:self action:@selector(clickedBarButtonItemAction)];
-    self.barbuttonItemAction = action;
-}
-
-- (void)setupBackgroundImage:(UIImage *)backgroundImage {
-    UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
-    backgroundImageView.image = backgroundImage;
-    [self.view insertSubview:backgroundImageView atIndex:0];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage lcck_imageNamed:icon bundleName:@"BarButtonIcon" bundleForClass:[self class]] style:UIBarButtonItemStylePlain target:self action:@selector(clickedBarButtonItemAction:event:)];
+    self.barButtonItemAction = action;
 }
 
 #pragma mark - alert and async utils
@@ -149,7 +112,7 @@
 
 - (BOOL)alertAVIMError:(NSError *)error {
     if (error) {
-        if (error.code == kAVIMErrorConnectionLost) {
+        if (error.code == AVIMErrorCodeConnectionLost) {
             [self alert:@"未能连接聊天服务"];
         } else if ([error.domain isEqualToString:NSURLErrorDomain]) {
             [self alert:@"网络连接发生错误"];

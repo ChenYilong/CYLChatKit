@@ -2,8 +2,8 @@
 //  UIImageView+LCCKExtension.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/5/16.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v2.1.1 Created by ElonChan on 16/5/16.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import "UIImageView+LCCKExtension.h"
@@ -56,13 +56,12 @@
 - (instancetype)initWithImageView:(UIImageView *)imageView {
     if (self = [super init]) {
         self.originImageView = imageView;
-//        [imageView addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew context:nil];
-//        [imageView addObserver:self forKeyPath:@"contentMode" options:NSKeyValueObservingOptionNew context:nil];
-//        __unsafe_unretained __typeof(self) weakSelf = self;
-//        [self cyl_executeAtDealloc:^{
-//            [weakSelf.originImageView removeObserver:weakSelf forKeyPath:@"image"];
-//            [weakSelf.originImageView removeObserver:weakSelf forKeyPath:@"contentMode"];
-//        }];
+        [imageView addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew context:nil];
+        [imageView addObserver:self forKeyPath:@"contentMode" options:NSKeyValueObservingOptionNew context:nil];
+        [self cyl_willDeallocWithSelfCallback:^(__unsafe_unretained LCCKImageObserver *owner, NSUInteger identifier) {
+            [owner.originImageView removeObserver:owner forKeyPath:@"image"];
+            [owner.originImageView removeObserver:owner forKeyPath:@"contentMode"];
+        }];
     }
     return self;
 }

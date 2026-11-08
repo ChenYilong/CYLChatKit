@@ -2,8 +2,8 @@
 //  LCCKUIService.h
 //  LeanCloudChatKit-iOS
 //
-//  Created by ElonChan on 16/3/1.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v2.1.1 Created by ElonChan on 16/3/1.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -17,7 +17,7 @@ FOUNDATION_EXTERN NSString *const LCCKUIServiceErrorDomain;
 
 @interface LCCKUIService : LCCKSingleton <LCCKUIService>
 
-/**
+/*!
  *  未读数发生变化
  *  @param aCount 总的未读数
  */

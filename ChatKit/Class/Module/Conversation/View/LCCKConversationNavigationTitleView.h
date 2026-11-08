@@ -2,7 +2,7 @@
 //  LCCKConversationNavigationTitleView.h
 //  Pods
 //
-//  v0.8.5 Created by ElonChan on 16/7/19.
+//  v2.1.1 Created by ElonChan on 16/7/19.
 //
 //
 
@@ -11,8 +11,6 @@
 @class AVIMConversation;
 
 @interface LCCKConversationNavigationTitleView : UIView
-
-@property (nonatomic, strong) UILabel *conversationNameView;
 
 - (instancetype)initWithConversation:(AVIMConversation *)conversation navigationController:(UINavigationController *)navigationController;
 

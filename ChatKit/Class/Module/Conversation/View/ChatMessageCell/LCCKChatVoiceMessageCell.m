@@ -2,8 +2,8 @@
 //  LCCKChatVoiceMessageCell.m
 //  LCCKChatExample
 //
-//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/16.
-//  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
+//  v2.1.1 Created by ElonChan ( https://github.com/ChenYilong/CYLChatKit ) on 15/11/16.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010） . All rights reserved.
 //
 
 #import "LCCKChatVoiceMessageCell.h"
@@ -42,15 +42,10 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
             make.right.equalTo(self.messageContentView.mas_right).with.offset(-12);
             make.centerY.equalTo(self.messageContentView.mas_centerY);
         }];
-//        [self.messageVoiceSecondsLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.right.equalTo(self.messageVoiceStatusImageView.mas_left).with.offset(-8);
-//            make.centerY.equalTo(self.messageContentView.mas_centerY);
-//        }];
         [self.messageVoiceSecondsLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(self.messageContentView.mas_left).with.offset(-10);
             make.bottom.equalTo(self.messageContentView.mas_bottom);
         }];
-//        self.messageVoiceSecondsLabel.textColor = self.conversationViewMessageRightTextColor;
         self.messageVoiceSecondsLabel.textColor = [UIColor lightGrayColor];
         [self.messageIndicatorView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.center.equalTo(self.messageContentView);
@@ -58,20 +53,15 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
             make.height.equalTo(@10);
         }];
     } else if (self.messageOwner == LCCKMessageOwnerTypeOther) {
-//        self.messageVoiceSecondsLabel.textColor = self.conversationViewMessageLeftTextColor;
         self.messageVoiceSecondsLabel.textColor = [UIColor lightGrayColor];
         [self.messageVoiceStatusImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.messageContentView.mas_left).with.offset(12);
             make.centerY.equalTo(self.messageContentView.mas_centerY);
         }];
         
-//        [self.messageVoiceSecondsLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.left.equalTo(self.messageVoiceStatusImageView.mas_right).with.offset(8);
-//            make.centerY.equalTo(self.messageContentView.mas_centerY);
-//        }];
         [self.messageVoiceSecondsLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.messageContentView.mas_right).with.offset(10);
-            make.bottom.equalTo(self.messageContentView.mas_bottom);
+                make.left.equalTo(self.messageContentView.mas_right).with.offset(10);
+                make.bottom.equalTo(self.messageContentView.mas_bottom);
         }];
         [self.messageIndicatorView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.center.equalTo(self.messageContentView);
@@ -89,7 +79,6 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
 #pragma mark - Public Methods
 
 - (void)setup {
-//    [self.messageContentView addSubview:self.messageVoiceSecondsLabel];
     [self addSubview:self.messageVoiceSecondsLabel];
     [self.messageContentView addSubview:self.messageVoiceStatusImageView];
     [self.messageContentView addSubview:self.messageIndicatorView];
@@ -99,12 +88,8 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
     [self addGeneralView];
     self.voiceMessageState = LCCKVoiceMessageStateNormal;
     [[LCCKAVAudioPlayer sharePlayer]  addObserver:self forKeyPath:@"audioPlayerState" options:NSKeyValueObservingOptionNew context:LCCKChatVoiceMessageCellVoiceMessageStateContext];
-    __weak __typeof(self) weakSelf = self;
-    [self cyl_executeAtDealloc:^{
-        NSObject *ss = weakSelf;
-        if (ss) {
-            [[LCCKAVAudioPlayer sharePlayer] removeObserver:ss forKeyPath:@"audioPlayerState"];
-        }
+    [self cyl_willDeallocWithSelfCallback:^(__unsafe_unretained id owner, NSUInteger identifier) {
+        [[LCCKAVAudioPlayer sharePlayer] removeObserver:owner forKeyPath:@"audioPlayerState"];
     }];
 }
 
@@ -236,8 +221,9 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
     self.messageVoiceSecondsLabel.hidden = NO;
     self.messageVoiceStatusImageView.hidden = NO;
     self.messageIndicatorView.hidden = YES;
-    [self.messageIndicatorView stopAnimating];
-    
+    dispatch_async(dispatch_get_main_queue(),^{
+        [self.messageIndicatorView stopAnimating];
+    });
     if (_voiceMessageState == LCCKVoiceMessageStatePlaying) {
         self.messageVoiceStatusImageView.highlighted = YES;
         [self.messageVoiceStatusImageView startAnimating];
@@ -245,10 +231,14 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
         self.messageVoiceSecondsLabel.hidden = YES;
         self.messageVoiceStatusImageView.hidden = YES;
         self.messageIndicatorView.hidden = NO;
-        [self.messageIndicatorView startAnimating];
+        dispatch_async(dispatch_get_main_queue(),^{
+            [self.messageIndicatorView startAnimating];
+        });
     } else {
         self.messageVoiceStatusImageView.highlighted = NO;
-        [self.messageVoiceStatusImageView stopAnimating];
+        dispatch_async(dispatch_get_main_queue(),^{
+            [self.messageVoiceStatusImageView stopAnimating];
+        });
     }
 }
 

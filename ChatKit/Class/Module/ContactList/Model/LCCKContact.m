@@ -2,8 +2,8 @@
 //  LCCKContact.m
 //  ChatKit
 //
-//  v0.8.5 Created by ElonChan on 16/7/11.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v2.1.1 Created by ElonChan on 16/7/11.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import "LCCKContact.h"
@@ -13,10 +13,8 @@
 @synthesize name = _name;
 @synthesize avatarURL = _avatarURL;
 @synthesize clientId = _clientId;
-@synthesize sex = _sex;
 
-
-- (instancetype)initWithUserId:(NSString *)userId name:(NSString *)name avatarURL:(NSURL *)avatarURL clientId:(NSString *)clientId sex:(NSString *)sex {
+- (instancetype)initWithUserId:(NSString *)userId name:(NSString *)name avatarURL:(NSURL *)avatarURL clientId:(NSString *)clientId {
     self = [super init];
     if (!self) {
         return nil;
@@ -25,12 +23,11 @@
     _name = name;
     _avatarURL = avatarURL;
     _clientId = clientId;
-    _sex = sex;
     return self;
 }
 
-+ (instancetype)userWithUserId:(NSString *)userId name:(NSString *)name avatarURL:(NSURL *)avatarURL clientId:(NSString *)clientId sex:(NSString *)sex {
-    LCCKContact *user = [[LCCKContact alloc] initWithUserId:userId name:name avatarURL:avatarURL clientId:clientId sex:sex];
++ (instancetype)userWithUserId:(NSString *)userId name:(NSString *)name avatarURL:(NSURL *)avatarURL clientId:(NSString *)clientId{
+    LCCKContact *user = [[LCCKContact alloc] initWithUserId:userId name:name avatarURL:avatarURL clientId:clientId];
     return user;
 }
 
@@ -39,7 +36,6 @@
                                        name:self.name
                                   avatarURL:self.avatarURL
                                    clientId:self.clientId
-                                           sex:self.sex
             ];
 }
 
@@ -48,7 +44,6 @@
     [aCoder encodeObject:self.name forKey:@"name"];
     [aCoder encodeObject:self.avatarURL forKey:@"avatarURL"];
     [aCoder encodeObject:self.clientId forKey:@"clientId"];
-    [aCoder encodeObject:self.sex forKey:@"sex"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -57,7 +52,6 @@
         _name = [aDecoder decodeObjectForKey:@"name"];
         _avatarURL = [aDecoder decodeObjectForKey:@"avatarURL"];
         _clientId = [aDecoder decodeObjectForKey:@"clientId"];
-        _sex = [aDecoder decodeObjectForKey:@"sex"];
     }
     return self;
 }

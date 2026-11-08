@@ -2,8 +2,8 @@
 //  LCCKMessage.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/3/21.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v2.1.1 Created by ElonChan on 16/3/21.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -18,11 +18,7 @@
 
 @property (nonatomic, copy, readonly) NSString *text;
 @property (nonatomic, copy, readonly) NSString *systemText;
-@property (nonatomic, strong, readwrite) UIImage *photo;
-@property (nonatomic, strong, readwrite) UIImage *thumbnailPhoto;
-@property (nonatomic, copy, readonly) NSString *photoPath;
-@property (nonatomic, strong, readonly) NSURL *thumbnailURL;
-@property (nonatomic, strong, readonly) NSURL *originPhotoURL;
+
 @property (nonatomic, strong, readonly) UIImage *videoConverPhoto;
 @property (nonatomic, copy, readonly) NSString *videoPath;
 @property (nonatomic, strong, readonly) NSURL *videoURL;
@@ -38,7 +34,6 @@
 @property (nonatomic, copy, readonly) NSString *geolocations;
 @property (nonatomic, strong, readonly) CLLocation *location;
 
-@property (nonatomic, assign, readonly) AVIMMessageMediaType mediaType;
 //@property (nonatomic, assign) LCCKConversationType messageGroupType;
 @property (nonatomic, assign, readonly) LCCKMessageReadState messageReadState;
 @property (nonatomic, copy, readwrite) NSString *serverMessageId;
@@ -56,9 +51,11 @@
 
 @property (nonatomic, copy, readonly) NSString *localDisplayName;
 
+@property (nonatomic, assign, readonly) NSInteger userType;
+
 - (instancetype)initWithText:(NSString *)text
-                      senderId:(NSString *)senderId
-                       sender:(id<LCCKUserDelegate>)sender
+                    senderId:(NSString *)senderId
+                      sender:(id<LCCKUserDelegate>)sender
                    timestamp:(NSTimeInterval)timestamp
              serverMessageId:(NSString *)serverMessageId;
 
@@ -71,6 +68,8 @@
  *  初始化图片类型的消息
  *
  *  @param photo          目标图片
+ *  @param photoWidth     图片的实际宽度
+ *  @param photoHeight    图片的实际高度
  *  @param photePath      目标图片的本地路径
  *  @param thumbnailURL   目标图片在服务器的缩略图地址
  *  @param originPhotoURL 目标图片在服务器的原图地址
@@ -80,11 +79,13 @@
  *  @return 返回Message model 对象
  */
 - (instancetype)initWithPhoto:(UIImage *)photo
+                   photoWidth:(uint)photoWidth
+                  photoHeight:(uint)photoHeight
                thumbnailPhoto:(UIImage *)thumbnailPhoto
                     photoPath:(NSString *)photoPath
                  thumbnailURL:(NSURL *)thumbnailURL
                originPhotoURL:(NSURL *)originPhotoURL
-                       senderId:(NSString *)senderId
+                     senderId:(NSString *)senderId
                        sender:(id<LCCKUserDelegate>)sender
                     timestamp:(NSTimeInterval)timestamp
               serverMessageId:(NSString *)serverMessageId;
@@ -103,8 +104,8 @@
 - (instancetype)initWithVideoConverPhoto:(UIImage *)videoConverPhoto
                                videoPath:(NSString *)videoPath
                                 videoURL:(NSURL *)videoURL
-                                  senderId:(NSString *)senderId
-                                   sender:(id<LCCKUserDelegate>)sender
+                                senderId:(NSString *)senderId
+                                  sender:(id<LCCKUserDelegate>)sender
                                timestamp:(NSTimeInterval)timestamp
                          serverMessageId:(NSString *)serverMessageId;
 
@@ -122,8 +123,8 @@
 - (instancetype)initWithVoicePath:(NSString *)voicePath
                          voiceURL:(NSURL *)voiceURL
                     voiceDuration:(NSString *)voiceDuration
-                           senderId:(NSString *)senderId
-                            sender:(id<LCCKUserDelegate>)sender
+                         senderId:(NSString *)senderId
+                           sender:(id<LCCKUserDelegate>)sender
                         timestamp:(NSTimeInterval)timestamp
                   serverMessageId:(NSString *)serverMessageId;
 
@@ -142,20 +143,21 @@
 - (instancetype)initWithVoicePath:(NSString *)voicePath
                          voiceURL:(NSURL *)voiceURL
                     voiceDuration:(NSString *)voiceDuration
-                           senderId:(NSString *)senderId
-                            sender:(id<LCCKUserDelegate>)sender
+                         senderId:(NSString *)senderId
+                           sender:(id<LCCKUserDelegate>)sender
                         timestamp:(NSTimeInterval)timestamp
-                           hasRead:(BOOL)hasRead
+                          hasRead:(BOOL)hasRead
                   serverMessageId:(NSString *)serverMessageId;
 
 - (instancetype)initWithLocalPositionPhoto:(UIImage *)localPositionPhoto
                               geolocations:(NSString *)geolocations
                                   location:(CLLocation *)location
-                                    senderId:(NSString *)senderId
-                                     sender:(id<LCCKUserDelegate>)sender
+                                  senderId:(NSString *)senderId
+                                    sender:(id<LCCKUserDelegate>)sender
                                  timestamp:(NSTimeInterval)timestamp
                            serverMessageId:(NSString *)serverMessageId;
 
 + (id)messageWithAVIMTypedMessage:(AVIMTypedMessage *)message;
 
 @end
+

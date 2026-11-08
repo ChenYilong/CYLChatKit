@@ -2,8 +2,8 @@
 //  LCCKConversationListViewModel.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/3/22.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v2.1.1 Created by ElonChan on 16/3/22.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import "LCCKConversationListViewModel.h"
@@ -36,8 +36,7 @@
 #else
 #import "CYLDeallocBlockExecutor.h"
 #endif
-
-
+#import <CYLTableViewPlaceHolder/CYLTableViewPlaceHolder.h>
 
 @interface LCCKConversationListViewModel ()
 
@@ -61,12 +60,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationMessageUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationUnreadsUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:LCCKNotificationConversationListDataSourceUpdated object:nil];
-    __weak __typeof(self) weakSelf = self;
-    [self cyl_executeAtDealloc:^{
-        id ss = weakSelf;
-        if (ss) {
-            [[NSNotificationCenter defaultCenter] removeObserver:ss];
-        }
+    [self cyl_willDeallocWithSelfCallback:^(__unsafe_unretained id owner, NSUInteger identifier) {
+        [[NSNotificationCenter defaultCenter] removeObserver:owner];
     }];
     _conversationListViewController = conversationListViewController;
     return self;
@@ -95,14 +90,22 @@
     [tableView setSeparatorColor:[[LCCKSettingService sharedInstance] defaultThemeColorForKey:@"TableView-SeparatorColor"]];
     __block NSString *displayName = nil;
     __block NSURL *avatarURL = nil;
+    __block NSInteger userType = 0;
     NSString *peerId = nil;
     if (conversation.lcck_type == LCCKConversationTypeSingle) {
         peerId = conversation.lcck_peerId;
+        cell.clientId = conversation.lcck_peerId;
     } else {
         peerId = conversation.lcck_lastMessage.clientId;
+        cell.clientId = nil;
     }
     if (peerId) {
-        [self asyncCacheElseNetLoadCell:cell peerId:peerId name:&displayName avatarURL:&avatarURL];
+        [self asyncCacheElseNetLoadCell:cell peerId:peerId name:&displayName userType:&userType avatarURL:&avatarURL];
+    }
+    if (userType == 1) {
+        cell.officialSignImageView.hidden = NO;
+    } else {
+        cell.officialSignImageView.hidden = YES;
     }
     if (conversation.lcck_type == LCCKConversationTypeSingle) {
         [cell.avatarImageView sd_setImageWithURL:avatarURL placeholderImage:[self imageInBundleForImageName:@"Placeholder_Avatar" ]];
@@ -117,7 +120,7 @@
         cell.messageTextLabel.attributedText = [LCCKLastMessageTypeManager attributedStringWithMessage:conversation.lcck_lastMessage conversation:conversation userName:displayName];
         cell.timestampLabel.text = [conversation.lcck_lastMessageAt lcck_timeAgoSinceNow];
     }
-    if (conversation.lcck_unreadCount > 0) {
+    if (conversation.unreadMessagesCount > 0) {
         if (conversation.muted) {
             cell.litteBadgeView.hidden = NO;
         } else {
@@ -125,14 +128,16 @@
         }
     }
 
-    
     LCCKConfigureCellBlock configureCellBlock = [[LCCKConversationListService sharedInstance] configureCellBlock];
     
     BOOL impDelegate = [self.conversationListViewController.delegate respondsToSelector:@selector(conversation:cell:tableView:cellForRowAtIndexPath:)];
 
     // Delegate 与 Block 两种方式不能同时实现
     if (configureCellBlock && impDelegate) {
-        [NSException raise:NSInternalInconsistencyException format:@"Block or Delegate choose one."];
+        //TODO: add debug model
+//        [NSException raise:NSInternalInconsistencyException format:@"Block or Delegate choose one."];
+        NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"Block or Delegate choose one.");
+        return cell;
     }
     // 调用 Delegate
     else if (impDelegate){
@@ -199,6 +204,35 @@
     }
 }
 
+- (void)asyncCacheElseNetLoadCell:(LCCKConversationListCell *)cell peerId:(NSString *)peerId name:(NSString **)name userType:(NSInteger *)userType avatarURL:(NSURL **)avatarURL {
+    NSError *error = nil;
+    cell.identifier = peerId;
+    [[LCCKUserSystemService sharedInstance] getCachedProfileIfExists:peerId name:name avatarURL:avatarURL userTye:userType error:&error];
+    if (error) {
+//        NSLog(@"%@", error);
+    }
+    //头像消息一般和昵称消息一同返回，故假设如果服务端返回了昵称，那么如果该用户有头像就一定会返回头像。反之，没返回昵称，一定是还未缓存用户信息。如果你的App中，不是这样的逻辑，可联系维护者将这一逻辑修改得严谨些，邮箱luohanchenyilong@163.com.
+    if (!*name) {
+        if (peerId != NULL && ![LCCKSettingService sharedInstance].isDisablePreviewUserId) {
+            *name = peerId;
+        }
+        __weak __typeof(self) weakSelf = self;
+        __weak __typeof(cell) weakCell = cell;
+        [[LCCKUserSystemService sharedInstance] getProfileInBackgroundForUserId:peerId callback:^(id<LCCKUserDelegate> user, NSError *error) {
+            BOOL hasData = user.name;
+            if (hasData && [weakCell.identifier isEqualToString:user.clientId]) {
+                NSIndexPath *indexPath_ = [weakSelf.conversationListViewController.tableView indexPathForCell:weakCell];
+                if (!indexPath_) {
+                    return;
+                }
+                dispatch_async(dispatch_get_main_queue(),^{
+                    [weakSelf.conversationListViewController.tableView reloadRowsAtIndexPaths:@[indexPath_] withRowAnimation:UITableViewRowAnimationNone];
+                });
+            }
+        }];
+    }
+}
+
 - (NSArray *)defaultRightButtons {
     UITableViewRowAction *actionItemDelete = [UITableViewRowAction
                                               rowActionWithStyle:UITableViewRowActionStyleNormal
@@ -223,8 +257,10 @@
     
     // Delegate 与 Block 两种方式不能同时实现
     if (didSelectBlock && impDelegate) {
-        [NSException raise:NSInternalInconsistencyException format:@"Block or Delegate choose one."];
-        
+        //TODO: add debug model
+//        [NSException raise:NSInternalInconsistencyException format:@"Block or Delegate choose one."];
+        NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"Block or Delegate choose one.");
+        return;
     }
     // 调用 Delegate
     else if (impDelegate){
@@ -258,12 +294,13 @@
 
 - (void)refresh {
     self.freshing = YES;
+    //FIXME:  
     [[LCCKConversationListService sharedInstance] findRecentConversationsWithBlock:^(NSArray *conversations, NSInteger totalUnreadCount, NSError *error) {
         dispatch_block_t finishBlock = ^{
             self.freshing = NO;
             if ([self.conversationListViewController filterAVIMError:error]) {
                 self.dataArray = [NSMutableArray arrayWithArray:conversations];
-                [self.conversationListViewController.tableView reloadData];
+                [self.conversationListViewController.tableView cyl_reloadData];
                 [self selectConversationIfHasRemoteNotificatoinConvid];
                 LCCKMarkBadgeWithTotalUnreadCountBlock markBadgeWithTotalUnreadCountBlock = [LCCKConversationListService sharedInstance].markBadgeWithTotalUnreadCountBlock;
                 if (markBadgeWithTotalUnreadCountBlock) {
@@ -276,10 +313,10 @@
                         badgeValue = LCCKBadgeTextForNumberGreaterThanLimit;
                     }
                     [self.conversationListViewController.navigationController tabBarItem].badgeValue = badgeValue;
-                    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:totalUnreadCount];
+//                    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:totalUnreadCount];
                 } else {
                     [self.conversationListViewController.navigationController tabBarItem].badgeValue = nil;
-                    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+//                    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
                 }
             }
         };
@@ -339,6 +376,12 @@
     return ({
         UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"Placeholder" bundleForClass:[self class]];
         image;});
+}
+
+#pragma mark - CYLTableViewPlaceHolderDelegate Method
+
+- (UIView *)makePlaceHolderView {
+    return self.conversationListViewController.placeHolderView;;
 }
 
 @end

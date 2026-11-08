@@ -2,15 +2,16 @@
 //  LCCKLastMessageTypeManager.m
 //  LeanCloudChatKit-iOS
 //
-//  Created by 陈宜龙 on 16/3/22.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v2.1.1 Created by ElonChan on 16/3/22.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import "LCCKLastMessageTypeManager.h"
 #import <AVOSCloudIM/AVIMTypedMessage.h>
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCCKUserSystemService.h"
-#import "AVIMConversation+LCCKAddition.h"
+#import "AVIMConversation+LCCKExtension.h"
+#import "NSObject+LCCKExtension.h"
 
 static NSMutableDictionary *attributedStringCache = nil;
 
@@ -19,49 +20,92 @@ static NSMutableDictionary *attributedStringCache = nil;
 + (NSString *)getMessageTitle:(AVIMTypedMessage *)message {
     NSString *title;
     switch (message.mediaType) {
-        case kAVIMMessageMediaTypeText:
-            title = message.text;
+        case kAVIMMessageMediaTypeText: {
+            //Custom message
+            BOOL isCustom = [[message.attributes valueForKey:LCCKCustomMessageIsCustomKey] boolValue];
+            if (!isCustom) {
+                title = message.text;
+                break;
+            }
+            title = [self titleForCustomMessage:message];
             break;
-            
+        }
         case kAVIMMessageMediaTypeAudio:
-            title = NSLocalizedStringFromTable(@"Voice", @"LCChatKitString", @"声音");
+            title = LCCKLocalizedStrings(@"Voice");
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
             
         case kAVIMMessageMediaTypeImage:
-            title = NSLocalizedStringFromTable(@"Photo", @"LCChatKitString", @"图片");
+            title = LCCKLocalizedStrings(@"Photo");
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
             
         case kAVIMMessageMediaTypeLocation:
-            title = NSLocalizedStringFromTable(@"Location", @"LCChatKitString", @"位置");
+            title = LCCKLocalizedStrings(@"Location");
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
-//        case kAVIMMessageMediaTypeEmotion:
-//            title = NSLocalizedStringFromTable(@"Sight", @"LCChatKitString", @"表情");
-//            title = [NSString stringWithFormat:@"[%@]",title];
-
-//            break;
+            
         case kAVIMMessageMediaTypeVideo:
-            title = NSLocalizedStringFromTable(@"Video", @"LCChatKitString", @"视频");
+            title = LCCKLocalizedStrings(@"Video");
             title = [NSString stringWithFormat:@"[%@]",title];
+            break;
 
-//TODO:
+        case kAVIMMessageMediaTypeRecalled:
+            title = @"";
+            break;
+            
+        default:
+            title = [self titleForCustomMessage:message];
+            break;
     }
+    return title;
+}
+
++ (NSString *)titleForCustomMessage:(AVIMTypedMessage *)customMessage {
+    NSString *typeTitleKey = [customMessage.attributes valueForKey:LCCKCustomMessageTypeTitleKey];
+    NSString *title = @"";
+    do {
+        if (typeTitleKey.length > 0) {
+            title = typeTitleKey;
+            title = [NSString stringWithFormat:@"[%@]", title];
+            break;
+        }
+        
+        title = LCCKLocalizedStrings(@"unknownMessageType");
+        title = [NSString stringWithFormat:@"[%@]", title];
+        break;
+    } while (NO);
     return title;
 }
 
 + (NSAttributedString *)attributedStringWithMessage:(AVIMTypedMessage *)message conversation:(AVIMConversation *)conversation userName:(NSString *)userName {
     NSString *title = [self getMessageTitle:message];
     if (conversation.lcck_type == LCCKConversationTypeGroup) {
-        title = [NSString stringWithFormat:@"%@: %@", userName, title];
+        if (!userName) {
+            userName = @"";
+        } else {
+            userName = [NSString stringWithFormat:@"%@: ", userName];
+        }
+        title = [NSString stringWithFormat:@"%@%@", userName, title];
     }
-    if (conversation.muted && conversation.lcck_unreadCount > 0) {
-        title = [NSString stringWithFormat:@"[%ld条] %@", conversation.lcck_unreadCount, title];
+    if (conversation.muted && conversation.unreadMessagesCount > 0) {
+        title = [NSString stringWithFormat:@"[%@条] %@", @(conversation.unreadMessagesCount), title];
     }
-    NSString *mentionText = @"[有人@你] ";
+    
+    NSString *mentionText = [NSString stringWithFormat:@"%@ ", LCCKLocalizedStrings(@"mentioned")];
+    BOOL hasMentioned = (message.mentioned || conversation.unreadMessagesMentioned);
+    if (conversation.lcck_draft.length > 0) {
+        title = conversation.lcck_draft;
+        NSString *draftText = [NSString stringWithFormat:@"[%@]", LCCKLocalizedStrings(@"draft")];
+        if (hasMentioned) {
+            mentionText = [mentionText stringByAppendingString:draftText];
+        } else {
+            mentionText = draftText;
+        }
+    }
+    
     NSString *finalText;
-    if (conversation.lcck_mentioned) {
+    if (hasMentioned || conversation.lcck_draft.length > 0) {
         finalText = [NSString stringWithFormat:@"%@%@", mentionText, title];
     } else {
         finalText = title;
@@ -76,10 +120,11 @@ static NSMutableDictionary *attributedStringCache = nil;
     NSDictionary *attributes = @{ NSForegroundColorAttributeName: [UIColor grayColor], (id)NSFontAttributeName:font};
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:finalText attributes:attributes];
     
-    if (conversation.lcck_mentioned) {
+    if (hasMentioned || conversation.lcck_draft.length > 0) {
         NSRange range = [finalText rangeOfString:mentionText];
         [attributedString setAttributes:@{NSForegroundColorAttributeName:[UIColor colorWithRed:183/255.0 green:20/255.0 blue:20/255.0 alpha:1], NSFontAttributeName : font} range:range];
     }
+    
     
     [attributedStringCache setObject:attributedString forKey:finalText];
     

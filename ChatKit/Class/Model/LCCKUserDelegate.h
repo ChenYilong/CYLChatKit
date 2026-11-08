@@ -2,8 +2,8 @@
 //  LCCKUserDelegate.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/2/2.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v2.1.1 Created by ElonChan on 18/6/2.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //  User Model Delegate.
 
 #import <Foundation/Foundation.h>
@@ -31,7 +31,6 @@
  * @brief The user's id in LeanCloud SDK, it may be equal to `userId`.
  */
 @property (nonatomic, copy, readwrite) NSString *clientId;
-@property (nonatomic, copy, readwrite) NSString *sex;
 
 - (instancetype)initWithUserId:(NSString *)userId name:(NSString *)name avatarURL:(NSURL *)avatarURL clientId:(NSString *)clientId;
 + (instancetype)userWithUserId:(NSString *)userId name:(NSString *)name avatarURL:(NSURL *)avatarURL clientId:(NSString *)clientId;
@@ -44,4 +43,5 @@
 - (instancetype)initWithClientId:(NSString *)clientId;
 + (instancetype)userWithClientId:(NSString *)clientId;
 
+@property (nonatomic, assign) NSInteger userType;
 @end

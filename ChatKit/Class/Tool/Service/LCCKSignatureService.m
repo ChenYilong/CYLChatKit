@@ -2,21 +2,16 @@
 //  LCCKSignatureService.m
 //  LeanCloudChatKit-iOS
 //
-//  Created by ElonChan on 16/2/22.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v2.1.1 Created by ElonChan on 18/6/22.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import "LCCKSignatureService.h"
 
 NSString *const LCCKSignatureServiceErrorDomain = @"LCCKSignatureServiceErrorDomain";
 
-@interface LCCKSignatureService ()
-
-@property (nonatomic, copy, readwrite) LCCKGenerateSignatureBlock generateSignatureBlock;
-
-@end
-
 @implementation LCCKSignatureService
+@synthesize generateSignatureBlock = _generateSignatureBlock;
 
 - (void)setGenerateSignatureBlock:(LCCKGenerateSignatureBlock)generateSignatureBlock {
     _generateSignatureBlock = generateSignatureBlock;

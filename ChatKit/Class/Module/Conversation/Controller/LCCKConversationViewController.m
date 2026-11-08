@@ -2,8 +2,8 @@
 //  LCCKConversationViewController.m
 //  LCCKChatBarExample
 //
-//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/20.
-//  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
+//  v2.1.1 Created by ElonChan ( https://github.com/ChenYilong/CYLChatKit ) on 15/11/20.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010） . All rights reserved.
 //
 
 //CYLDebugging定义为1表示【debugging】 ，注释、不定义或者0 表示【debugging】
@@ -11,8 +11,8 @@
 
 #import "LCCKConversationViewController.h"
 
-#if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
 #else
 #import "LCChatKit.h"
 #endif
@@ -35,20 +35,17 @@
 #import "LCCKAlertController.h"
 #import "LCCKPhotoBrowser.h"
 
-
 #if __has_include(<CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>)
 #import <CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>
 #else
 #import "CYLDeallocBlockExecutor.h"
 #endif
 
-
 #ifdef CYLDebugging
 #import <MLeaksFinder/MLeaksFinder.h>
 #endif
 
 NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationViewControllerErrorDomain";
-NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 
 @interface LCCKConversationViewController () <LCCKChatBarDelegate, LCCKChatMessageCellDelegate, LCCKConversationViewModelDelegate, LCCKPhotoBrowserDelegate>
 
@@ -69,80 +66,9 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 @property (nonatomic, strong) NSMutableArray *photos;
 @property (nonatomic, strong) NSMutableArray *thumbs;
 @property (nonatomic, assign, getter=isFirstTimeJoinGroup) BOOL firstTimeJoinGroup;
-
 @end
 
 @implementation LCCKConversationViewController
-
-- (NSString *) peerIcon {
-    if (_peerIcon == nil) {
-        _peerIcon = @"";
-    }
-    return _peerIcon;
-}
-
-- (NSString *)peerName {
-    if (_peerName == nil) {
-        _peerName = @"";
-    }
-    return _peerName;
-}
-
-- (NSString *)peerID {
-    if (_peerID == nil) {
-        _peerID = @"";
-    }
-    return _peerID;
-}
-
-- (NSString *)peerSex {
-    if (_peerSex == nil) {
-        _peerSex = @"";
-    }
-    return _peerSex;
-}
-
-- (NSString *)messageType {
-    if (_messageType == nil) {
-        _messageType = @"";
-    }
-    return _messageType;
-}
-
-- (NSString *)messageFromApp {
-    if (_messageFromApp == nil) {
-        _messageFromApp = @"";
-    }
-    return _messageFromApp;
-}
-
-- (NSString *)selfIcon {
-    if (_selfIcon == nil) {
-        _selfIcon = @"";
-    }
-    return _selfIcon;
-}
-
-- (NSString *)selfName {
-    if (_selfName == nil) {
-        _selfName = @"";
-    }
-    return _selfName;
-}
-
-- (NSString *)selfID {
-    if (_selfID == nil) {
-        _selfID = @"";
-    }
-    return _selfID;
-}
-
-- (NSString *)selfSex {
-    if (_selfSex == nil) {
-        _selfSex = @"";
-    }
-    return _selfSex;
-}
 
 - (void)setFetchConversationHandler:(LCCKFetchConversationHandler)fetchConversationHandler {
     _fetchConversationHandler = fetchConversationHandler;
@@ -188,7 +114,7 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
         /* If object is clean, ignore save request. */
         if (_peerId) {
             [[LCCKConversationService sharedInstance] fetchConversationWithPeerId:self.peerId callback:^(AVIMConversation *conversation, NSError *error) {
-                //SDK没有好友观念，任何两个ID均可会话，请APP层自行处理好友关系。
+                //SDK没有好友概念，任何两个ID均可会话，请APP层自行处理好友关系。
                 [self refreshConversation:conversation isJoined:YES error:error];
             }];
             break;
@@ -256,10 +182,6 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
     }
 }
 
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 #ifdef CYLDebugging
 - (BOOL)willDealloc {
     if (![super willDealloc]) {
@@ -276,23 +198,16 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
         chatViewModel.delegate = self;
         _chatViewModel = chatViewModel;
     }
-    _chatViewModel.peerSex = self.peerSex;
-    _chatViewModel.peerIcon = self.peerIcon;
-    _chatViewModel.peerName = self.peerName;
-    _chatViewModel.peerID = self.peerID;
-    _chatViewModel.messageType = self.messageType;
-    _chatViewModel.messageFromApp = self.messageFromApp;
     return _chatViewModel;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    __weak __typeof(self) weakSelf = self;
-    [self cyl_executeAtDealloc:^{
-        LCCKConversationViewController *ss = weakSelf;
-        if (ss) {
-            !ss.viewControllerWillDeallocBlock ?: ss.viewControllerWillDeallocBlock(ss);
-        }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userWillSendMsgWithoutPower) name:LCCKNotificationRecordNoPower object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveNewMsgForLengthOut) name:LCCKNotificationTextLengthOut object:nil];
+    
+    [self cyl_willDeallocWithSelfCallback:^(__unsafe_unretained LCCKConversationViewController *owner, NSUInteger identifier) {
+        !owner.viewControllerWillDeallocBlock ?: owner.viewControllerWillDeallocBlock(owner);
     }];
     self.navigationController.interactivePopGestureRecognizer.delaysTouchesBegan = NO;
     self.tableView.delegate = self.chatViewModel;
@@ -305,12 +220,13 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
     [[LCCKUserSystemService sharedInstance] fetchCurrentUserInBackground:^(id<LCCKUserDelegate> user, NSError *error) {
         self.user = user;
     }];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userWillSendMsgWithoutPower) name:LCCKNotificationRecordNoPower object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveNewMsgForLengthOut) name:LCCKNotificationTextLengthOut object:nil];
-
     [self.chatViewModel setDefaultBackgroundImage];
-
+    if (self.title) {
+        self.navigationItem.title = self.title;
+    }
+    if (!self.navigationItem.titleView.superview) {
+        [self setupNavigationItemTitleWithConversation:self.conversation];
+    }
     !self.viewDidLoadBlock ?: self.viewDidLoadBlock(self);
 }
 
@@ -324,9 +240,8 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
     [super viewDidAppear:animated];
     [self.chatBar open];
     [self saveCurrentConversationInfoIfExists];
-    
+    //TODO:  群聊人数改变，改群名称
     [self setupNavigationItemTitleWithConversation:self.conversation];
-    
     !self.viewDidAppearBlock ?: self.viewDidAppearBlock(self, animated);
 }
 
@@ -352,14 +267,7 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    if (_conversation && (self.chatViewModel.avimTypedMessage.count > 0)) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            [[LCCKConversationService sharedInstance] updateConversationAsReadWithLastMessage:_conversation.lcck_lastMessage];
-        });
-    }
-    
-    self.navigationItem.titleView = nil;
-    
+    //TODO:  群聊人数改变，改群名称
     !self.viewDidDisappearBlock ?: self.viewDidDisappearBlock(self, animated);
 }
 
@@ -371,16 +279,11 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 #pragma mark -
 #pragma mark - public Methods
 
-- (void)sendTextMessage:(NSString *)text
-{
+- (void)sendTextMessage:(NSString *)text {
     [self sendTextMessage:text mentionList:@[]];
 }
 
-- (void)sendTextMessage:(NSString *)text mentionList:(NSArray<NSString *> *)mentionList
-{
-    if (self.conversationId == nil) {
-        return;
-    }
+- (void)sendTextMessage:(NSString *)text mentionList:(NSArray<NSString *> *)mentionList {
     if ([text length] > 0 ) {
         LCCKMessage *lcckMessage = [[LCCKMessage alloc] initWithText:text
                                                             senderId:self.userId
@@ -388,24 +291,7 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
                                                            timestamp:LCCK_CURRENT_TIMESTAMP
                                                      serverMessageId:nil];
         [self makeSureSendValidMessage:lcckMessage afterFetchedConversationShouldWithAssert:NO];
-
         [self.chatViewModel sendMessage:lcckMessage mentionList:mentionList];
-        
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:RNNotificationName
-         object:@{
-           @"USER_SEX": self.peerSex,
-           @"READ":@YES,
-           @"MSG_TYPE": self.messageType,
-           @"APP": self.messageFromApp,
-           @"USER_ICON": self.peerIcon,
-           @"USER_NAME": self.peerName,
-           @"CONVERSATION_ID": self.conversationId,
-           @"USER_ID": self.peerID,
-           @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
-           @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
-           @"CHAT_MESSAGE":[NSString stringWithFormat:@"%@", text]
-       }];
     }
 }
 
@@ -421,9 +307,6 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 }
 
 - (void)sendImageMessageData:(NSData *)imageData {
-    if (self.conversationId == nil) {
-        return;
-    }
     NSString *path = [[LCCKSettingService sharedInstance] tmpPath];
     NSError *error;
     [imageData writeToFile:path options:NSDataWritingAtomic error:&error];
@@ -431,6 +314,8 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
     UIImage *thumbnailPhoto = [representationImage lcck_imageByScalingAspectFill];
     if (error == nil) {
         LCCKMessage *message = [[LCCKMessage alloc] initWithPhoto:representationImage
+                                                       photoWidth:0
+                                                      photoHeight:0
                                                    thumbnailPhoto:thumbnailPhoto
                                                         photoPath:path
                                                      thumbnailURL:nil
@@ -442,32 +327,12 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
                                 ];
         [self makeSureSendValidMessage:message afterFetchedConversationShouldWithAssert:NO];
         [self.chatViewModel sendMessage:message];
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:RNNotificationName
-         object:@{
-           @"USER_SEX": self.peerSex,
-           @"USER_ICON": self.peerIcon,
-           @"READ":@YES,
-           @"MSG_TYPE": self.messageType,
-           @"APP": self.messageFromApp,
-           @"USER_NAME": self.peerName,
-           @"CONVERSATION_ID": self.conversationId,
-           @"USER_ID": self.peerID,
-           @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
-           @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
-           @"CHAT_MESSAGE":@"图片消息"
-       }];
     } else {
         [self alert:@"write image to file error"];
     }
 }
 
 - (void)sendVoiceMessageWithPath:(NSString *)voicePath time:(NSTimeInterval)recordingSeconds {
-
-    if (self.conversationId == nil) {
-        return;
-    }
-
     LCCKMessage *message = [[LCCKMessage alloc] initWithVoicePath:voicePath
                                                          voiceURL:nil
                                                     voiceDuration:[NSString stringWithFormat:@"%@", @(recordingSeconds)]
@@ -476,26 +341,11 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
                                                         timestamp:LCCK_CURRENT_TIMESTAMP
                                                   serverMessageId:nil];
     [self makeSureSendValidMessage:message afterFetchedConversationShouldWithAssert:NO];
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:RNNotificationName
-     object:@{
-          @"USER_SEX": self.peerSex,
-          @"USER_ICON": self.peerIcon,
-          @"USER_NAME": self.peerName,
-          @"CONVERSATION_ID": self.conversationId,
-          @"READ":@YES,
-          @"MSG_TYPE": self.messageType,
-          @"APP": self.messageFromApp,
-          @"USER_ID": self.peerID,
-          @"MESSAGE_TYPE": @"MESSAGE_TYPE_CHAT",
-          @"CHAT_TIME": [NSString stringWithFormat:@"%f", LCCK_CURRENT_TIMESTAMP],
-          @"CHAT_MESSAGE":@"语音消息"
-    }];
     [self.chatViewModel sendMessage:message];
 }
 
 - (void)sendLocationMessageWithLocationCoordinate:(CLLocationCoordinate2D)locationCoordinate locatioTitle:(NSString *)locationTitle {
-
+    
     LCCKMessage *message = [[LCCKMessage alloc] initWithLocalPositionPhoto:({
         NSString *imageName = @"message_sender_location";
         UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
@@ -516,12 +366,6 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 }
 
 - (void)sendCustomMessage:(AVIMTypedMessage *)customMessage {
-    if (self.conversationId == nil) {
-        return;
-    }
-    if (!self.isAvailable) {
-        return;
-    }
     [self makeSureSendValidMessageAfterFetchedConversation:customMessage];
     [self.chatViewModel sendCustomMessage:customMessage];
 }
@@ -530,12 +374,6 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
             progressBlock:(AVProgressBlock)progressBlock
                   success:(LCCKBooleanResultBlock)success
                    failed:(LCCKBooleanResultBlock)failed {
-    if (self.conversationId == nil) {
-        return;
-    }
-    if (!self.isAvailable) {
-        return;
-    }
     [self makeSureSendValidMessageAfterFetchedConversation:customMessage];
     [self.chatViewModel sendCustomMessage:customMessage progressBlock:progressBlock success:success failed:failed];
 }
@@ -557,11 +395,10 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
                             @(__LINE__),
                             @"Remember to check if `isAvailable` is ture, making sure sending message after conversation has been fetched"];
         if (!withAssert) {
-            LCCKLog(@"�类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), reason);
+            LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), reason);
             return;
         }
-//        NSAssert(NO, reason);
-        return;
+        NSAssert(NO, reason);
     }
     if ([message isKindOfClass:[LCCKMessage class]]) {
         return;
@@ -574,32 +411,10 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
                             @(__PRETTY_FUNCTION__),
                             @(__LINE__),
                             @"ChatKit only support sending AVIMTypedMessage"];
-        @throw [NSException exceptionWithName:NSGenericException
-                                       reason:reason
-                                     userInfo:nil];
+        //TODO: add debug model
+        NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), reason);
+        return;
     }
-}
-
-#pragma mark - Notification
-
-- (void)userWillSendMsgWithoutPower {
-    [self showWaring:@"需要开启麦克风权限"];
-}
-
-- (void)recieveNewMsgForLengthOut {
-    [self showWaring:@"每次输入最多1000字~"];
-}
-
-- (void)showWaring:(NSString *)message {
-    // 没有找到Toast 只能用弹框
-    LCCKAlertController *alert = [LCCKAlertController alertControllerWithTitle:nil
-                                                                       message:message
-                                                                preferredStyle:LCCKAlertControllerStyleAlert];
-    NSString *cancelActionTitle = LCCKLocalizedStrings(@"ok");
-    LCCKAlertAction *cancelAction = [LCCKAlertAction actionWithTitle:cancelActionTitle style:LCCKAlertActionStyleDefault
-                                                             handler:^(LCCKAlertAction * action) {}];
-    [alert addAction:cancelAction];
-    [alert showWithSender:nil controller:self animated:YES completion:NULL];
 }
 
 #pragma mark - UI init
@@ -625,14 +440,23 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 }
 
 - (void)setupNavigationItemTitleWithConversation:(AVIMConversation *)conversation {
+    // Related report about the conversation title's initial position: https://github.com/leancloud/ChatKit-OC/issues/202
+    if (self.navigationItem.title) {
+        return;
+    }
+    self.navigationItem.titleView = nil;
     LCCKConversationNavigationTitleView *navigationItemTitle = [[LCCKConversationNavigationTitleView alloc] initWithConversation:conversation navigationController:self.navigationController];
-    UINavigationBar *navigationBar = self.navigationController.navigationBar;
-    CGFloat navigationBarWidth = CGRectGetWidth(navigationBar.bounds);
-    CGFloat titleWidth = MAX(0, navigationBarWidth - 130);
-    CGFloat titleHeight = CGRectGetHeight(navigationBar.bounds);
-    // Start centered to avoid a visible position jump during the navigation bar's first layout.
-    // https://github.com/leancloud/ChatKit-OC/issues/202
-    navigationItemTitle.frame = CGRectMake((navigationBarWidth - titleWidth) / 2, 0, titleWidth, titleHeight);
+    navigationItemTitle.frame = CGRectZero;
+    //仅修高度,xyw值不变
+    navigationItemTitle.frame = ({
+        CGRect frame = navigationItemTitle.frame;
+        CGFloat containerViewHeight = self.navigationController.navigationBar.frame.size.height;
+        CGFloat containerViewWidth = self.navigationController.navigationBar.frame.size.width - 130;
+        frame.size.width = containerViewWidth;
+        frame.size.height = containerViewHeight;
+        navigationItemTitle.center = self.navigationController.navigationBar.center;
+        frame;
+    });
     self.navigationItem.titleView = navigationItemTitle;
 }
 
@@ -740,10 +564,13 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
     //peer初始化成功时也会对conversation赋值
     _conversation = conversation;
     [self saveCurrentConversationInfoIfExists];
-//    if (_conversation) {
-//    }
+    //    if (_conversation) {
+    //    }
     [self callbackCurrentConversationEvenNotExists:conversation callback:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+                [[LCCKConversationService sharedInstance] updateConversationAsReadWithLastMessage:_conversation.lcck_lastMessage];
+            });
             [self handleLoadHistoryMessagesHandlerIfIsJoined:isJoined];
         }
     }];
@@ -753,7 +580,7 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
     if (conversation.createAt) {
         if (!conversation.imClient) {
             [conversation setValue:[LCCKSessionService sharedInstance].client forKey:@"imClient"];
-            LCCKLog(@"�类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
+            LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
         }
         BOOL hasDraft = (conversation.lcck_draft.length > 0);
         if (hasDraft) {
@@ -779,6 +606,7 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
             }
             [self fetchConversationHandler:conversation];
             !callback ?: callback(YES, nil);
+            return;
         }];
     } else {
         [self fetchConversationHandler:conversation];
@@ -820,11 +648,11 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
     }
     __weak __typeof(self) weakSelf = self;
     [self.chatViewModel loadMessagesFirstTimeWithCallback:^(BOOL succeeded, id object, NSError *error) {
-//        dispatch_async(dispatch_get_main_queue(),^{
-//            [weakSelf loadLatestMessagesHandler:succeeded error:error];
-//            BOOL isFirstTimeMeet = (([object count] == 0) && succeeded);
-//            [self sendWelcomeMessageIfNeeded:isFirstTimeMeet];
-//        });
+        dispatch_async(dispatch_get_main_queue(),^{
+            [weakSelf loadLatestMessagesHandler:succeeded error:error];
+            BOOL isFirstTimeMeet = (([object count] == 0) && succeeded);
+            [self sendWelcomeMessageIfNeeded:isFirstTimeMeet];
+        });
     }];
 }
 
@@ -932,20 +760,26 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
     } completion:nil];
 }
 
-
 #pragma mark - LCCKChatMessageCellDelegate
 
 - (void)messageCellTappedHead:(LCCKChatMessageCell *)messageCell {
     LCCKOpenProfileBlock openProfileBlock = [LCCKUIService sharedInstance].openProfileBlock;
-    if ([messageCell.message lcck_isCustomMessage]) {
-        id<LCCKUserDelegate> sender = [[LCCKUserSystemService sharedInstance] getProfileForUserId:self.conversation.lcck_peerId error:nil];
-        if (sender != nil) {
-            //!openProfileBlock ?: openProfileBlock(self.conversation.lcck_peerId, sender, self);
-            !openProfileBlock ?: openProfileBlock(((AVIMMessage *)messageCell.message).clientId, sender, self);
-        }
-    }else{
-        !openProfileBlock ?: openProfileBlock(messageCell.message.senderId, messageCell.message.sender, self);
+    NSString *senderId = nil;
+    @try {
+      senderId = messageCell.message.senderId;
+    } @catch (NSException *exc) {}
+    if (!senderId) {
+        @try {
+            AVIMTypedMessage *message = (AVIMTypedMessage *)messageCell.message;
+            senderId = message.clientId;
+        } @catch (NSException *exc) {}
     }
+    id<LCCKUserDelegate> sender = nil;
+    @try {
+        sender = messageCell.message.sender;
+    } @catch (NSException *exc) {}
+    
+    !openProfileBlock ?: openProfileBlock(senderId, sender, self);
 }
 
 - (void)messageCellTappedBlank:(LCCKChatMessageCell *)messageCell {
@@ -958,37 +792,20 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
     }
     [self.chatBar close];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:messageCell];
-    LCCKMessage *message = [self.chatViewModel.dataArray lcck_messageAtIndex:indexPath.row];
+    id<LCCKMessageDelegate> message = [self.chatViewModel.dataArray lcck_messageAtIndex:indexPath.row];
     switch (messageCell.mediaType) {
         case kAVIMMessageMediaTypeAudio: {
-            NSString *voiceFileName = message.voicePath;//必须带后缀，.mp3；
+            LCCKMessage *voiceMessage = (LCCKMessage *)message;
+            NSString *voiceFileName = voiceMessage.voicePath;//必须带后缀，.mp3；
             [[LCCKAVAudioPlayer sharePlayer] playAudioWithURLString:voiceFileName identifier:message.messageId];
         }
             break;
         case kAVIMMessageMediaTypeImage: {
-            ///FIXME:4S等低端机型在图片超过1M时，有几率会Crash，尤其是全景图。
-            LCCKPreviewImageMessageBlock previewImageMessageBlock = [LCCKUIService sharedInstance].previewImageMessageBlock;
-            UIImageView *placeholderView = [(LCCKChatImageMessageCell *)messageCell messageImageView];
-            NSDictionary *userInfo = @{
-                                       /// 传递触发的UIViewController对象
-                                       LCCKPreviewImageMessageUserInfoKeyFromController : self,
-                                       /// 传递触发的UIView对象
-                                       LCCKPreviewImageMessageUserInfoKeyFromView : self.tableView,
-                                       LCCKPreviewImageMessageUserInfoKeyFromPlaceholderView : placeholderView
-                                       };
-            NSArray *allVisibleImages = nil;
-            NSArray *allVisibleThumbs = nil;
-            NSNumber *selectedMessageIndex = nil;
-            [self.chatViewModel getAllVisibleImagesForSelectedMessage:messageCell.message allVisibleImages:&allVisibleImages allVisibleThumbs:&allVisibleThumbs selectedMessageIndex:&selectedMessageIndex];
-            
-            if (previewImageMessageBlock) {
-                previewImageMessageBlock(selectedMessageIndex.unsignedIntegerValue, allVisibleImages, allVisibleThumbs, userInfo);
-            } else {
-                [self previewImageMessageWithInitialIndex:selectedMessageIndex.unsignedIntegerValue allVisibleImages:allVisibleImages allVisibleThumbs:allVisibleThumbs placeholderImageView:placeholderView fromViewController:self];
-            }
+            [self imageMessageCellTappedMessageCell:messageCell];
         }
             break;
         case kAVIMMessageMediaTypeLocation: {
+            LCCKMessage *locationMessage = (LCCKMessage *)message;
             NSDictionary *userInfo = @{
                                        /// 传递触发的UIViewController对象
                                        LCCKPreviewLocationMessageUserInfoKeyFromController : self,
@@ -996,29 +813,46 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
                                        LCCKPreviewLocationMessageUserInfoKeyFromView : self.tableView,
                                        };
             LCCKPreviewLocationMessageBlock previewLocationMessageBlock = [LCCKUIService sharedInstance].previewLocationMessageBlock;
-            !previewLocationMessageBlock ?: previewLocationMessageBlock(message.location, message.geolocations, userInfo);
+            !previewLocationMessageBlock ?: previewLocationMessageBlock(locationMessage.location, locationMessage.geolocations, userInfo);
         }
             break;
         default: {
-//            //TODO:自定义消息的点击事件
-//            NSString *formatString = @"\n\n\
-//            ------ BEGIN NSException Log ---------------\n \
-//            class name: %@                              \n \
-//            ------line: %@                              \n \
-//            ----reason: %@                              \n \
-//            ------ END -------------------------------- \n\n";
-//            NSString *reason = [NSString stringWithFormat:formatString,
-//                                @(__PRETTY_FUNCTION__),
-//                                @(__LINE__),
-//                                @"messageCell.messageType not handled"];
-//            //手动创建一个异常导致的崩溃事件 http://is.gd/EfVfN0
-//            @throw [NSException exceptionWithName:NSGenericException
-//                                           reason:reason
-//                                         userInfo:nil];
+            BOOL isImage = NO;
+            @try {
+                isImage = (message.photo || message.photoPath.length > 0);
+            }
+            @catch (NSException *){}
+            if (isImage) {
+                [self imageMessageCellTappedMessageCell:messageCell];
+                
+            }
         }
             break;
     }
     [self.chatBar open];
+}
+
+
+- (void)imageMessageCellTappedMessageCell:(LCCKChatImageMessageCell *)messageCell {
+    ///FIXME:4S等低端机型在图片超过1M时，有几率会Crash，尤其是全景图。
+    LCCKPreviewImageMessageBlock previewImageMessageBlock = [LCCKUIService sharedInstance].previewImageMessageBlock;
+    UIImageView *placeholderView = [(LCCKChatImageMessageCell *)messageCell messageImageView];
+    NSDictionary *userInfo = @{
+                               /// 传递触发的UIViewController对象
+                               LCCKPreviewImageMessageUserInfoKeyFromController : self,
+                               /// 传递触发的UIView对象
+                               LCCKPreviewImageMessageUserInfoKeyFromView : self.tableView,
+                               LCCKPreviewImageMessageUserInfoKeyFromPlaceholderView : placeholderView
+                               };
+    NSArray *allVisibleImages = nil;
+    NSArray *allVisibleThumbs = nil;
+    NSNumber *selectedMessageIndex = nil;
+    [self.chatViewModel getAllVisibleImagesForSelectedMessage:messageCell.message allVisibleImages:&allVisibleImages allVisibleThumbs:&allVisibleThumbs selectedMessageIndex:&selectedMessageIndex];
+    if (previewImageMessageBlock) {
+        previewImageMessageBlock(selectedMessageIndex.unsignedIntegerValue, allVisibleImages, allVisibleThumbs, userInfo);
+    } else {
+        [self previewImageMessageWithInitialIndex:selectedMessageIndex.unsignedIntegerValue allVisibleImages:allVisibleImages allVisibleThumbs:allVisibleThumbs placeholderImageView:placeholderView fromViewController:self];
+    }
 }
 
 - (void)previewImageMessageWithInitialIndex:(NSUInteger)initialIndex
@@ -1029,6 +863,9 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
     // Browser
     NSMutableArray *photos = [[NSMutableArray alloc] initWithCapacity:[allVisibleImages count]];
     NSMutableArray *thumbs = [[NSMutableArray alloc] initWithCapacity:[allVisibleThumbs count]];
+    if (allVisibleImages.count == 0 && allVisibleThumbs.count == 0) {
+        return;
+    }
     LCCKPhoto *photo;
     for (NSUInteger index = 0; index < allVisibleImages.count; index++) {
         id image_ = allVisibleImages[index];
@@ -1048,12 +885,28 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
     self.thumbs = thumbs;
     // Create browser
     LCCKPhotoBrowser *browser = [[LCCKPhotoBrowser alloc] initWithPhotos:photos];
+    browser.actionButtonTitles = @[@"识别二维码"];
     browser.delegate = self;
     [browser setInitialPageIndex:initialIndex];
     browser.usePopAnimation = YES;
     browser.animationDuration = 0.15;
     // Show
     [fromViewController presentViewController:browser animated:YES completion:nil];
+}
+
+- (void)modifyMessage:(LCCKChatMessageCell *)messageCell newMessage:(LCCKMessage *)newMessage callback:(void (^)(BOOL, NSError *))callback {
+    [self.chatViewModel modifyMessageForMessageCell:messageCell newMessage:newMessage callback:callback];
+}
+
+
+- (void)recallMessage:(LCCKChatMessageCell *)messageCell callback:(void (^)(BOOL, NSError *))callback {
+    [self.chatViewModel recallMessageForMessageCell:messageCell callback:callback];
+}
+
+- (void)photoBrowser:(LCCKPhotoBrowser *)photoBrowser didDismissActionSheetWithButtonIndex:(NSUInteger)buttonIndex photoIndex:(NSUInteger)photoIndex {
+    
+    NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@--%@--%@", @(__PRETTY_FUNCTION__), @(__LINE__), photoBrowser, @(buttonIndex), @(photoIndex));
+    UIImage *image =  self.photos[photoIndex];
 }
 
 - (void)avatarImageViewLongPressed:(LCCKChatMessageCell *)messageCell {
@@ -1080,18 +933,8 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
     [self.chatViewModel resendMessageForMessageCell:messageCell];
 }
 
-- (void)modifyMessage:(LCCKChatMessageCell *)messageCell newMessage:(LCCKMessage *)newMessage callback:(void (^)(BOOL, NSError *))callback
-{
-    [self.chatViewModel modifyMessageForMessageCell:messageCell newMessage:newMessage callback:callback];
-}
-
-- (void)recallMessage:(LCCKChatMessageCell *)messageCell callback:(void (^)(BOOL, NSError *))callback
-{
-    [self.chatViewModel recallMessageForMessageCell:messageCell callback:callback];
-}
-
 - (void)fileMessageDidDownload:(LCCKChatMessageCell *)messageCell {
-    [self reloadAfterReceiveMessage];
+    [self.tableView reloadData];
 }
 
 - (void)messageCell:(LCCKChatMessageCell *)messageCell didTapLinkText:(NSString *)linkText linkType:(MLLinkType)linkType {
@@ -1168,15 +1011,41 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 }
 
 - (void)updateStatusView {
-//    if (!self.shouldCheckSessionStatus) {
-//        return;
-//    }
+    if (!self.shouldCheckSessionStatus) {
+        return;
+    }
     BOOL isConnected = [LCCKSessionService sharedInstance].connect;
     if (isConnected) {
         self.clientStatusView.hidden = YES;
     } else {
         self.clientStatusView.hidden = NO;
     }
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - Notification
+
+- (void)userWillSendMsgWithoutPower {
+    [self showWaring:@"需要开启麦克风权限"];
+}
+
+- (void)recieveNewMsgForLengthOut {
+    NSString *message = [NSString stringWithFormat:@"每次输入最多%@字~", @(LCCKNotificationTextLengthOutLength)];
+    [self showWaring:message];
+}
+
+- (void)showWaring:(NSString *)message {
+    LCCKAlertController *alert = [LCCKAlertController alertControllerWithTitle:nil
+                                                                       message:message
+                                                                preferredStyle:LCCKAlertControllerStyleAlert];
+    NSString *cancelActionTitle = LCCKLocalizedStrings(@"ok");
+    LCCKAlertAction *cancelAction = [LCCKAlertAction actionWithTitle:cancelActionTitle style:LCCKAlertActionStyleDefault
+                                                             handler:^(LCCKAlertAction * action) {}];
+    [alert addAction:cancelAction];
+    [alert showWithSender:nil controller:self animated:YES completion:NULL];
 }
 
 @end

@@ -2,15 +2,15 @@
 //  LCCKChatBar.m
 //  LCCKChatBarExample
 //
-//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/17.
-//  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
+//  v2.1.1 Created by ElonChan ( https://github.com/ChenYilong/LCCKChatKit ) on 15/8/17.
+//  Copyright (c) 2018 ChenYilong（wechat id：chenyilong1010） . All rights reserved.
 //
 
 #import "LCCKChatBar.h"
 #import "LCCKChatMoreView.h"
 #import "LCCKChatFaceView.h"
 #import "LCCKProgressHUD.h"
-#import "Mp3Recorder.h"
+//#import "Mp3Recorder.h"
 #if __has_include(<Masonry/Masonry.h>)
 #import <Masonry/Masonry.h>
 #else
@@ -24,11 +24,8 @@
 NSString *const kLCCKBatchDeleteTextPrefix = @"kLCCKBatchDeleteTextPrefix";
 NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
-@interface LCCKChatBar () <UITextViewDelegate, UINavigationControllerDelegate, Mp3RecorderDelegate, LCCKChatFaceViewDelegate>
+@interface LCCKChatBar () <UITextViewDelegate, UINavigationControllerDelegate, LCCKChatFaceViewDelegate>
 
-@property (strong, nonatomic) Mp3Recorder *MP3;
-@property (strong, nonatomic) NSTimer *recordingTimeoutTimer;
-@property (assign, nonatomic) BOOL recordingDidReachTimeLimit;
 @property (nonatomic, strong) UIView *inputBarBackgroundView; /**< 输入栏目背景视图 */
 @property (strong, nonatomic) UIButton *voiceButton; /**< 切换录音模式按钮 */
 @property (strong, nonatomic) UIButton *voiceRecordButton; /**< 录音按钮 */
@@ -43,10 +40,10 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
 @property (assign, nonatomic) CGSize keyboardSize;
 
-@property (strong, nonatomic) UITextView *textView;
 @property (assign, nonatomic) CGFloat oldTextViewHeight;
 @property (nonatomic, assign, getter=shouldAllowTextViewContentOffset) BOOL allowTextViewContentOffset;
 @property (nonatomic, assign, getter=isClosed) BOOL close;
+@property (nonatomic, assign) CGFloat volumeTimeLength;
 
 #pragma mark - MessageInputView Customize UI
 ///=============================================================================
@@ -58,7 +55,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 @property (nonatomic, strong) UIColor *messageInputViewTextFieldBackgroundColor;
 @property (nonatomic, strong) UIColor *messageInputViewRecordTextColor;
 //TODO:MessageInputView-Tint-Color
-
+@property (nonatomic, assign) BOOL isTimeOut;//是否超时
 @property (nonatomic, strong) NSMutableSet<NSString *> *mentionSet;
 
 @end
@@ -74,35 +71,38 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 }
 
 - (void)setupConstraints {
-    CGFloat offset = 5;
+    CGFloat offset = 5 * 2;
     [self.inputBarBackgroundView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.and.right.and.top.mas_equalTo(self);
         make.bottom.mas_equalTo(self).priorityLow();
     }];
-    
+    // Related iPhone X input-bar layout report: https://github.com/leancloud/ChatKit-OC/issues/361
     [self.voiceButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.inputBarBackgroundView.mas_left).with.offset(offset);
-        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarBottomOffset);
+        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-LCCKChatBarBottomOffset);
         make.width.equalTo(self.voiceButton.mas_height);
     }];
     
     [self.moreButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.inputBarBackgroundView.mas_right).with.offset(-offset);
-        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarBottomOffset);
-        make.width.equalTo(self.moreButton.mas_height);
+        make.bottom.equalTo(self.textView);
+        //        make.centerY.equalTo(self.textView);
+        make.width.equalTo(@(60));
+        make.height.equalTo(@(kLCCKChatBarTextViewFrameMinHeight));
     }];
     
     [self.faceButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.moreButton.mas_left).with.offset(-offset);
-        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarBottomOffset);
+        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-LCCKChatBarBottomOffset);
         make.width.equalTo(self.faceButton.mas_height);
     }];
     
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.voiceButton.mas_right).with.offset(offset);
-        make.right.equalTo(self.faceButton.mas_left).with.offset(-offset);
-        make.top.equalTo(self.inputBarBackgroundView).with.offset(kChatBarTextViewBottomOffset);
-        make.bottom.equalTo(self.inputBarBackgroundView).with.offset(-kChatBarTextViewBottomOffset);
+        make.left.equalTo(self.inputBarBackgroundView.mas_left).with.offset(offset);
+        make.right.equalTo(self.moreButton.mas_left).with.offset(-offset);
+        
+        make.top.equalTo(self.inputBarBackgroundView).with.offset(LCCKChatBarTextViewBottomOffset);
+        make.bottom.equalTo(self.inputBarBackgroundView).with.offset(-LCCKChatBarTextViewBottomOffset);
         make.height.mas_greaterThanOrEqualTo(kLCCKChatBarTextViewFrameMinHeight);
     }];
     
@@ -129,6 +129,8 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     _faceView.delegate = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:LCCKNotificationRecordTimeOut object:nil];
 }
 
 #pragma mark -
@@ -163,11 +165,13 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     } else {
         self.allowTextViewContentOffset = NO;
     }
-    if ([text isEqualToString:@"\n"]) {
-        [self sendTextMessage:textView.text];
-        return NO;
-    } else if (text.length == 0){
-        //构造元素需要使用两个空格来进行缩进，右括号]或者}写在新的一行，并且与调用语法糖那行代码的第一个非空字符对齐：
+    
+    //    if ([text isEqualToString:@"\n"]) {
+    //        [self sendTextMessage:textView.text];
+    //        return NO;
+    //    } else
+    
+    if (text.length == 0){
         NSArray *defaultRegulations = @[
                                         //判断删除的文字是否符合表情文字规则
                                         @{
@@ -205,11 +209,16 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
+    if (textView.text.length > 0) {
+//        [self.moreButton cyl_setHighlighted:YES];
+    } else {
+//        [self.moreButton cyl_setHighlighted:NO];
+    }
     [self textViewDidChange:textView shouldCacheText:YES];
 }
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range deleteBatchOfTextWithPrefix:(NSString *)prefix suffix:(NSString *)suffix
-{
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range deleteBatchOfTextWithPrefix:(NSString *)prefix
+          suffix:(NSString *)suffix {
     NSString *substringOfText = [textView.text substringWithRange:range];
     if ([substringOfText isEqualToString:suffix]) {
         NSUInteger location = range.location;
@@ -230,11 +239,13 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
                 }
             }
         }
+        
         if ([prefix isEqualToString:@"@"] && [suffix isEqualToString:@" "]) {
             NSString *atPeerId = [textView.text substringWithRange:NSMakeRange(location, length)];
             NSString *peerId = [[atPeerId substringToIndex:atPeerId.length - 1] substringFromIndex:1];
             [self.mentionSet removeObject:peerId];
         }
+        
         textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(location, length) withString:@""];
         [textView setSelectedRange:NSMakeRange(location, 0)];
         [self textViewDidChange:self.textView];
@@ -293,6 +304,23 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     } completion:nil];
 }
 
+#pragma mark -
+#pragma mark - Private Methods     #pragma mark - Private Methods
+
+- (BOOL)judgeAVAudioSession {
+    // Related report: microphone authorization can result in a zero-second voice message: https://github.com/leancloud/ChatKit-OC/issues/269
+    __block BOOL bCanRecord = YES;
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    [audioSession requestRecordPermission:^(BOOL granted) {
+        if (granted) {
+            bCanRecord = YES;
+        } else {
+            bCanRecord = NO;
+        }
+    }];
+    return bCanRecord;
+}
+
 #pragma mark - 核心方法
 ///=============================================================================
 /// @name 核心方法
@@ -315,7 +343,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     CGFloat newTextViewHeight = MAX(kLCCKChatBarTextViewFrameMinHeight, MIN(kLCCKChatBarTextViewFrameMaxHeight, textSize.height));
     BOOL textViewHeightChanged = (self.oldTextViewHeight != newTextViewHeight);
     if (textViewHeightChanged) {
-       //FIXME:如果有草稿，且超出了最低高度，会产生约束警告。
+        //FIXME:如果有草稿，且超出了最低高度，会产生约束警告。
         self.oldTextViewHeight = newTextViewHeight;
         [self.textView mas_updateConstraints:^(MASConstraintMaker *make) {
             CGFloat height = newTextViewHeight;
@@ -344,7 +372,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 #pragma mark - MP3RecordedDelegate
 
 - (void)endConvertWithMP3FileName:(NSString *)fileName {
-    [self invalidateRecordingTimeoutTimer];
     if (fileName) {
         [LCCKProgressHUD dismissWithProgressState:LCCKProgressSuccess];
         [self sendVoiceMessage:fileName seconds:[LCCKProgressHUD seconds]];
@@ -354,12 +381,19 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 }
 
 - (void)failRecord {
-    [self invalidateRecordingTimeoutTimer];
     [LCCKProgressHUD dismissWithProgressState:LCCKProgressError];
 }
 
 - (void)beginConvert {
     [LCCKProgressHUD changeSubTitle:@"正在转换..."];
+}
+
+- (void)realTimeVolumeSize:(float)size timeLength:(NSTimeInterval)timeLength {
+    [LCCKProgressHUD realtimeChangeVolumeImageView:size timeLength:timeLength];
+    self.volumeTimeLength = timeLength/10.0;
+    if (self.volumeTimeLength >= kLCCKVolumeMaxTimeLength) {
+        //        [self.MP3 stopRecord];
+    }
 }
 
 #pragma mark - LCCKChatFaceViewDelegate
@@ -379,9 +413,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         self.cachedText = @"";
         self.showType = LCCKFunctionViewShowFace;
     } else {
-        NSBundle *bundle = [NSBundle bundleForClass: [LCCKChatBar class]];
-        NSString *localFaceName = NSLocalizedStringFromTableInBundle(faceName,  @"EmojiLocalizable", bundle, @"");
-        [self appendString:localFaceName beginInputing:NO];
+        [self appendString:faceName beginInputing:NO];
     }
 }
 
@@ -454,9 +486,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     }
     [self updateChatBarKeyBoardConstraints];
     [self updateChatBarConstraintsIfNeeded];
-    if (@available(iOS 11.0, *)) {
-        [self safeAreaInsetsDidChange];
-    }
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {
@@ -494,10 +523,10 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 }
 
 - (void)setup {
+    self.isTimeOut = NO;
     self.close = NO;
     self.oldTextViewHeight = kLCCKChatBarTextViewFrameMinHeight;
     self.allowTextViewContentOffset = YES;
-    self.MP3 = [[Mp3Recorder alloc] initWithDelegate:self];
     [self faceView];
     [self moreView];
     [self addSubview:self.inputBarBackgroundView];
@@ -517,86 +546,85 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     }];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(confirmRecordVoice) name:kLCCKRecordAudioTooLong object:nil];
+    //修复录音时点击Home键 在返回App后 仍然显示录音动效的问题
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeBackgroundCancelRecordVoice) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appRecieveMsgFromRecordTimer) name:LCCKNotificationRecordTimeOut object:nil];
     self.backgroundColor = self.messageInputViewBackgroundColor;
     [self setupConstraints];
-    
     self.mentionSet = [NSMutableSet set];
 }
+
 
 /**
  *  开始录音
  */
-- (void)startRecordVoice {
-    if (self.isGaming) {
-        _startVoiceWhenGaming();
-    }else{
-        [self invalidateRecordingTimeoutTimer];
-        self.recordingDidReachTimeLimit = NO;
-        [LCCKProgressHUD show];
-        self.voiceRecordButton.highlighted = YES;
-        [self.MP3 startRecord];
-        NSTimer *timer = [NSTimer timerWithTimeInterval:60
-                                                 target:self
-                                               selector:@selector(recordingTimeLimitDidExpire)
-                                               userInfo:nil
-                                                repeats:NO];
-        self.recordingTimeoutTimer = timer;
-        [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
-    }
-}
+//- (void)startRecordVoice {
+//    if ([self judgeAVAudioSession]) {
+//        [LCCKProgressHUD show];
+//        self.voiceRecordButton.selected = YES;
+//        self.voiceRecordButton.highlighted = YES;
+//        [self.MP3 startRecord];
+//        self.volumeTimeLength = 0.0;
+//    } else {
+//        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationRecordNoPower object:nil];
+//    }
+//}
 
 /**
  *  取消录音
  */
-- (void)cancelRecordVoice {
-    [self invalidateRecordingTimeoutTimer];
-    if (self.recordingDidReachTimeLimit) {
-        return;
-    }
-    [LCCKProgressHUD dismissWithMessage:@"取消录音"];
-    self.voiceRecordButton.highlighted = NO;
-    [self.MP3 cancelRecord];
-}
+//- (void)cancelRecordVoice {
+//    self.voiceRecordButton.selected = NO;
+//    self.voiceRecordButton.highlighted = NO;
+//    if (self.volumeTimeLength >= kLCCKVolumeMaxTimeLength) {
+//        return;
+//    }
+//    [LCCKProgressHUD dismissWithMessage:@""];
+//
+//    [self.MP3 cancelRecord];
+//
+//}
 
 /**
  *  录音结束
  */
-- (void)confirmRecordVoice {
-    if (self.recordingDidReachTimeLimit) {
-        return;
-    }
-    [self invalidateRecordingTimeoutTimer];
-    self.voiceRecordButton.highlighted = NO;
-    [self.MP3 stopRecord];
-}
+//- (void)confirmRecordVoice {
+//    self.voiceRecordButton.selected = NO;
+//    self.voiceRecordButton.highlighted = NO;
+//    if (self.isTimeOut == NO) {
+//        //FIXME:  inside or outside
+//        if (self.volumeTimeLength >= kLCCKVolumeMaxTimeLength) {
+//            return;
+//        }
+//
+//        [self.MP3 stopRecord];
+//    } else {
+//        self.isTimeOut = NO;
+//    }
+//
+//}
 
-- (void)recordingTimeLimitDidExpire {
-    self.recordingTimeoutTimer = nil;
-    self.recordingDidReachTimeLimit = YES;
-    self.voiceRecordButton.highlighted = NO;
-    // The HUD counts down from 60 seconds; stop the recorder when it expires.
-    // https://github.com/leancloud/ChatKit-OC/issues/414
-    [self.MP3 stopRecord];
-}
-
-- (void)invalidateRecordingTimeoutTimer {
-    [self.recordingTimeoutTimer invalidate];
-    self.recordingTimeoutTimer = nil;
-}
 
 /**
  *  更新录音显示状态,手指向上滑动后提示松开取消录音
  */
-- (void)updateCancelRecordVoice {
-    [LCCKProgressHUD changeSubTitle:@"松开取消录音"];
-}
+//- (void)updateCancelRecordVoice {
+//    if (self.volumeTimeLength >= kLCCKVolumeMaxTimeLength) {
+//        return;
+//    }
+//    [LCCKProgressHUD changeSubTitle:@"松开手指,取消发送"];
+//}
 
 /**
  *  更新录音状态,手指重新滑动到范围内,提示向上取消录音
  */
-- (void)updateContinueRecordVoice {
-    [LCCKProgressHUD changeSubTitle:@"向上滑动取消录音"];
-}
+//- (void)updateContinueRecordVoice {
+//    if (self.volumeTimeLength >= kLCCKVolumeMaxTimeLength) {
+//        return;
+//    }
+//    [LCCKProgressHUD changeSubTitle:@"手指上滑,取消发送"];
+//}
 
 - (void)setShowType:(LCCKFunctionViewShowType)showType {
     if (_showType == showType) {
@@ -630,32 +658,15 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
             break;
     }
     [self updateChatBarConstraintsIfNeeded];
-    if (@available(iOS 11.0, *)) {
+    if (@available(iOS 11.0, *) && CYL_IS_iPHONEX) {
         [self safeAreaInsetsDidChange];
     }
 }
 
 - (void)buttonAction:(UIButton *)button {
-    LCCKFunctionViewShowType showType = button.tag;
-    //更改对应按钮的状态
-    if (button == self.faceButton) {
-        [self.faceButton setSelected:!self.faceButton.selected];
-        [self.moreButton setSelected:NO];
-        [self.voiceButton setSelected:NO];
-    } else if (button == self.moreButton){
-        [self.faceButton setSelected:NO];
-        [self.moreButton setSelected:!self.moreButton.selected];
-        [self.voiceButton setSelected:NO];
-    } else if (button == self.voiceButton){
-        [self.faceButton setSelected:NO];
-        [self.moreButton setSelected:NO];
-        [self.voiceButton setSelected:!self.voiceButton.selected];
+    if (self.textView.text.length > 0) {
+        [self sendTextMessage:self.textView.text];
     }
-    if (!button.selected) {
-        showType = LCCKFunctionViewShowKeyboard;
-        [self beginInputing];
-    }
-    self.showType = showType;
 }
 
 - (void)showFaceView:(BOOL)show {
@@ -682,6 +693,12 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     }
 }
 
+- (void)destroyAVAudioPlayer {
+    [[LCCKAVAudioPlayer sharePlayer] stopAudioPlayer];
+    [LCCKAVAudioPlayer sharePlayer].identifier = nil;
+    [LCCKAVAudioPlayer sharePlayer].URLString = nil;
+}
+
 /**
  *  显示moreView
  *  @param show 要显示的moreView
@@ -689,17 +706,17 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 - (void)showMoreView:(BOOL)show {
     if (show) {
         self.moreView.hidden = NO;
-        [self.superview layoutIfNeeded];
-        // Replace the offscreen top constraint instead of accumulating competing top constraints.
-        // https://github.com/leancloud/ChatKit-OC/issues/327
-        [self.moreView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.width.and.left.mas_equalTo(self);
-            make.height.mas_equalTo(kFunctionViewHeight);
-            make.top.mas_equalTo(self.superview.mas_bottom).offset(-kFunctionViewHeight);
-        }];
+        // Related report about the image-selection panel's constraints: https://github.com/leancloud/ChatKit-OC/issues/327
         [UIView animateWithDuration:LCCKAnimateDuration animations:^{
-            [self.superview layoutIfNeeded];
+            [self.moreView mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.top.mas_equalTo(self.superview.mas_bottom).offset(-kFunctionViewHeight);
+            }];
+            [self.moreView layoutIfNeeded];
         } completion:nil];
+        
+        [self.moreView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(self.inputBarBackgroundView.mas_bottom);
+        }];
     } else if (self.moreView.superview) {
         self.moreView.hidden = YES;
         [self.moreView mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -712,10 +729,10 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 }
 
 - (void)showVoiceView:(BOOL)show {
-    self.voiceButton.selected = show;
-    self.voiceRecordButton.selected = show;
-    self.voiceRecordButton.hidden = !show;
-    self.textView.hidden = !self.voiceRecordButton.hidden;
+    //    self.voiceButton.selected = show;
+    //    self.voiceRecordButton.selected = !show;
+    //    self.voiceRecordButton.hidden = !show;
+    //    self.textView.hidden = !self.voiceRecordButton.hidden;
 }
 
 /**
@@ -727,6 +744,11 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     if (!text || text.length == 0 || [text lcck_isSpace]) {
         return;
     }
+    
+    if (text.length > LCCKNotificationTextLengthOutLength) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationTextLengthOut object:nil];
+        return;
+    }
     NSArray<NSString *> *mentionList = self.mentionSet.allObjects;
     [self.mentionSet removeAllObjects];
     if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendMessage:mentionList:)]) {
@@ -735,18 +757,13 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     self.textView.text = @"";
     self.cachedText = @"";
     self.showType = LCCKFunctionViewShowKeyboard;
+//    [self.moreButton LCCK_setHighlighted:NO];
 }
 
-/**
- *  通知代理发送语音信息
- *
- *  @param voiceData 发送的语音信息data
- *  @param seconds   语音时长
- */
 - (void)sendVoiceMessage:(NSString *)voiceFileName seconds:(NSTimeInterval)seconds {
-    if ((seconds > 0) && self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendVoice:seconds:)]) {
-        [self.delegate chatBar:self sendVoice:voiceFileName seconds:seconds];
-    }
+    //    if ((seconds > 0) && self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendVoice:seconds:)]) {
+    //        [self.delegate chatBar:self sendVoice:voiceFileName seconds:seconds];
+    //    }
 }
 
 /**
@@ -755,9 +772,9 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
  *  @param image 发送的图片
  */
 - (void)sendImageMessage:(UIImage *)image {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendPictures:)]) {
-        [self.delegate chatBar:self sendPictures:@[image]];
-    }
+    //    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBar:sendPictures:)]) {
+    //        [self.delegate chatBar:self sendPictures:@[image]];
+    //    }
 }
 
 - (void)chatBarFrameDidChangeShouldScrollToBottom:(BOOL)shouldScrollToBottom {
@@ -801,11 +818,12 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         _textView = [[UITextView alloc] init];
         _textView.font = [UIFont systemFontOfSize:16.0f];
         _textView.delegate = self;
+        //        _textView.placehodler;
         _textView.layer.cornerRadius = 4.0f;
         _textView.textColor = self.messageInputViewTextFieldTextColor;
         _textView.backgroundColor = self.messageInputViewTextFieldBackgroundColor;
         _textView.layer.borderColor = [UIColor colorWithRed:204.0/255.0f green:204.0/255.0f blue:204.0/255.0f alpha:1.0f].CGColor;
-        _textView.returnKeyType = UIReturnKeySend;
+        //        _textView.returnKeyType = UIReturnKeyDefault;
         _textView.layer.borderWidth = .5f;
         _textView.layer.masksToBounds = YES;
         _textView.scrollsToTop = NO;
@@ -822,6 +840,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         [_voiceButton setBackgroundImage:[self imageInBundlePathForImageName:@"ToolViewInputVoice"] forState:UIControlStateNormal];
         [_voiceButton setBackgroundImage:[self imageInBundlePathForImageName:@"ToolViewKeyboard"] forState:UIControlStateSelected];
         [_voiceButton addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+        _voiceButton.hidden = YES;
         [_voiceButton sizeToFit];
     }
     return _voiceButton;
@@ -838,15 +857,15 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         UIImage *voiceRecordButtonNormalBackgroundImage = [[self imageInBundlePathForImageName:@"VoiceBtn_Black"] resizableImageWithCapInsets:edgeInsets resizingMode:UIImageResizingModeStretch];
         UIImage *voiceRecordButtonHighlightedBackgroundImage = [[self imageInBundlePathForImageName:@"VoiceBtn_BlackHL"] resizableImageWithCapInsets:edgeInsets resizingMode:UIImageResizingModeStretch];
         [_voiceRecordButton setBackgroundImage:voiceRecordButtonNormalBackgroundImage forState:UIControlStateNormal];
-        [_voiceRecordButton setBackgroundImage:voiceRecordButtonHighlightedBackgroundImage forState:UIControlStateHighlighted];
+        [_voiceRecordButton setBackgroundImage:voiceRecordButtonHighlightedBackgroundImage forState:UIControlStateSelected];
         _voiceRecordButton.titleLabel.font = [UIFont systemFontOfSize:14.0f];
-        [_voiceRecordButton setTitle:[NSBundle lcck_getLocalizedString:@"按住 说话" class:[self class]] forState:UIControlStateNormal];
-        [_voiceRecordButton setTitle:[NSBundle lcck_getLocalizedString:@"松开 结束" class:[self class]] forState:UIControlStateHighlighted];
+        [_voiceRecordButton setTitle:@"按住 说话" forState:UIControlStateNormal];
+        [_voiceRecordButton setTitle:@"松开 结束" forState:UIControlStateSelected];
+        [_voiceRecordButton setTitle:@"松开 结束" forState:UIControlStateHighlighted];
+        
+        // Related interruption and permission reports; TouchCancel handling is not wired here: https://github.com/ChenYilong/CYLChatKit/issues/3
         [_voiceRecordButton addTarget:self action:@selector(startRecordVoice) forControlEvents:UIControlEventTouchDown];
         [_voiceRecordButton addTarget:self action:@selector(cancelRecordVoice) forControlEvents:UIControlEventTouchUpOutside];
-        // https://github.com/ChenYilong/CYLChatKit/issues/3
-        // https://github.com/leancloud/ChatKit-OC/issues/269
-        [_voiceRecordButton addTarget:self action:@selector(cancelRecordVoice) forControlEvents:UIControlEventTouchCancel];
         [_voiceRecordButton addTarget:self action:@selector(confirmRecordVoice) forControlEvents:UIControlEventTouchUpInside];
         [_voiceRecordButton addTarget:self action:@selector(updateCancelRecordVoice) forControlEvents:UIControlEventTouchDragExit];
         [_voiceRecordButton addTarget:self action:@selector(updateContinueRecordVoice) forControlEvents:UIControlEventTouchDragEnter];
@@ -857,10 +876,17 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 - (UIButton *)moreButton {
     if (!_moreButton) {
         _moreButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _moreButton.frame = CGRectZero;
+        _moreButton.layer.cornerRadius = 5;
+        _moreButton.layer.masksToBounds = YES;
         _moreButton.tag = LCCKFunctionViewShowMore;
-        [_moreButton setBackgroundImage:[self imageInBundlePathForImageName:@"TypeSelectorBtn_Black"] forState:UIControlStateNormal];
-        [_moreButton setBackgroundImage:[self imageInBundlePathForImageName:@"TypeSelectorBtn_Black"] forState:UIControlStateSelected];
+//        [_moreButton hdl_setBackgroundColor:[UIColor fd_c1] forState:UIControlStateHighlighted];
+//        [_moreButton hdl_setBackgroundColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        [_moreButton setTitle:@"发送" forState:UIControlStateNormal];
+        [_moreButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+        [_moreButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
         [_moreButton addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+//        [_moreButton cyl_setHighlighted:NO];
         [_moreButton sizeToFit];
     }
     return _moreButton;
@@ -874,6 +900,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         [_faceButton setBackgroundImage:[self imageInBundlePathForImageName:@"ToolViewKeyboard"] forState:UIControlStateSelected];
         [_faceButton addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
         [_faceButton sizeToFit];
+        _faceButton.hidden = YES;
     }
     return _faceButton;
 }
@@ -925,25 +952,69 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     return _messageInputViewRecordTextColor;
 }
 
+/**
+ *  进入后台 取消当前的录音
+ */
+- (void)appBecomeBackgroundCancelRecordVoice {
+    //    [self cancelRecordVoice];
+}
+
+/**
+ *  倒计时结束 完成当前的录音
+ */
+//- (void)appRecieveMsgFromRecordTimer {
+//    if (self.voiceRecordButton.highlighted == YES) {
+//        self.voiceRecordButton.selected = NO;
+//        self.voiceRecordButton.highlighted = NO;
+//        [self.MP3 stopRecord];
+//        self.isTimeOut = YES;
+//    }
+//}
+
+- (UIColor *)randomColor {
+    return [UIColor colorWithRed:drand48()
+                           green:drand48()
+                            blue:drand48()
+                           alpha:drand48()];
+}
+
+- (UIImage *)randomImage {
+    CGSize size = CGSizeMake(30, 10);
+    UIGraphicsBeginImageContextWithOptions(size , NO, 0);
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    UIColor *fillColor = [self randomColor];
+    CGContextSetFillColorWithColor(context, [fillColor CGColor]);
+    CGRect rect = CGRectMake(0, 0, size.width, size.height);
+    CGContextFillRect(context, rect);
+    
+    fillColor = [self randomColor];
+    CGContextSetFillColorWithColor(context, [fillColor CGColor]);
+    CGFloat xxx = 3;
+    rect = CGRectMake(xxx, xxx, size.width - 2 * xxx, size.height - 2 * xxx);
+    CGContextFillRect(context, rect);
+    
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return img;
+}
+
 - (void)safeAreaInsetsDidChange {
-    [super safeAreaInsetsDidChange];
     CGFloat safeAreaOffset = 0;
     if ((_showType != LCCKFunctionViewShowFace) &&  (_showType != LCCKFunctionViewShowMore)) {
         safeAreaOffset = -self.safeAreaInsets.bottom;
     }
-    // Use the device's actual inset instead of assuming fixed iPhone X dimensions.
-    // https://github.com/leancloud/ChatKit-OC/issues/361
     [self.voiceButton mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarBottomOffset+safeAreaOffset);
+        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-LCCKChatBarBottomOffset+safeAreaOffset);
     }];
     [self.moreButton mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarBottomOffset+safeAreaOffset);
+        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-LCCKChatBarBottomOffset+safeAreaOffset);
     }];
     [self.faceButton mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarBottomOffset+safeAreaOffset);
+        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-LCCKChatBarBottomOffset+safeAreaOffset);
     }];
     [self.textView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarTextViewBottomOffset+safeAreaOffset);
+        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-LCCKChatBarBottomOffset+safeAreaOffset);
     }];
 }
 

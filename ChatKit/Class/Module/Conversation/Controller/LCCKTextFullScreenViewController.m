@@ -2,8 +2,8 @@
 //  LCCKTextFullScreenViewController.m
 //  LeanCloudIMKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/3/23.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v2.1.1 Created by ElonChan on 16/3/23.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import "LCCKTextFullScreenViewController.h"
@@ -26,7 +26,8 @@ static void * const LCCKTextFullScreenViewContentSizeContext = (void*)&LCCKTextF
 @property (nonatomic, copy, readonly) NSDictionary *textStyle;
 @property (nonatomic, copy) LCCKRemoveFromWindowHandler removeFromWindowHandler;
 @end
-
+@interface LCCKTextFullScreenViewController()<UITextViewDelegate>
+@end
 @implementation LCCKTextFullScreenViewController
 @synthesize textStyle = _textStyle;
 
@@ -34,12 +35,8 @@ static void * const LCCKTextFullScreenViewContentSizeContext = (void*)&LCCKTextF
     if (!_displayTextView) {
         UITextView *displayTextView = [[UITextView alloc] initWithFrame:self.view.frame];
         [displayTextView addObserver:self forKeyPath:@"contentSize" options:(NSKeyValueObservingOptionNew) context:LCCKTextFullScreenViewContentSizeContext];
-        __weak __typeof(self) weakSelf = self;
-        [self cyl_executeAtDealloc:^{
-            NSObject *ss = weakSelf;
-            if (ss) {
-                [displayTextView removeObserver:ss forKeyPath:@"contentSize"];
-            }
+        [self cyl_willDeallocWithSelfCallback:^(__unsafe_unretained id owner, NSUInteger identifier) {
+            [displayTextView removeObserver:owner forKeyPath:@"contentSize"];
         }];
         displayTextView.contentSize = self.view.bounds.size;
         displayTextView.textColor = [UIColor blackColor];
@@ -47,8 +44,12 @@ static void * const LCCKTextFullScreenViewContentSizeContext = (void*)&LCCKTextF
         displayTextView.backgroundColor = [UIColor whiteColor];
         displayTextView.dataDetectorTypes = UIDataDetectorTypeAll;
         displayTextView.textContainerInset = UIEdgeInsetsMake(0,20,0,20);
-        [self.backgroundView addSubview:displayTextView];
-        _displayTextView = displayTextView;
+        UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeFromWindow:)];
+        recognizer.delegate = self;
+        recognizer.numberOfTapsRequired = 1;
+        [self.view addSubview:(_displayTextView = displayTextView)];
+        [_displayTextView addGestureRecognizer:recognizer];
+        [self.view bringSubviewToFront:_displayTextView];
     }
     return _displayTextView;
 }
@@ -64,22 +65,6 @@ static void * const LCCKTextFullScreenViewContentSizeContext = (void*)&LCCKTextF
                        NSParagraphStyleAttributeName: style};
     }
     return _textStyle;
-}
-/**
- *  lazy load backgroundView
- *
- *  @return UIView
- */
-- (UIView *)backgroundView {
-    if (_backgroundView == nil) {
-        UIView *backgroundView = [[UIView alloc] initWithFrame:self.view.frame];
-        backgroundView.backgroundColor = [UIColor blueColor];
-        UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeFromWindow:)];
-        [backgroundView addGestureRecognizer:recognizer];
-        [self.view addSubview:backgroundView];
-        _backgroundView = backgroundView;
-    }
-    return _backgroundView;
 }
 
 - (void)setRemoveFromWindowHandler:(LCCKRemoveFromWindowHandler)removeFromWindowHandler {
@@ -100,8 +85,11 @@ static void * const LCCKTextFullScreenViewContentSizeContext = (void*)&LCCKTextF
     NSMutableAttributedString *attrS = [LCCKFaceManager emotionStrWithString:text];
     [attrS addAttributes:self.textStyle range:NSMakeRange(0, attrS.length)];
     self.displayTextView.attributedText = attrS;
-    
     return self;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return YES;
 }
 
 - (BOOL)prefersStatusBarHidden {

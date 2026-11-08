@@ -2,8 +2,8 @@
 //  LCCKChatImageMessageCell.m
 //  LCCKChatExample
 //
-//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/16.
-//  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
+//  v2.1.1 Created by ElonChan ( https://github.com/ChenYilong/CYLChatKit ) on 15/11/16.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010） . All rights reserved.
 //
 
 #import "LCCKChatImageMessageCell.h"
@@ -31,8 +31,6 @@
  *  显示上传进度百分比的UILabel
  */
 @property (nonatomic, weak) UILabel *messageProgressLabel;
-
-- (void)updateMessageImageViewWithImage:(UIImage *)image;
 
 @end
 
@@ -63,24 +61,6 @@
     [self addGeneralView];
 }
 
-- (void)updateMessageImageViewWithImage:(UIImage *)image {
-    if (!image) {
-        return;
-    }
-    self.messageImageView.image = image;
-    UIEdgeInsets edgeMessageBubbleCustomize;
-    if (self.messageOwner == LCCKMessageOwnerTypeSelf) {
-        edgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].rightHollowEdgeMessageBubbleCustomize;
-    } else {
-        edgeMessageBubbleCustomize = [LCCKSettingService sharedInstance].leftHollowEdgeMessageBubbleCustomize;
-    }
-    [self.messageImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.messageContentView).with.insets(edgeMessageBubbleCustomize);
-        make.width.mas_equalTo(image.size.width);
-        make.height.mas_equalTo(image.size.height);
-    }];
-}
-
 - (void)singleTapMessageImageViewGestureRecognizerHandler:(UITapGestureRecognizer *)tapGestureRecognizer {
     if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
         if ([self.delegate respondsToSelector:@selector(messageCellTappedMessage:)]) {
@@ -93,56 +73,62 @@
     [super configureCellWithData:message];
     UIImage *thumbnailPhoto = message.thumbnailPhoto;
     do {
+        if (self.messageImageView.image && (self.messageImageView.image == thumbnailPhoto)) {
+            break;
+        }
         if (thumbnailPhoto) {
-            [self updateMessageImageViewWithImage:thumbnailPhoto];
+            self.messageImageView.image = thumbnailPhoto;
             break;
         }
         NSString *imageLocalPath = message.photoPath;
-        BOOL isLocalPath = ![imageLocalPath hasPrefix:@"http"];
+        
+        NSString *imageLocalOrURLPath = message.originPhotoURL.absoluteString;
+        if (imageLocalPath.length > 0 && [NSData dataWithContentsOfFile:imageLocalPath]) {
+            imageLocalOrURLPath = imageLocalPath;
+        }
+        BOOL isLocalPath = ![imageLocalOrURLPath hasPrefix:@"http"];
         //note: this will ignore contentMode.
-        if (imageLocalPath && isLocalPath) {
+        if (imageLocalPath.length > 0 && isLocalPath) {
             NSData *imageData = [NSData dataWithContentsOfFile:imageLocalPath];
             UIImage *image = [UIImage imageWithData:imageData];
-            UIImage *resizedImage = [image lcck_imageByScalingAspectFill];
-            [self updateMessageImageViewWithImage:resizedImage];
+            // Use the original dimensions to keep image-message bubble heights stable: https://github.com/leancloud/ChatKit-OC/issues/279
+            // Dimensionless custom message models use a bounded fallback size: https://github.com/ChenYilong/CYLChatKit/issues/6
+            CGSize photoSize = CGSizeMake(message.photoWidth ?: 30, message.photoHeight ?: 30);
+            UIImage *resizedImage = [image lcck_imageByScalingAspectFillWithOriginSize:photoSize];
+            self.messageImageView.image = resizedImage;
             message.photo = image;
             message.thumbnailPhoto = resizedImage;
             break;
         }
         // requied!
         if (message.originPhotoURL) {
-            UIImage *image = [self imageInBundleForImageName:@"Placeholder_Image"];
-            // Use a bounded placeholder until the downloaded image supplies the actual dimensions.
-            // https://github.com/leancloud/ChatKit-OC/issues/279
-            // https://github.com/ChenYilong/CYLChatKit/issues/6
-            UIImage *newImage = [image lcck_imageByScalingAspectFill];
-            [self updateMessageImageViewWithImage:newImage];
-            
-            [self.messageImageView  sd_setImageWithURL:message.originPhotoURL placeholderImage:newImage
-                                             completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                                                 dispatch_async(dispatch_get_main_queue(),^{
-                                                     if (image){
-                                                         message.photo = image;
-                                                         UIImage *thumbnailPhoto = [image lcck_imageByScalingAspectFill];
-                                                         message.thumbnailPhoto = thumbnailPhoto;
-                                                         if (self.message == message) {
-                                                             [self updateMessageImageViewWithImage:thumbnailPhoto];
-                                                         }
-                                                         if ([self.delegate respondsToSelector:@selector(fileMessageDidDownload:)]) {
-                                                             [self.delegate fileMessageDidDownload:self];
-                                                         }
-                                                     }
-                                                 });
-                                                 
-                                             }
-             ];
+            UIImage *image;
+            image = [self imageInBundleForImageName:@"Placeholder_Accept_Defeat"];
+            if (message.photoWidth > 0 && message.photoHeight > 0) {
+               image = [self imageInBundleForImageName:@"Placeholder_Image"];
+            }
+            // Keep the placeholder aligned with the eventual image dimensions: https://github.com/leancloud/ChatKit-OC/issues/279
+            CGSize photoSize = CGSizeMake(message.photoWidth ?: 30, message.photoHeight ?: 30);
+            UIImage *newImage = [image lcck_imageByScalingAspectFillWithOriginSize:photoSize];
+            self.messageImageView.contentMode = UIViewContentModeScaleAspectFit;
+            self.messageImageView.image = newImage;
+            AVIMImageMessage *imgMessage = (AVIMImageMessage *)message.message;
+            [imgMessage.file downloadWithCompletionHandler:^(NSURL * _Nullable filePath, NSError * _Nullable error) {
+                if (filePath.absoluteString.length > 0) {
+                    NSData *data = [NSData dataWithContentsOfURL:filePath];
+                    UIImage *image = [UIImage imageWithData:data];
+                    if (image){
+                        message.photo = image;
+                        message.thumbnailPhoto = [image lcck_imageByScalingAspectFillWithOriginSize:photoSize];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConversionImageMessageDidDownloaded object:self];
+                        
+                    }
+                }
+            }];
             break;
         }
-        
     } while (NO);
 }
-
-
 
 - (UIImage *)imageInBundleForImageName:(NSString *)imageName {
     return ({

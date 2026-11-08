@@ -2,15 +2,15 @@
 //  LCCKFaceManager.m
 //  LCCKChatBarExample
 //
-//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/8/25.
-//  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
+//  v2.1.1 Created by ElonChan ( https://github.com/ChenYilong/CYLChatKit ) on 15/8/25.
+//  Copyright (c) 2018 ChenYilong（wechat id：chenyilong1010） . All rights reserved.
 //
 
 #import "LCCKFaceManager.h"
 #import "UIImage+LCCKExtension.h"
 #import "LCCKConstants.h"
-#if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
 #else
 #import "LCChatKit.h"
 #endif
@@ -104,7 +104,7 @@
         return;
     }
     //2、通过正则表达式来匹配字符串
-    NSString *regex_emoji = @"\\[[^\\]]+\\]"; //匹配表情
+    NSString *regex_emoji = @"\\[[a-zA-Z0-9\\/\\u4e00-\\u9fa5]+\\]"; //匹配表情
     
     NSError *error = nil;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regex_emoji options:NSRegularExpressionCaseInsensitive error:&error];
@@ -130,12 +130,9 @@
         NSRange range = [match range];
         //获取原字符串中对应的值
         NSString *subStr = [text substringWithRange:range];
-        //因为输入框的时候把文字变成国际化的文案，所以现在要将国际化的文案变成原来name
-        NSBundle *bundle = [NSBundle bundleForClass: [LCCKFaceManager class]];
-        NSString *originImageName = NSLocalizedStringFromTableInBundle(subStr,  @"EmojiLocalizable", bundle, @"");
         NSMutableArray *emojiFaceArrays = [[LCCKFaceManager shareInstance] emojiFaceArrays];
         for (NSDictionary *dict in emojiFaceArrays) {
-            if ([dict[kFaceNameKey]  isEqualToString:originImageName]) {
+            if ([dict[kFaceNameKey]  isEqualToString:subStr]) {
                 //face[i][@"png"]就是我们要加载的图片
                 //新建文字附件来存放我们的图片,iOS7才新加的对象
                 NSTextAttachment *textAttachment = [[NSTextAttachment alloc] init];
@@ -173,7 +170,7 @@
     //1、创建一个可变的属性字符串
     NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc] initWithString:text];
     //2、通过正则表达式来匹配字符串
-    NSString *regex_emoji = @"\\[[^\\]]+\\]"; //匹配表情
+    NSString *regex_emoji = @"\\[[a-zA-Z0-9\\/\\u4e00-\\u9fa5]+\\]"; //匹配表情
     
     NSError *error = nil;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regex_emoji options:NSRegularExpressionCaseInsensitive error:&error];
@@ -200,10 +197,8 @@
         //获取原字符串中对应的值
         NSString *subStr = [text substringWithRange:range];
         NSMutableArray *emojiFaceArrays = [[LCCKFaceManager shareInstance] emojiFaceArrays];
-        NSBundle *bundle = [NSBundle bundleForClass: [LCCKFaceManager class]];
-        NSString *originImageName = NSLocalizedStringFromTableInBundle(subStr,  @"EmojiLocalizable", bundle, @"");
         for (NSDictionary *dict in emojiFaceArrays) {
-            if ([dict[kFaceNameKey]  isEqualToString:originImageName]) {
+            if ([dict[kFaceNameKey]  isEqualToString:subStr]) {
                 //face[i][@"png"]就是我们要加载的图片
                 //新建文字附件来存放我们的图片,iOS7才新加的对象
                 NSTextAttachment *textAttachment = [[NSTextAttachment alloc] init];

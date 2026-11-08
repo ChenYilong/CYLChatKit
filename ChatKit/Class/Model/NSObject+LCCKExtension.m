@@ -2,14 +2,14 @@
 //  NSObject+LCCKExtension.m
 //  Pods
 //
-//  v0.8.5 Created by ElonChan on 16/8/10.
+//  v2.1.1 Created by ElonChan on 18/6/10.
 //
 //
 
 #import "NSObject+LCCKExtension.h"
 
-#if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
 #else
 #import "LCChatKit.h"
 #endif
@@ -48,7 +48,7 @@
             sendTime = LCCK_CURRENT_TIMESTAMP;
         }
         selfMessageTimestamp = sendTime;
-    } else {
+    } else if ([self respondsToSelector:@selector(timestamp)]){
         selfMessageTimestamp = [(LCCKMessage *)self timestamp];
     }
     return selfMessageTimestamp;
@@ -73,7 +73,12 @@
         !callback ?: callback(YES, selfMessageTimestamp);
         return;
     }
-    id lastMessage = [messages objectAtIndex:index - 1];
+    id lastMessage;
+    @try {
+        lastMessage = [messages objectAtIndex:index - 1];
+    } @catch (NSException *exception) {
+        NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), exception.reason);
+    }
     
     NSTimeInterval lastMessageTimestamp = [lastMessage lcck_messageTimestamp];
     NSTimeInterval interval = (selfMessageTimestamp - lastMessageTimestamp) / 1000;

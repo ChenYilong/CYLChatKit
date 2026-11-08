@@ -21,6 +21,7 @@
 - (void)photoBrowser:(LCCKPhotoBrowser *)photoBrowser didDismissAtPageIndex:(NSUInteger)index;
 - (void)photoBrowser:(LCCKPhotoBrowser *)photoBrowser willDismissAtPageIndex:(NSUInteger)index;
 - (void)photoBrowser:(LCCKPhotoBrowser *)photoBrowser didDismissActionSheetWithButtonIndex:(NSUInteger)buttonIndex photoIndex:(NSUInteger)photoIndex;
+- (void)photoBrowser:(LCCKPhotoBrowser *)photoBrowser clickedButtonAtIndex:(NSUInteger)buttonIndex photoIndex:(NSUInteger)photoIndex;
 - (LCCKCaptionView *)photoBrowser:(LCCKPhotoBrowser *)photoBrowser captionViewForPhotoAtIndex:(NSUInteger)index;
 @end
 

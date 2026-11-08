@@ -2,8 +2,8 @@
 //  AVIMConversation+LCCKExtension.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/3/11.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v2.1.1 Created by ElonChan on 16/3/11.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import "AVIMConversation+LCCKExtension.h"
@@ -46,14 +46,9 @@
     return isServerLate ? dateFromServer : dateFromCache;
 }
 
-- (NSInteger)lcck_unreadCount
-{
-    return self.unreadMessagesCount;
-}
-
 - (NSString *)lcck_badgeText {
     NSString *badgeText;
-    NSUInteger unreadCount = self.lcck_unreadCount;
+    NSUInteger unreadCount = self.unreadMessagesCount;
     if (unreadCount > 99) {
         badgeText = LCCKBadgeTextForNumberGreaterThanLimit;
     } else {
@@ -61,21 +56,6 @@
     }
     return badgeText;
 }
-
-//- (void)setLcck_unreadCount:(NSInteger)lcck_unreadCount {
-//    NSNumber *lcck_unreadCountObject = [NSNumber numberWithInteger:lcck_unreadCount];
-//    objc_setAssociatedObject(self, @selector(lcck_unreadCount), lcck_unreadCountObject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-//}
-
-- (BOOL)lcck_mentioned
-{
-    return self.unreadMessagesMentioned;
-}
-
-//- (void)setLcck_mentioned:(BOOL)lcck_mentioned {
-//    NSNumber *lcck_mentionedObject = [NSNumber numberWithBool:lcck_mentioned];
-//    objc_setAssociatedObject(self, @selector(lcck_mentioned), lcck_mentionedObject, OBJC_ASSOCIATION_ASSIGN);
-//}
 
 - (NSString *)lcck_draft {
     return objc_getAssociatedObject(self, @selector(lcck_draft));
@@ -116,19 +96,18 @@
     }
     if (self.members.count == 0) {
         return LCCKLocalizedStrings(@"SystemConversation");
-    } else if (self.members.count > 2) {
-        return LCCKLocalizedStrings(@"GroupConversation");
-    } else if (self.members.count == 2) {
-        return LCCKLocalizedStrings(@"SingleConversation");
-    } else {
-        return LCCKLocalizedStrings(@"");
     }
+    return LCCKLocalizedStrings(@"GroupConversation");
+    
 }
 
 - (NSString *)lcck_peerId {
     NSArray *members = self.members;
     if (members.count == 0) {
-        [NSException raise:@"invalid conversation" format:@"invalid conversation"];
+        //TODO: add debug model
+        //        [NSException raise:@"invalid conversation" format:@"invalid conversation"];
+        NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"invalid conversation");
+        return nil;
     }
     if (members.count == 1) {
         return members[0];

@@ -2,14 +2,14 @@
 //  LCCKContactListViewController.h
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan on 16/2/22.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v2.1.1 Created by ElonChan on 18/6/22.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-#if __has_include(<ChatKit/LCChatKit.h>)
-    #import <ChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+    #import <CYLChatKit/LCChatKit.h>
 #else
     #import "LCChatKit.h"
 #endif

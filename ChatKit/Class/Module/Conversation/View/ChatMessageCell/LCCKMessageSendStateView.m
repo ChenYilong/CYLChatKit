@@ -2,8 +2,8 @@
 //  LCCKMessageSendStateView.m
 //  LCCKChatBarExample
 //
-//  v0.8.5 Created by ElonChan  ( https://github.com/leancloud/ChatKit-OC ) on 15/11/23.
-//  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
+//  v2.1.1 Created by ElonChan  ( https://github.com/ChenYilong/CYLChatKit ) on 15/11/23.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010） . All rights reserved.
 //
 
 #import "LCCKMessageSendStateView.h"
@@ -33,12 +33,8 @@ static void * const LCCKSendImageViewShouldShowIndicatorViewContext = (void*)&LC
         [self addSubview:self.indicatorView = indicatorView];
         // KVO注册监听
         [self addObserver:self forKeyPath:@"showIndicatorView" options:NSKeyValueObservingOptionNew context:LCCKSendImageViewShouldShowIndicatorViewContext];
-        __weak __typeof(self) weakSelf = self;
-        [self cyl_executeAtDealloc:^{
-            NSObject *ss = weakSelf;
-            if (ss) {
-                [ss removeObserver:ss forKeyPath:@"showIndicatorView"];
-            }
+        [self cyl_willDeallocWithSelfCallback:^(__unsafe_unretained id owner, NSUInteger identifier) {
+            [owner removeObserver:owner forKeyPath:@"showIndicatorView"];
         }];
         [self addTarget:self action:@selector(failImageViewTap:) forControlEvents:UIControlEventTouchUpInside];
         
@@ -88,11 +84,6 @@ static void * const LCCKSendImageViewShouldShowIndicatorViewContext = (void*)&LC
             self.hidden = YES;
             break;
     }
-    self.hidden = !(_messageSendState == LCCKMessageSendStateSending ||
-                    _messageSendState == LCCKMessageSendStateFailed);
-    [self showErrorIcon:_messageSendState == LCCKMessageSendStateFailed];
-    // Restore the failed state even when KVO sees no transition from a reused cell.
-    // https://github.com/leancloud/ChatKit-OC/issues/402
 }
 
 //- (void)setMessageSendState:(LCCKMessageSendState)messageSendState {
@@ -126,6 +117,7 @@ static void * const LCCKSendImageViewShouldShowIndicatorViewContext = (void*)&LC
 
 // KVO监听执行
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    // Related report about failed messages disappearing from the conversation: https://github.com/leancloud/ChatKit-OC/issues/402
     if(context != LCCKSendImageViewShouldShowIndicatorViewContext) {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
         return;

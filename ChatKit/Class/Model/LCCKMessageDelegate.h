@@ -2,7 +2,7 @@
 //  LCCKMessageDelegate.h
 //  Pods
 //
-//  v0.8.5 Created by ElonChan on 16/7/26.
+//  v2.1.1 Created by ElonChan on 16/7/26.
 //
 //
 #import "LCCKConstants.h"
@@ -10,6 +10,22 @@
 @protocol LCCKUserDelegate;
 
 @protocol LCCKMessageDelegate <NSObject, NSCopying, NSCoding>
+
+@required
+
+@property (nonatomic, strong, readwrite) UIImage *photo;
+@property (nonatomic, strong, readwrite) UIImage *thumbnailPhoto;
+/// Width of the image in pixels.
+@property(nonatomic, assign, readonly) int photoWidth;
+/// Height of the image in pixels.
+@property(nonatomic, assign, readonly) int photoHeight;
+@property (nonatomic, copy, readonly) NSString *photoPath;
+@property (nonatomic, strong, readonly) NSURL *originPhotoURL;
+@property (nonatomic, assign, readonly) AVIMMessageMediaType mediaType;
+
+@optional
+
+@property (nonatomic, strong, readonly) NSURL *thumbnailURL;
 
 /*!
  *  消息Id
@@ -51,7 +67,7 @@
  */
 @property (nonatomic, assign, readonly, getter=hasRead) BOOL read;
 
-@optional
+
 
 /*!
  * 消息接收者是否已读

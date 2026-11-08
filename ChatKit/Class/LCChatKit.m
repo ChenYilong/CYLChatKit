@@ -2,8 +2,8 @@
 //  LCChatKit.m
 //  LeanCloudChatKit-iOS
 //
-//  v0.8.5 Created by ElonChan  on 16/2/22.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v2.1.1 Created by ElonChan  on 18/6/22.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import "LCChatKit.h"
@@ -44,6 +44,7 @@
 @synthesize disableSingleSignOn = _disableSingleSignOn;
 @synthesize filterMessagesBlock = _filterMessagesBlock;
 @synthesize sendMessageHookBlock = _sendMessageHookBlock;
+@synthesize conversationListShowHookBlock = _conversationListShowHookBlock;
 
 #pragma mark -
 
@@ -140,11 +141,9 @@
     self.sessionService.disableSingleSignOn = disableSingleSignOn;
 }
 
-- (void)setMemberInfoChangedBlock:(void (^)(AVIMConversation *conversation, NSString *byClientId, NSString *clientId, AVIMConversationMemberRole role))block
-{
+- (void)setMemberInfoChangedBlock:(void (^)(AVIMConversation *conversation, NSString *byClientId, NSString *clientId, AVIMConversationMemberRole role))block {
     self.sessionService.memberInfoChangedBlock = block;
 }
-
 #pragma mark - LCCKUserSystemService
 ///=============================================================================
 /// @name LCCKUserSystemService
@@ -369,7 +368,9 @@
     [self.conversationListService setMarkBadgeWithTotalUnreadCountBlock:markBadgeWithTotalUnreadCountBlock];
 }
 
-//TODO:CacheService;
+- (void)setConversationListShowHookBlock:(LCCKConversationListShowHookBlock)conversationListShowHookBlock {
+    [self.conversationListService setConversationListShowHookBlock:conversationListShowHookBlock];
+}
 
 @end
 

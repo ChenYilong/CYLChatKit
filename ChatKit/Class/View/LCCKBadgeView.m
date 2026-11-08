@@ -2,7 +2,8 @@
  Copyright (c) 2013 Javier Soto.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
+ of this software and associat
+ ed documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
@@ -84,12 +85,11 @@ static BOOL LCCKBadgeViewIsUIKitFlatMode(void)
 {
     LCCKBadgeView *badgeViewAppearanceProxy = LCCKBadgeView.appearance;
 
-    badgeViewAppearanceProxy.badgeOverlayColor = [UIColor colorWithWhite:1.0f alpha:0.3];
-    badgeViewAppearanceProxy.badgeTextShadowColor = UIColor.clearColor;
-    badgeViewAppearanceProxy.badgeShadowColor = [UIColor colorWithWhite:0.0f alpha:0.4f];
-    badgeViewAppearanceProxy.badgeShadowSize = CGSizeMake(0.0f, 3.0f);
-    badgeViewAppearanceProxy.badgeStrokeWidth = 2.0f;
-    badgeViewAppearanceProxy.badgeStrokeColor = UIColor.whiteColor;
+    badgeViewAppearanceProxy.backgroundColor = UIColor.clearColor;
+    badgeViewAppearanceProxy.badgeAlignment = LCCKBadgeViewAlignmentTopRight;
+    badgeViewAppearanceProxy.badgeBackgroundColor = UIColor.redColor;
+    badgeViewAppearanceProxy.badgeTextFont = [UIFont boldSystemFontOfSize:UIFont.systemFontSize];
+    badgeViewAppearanceProxy.badgeTextColor = UIColor.whiteColor;
 }
 
 + (void)applyIOS7Style

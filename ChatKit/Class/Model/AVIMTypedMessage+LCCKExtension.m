@@ -2,8 +2,8 @@
 //  AVIMTypedMessage+LCCKExtension.m
 //  ChatKit
 //
-//  v0.8.5 Created by ElonChan on 16/5/26.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v2.1.1 Created by ElonChan on 16/5/26.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
 #import "AVIMTypedMessage+LCCKExtension.h"
@@ -15,11 +15,7 @@
 - (BOOL)lcck_isSupportThisCustomMessage {
     NSNumber *typeDictKey = @([(AVIMTypedMessage *)self mediaType]);
     Class class = [_typeDict objectForKey:typeDictKey];
-    if (class != nil) {
-        return true;
-    }else{
-        return false;
-    }
+    return class;
 }
 
 + (AVIMTypedMessage *)lcck_messageWithLCCKMessage:(LCCKMessage *)message {
@@ -31,7 +27,20 @@
         }
         case kAVIMMessageMediaTypeVideo:
         case kAVIMMessageMediaTypeImage: {
-            avimTypedMessage = [AVIMImageMessage messageWithText:nil attachedFilePath:message.photoPath attributes:nil];
+            
+            NSString *localPhotoPath = message.photoPath;
+            NSString *remotePhotoPath = message.originPhotoURL;
+
+            if ([remotePhotoPath hasPrefix:@"http"]) {
+                AVFile *file = [AVFile fileWithRemoteURL:[NSURL URLWithString:remotePhotoPath]];
+                avimTypedMessage = [AVIMImageMessage messageWithText:nil file:file attributes:nil];
+            } else if ([localPhotoPath hasPrefix:@"http"]) {
+                AVFile *file = [AVFile fileWithRemoteURL:[NSURL URLWithString:localPhotoPath]];
+                avimTypedMessage = [AVIMImageMessage messageWithText:nil file:file attributes:nil];
+            } else {
+                avimTypedMessage = [AVIMImageMessage messageWithText:nil attachedFilePath:message.photoPath attributes:nil];
+            }
+            
             break;
         }
         case kAVIMMessageMediaTypeAudio: {

@@ -2,17 +2,22 @@
 //  LCCKBaseTableViewController.h
 //  LeanCloudChatKit-iOS
 //
-//  Created by 陈宜龙 on 16/3/9.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v2.1.1 Created by ElonChan on 16/3/9.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
-
 
 #import "LCCKBaseViewController.h"
 @class LCCKStatusView;
 
+typedef enum : NSUInteger {
+    LCCKViewControllerStylePlain = 0,
+    LCCKViewControllerStylePresenting
+}LCCKViewControllerStyle;
+
 @interface LCCKBaseTableViewController : LCCKBaseViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong, readonly) LCCKStatusView *clientStatusView;
+@property (nonatomic, assign) LCCKViewControllerStyle viewControllerStyle;
 
 /**
  *  显示大量数据的控件
@@ -28,10 +33,11 @@
  *  大量数据的数据源
  */
 @property (nonatomic, strong) NSMutableArray *dataSource;
+@property (nonatomic, assign, getter=shouldCheckSessionStatus) BOOL checkSessionStatus;
 
 /**
  *  加载本地或者网络数据源
  */
 - (void)loadDataSource;
-
+- (void)updateStatusView;
 @end

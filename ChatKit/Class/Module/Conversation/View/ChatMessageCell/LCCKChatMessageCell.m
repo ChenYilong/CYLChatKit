@@ -2,8 +2,8 @@
 //  LCCKChatMessageCell.m
 //  LCCKChatExample
 //
-//  v0.8.5 Created by ElonChan ( https://github.com/leancloud/ChatKit-OC ) on 15/11/13.
-//  Copyright © 2015年 https://LeanCloud.cn . All rights reserved.
+//  v2.1.1 Created by ElonChan ( https://github.com/ChenYilong/CYLChatKit ) on 15/11/13.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010） . All rights reserved.
 //
 
 #import "LCCKChatMessageCell.h"
@@ -23,8 +23,8 @@
 #import "UIImageView+WebCache.h"
 #endif
 
-#if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
 #else
 #import "LCChatKit.h"
 #endif
@@ -40,18 +40,13 @@ static CGFloat const kAvatarImageViewWidth = 50.f;
 static CGFloat const kAvatarImageViewHeight = kAvatarImageViewWidth;
 static CGFloat const LCCKMessageSendStateViewWidthHeight = 30.f;
 static CGFloat const LCCKMessageSendStateViewLeftOrRightToMessageContentView = 2.f;
-static CGFloat const LCCKAvatarToMessageContent = 5.f;
 
-static CGFloat const LCCKAvatarBottomToMessageContentTop = -1.f;
-
-
-static CGFloat const LCCK_MSG_CELL_EDGES_OFFSET = 16;
 static CGFloat const LCCK_MSG_CELL_NICKNAME_HEIGHT = 16;
 static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 
 @interface LCCKChatMessageCell ()<LCCKSendImageViewDelegate>
 
-@property (nonatomic, strong, readwrite) LCCKMessage *message;
+//@property (nonatomic, strong, readwrite) LCCKMessage *message;
 @property (nonatomic, assign, readwrite) AVIMMessageMediaType mediaType;
 @property (nonatomic, strong) UIColor *conversationViewSenderNameTextColor;
 
@@ -158,7 +153,6 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
                 CGFloat width = [UIApplication sharedApplication].keyWindow.frame.size.width;
                 CGFloat height = [UIApplication sharedApplication].keyWindow.frame.size.height;
                 CGFloat widthLimit = MIN(width, height)/5 * 3;
-                
                 make.width.lessThanOrEqualTo(@(widthLimit)).priorityHigh();
                 make.bottom.equalTo(self.contentView.mas_bottom).with.offset(-LCCK_MSG_CELL_EDGES_OFFSET).priorityLow();
             }];
@@ -263,10 +257,16 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 - (BOOL)isAbleToTap {
     BOOL isAbleToTap = NO;
     //For Link handle
-    if (self.mediaType < 0 && ![self isKindOfClass:[LCCKChatTextMessageCell class]]) {
+    if (self.mediaType < 0) {
         isAbleToTap = YES;
     }
     return isAbleToTap;
+}
+- (UIImageView *)messageContentBackgroundImageView {
+    if (!_messageContentBackgroundImageView) {
+        _messageContentBackgroundImageView = [[UIImageView alloc] init];
+    }
+    return _messageContentBackgroundImageView;
 }
 
 - (void)addGeneralView {
@@ -275,6 +275,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     [self.contentView addSubview:self.messageContentView];
     [self.contentView addSubview:self.messageReadStateImageView];
     [self.contentView addSubview:self.messageSendStateView];
+    
     
     [self.messageContentBackgroundImageView setImage:[LCCKBubbleImageFactory bubbleImageViewForType:self.messageOwner messageType:self.mediaType isHighlighted:NO]];
     [self.messageContentBackgroundImageView setHighlightedImage:[LCCKBubbleImageFactory bubbleImageViewForType:self.messageOwner messageType:self.mediaType isHighlighted:YES]];
@@ -285,12 +286,14 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     
     self.messageSendStateView.hidden = YES;
     self.messageReadStateImageView.hidden = YES;
-    
 
     if (self.isAbleToTap) {
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+        tap.delegate = self;
+        tap.numberOfTapsRequired = 1;
         [self.contentView addGestureRecognizer:tap];
     }
+    
     UITapGestureRecognizer *avatarImageViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(avatarImageViewHandleTap:)];
     self.avatarImageView.userInteractionEnabled = YES;
     [self.avatarImageView addGestureRecognizer:avatarImageViewTap];
@@ -300,9 +303,21 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     [self addGestureRecognizer:recognizer];
 }
 
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    CGPoint tapPoint = [gestureRecognizer locationInView:self.contentView];
+    if (CGRectContainsPoint(self.avatarImageView.frame, tapPoint)) {
+        return NO;
+    } else if(CGRectContainsPoint(self.messageContentView.frame, tapPoint) && [self isKindOfClass:[LCCKChatTextMessageCell class]]) {
+        return NO;
+    }
+    return YES;
+}
+
 - (void)setup {
     if (![self conformsToProtocol:@protocol(LCCKChatMessageCellSubclassing)]) {
-        [NSException raise:@"LCCKChatMessageCellNotSubclassException" format:@"Class does not conform LCCKChatMessageCellSubclassing protocol."];
+        //TODO: add debug model
+        NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), [NSString stringWithFormat:@"%@%@", @"LCCKChatMessageCellNotSubclassException", @"Class does not conform LCCKChatMessageCellSubclassing protocol."]);
+        return;
     }
     self.mediaType = [[self class] classMediaType];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -314,68 +329,22 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 - (void)configureCellWithData:(id)message {
     NSString *nickName = nil;
     NSURL *avatarURL = nil;
-
-    NSString* payload = @"";
-    //看到这句话，你已经更新了2018.0214的代码了
-    if([message isKindOfClass: [AVIMMessage class]]) {
-        payload = ((AVIMMessage *)message).payload;
-    } else if([message isKindOfClass: [LCCKMessage class]]) {
-        payload = ((LCCKMessage *)message).message.payload == nil ? @"" : ((LCCKMessage *)message).message.payload;
-    }
-
-    NSData *data = [payload dataUsingEncoding:NSUTF8StringEncoding];
-    id orginData = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-    id json = [orginData objectForKey:@"_lcattrs"];
-    
-    NSString *name = [json objectForKey: @"USER_NAME"];
-    if (name != nil) {
-        nickName = name;
-    }
-    NSString *icon = [json objectForKey: @"USER_ICON"];
-    NSURL *url = [NSURL URLWithString:icon];
-    avatarURL = url;
-//    if(icon == nil
-//       || (icon != nil && [icon isEqualToString:@""])) {
-//        avatarURL = self.message.sender.avatarURL;
-//    }
-//
-//    if(avatarURL == nil
-//       || (avatarURL != nil && [avatarURL.absoluteString isEqualToString:@""])) {
-//        id<LCCKUserDelegate> defSender = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
-//        avatarURL = defSender.avatarURL;
-//    }
-    
+    NSInteger userType = 0;
     LCCKMessageSendState sendStatus;
     if ([message lcck_isCustomMessage]) {
         NSString *senderClientId = [(AVIMTypedMessage *)message clientId];
         NSError *error;
         //TODO:如果我正在群里聊天，这时有人进入群聊，需要异步获取头像等信息，模仿ConversationList的做法。
-        [[LCCKUserSystemService sharedInstance] getCachedProfileIfExists:senderClientId name:&nickName avatarURL:&avatarURL error:&error];
-        if (!nickName)  {
-            nickName = senderClientId;
-            NSString *name = [json objectForKey: @"USER_NAME"];
-            if (name != nil) {
-                nickName = name;
-            }
-        }
-        self.message = message;
+        [[LCCKUserSystemService sharedInstance] getCachedProfileIfExists:senderClientId name:&nickName avatarURL:&avatarURL userTye:&userType error:&error];
+        if (!nickName)  { nickName = senderClientId; }
+        self.message = nil;
         sendStatus = (LCCKMessageSendState)[(AVIMTypedMessage *)message status];
     } else {
         self.message = message;
-        NSString *name = [json objectForKey: @"USER_NAME"];
-        if (name != nil) {
-            nickName = name;
-        }
-        if(!nickName) {
-            nickName = self.message.localDisplayName;
-        }
-        NSString *icon = [json objectForKey: @"USER_ICON"];
-        NSURL *url = [NSURL URLWithString:icon];
-        avatarURL = url;
-        if(!avatarURL) {
-            avatarURL = self.message.sender.avatarURL;
-        }
+        nickName = self.message.localDisplayName;
+        avatarURL = self.message.sender.avatarURL;
         sendStatus = self.message.sendStatus;
+        userType = self.message.userType;
         //FIXME: SDK 暂不支持已读未读
         //        if ([(LCCKMessage *)message messageReadState]) {
         //            self.messageReadState = self.message.messageReadState;
@@ -388,6 +357,11 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"Placeholder" bundleForClass:[self class]];
         image;})
      ];
+    if (userType == 1) {
+        self.officialSignImageView.hidden = NO;
+    } else {
+        self.officialSignImageView.hidden = YES;
+    }
     self.messageSendState = sendStatus;
 }
 
@@ -398,10 +372,9 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         CGPoint tapPoint = [tap locationInView:self.contentView];
         if (CGRectContainsPoint(self.messageContentView.frame, tapPoint)) {
             [self.delegate messageCellTappedMessage:self];
-        }  else if (!CGRectContainsPoint(self.avatarImageView.frame, tapPoint)) {
-            //FIXME:Never invoked
-            [self.delegate messageCellTappedBlank:self];
+            return;
         }
+        [self.delegate messageCellTappedBlank:self];
     }
 }
 
@@ -437,21 +410,33 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 }
 
 #pragma mark - Getters
+- (UIImageView *)officialSignImageView {
+    if (!_officialSignImageView) {
+        UIImageView *officialSignImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 25, 12.5)];
+        [officialSignImageView sd_setImageWithURL:[NSURL URLWithString:@"https://hdl-middletier-prd.oss-cn-beijing.aliyuncs.com/app-img/v2/my/my_official.png"]];
+        _officialSignImageView = officialSignImageView;
+        _officialSignImageView.hidden = YES;
+    }
+    return _officialSignImageView;
+}
 
 - (UIImageView *)avatarImageView {
     if (!_avatarImageView) {
         _avatarImageView = [[UIImageView alloc] init];
-        _avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
+        _avatarImageView.contentMode = UIViewContentModeScaleAspectFill;//防止特别长或者宽的图片显示不正常
         LCCKAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
         if (avatarImageViewCornerRadiusBlock) {
             CGSize avatarImageViewSize = CGSizeMake(kAvatarImageViewWidth, kAvatarImageViewHeight);
+            // Set bounds before applying the configured corner radius to prevent first-layout clipping failures: https://github.com/leancloud/ChatKit-OC/issues/347
+            // This also addresses the reported conversation-avatar refresh behavior: https://github.com/leancloud/ChatKit-OC/issues/348
+            // Avatar sizing and aspect-fill behavior: https://github.com/ChenYilong/CYLChatKit/issues/4
+            _avatarImageView.frame = CGRectMake(0, 0, kAvatarImageViewWidth, kAvatarImageViewHeight);
             CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatarImageViewSize);
-            // https://github.com/leancloud/ChatKit-OC/issues/347
-            // https://github.com/leancloud/ChatKit-OC/issues/348
-            self.avatarImageView.layer.cornerRadius = avatarImageViewCornerRadius;
-            self.avatarImageView.clipsToBounds = YES;
+            _avatarImageView.lcck_cornerRadius = avatarImageViewCornerRadius;
+           [_avatarImageView addSubview:self.officialSignImageView];
         }
         [self bringSubviewToFront:_avatarImageView];
+        
     }
     return _avatarImageView;
 }
@@ -476,7 +461,10 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 
 - (UIImageView *)messageReadStateImageView {
     if (!_messageReadStateImageView) {
-        _messageReadStateImageView = [[UIImageView alloc] init];
+        _messageReadStateImageView = [[UIImageView alloc] initWithImage:({
+            NSString *imageName = @"VoiceMessage_Unread";
+            UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
+            image;})];
     }
     return _messageReadStateImageView;
 }
@@ -487,13 +475,6 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         _messageSendStateView.delegate = self;
     }
     return _messageSendStateView;
-}
-
-- (UIImageView *)messageContentBackgroundImageView {
-    if (!_messageContentBackgroundImageView) {
-        _messageContentBackgroundImageView = [[UIImageView alloc] init];
-    }
-    return _messageContentBackgroundImageView;
 }
 
 - (LCCKConversationType)messageChatType {
@@ -514,6 +495,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     return LCCKMessageOwnerTypeUnknown;
 }
 
+
 - (void)handleLongPress:(UILongPressGestureRecognizer *)longPressGes {
     if (longPressGes.state == UIGestureRecognizerStateBegan) {
         CGPoint longPressPoint = [longPressGes locationInView:self.contentView];
@@ -531,22 +513,20 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         dispatch_after(when, dispatch_get_main_queue(), ^{
             [self becomeFirstResponder];
             LCCKLongPressMessageBlock longPressMessageBlock = [LCChatKit sharedInstance].longPressMessageBlock;
+            NSDictionary *userInfo = @{ LCCKLongPressMessageUserInfoKeyFromController: self.delegate,
+                                        LCCKLongPressMessageUserInfoKeyFromView: self.tableView,
+                                        LCCKLongPressMessageUserInfoKeyMessageOwner: @(self.messageOwner),
+                                        LCCKLongPressMessageUserInfoKeyMessageCell: self };
             NSArray *menuItems = [NSArray array];
-            NSDictionary *userInfo = @{
-                                       LCCKLongPressMessageUserInfoKeyFromController : self.delegate,
-                                       LCCKLongPressMessageUserInfoKeyFromView : self.tableView,
-                                       };
             if (longPressMessageBlock) {
                 menuItems = longPressMessageBlock(self.message, userInfo);
             } else {
-                LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"copy")
-                                                                       block:^{
-                                                                           UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                                                                           [pasteboard setString:[self.message text]];
-                                                                       }];
-                //TODO:添加“转发”
+                LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"copy") block:^{
+                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                    [pasteboard setString:[self.message text]];
+                }];
                 if (self.mediaType == kAVIMMessageMediaTypeText) {
-                    menuItems = @[ copyItem ];
+                    menuItems = @[copyItem];
                 }
             }
             UIMenuController *menuController = [UIMenuController sharedMenuController];
@@ -555,10 +535,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
             UITableView *tableView = self.tableView;
             CGRect targetRect = [self convertRect:self.messageContentView.frame toView:tableView];
             [menuController setTargetRect:targetRect inView:tableView];
-            [[NSNotificationCenter defaultCenter] addObserver:self
-                                                     selector:@selector(handleMenuWillShowNotification:)
-                                                         name:UIMenuControllerWillShowMenuNotification
-                                                       object:nil];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleMenuWillShowNotification:) name:UIMenuControllerWillShowMenuNotification object:nil];
             [menuController setMenuVisible:YES animated:YES];
         });
     }

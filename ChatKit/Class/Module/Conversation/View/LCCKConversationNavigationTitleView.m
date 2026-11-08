@@ -2,7 +2,7 @@
 //  LCCKConversationNavigationTitleView.m
 //  Pods
 //
-//  v0.8.5 Created by ElonChan on 16/7/19.
+//  v2.1.1 Created by ElonChan on 16/7/19.
 //
 //
 
@@ -15,8 +15,8 @@
 #else
 #import "CYLDeallocBlockExecutor.h"
 #endif
-#if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
 #else
 #import "LCChatKit.h"
 #endif
@@ -28,6 +28,7 @@ static void * const LCCKConversationViewControllerMembersCountContext = (void*)&
 
 @interface LCCKConversationNavigationTitleView ()
 
+@property (nonatomic, strong) UILabel *conversationNameView;
 @property (nonatomic, strong) UILabel *membersCountView;
 @property (nonatomic, weak) UINavigationController *navigationController;
 @property (nonatomic, strong) UIStackView *containerView;
@@ -62,16 +63,18 @@ static void * const LCCKConversationViewControllerMembersCountContext = (void*)&
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if(context == LCCKConversationViewControllerMutedContext) {
-        id newKey = change[NSKeyValueChangeNewKey];
-        BOOL muted = [newKey boolValue];
-        self.remindMuteImageView.hidden = !muted;
-        [self.containerView layoutIfNeeded];
-    } else if(context == LCCKConversationViewControllerNameContext) {
-        [self resetConversationNameWithMembersCountChanged:NO];
-    } else if (context == LCCKConversationViewControllerMembersCountContext) {
-        [self resetConversationName];
-    }
+    dispatch_async(dispatch_get_main_queue(),^{
+        if(context == LCCKConversationViewControllerMutedContext) {
+            id newKey = change[NSKeyValueChangeNewKey];
+            BOOL muted = [newKey boolValue];
+            self.remindMuteImageView.hidden = !muted;
+            [self.containerView layoutIfNeeded];
+        } else if(context == LCCKConversationViewControllerNameContext) {
+            [self resetConversationNameWithMembersCountChanged:NO];
+        } else if (context == LCCKConversationViewControllerMembersCountContext) {
+            [self resetConversationName];
+        }
+    });
 }
 
 - (instancetype)sharedInitWithConversation:(AVIMConversation *)conversation {
@@ -79,15 +82,10 @@ static void * const LCCKConversationViewControllerMembersCountContext = (void*)&
     [conversation addObserver:self forKeyPath:@"muted" options:NSKeyValueObservingOptionNew context:LCCKConversationViewControllerMutedContext];
     [conversation addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:LCCKConversationViewControllerNameContext];
     [conversation addObserver:self forKeyPath:@"members.@count" options:NSKeyValueObservingOptionNew context:LCCKConversationViewControllerMembersCountContext];
-
-    __weak __typeof(self) weakSelf = self;
-    [self cyl_executeAtDealloc:^{
-        NSObject *ss = weakSelf;
-        if (ss) {
-            [conversation removeObserver:ss forKeyPath:@"muted"];
-            [conversation removeObserver:ss forKeyPath:@"name"];
-            [conversation removeObserver:ss forKeyPath:@"members.@count"];
-        }
+    [self cyl_willDeallocWithSelfCallback:^(__unsafe_unretained id owner, NSUInteger identifier) {
+        [conversation removeObserver:owner forKeyPath:@"muted"];
+        [conversation removeObserver:owner forKeyPath:@"name"];
+        [conversation removeObserver:owner forKeyPath:@"members.@count"];
     }];
     
     [self.containerView layoutIfNeeded];//fix member count view won't display when conversationNameView is too long
@@ -127,7 +125,7 @@ static void * const LCCKConversationViewControllerMembersCountContext = (void*)&
     if (!_conversationNameView) {
         UILabel *conversationNameView = [[UILabel alloc] initWithFrame:CGRectZero];
         conversationNameView.font = [UIFont boldSystemFontOfSize:kLCCKTitleFontSize];
-        conversationNameView.textColor = [UIColor whiteColor];
+        conversationNameView.textColor = [UIColor blackColor];
         conversationNameView.textAlignment = NSTextAlignmentCenter;
         [conversationNameView sizeToFit];
         conversationNameView.lineBreakMode = NSLineBreakByTruncatingTail;
@@ -151,6 +149,7 @@ static void * const LCCKConversationViewControllerMembersCountContext = (void*)&
 
 #pragma mark -
 #pragma mark - Private Methods
+//2018-06-20 02:01:09.641036+0800 ChatKit-OC[26054:8518941] *** -[LCCKConversationNavigationTitleView conversationNameView]: message sent to deallocated instance 0x7fa90694af80
 
 - (void)resetConversationName {
     [self resetConversationNameWithMembersCountChanged:YES];
@@ -168,7 +167,7 @@ static void * const LCCKConversationViewControllerMembersCountContext = (void*)&
     if (conversationName.length == 0 || !conversationName) {
         conversationName = LCCKLocalizedStrings(@"Chat");
     }
-    self.conversationNameView.text = @"";//conversationName;
+    self.conversationNameView.text = conversationName;
     if (membersCountChanged) {
         NSUInteger membersCount = self.conversation.members.count;
         self.membersCountView.text = [NSString stringWithFormat:@"(%@)", @(membersCount)];

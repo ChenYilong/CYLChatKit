@@ -2,14 +2,14 @@
 //  LCCKInputViewPlugin.m
 //  Pods
 //
-//  v0.8.5 Created by ElonChan on 16/7/19.
+//  v2.1.1 Created by ElonChan on 16/7/19.
 //
 //
 
 #import "LCCKInputViewPlugin.h"
 
-#if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
 #else
 #import "LCChatKit.h"
 #endif
@@ -43,7 +43,9 @@ NSMutableArray const *LCCKInputViewPluginArray = nil;
 
 - (instancetype)init {
     if (![self conformsToProtocol:@protocol(LCCKInputViewPluginSubclassing)]) {
-        [NSException raise:@"LCCKInputViewPluginNotSubclassException" format:@"Class does not conform LCCKInputViewPluginSubclassing protocol."];
+        //TODO: add debug model
+        NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), [NSString stringWithFormat:@"%@ %@", @"Class does not conform LCCKInputViewPluginSubclassing protocol."]);
+        return nil;
     }
     if ((self = [super init])) {
         self.pluginType = [[self class] classPluginType];

@@ -2,7 +2,7 @@
 //  LCCKInputViewPluginPickImage.m
 //  Pods
 //
-//  v0.8.5 Created by ElonChan on 16/8/11.
+//  v2.1.1 Created by ElonChan on 18/6/11.
 //
 //
 
@@ -40,7 +40,7 @@
  * 插件名称
  */
 - (NSString *)pluginTitle {
-    return [NSBundle lcck_getLocalizedString:@"照片" class:[self class]];
+    return @"照片";
 }
 
 /*!
@@ -82,6 +82,7 @@
     }
     _pickerController = [[UIImagePickerController alloc] init];
     _pickerController.delegate = self;
+    _pickerController.allowsEditing = YES;
     return _pickerController;
 }
 

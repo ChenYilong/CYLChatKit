@@ -2,8 +2,8 @@
 //  LCCKSignatureService.h
 //  LeanCloudChatKit-iOS
 //
-//  Created by ElonChan on 16/2/22.
-//  Copyright © 2016年 LeanCloud. All rights reserved.
+//  v2.1.1 Created by ElonChan on 18/6/22.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //  Service for pinning signature to actions.
 
 #import <Foundation/Foundation.h>
