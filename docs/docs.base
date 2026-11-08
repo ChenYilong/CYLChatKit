@@ -1,0 +1,13 @@
+filters:
+  and:
+    - file.folder == "CYLChatKit/docs"
+    - file.ext == "md"
+    - file.basename != "instructions"
+views:
+  - type: cards
+    name: Project documentation
+    order:
+      - file.name
+    sort:
+      - property: file.name
+        direction: ASC
