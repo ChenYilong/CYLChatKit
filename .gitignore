@@ -34,3 +34,10 @@ Pods/
 
 # macOS AppleDouble metadata
 ._*
+
+# Malformed metadata/artifact names
+/..claude/
+/..git/
+/..github/
+/..gitignore
+/..pullapprove.yml

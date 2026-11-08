@@ -31,4 +31,7 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
 ## Git changes
 
 - Keep changes scoped to the requested work and do not stage AppleDouble (`._*`) or other generated files.
+- Ignore malformed metadata/artifact names such as `..claude/`, `..git/`, `..github/`, `..gitignore`, and `..pullapprove.yml`; the repository `.gitignore` also excludes AppleDouble files such as `._.pullapprove.yml` and `._ChatKit`.
+- Before staging, inspect `git status` and confirm no ignored or generated artifacts are included. `.gitignore` does not untrack files already committed; remove only specifically verified artifact paths from the index, preserving all real project content.
+- Never run broad deletion commands against `.git/objects` or other Git internals. Do not delete AppleDouble files in Git internals as a cleanup shortcut; leave them untouched unless a specific file is proven corrupt and a safe Git-aware repair is planned.
 - Use concise English commit messages. Never commit credentials, signing assets, or local build output.
