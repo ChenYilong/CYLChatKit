@@ -1,5 +1,7 @@
-platform :ios , '7.0' 
-target 'ChatKit-OC’ do
+platform :ios, '15.0'
+project 'ChatKit-OC.xcodeproj'
+
+target 'ChatKit-OC' do
 
 #=========================================================
 #======================== Lib Dependency =================
