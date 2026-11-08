@@ -18,7 +18,6 @@
 @property (nonatomic, strong) UILabel *subTitleLabel;
 @property (assign, nonatomic) LCCKProgressState progressState;
 @property (assign, nonatomic) NSTimeInterval seconds;
-@property (nonatomic, strong, readonly) UIWindow *overlayWindow;
 @property (strong, nonatomic) UIView *bgView;
 @property (strong, nonatomic) UIImageView *cancleImageView;
 @property (strong, nonatomic) UIImageView *volumeImageView;
@@ -28,7 +27,6 @@
 @end
 
 @implementation LCCKProgressHUD
-@synthesize overlayWindow = _overlayWindow;
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
@@ -76,9 +74,8 @@
 - (void)timerAction {
     // Related report: the recording countdown can continue below zero: https://github.com/leancloud/ChatKit-OC/issues/414
     self.angle -= 3;
-    self.seconds ++ ;
-    
-    float second = self.countdownTime;
+    self.seconds = MIN(self.seconds + 1, kLCCKVolumeMaxTimeLength * 10);
+    float second = MAX(0, self.countdownTime);
     if (second <= 10.0f) {
         _cancleImageView.alpha = 0;
         _soundImageView.alpha = 0;
@@ -98,7 +95,7 @@
     } else {
         self.centerLabel.textColor = [UIColor yellowColor];
     }
-    self.countdownTime = second-0.1;
+    self.countdownTime = MAX(0, second - 0.1);
     self.centerLabel.text = [NSString stringWithFormat:@"%.0f",self.countdownTime];
     [UIView commitAnimations];
 }
@@ -147,7 +144,8 @@
     UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
     self.volumeImageView.image = image;
     
-    self.seconds = timeLength;
+    self.seconds = MIN(MAX(timeLength, 0), kLCCKVolumeMaxTimeLength * 10);
+    self.countdownTime = MAX(0, kLCCKVolumeMaxTimeLength - self.seconds/10.0);
     if ((kLCCKVolumeMaxTimeLength - self.seconds/10.0) <= 10) {
         _cancleImageView.alpha = 0;
         _soundImageView.alpha = 0;
@@ -158,7 +156,7 @@
     } else {
         self.centerLabel.textColor = [UIColor yellowColor];
     }
-    self.centerLabel.text = [NSString stringWithFormat:@"%.0f",(kLCCKVolumeMaxTimeLength - self.seconds/10.0)];
+    self.centerLabel.text = [NSString stringWithFormat:@"%.0f", self.countdownTime];
 }
 
 - (void)dismiss{
@@ -182,18 +180,9 @@
                          }
                          completion:^(BOOL finished){
                              if(self.alpha == 0) {
+                                 // The HUD is a subview of the existing key window; do not create a new key window during dismissal.
+                                 // https://github.com/leancloud/ChatKit-OC/issues/420
                                  [self removeFromSuperview];
-                                 
-                                 NSMutableArray *windows = [[NSMutableArray alloc] initWithArray:[UIApplication sharedApplication].windows];
-                                 // Related report about restoring the recording HUD window: https://github.com/leancloud/ChatKit-OC/issues/420
-                                 [windows removeObject:self.overlayWindow];
-                                 
-                                 [windows enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(UIWindow *window, NSUInteger idx, BOOL *stop) {
-                                     if([window isKindOfClass:[UIWindow class]] && window.windowLevel == UIWindowLevelNormal) {
-                                         [window makeKeyWindow];
-                                         *stop = YES;
-                                     }
-                                 }];
                              }
                          }];
     });
@@ -310,16 +299,6 @@
         _subTitleLabel.layer.masksToBounds = YES;
     }
     return _subTitleLabel;
-}
-
-- (UIWindow *)overlayWindow {
-    if(!_overlayWindow) {
-        _overlayWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        _overlayWindow.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        _overlayWindow.userInteractionEnabled = NO;
-        [_overlayWindow makeKeyAndVisible];
-    }
-    return _overlayWindow;
 }
 
 #pragma mark - Class Methods

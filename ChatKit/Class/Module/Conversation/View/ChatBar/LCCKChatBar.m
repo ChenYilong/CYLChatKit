@@ -10,7 +10,8 @@
 #import "LCCKChatMoreView.h"
 #import "LCCKChatFaceView.h"
 #import "LCCKProgressHUD.h"
-//#import "Mp3Recorder.h"
+#import "Mp3Recorder.h"
+#import <AVFoundation/AVFoundation.h>
 #if __has_include(<Masonry/Masonry.h>)
 #import <Masonry/Masonry.h>
 #else
@@ -24,8 +25,13 @@
 NSString *const kLCCKBatchDeleteTextPrefix = @"kLCCKBatchDeleteTextPrefix";
 NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
-@interface LCCKChatBar () <UITextViewDelegate, UINavigationControllerDelegate, LCCKChatFaceViewDelegate>
+@interface LCCKChatBar () <UITextViewDelegate, UINavigationControllerDelegate, Mp3RecorderDelegate, LCCKChatFaceViewDelegate>
 
+@property (strong, nonatomic) Mp3Recorder *MP3;
+@property (strong, nonatomic) NSTimer *recordingTimeoutTimer;
+@property (assign, nonatomic) BOOL recordingDidReachTimeLimit;
+@property (assign, nonatomic) BOOL recordButtonTracking;
+@property (assign, nonatomic, getter=isRecording) BOOL recording;
 @property (nonatomic, strong) UIView *inputBarBackgroundView; /**< 输入栏目背景视图 */
 @property (strong, nonatomic) UIButton *voiceButton; /**< 切换录音模式按钮 */
 @property (strong, nonatomic) UIButton *voiceRecordButton; /**< 录音按钮 */
@@ -55,7 +61,6 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 @property (nonatomic, strong) UIColor *messageInputViewTextFieldBackgroundColor;
 @property (nonatomic, strong) UIColor *messageInputViewRecordTextColor;
 //TODO:MessageInputView-Tint-Color
-@property (nonatomic, assign) BOOL isTimeOut;//是否超时
 @property (nonatomic, strong) NSMutableSet<NSString *> *mentionSet;
 
 @end
@@ -125,12 +130,12 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 }
 
 - (void)dealloc {
+    [self invalidateRecordingTimeoutTimer];
     self.delegate = nil;
     _faceView.delegate = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:LCCKNotificationRecordTimeOut object:nil];
 }
 
 #pragma mark -
@@ -307,18 +312,39 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 #pragma mark -
 #pragma mark - Private Methods     #pragma mark - Private Methods
 
-- (BOOL)judgeAVAudioSession {
-    // Related report: microphone authorization can result in a zero-second voice message: https://github.com/leancloud/ChatKit-OC/issues/269
-    __block BOOL bCanRecord = YES;
+- (void)startRecordVoice {
+    self.recordButtonTracking = YES;
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    if (audioSession.recordPermission == AVAudioSessionRecordPermissionGranted) {
+        [self beginRecordingVoice];
+        return;
+    }
+    if (audioSession.recordPermission == AVAudioSessionRecordPermissionDenied) {
+        self.recordButtonTracking = NO;
+        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationRecordNoPower object:nil];
+        return;
+    }
+
+    // Do not start recording until the asynchronous authorization result is known.
+    // https://github.com/leancloud/ChatKit-OC/issues/269
+    __weak typeof(self) weakSelf = self;
     [audioSession requestRecordPermission:^(BOOL granted) {
-        if (granted) {
-            bCanRecord = YES;
-        } else {
-            bCanRecord = NO;
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            __strong typeof(weakSelf) self = weakSelf;
+            if (!self) {
+                return;
+            }
+            if (!granted) {
+                self.recordButtonTracking = NO;
+                [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationRecordNoPower object:nil];
+                return;
+            }
+            // Permission dialogs interrupt the original hold gesture. Require a new explicit press
+            // so tapping "Allow" cannot start an accidental zero-length recording.
+            // https://github.com/leancloud/ChatKit-OC/issues/269
+            self.recordButtonTracking = NO;
+        });
     }];
-    return bCanRecord;
 }
 
 #pragma mark - 核心方法
@@ -372,6 +398,9 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 #pragma mark - MP3RecordedDelegate
 
 - (void)endConvertWithMP3FileName:(NSString *)fileName {
+    self.recording = NO;
+    self.recordButtonTracking = NO;
+    [self invalidateRecordingTimeoutTimer];
     if (fileName) {
         [LCCKProgressHUD dismissWithProgressState:LCCKProgressSuccess];
         [self sendVoiceMessage:fileName seconds:[LCCKProgressHUD seconds]];
@@ -381,6 +410,11 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 }
 
 - (void)failRecord {
+    self.recording = NO;
+    self.recordButtonTracking = NO;
+    [self invalidateRecordingTimeoutTimer];
+    self.voiceRecordButton.selected = NO;
+    self.voiceRecordButton.highlighted = NO;
     [LCCKProgressHUD dismissWithProgressState:LCCKProgressError];
 }
 
@@ -390,9 +424,9 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 
 - (void)realTimeVolumeSize:(float)size timeLength:(NSTimeInterval)timeLength {
     [LCCKProgressHUD realtimeChangeVolumeImageView:size timeLength:timeLength];
-    self.volumeTimeLength = timeLength/10.0;
+    self.volumeTimeLength = MIN(MAX(timeLength, 0), kLCCKVolumeMaxTimeLength * 10) / 10.0;
     if (self.volumeTimeLength >= kLCCKVolumeMaxTimeLength) {
-        //        [self.MP3 stopRecord];
+        [self recordingTimeLimitDidExpire];
     }
 }
 
@@ -523,10 +557,10 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 }
 
 - (void)setup {
-    self.isTimeOut = NO;
     self.close = NO;
     self.oldTextViewHeight = kLCCKChatBarTextViewFrameMinHeight;
     self.allowTextViewContentOffset = YES;
+    self.MP3 = [[Mp3Recorder alloc] initWithDelegate:self];
     [self faceView];
     [self moreView];
     [self addSubview:self.inputBarBackgroundView];
@@ -549,82 +583,94 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(confirmRecordVoice) name:kLCCKRecordAudioTooLong object:nil];
     //修复录音时点击Home键 在返回App后 仍然显示录音动效的问题
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeBackgroundCancelRecordVoice) name:UIApplicationDidEnterBackgroundNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appRecieveMsgFromRecordTimer) name:LCCKNotificationRecordTimeOut object:nil];
     self.backgroundColor = self.messageInputViewBackgroundColor;
     [self setupConstraints];
     self.mentionSet = [NSMutableSet set];
 }
 
 
-/**
- *  开始录音
- */
-//- (void)startRecordVoice {
-//    if ([self judgeAVAudioSession]) {
-//        [LCCKProgressHUD show];
-//        self.voiceRecordButton.selected = YES;
-//        self.voiceRecordButton.highlighted = YES;
-//        [self.MP3 startRecord];
-//        self.volumeTimeLength = 0.0;
-//    } else {
-//        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationRecordNoPower object:nil];
-//    }
-//}
+- (void)beginRecordingVoice {
+    if (!self.recordButtonTracking || self.isRecording) {
+        return;
+    }
+    self.recordingDidReachTimeLimit = NO;
+    self.volumeTimeLength = 0;
+    self.recording = YES;
+    self.voiceRecordButton.selected = YES;
+    [LCCKProgressHUD show];
 
-/**
- *  取消录音
- */
-//- (void)cancelRecordVoice {
-//    self.voiceRecordButton.selected = NO;
-//    self.voiceRecordButton.highlighted = NO;
-//    if (self.volumeTimeLength >= kLCCKVolumeMaxTimeLength) {
-//        return;
-//    }
-//    [LCCKProgressHUD dismissWithMessage:@""];
-//
-//    [self.MP3 cancelRecord];
-//
-//}
+    NSTimer *timer = [NSTimer timerWithTimeInterval:kLCCKVolumeMaxTimeLength
+                                             target:self
+                                           selector:@selector(recordingTimeoutTimerDidFire:)
+                                           userInfo:nil
+                                            repeats:NO];
+    self.recordingTimeoutTimer = timer;
+    [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+    [self.MP3 startRecord];
+}
 
-/**
- *  录音结束
- */
-//- (void)confirmRecordVoice {
-//    self.voiceRecordButton.selected = NO;
-//    self.voiceRecordButton.highlighted = NO;
-//    if (self.isTimeOut == NO) {
-//        //FIXME:  inside or outside
-//        if (self.volumeTimeLength >= kLCCKVolumeMaxTimeLength) {
-//            return;
-//        }
-//
-//        [self.MP3 stopRecord];
-//    } else {
-//        self.isTimeOut = NO;
-//    }
-//
-//}
+- (void)cancelRecordVoice {
+    self.recordButtonTracking = NO;
+    [self invalidateRecordingTimeoutTimer];
+    if (!self.isRecording) {
+        return;
+    }
+    self.recording = NO;
+    self.voiceRecordButton.selected = NO;
+    self.voiceRecordButton.highlighted = NO;
+    [LCCKProgressHUD dismissWithMessage:@"取消录音"];
+    [self.MP3 cancelRecord];
+}
 
+- (void)confirmRecordVoice {
+    self.recordButtonTracking = NO;
+    if (!self.isRecording) {
+        return;
+    }
+    [self invalidateRecordingTimeoutTimer];
+    self.recording = NO;
+    self.voiceRecordButton.selected = NO;
+    self.voiceRecordButton.highlighted = NO;
+    [self.MP3 stopRecord];
+}
 
-/**
- *  更新录音显示状态,手指向上滑动后提示松开取消录音
- */
-//- (void)updateCancelRecordVoice {
-//    if (self.volumeTimeLength >= kLCCKVolumeMaxTimeLength) {
-//        return;
-//    }
-//    [LCCKProgressHUD changeSubTitle:@"松开手指,取消发送"];
-//}
+- (void)recordingTimeLimitDidExpire {
+    if (!self.isRecording || self.recordingDidReachTimeLimit) {
+        return;
+    }
+    [self invalidateRecordingTimeoutTimer];
+    self.recordingDidReachTimeLimit = YES;
+    self.recording = NO;
+    self.recordButtonTracking = NO;
+    self.voiceRecordButton.selected = NO;
+    self.voiceRecordButton.highlighted = NO;
+    // Stop at the supported maximum instead of allowing an unbounded negative countdown.
+    // https://github.com/leancloud/ChatKit-OC/issues/414
+    [self.MP3 stopRecord];
+}
 
-/**
- *  更新录音状态,手指重新滑动到范围内,提示向上取消录音
- */
-//- (void)updateContinueRecordVoice {
-//    if (self.volumeTimeLength >= kLCCKVolumeMaxTimeLength) {
-//        return;
-//    }
-//    [LCCKProgressHUD changeSubTitle:@"手指上滑,取消发送"];
-//}
+- (void)recordingTimeoutTimerDidFire:(NSTimer *)timer {
+    if (timer == self.recordingTimeoutTimer) {
+        [self recordingTimeLimitDidExpire];
+    }
+}
+
+- (void)invalidateRecordingTimeoutTimer {
+    [self.recordingTimeoutTimer invalidate];
+    self.recordingTimeoutTimer = nil;
+}
+
+- (void)updateCancelRecordVoice {
+    if (self.isRecording) {
+        [LCCKProgressHUD changeSubTitle:@"松开手指,取消发送"];
+    }
+}
+
+- (void)updateContinueRecordVoice {
+    if (self.isRecording) {
+        [LCCKProgressHUD changeSubTitle:@"手指上滑,取消发送"];
+    }
+}
 
 - (void)setShowType:(LCCKFunctionViewShowType)showType {
     if (_showType == showType) {
@@ -863,9 +909,12 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         [_voiceRecordButton setTitle:@"松开 结束" forState:UIControlStateSelected];
         [_voiceRecordButton setTitle:@"松开 结束" forState:UIControlStateHighlighted];
         
-        // Related interruption and permission reports; TouchCancel handling is not wired here: https://github.com/ChenYilong/CYLChatKit/issues/3
+        // Cancel recordings when control tracking is interrupted or microphone authorization is requested.
+        // https://github.com/ChenYilong/CYLChatKit/issues/3
+        // https://github.com/leancloud/ChatKit-OC/issues/269
         [_voiceRecordButton addTarget:self action:@selector(startRecordVoice) forControlEvents:UIControlEventTouchDown];
         [_voiceRecordButton addTarget:self action:@selector(cancelRecordVoice) forControlEvents:UIControlEventTouchUpOutside];
+        [_voiceRecordButton addTarget:self action:@selector(cancelRecordVoice) forControlEvents:UIControlEventTouchCancel];
         [_voiceRecordButton addTarget:self action:@selector(confirmRecordVoice) forControlEvents:UIControlEventTouchUpInside];
         [_voiceRecordButton addTarget:self action:@selector(updateCancelRecordVoice) forControlEvents:UIControlEventTouchDragExit];
         [_voiceRecordButton addTarget:self action:@selector(updateContinueRecordVoice) forControlEvents:UIControlEventTouchDragEnter];
@@ -956,20 +1005,8 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
  *  进入后台 取消当前的录音
  */
 - (void)appBecomeBackgroundCancelRecordVoice {
-    //    [self cancelRecordVoice];
+    [self cancelRecordVoice];
 }
-
-/**
- *  倒计时结束 完成当前的录音
- */
-//- (void)appRecieveMsgFromRecordTimer {
-//    if (self.voiceRecordButton.highlighted == YES) {
-//        self.voiceRecordButton.selected = NO;
-//        self.voiceRecordButton.highlighted = NO;
-//        [self.MP3 stopRecord];
-//        self.isTimeOut = YES;
-//    }
-//}
 
 - (UIColor *)randomColor {
     return [UIColor colorWithRed:drand48()
