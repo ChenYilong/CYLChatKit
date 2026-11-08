@@ -628,16 +628,13 @@ NSString *const RNNotificationName = @"sendMessageToRNNotificationName";
 
 - (void)setupNavigationItemTitleWithConversation:(AVIMConversation *)conversation {
     LCCKConversationNavigationTitleView *navigationItemTitle = [[LCCKConversationNavigationTitleView alloc] initWithConversation:conversation navigationController:self.navigationController];
-    navigationItemTitle.frame = CGRectZero;
-    //仅修高度,xyw值不变
-    navigationItemTitle.frame = ({
-        CGRect frame = navigationItemTitle.frame;
-        CGFloat containerViewHeight = self.navigationController.navigationBar.frame.size.height;
-        CGFloat containerViewWidth = self.navigationController.navigationBar.frame.size.width - 130;
-        frame.size.width = containerViewWidth;
-        frame.size.height = containerViewHeight;
-        frame;
-    });
+    UINavigationBar *navigationBar = self.navigationController.navigationBar;
+    CGFloat navigationBarWidth = CGRectGetWidth(navigationBar.bounds);
+    CGFloat titleWidth = MAX(0, navigationBarWidth - 130);
+    CGFloat titleHeight = CGRectGetHeight(navigationBar.bounds);
+    // Start centered to avoid a visible position jump during the navigation bar's first layout.
+    // https://github.com/leancloud/ChatKit-OC/issues/202
+    navigationItemTitle.frame = CGRectMake((navigationBarWidth - titleWidth) / 2, 0, titleWidth, titleHeight);
     self.navigationItem.titleView = navigationItemTitle;
 }
 

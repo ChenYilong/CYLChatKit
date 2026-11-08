@@ -31,4 +31,6 @@ xcuserdata/
 Pods/
 
 *.DS_Store
+
+# macOS AppleDouble metadata
 ._*

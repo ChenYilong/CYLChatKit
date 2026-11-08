@@ -451,12 +451,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     [self updateChatBarKeyBoardConstraints];
     [self updateChatBarConstraintsIfNeeded];
     if (@available(iOS 11.0, *)) {
-        UIWindow *keyWindow = [[[UIApplication sharedApplication] delegate] window];
-        // 获取底部安全区域高度，iPhone X 竖屏下为 34.0，横屏下为 21.0，其他类型设备都为 0
-        CGFloat bottomSafeInset = keyWindow.safeAreaInsets.bottom;
-        if (bottomSafeInset == 34.0f || bottomSafeInset == 21.0f) {
-            [self safeAreaInsetsDidChange];
-        }
+        [self safeAreaInsetsDidChange];
     }
 }
 
@@ -600,12 +595,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
     }
     [self updateChatBarConstraintsIfNeeded];
     if (@available(iOS 11.0, *)) {
-        UIWindow *keyWindow = [[[UIApplication sharedApplication] delegate] window];
-        // 获取底部安全区域高度，iPhone X 竖屏下为 34.0，横屏下为 21.0，其他类型设备都为 0
-        CGFloat bottomSafeInset = keyWindow.safeAreaInsets.bottom;
-        if (bottomSafeInset == 34.0f || bottomSafeInset == 21.0f) {
-            [self safeAreaInsetsDidChange];
-        }
+        [self safeAreaInsetsDidChange];
     }
 }
 
@@ -896,10 +886,13 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
 }
 
 - (void)safeAreaInsetsDidChange {
+    [super safeAreaInsetsDidChange];
     CGFloat safeAreaOffset = 0;
     if ((_showType != LCCKFunctionViewShowFace) &&  (_showType != LCCKFunctionViewShowMore)) {
         safeAreaOffset = -self.safeAreaInsets.bottom;
     }
+    // Use the device's actual inset instead of assuming fixed iPhone X dimensions.
+    // https://github.com/leancloud/ChatKit-OC/issues/361
     [self.voiceButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarBottomOffset+safeAreaOffset);
     }];
@@ -910,7 +903,7 @@ NSString *const kLCCKBatchDeleteTextSuffix = @"kLCCKBatchDeleteTextSuffix";
         make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarBottomOffset+safeAreaOffset);
     }];
     [self.textView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarBottomOffset+safeAreaOffset);
+        make.bottom.equalTo(self.inputBarBackgroundView.mas_bottom).with.offset(-kChatBarTextViewBottomOffset+safeAreaOffset);
     }];
 }
 

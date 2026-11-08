@@ -95,6 +95,8 @@
         // requied!
         if (message.originPhotoURL) {
             UIImage *image = [self imageInBundleForImageName:@"Placeholder_Image"];
+            // Keep the placeholder at the message's target dimensions and refresh its row after download.
+            // https://github.com/leancloud/ChatKit-OC/issues/279
             CGSize photoSize = CGSizeMake(message.photoWidth, message.photoHeight);
             UIImage *newImage = [image lcck_imageByScalingAspectFillWithOriginSize:photoSize];
             self.messageImageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -183,7 +185,7 @@
     if (!_messageImageView) {
         _messageImageView = [[UIImageView alloc] init];
         //FIXME:这一行可以不需要
-        _messageImageView.contentMode = UIViewContentModeScaleAspectFit;
+        _messageImageView.contentMode = UIViewContentModeScaleToFill;
     }
     return _messageImageView;
     
@@ -216,4 +218,3 @@
 }
 
 @end
-
