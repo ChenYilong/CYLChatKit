@@ -69,7 +69,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 #pragma mark - current conversation
 
 - (void)updateConversationAsReadWithLastMessage:(id)lastMessage {
-    id<LCCKConversationDelegate> conversation = self.currentConversation;
+    id<LCCKConversationProtocol> conversation = self.currentConversation;
     NSString *conversationId = conversation.conversationId;
     if (!conversation.createAt || conversationId.length == 0) {
         NSLog( @"类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"conversation is not available");
@@ -81,17 +81,17 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationUnreadsUpdated object:nil];
 }
 
-- (void)setCurrentConversation:(id<LCCKConversationDelegate>)currentConversation {
+- (void)setCurrentConversation:(id<LCCKConversationProtocol>)currentConversation {
     _currentConversation = currentConversation;
     [self prepareConversationIfNeeded:currentConversation];
 }
 
-- (id<LCCKConversationDelegate>)currentConversation {
+- (id<LCCKConversationProtocol>)currentConversation {
     [self prepareConversationIfNeeded:_currentConversation];
     return _currentConversation;
 }
 
-- (void)prepareConversationIfNeeded:(id<LCCKConversationDelegate>)conversation {
+- (void)prepareConversationIfNeeded:(id<LCCKConversationProtocol>)conversation {
     if (!conversation) {
         return;
     }
@@ -130,22 +130,22 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     [self.IMProvider deleteRecentConversationWithConversationId:conversationId shouldRefreshWhenFinished:shouldRefreshWhenFinished];
 }
 
-- (void)insertRecentConversation:(id<LCCKConversationDelegate>)conversation {
+- (void)insertRecentConversation:(id<LCCKConversationProtocol>)conversation {
     [self insertRecentConversation:conversation shouldRefreshWhenFinished:YES];
 }
 
-- (void)insertRecentConversation:(id<LCCKConversationDelegate>)conversation shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
+- (void)insertRecentConversation:(id<LCCKConversationProtocol>)conversation shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
     if (!conversation) {
         return;
     }
     [self insertRecentConversations:@[conversation] shouldRefreshWhenFinished:shouldRefreshWhenFinished];
 }
 
-- (void)insertRecentConversations:(NSArray<id<LCCKConversationDelegate>> *)conversations {
+- (void)insertRecentConversations:(NSArray<id<LCCKConversationProtocol>> *)conversations {
     [self insertRecentConversations:conversations shouldRefreshWhenFinished:YES];
 }
 
-- (void)insertRecentConversations:(NSArray<id<LCCKConversationDelegate>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
+- (void)insertRecentConversations:(NSArray<id<LCCKConversationProtocol>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
     [self.IMProvider insertRecentConversations:conversations ?: @[] shouldRefreshWhenFinished:shouldRefreshWhenFinished];
 }
 
@@ -239,7 +239,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     [self.IMProvider insertFailedLCCKMessage:message];
 }
 
-- (void)insertFailedMessage:(id<LCCKIMMessageDelegate>)message {
+- (void)insertFailedMessage:(id<LCCKIMMessageProtocol>)message {
     if (message.conversationId == nil) {
         //TODO: add debug model
         NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"conversationId is nil");
@@ -258,15 +258,15 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 
 #pragma mark - send messages
 
-- (void)sendMessage:(id<LCCKIMMessageDelegate>)message
-       conversation:(id<LCCKConversationDelegate>)conversation
+- (void)sendMessage:(id<LCCKIMMessageProtocol>)message
+       conversation:(id<LCCKConversationProtocol>)conversation
       progressBlock:(LCCKProgressBlock)progressBlock
            callback:(LCCKBooleanResultBlock)block {
     [self sendMessage:message conversation:conversation mentionList:nil progressBlock:progressBlock callback:block];
 }
 
-- (void)sendMessage:(id<LCCKIMMessageDelegate>)message
-       conversation:(id<LCCKConversationDelegate>)conversation
+- (void)sendMessage:(id<LCCKIMMessageProtocol>)message
+       conversation:(id<LCCKConversationProtocol>)conversation
         mentionList:(NSArray<NSString *> *)mentionList
       progressBlock:(LCCKProgressBlock)progressBlock
            callback:(LCCKBooleanResultBlock)block {
@@ -278,18 +278,18 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
 }
 
 - (void)sendWelcomeMessageToPeerId:(NSString *)peerId text:(NSString *)text block:(LCCKBooleanResultBlock)block {
-    [self fetchConversationWithPeerId:peerId callback:^(id<LCCKConversationDelegate> conversation, NSError *error) {
+    [self fetchConversationWithPeerId:peerId callback:^(id<LCCKConversationProtocol> conversation, NSError *error) {
         [self sendText:text toConversation:conversation error:error block:block];
     }];
 }
 
 - (void)sendWelcomeMessageToConversationId:(NSString *)conversationId text:(NSString *)text block:(LCCKBooleanResultBlock)block {
-    [self fetchConversationWithConversationId:conversationId callback:^(id<LCCKConversationDelegate> conversation, NSError *error) {
+    [self fetchConversationWithConversationId:conversationId callback:^(id<LCCKConversationProtocol> conversation, NSError *error) {
         [self sendText:text toConversation:conversation error:error block:block];
     }];
 }
 
-- (void)sendText:(NSString *)text toConversation:(id<LCCKConversationDelegate>)conversation error:(NSError *)error block:(LCCKBooleanResultBlock)block {
+- (void)sendText:(NSString *)text toConversation:(id<LCCKConversationProtocol>)conversation error:(NSError *)error block:(LCCKBooleanResultBlock)block {
     if (error || !conversation) {
         !block ?: block(NO, error ?: [self errorWithReason:@"conversation is nil"]);
         return;
@@ -299,7 +299,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
                                                            sender:nil
                                                         timestamp:LCCK_CURRENT_TIMESTAMP
                                                   serverMessageId:nil];
-    id<LCCKIMMessageDelegate> message = [self.IMProvider IMMessageFromMessage:textMessage];
+    id<LCCKIMMessageProtocol> message = [self.IMProvider IMMessageFromMessage:textMessage];
     [self sendMessage:message conversation:conversation progressBlock:nil callback:block];
 }
 
@@ -317,7 +317,7 @@ NSString *const LCCKConversationServiceErrorDomain = @"LCCKConversationServiceEr
     _loadLatestMessagesHandler = loadLatestMessagesHandler;
 }
 
-- (void)queryTypedMessagesWithConversation:(id<LCCKConversationDelegate>)conversation
+- (void)queryTypedMessagesWithConversation:(id<LCCKConversationProtocol>)conversation
                                  messageId:(NSString *)messageId
                                  timestamp:(int64_t)timestamp
                                      limit:(NSInteger)limit

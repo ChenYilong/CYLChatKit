@@ -19,8 +19,8 @@
     BOOL isCustomMessage = NO;
     NSString *messageTypeString = @"message_";
     switch (messageMediaType) {
-        case kLCCKMessageMediaTypeImage:
-        case kLCCKMessageMediaTypeLocation:
+        case LCCKMessageMediaTypeImage:
+        case LCCKMessageMediaTypeLocation:
             messageTypeString = [messageTypeString stringByAppendingString:@"hollow_"];
             break;
         default:
@@ -31,8 +31,8 @@
         case LCCKMessageOwnerTypeSelf: {
             // 发送
             switch (messageMediaType) {
-                case kLCCKMessageMediaTypeImage:
-                case kLCCKMessageMediaTypeLocation:
+                case LCCKMessageMediaTypeImage:
+                case LCCKMessageMediaTypeLocation:
                     bubbleImageCapInsets = [LCCKSettingService sharedInstance].rightHollowCapMessageBubbleCustomize;
                     break;
                 default:
@@ -45,8 +45,8 @@
         case LCCKMessageOwnerTypeOther: {
             // 接收
             switch (messageMediaType) {
-                case kLCCKMessageMediaTypeImage:
-                case kLCCKMessageMediaTypeLocation:
+                case LCCKMessageMediaTypeImage:
+                case LCCKMessageMediaTypeLocation:
                     bubbleImageCapInsets = [LCCKSettingService sharedInstance].leftHollowCapMessageBubbleCustomize;
                     break;
                 default:

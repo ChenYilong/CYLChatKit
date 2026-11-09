@@ -10,7 +10,7 @@
 
 #import "LCCKMessage.h"
 #import "LCCKConstants.h"
-#import "LCCKIMMessageDelegate.h"
+#import "LCCKIMMessageProtocol.h"
 
 @class LCCKMessage;
 @class LCCKConversationViewController;
@@ -42,15 +42,15 @@ typedef void (^LCCKSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError
  * The IM SDK messages loaded from the server, used for paging, editing, and recalling.
  * The historical name is kept for compatibility.
  */
-@property (nonatomic, strong, readonly) NSMutableArray<id<LCCKIMMessageDelegate>> *avimTypedMessage;
+@property (nonatomic, strong, readonly) NSMutableArray<id<LCCKIMMessageProtocol>> *avimTypedMessage;
 
 /**
  *  发送一条消息,消息已经通过addMessage添加到LCCKConversationViewModel数组中了,此方法主要为了LCCKChatServer发送消息过程
  */
 - (void)sendMessage:(id)message;
 - (void)sendMessage:(id)message mentionList:(NSArray<NSString *> *)mentionList;
-- (void)sendCustomMessage:(id<LCCKIMMessageDelegate>)customMessage;
-- (void)sendCustomMessage:(id<LCCKIMMessageDelegate>)aMessage
+- (void)sendCustomMessage:(id<LCCKIMMessageProtocol>)customMessage;
+- (void)sendCustomMessage:(id<LCCKIMMessageProtocol>)aMessage
             progressBlock:(LCCKProgressBlock)progressBlock
                   success:(LCCKBooleanResultBlock)success
                    failed:(LCCKBooleanResultBlock)failed;

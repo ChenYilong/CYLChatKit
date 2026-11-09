@@ -254,7 +254,7 @@ static NSString *const LCCKLeanCloudSessionServiceErrorDomain = @"LCCKLeanCloudS
 didMemberInfoUpdateBy:(NSString *)byClientId
             memberId:(NSString *)memberId
                 role:(AVIMConversationMemberRole)role {
-    void (^memberInfoChangedBlock)(id<LCCKConversationDelegate>, NSString *, NSString *, NSUInteger) = [LCCKSessionService sharedInstance].memberInfoChangedBlock;
+    void (^memberInfoChangedBlock)(id<LCCKConversationProtocol>, NSString *, NSString *, NSUInteger) = [LCCKSessionService sharedInstance].memberInfoChangedBlock;
     !memberInfoChangedBlock ?: memberInfoChangedBlock(conversation, byClientId, memberId, (NSUInteger)role);
 }
 

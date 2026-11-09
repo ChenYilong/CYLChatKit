@@ -10,8 +10,8 @@
 #import "LCCKConstants.h"
 #import "LCCKSingleton.h"
 #import "LCCKMenuItem.h"
-#import "LCCKConversationDelegate.h"
-#import "LCCKIMMessageDelegate.h"
+#import "LCCKConversationProtocol.h"
+#import "LCCKIMMessageProtocol.h"
 #import "LCCKIMProvider.h"
 #import <CoreLocation/CoreLocation.h>
 @class LCCKConversationViewController;
@@ -66,7 +66,7 @@ typedef void (^LCCKForceReconnectSessionBlock)(NSError *error, BOOL granted, __k
 /*!
  * @param role The member role reported by the IM provider. For LeanCloud it is an `AVIMConversationMemberRole` value.
  */
-- (void)setMemberInfoChangedBlock:(void (^)(id<LCCKConversationDelegate> conversation, NSString *byClientId, NSString *clientId, NSUInteger role))block;
+- (void)setMemberInfoChangedBlock:(void (^)(id<LCCKConversationProtocol> conversation, NSString *byClientId, NSString *clientId, NSUInteger role))block;
 
 @end
 
@@ -361,8 +361,8 @@ typedef CGFloat (^LCCKAvatarImageViewCornerRadiusBlock)(CGSize avatarImageViewSi
 /// @name LCCKConversationService
 ///=============================================================================
 
-typedef void (^LCCKConversationResultBlock)(id<LCCKConversationDelegate> conversation, NSError *error);
-typedef void (^LCCKFetchConversationHandler) (id<LCCKConversationDelegate> conversation, LCCKConversationViewController *conversationController);
+typedef void (^LCCKConversationResultBlock)(id<LCCKConversationProtocol> conversation, NSError *error);
+typedef void (^LCCKFetchConversationHandler) (id<LCCKConversationProtocol> conversation, LCCKConversationViewController *conversationController);
 typedef void (^LCCKConversationInvalidedHandler) (NSString *conversationId, LCCKConversationViewController *conversationController, id<LCCKUserDelegate> administrator, NSError *error);
 
 @protocol LCCKConversationService <NSObject>
@@ -384,9 +384,9 @@ typedef void (^LCCKConversationInvalidedHandler) (NSString *conversationId, LCCK
 
 typedef void (^LCCKFilterMessagesCompletionHandler)(NSArray *filteredMessages, NSError *error);
 /*!
- * @param messages SDK messages conforming to `LCCKIMMessageDelegate`. Return the filtered SDK messages.
+ * @param messages SDK messages conforming to `LCCKIMMessageProtocol`. Return the filtered SDK messages.
  */
-typedef void (^LCCKFilterMessagesBlock)(id<LCCKConversationDelegate> conversation, NSArray<id<LCCKIMMessageDelegate>> *messages, LCCKFilterMessagesCompletionHandler completionHandler);
+typedef void (^LCCKFilterMessagesBlock)(id<LCCKConversationProtocol> conversation, NSArray<id<LCCKIMMessageProtocol>> *messages, LCCKFilterMessagesCompletionHandler completionHandler);
 
 /*!
  * 用于筛选消息，比如：群定向消息、筛选黑名单消息、黑名单消息
@@ -402,9 +402,9 @@ typedef void (^LCCKFilterMessagesBlock)(id<LCCKConversationDelegate> conversatio
  */
 typedef void (^LCCKSendMessageHookCompletionHandler)(BOOL granted, NSError *error);
 /*!
- * @param message The SDK message about to be sent, conforming to `LCCKIMMessageDelegate`.
+ * @param message The SDK message about to be sent, conforming to `LCCKIMMessageProtocol`.
  */
-typedef void (^LCCKSendMessageHookBlock)(LCCKConversationViewController *conversationController, id<LCCKIMMessageDelegate> message, LCCKSendMessageHookCompletionHandler completionHandler);
+typedef void (^LCCKSendMessageHookBlock)(LCCKConversationViewController *conversationController, id<LCCKIMMessageProtocol> message, LCCKSendMessageHookCompletionHandler completionHandler);
 
 /*!
  * 用于HOOK掉发送消息的行为，可以实现比如：禁止黑名单用户发消息、禁止发送包含敏感词掉消息
@@ -433,7 +433,7 @@ typedef void (^LCCKLoadLatestMessagesHandler)(LCCKConversationViewController *co
  *  插入一条最近对话
  *  @param conversation 会话
  */
-- (void)insertRecentConversation:(id<LCCKConversationDelegate>)conversation;
+- (void)insertRecentConversation:(id<LCCKConversationProtocol>)conversation;
 
 /**
  *  增加未读数
@@ -474,8 +474,8 @@ typedef void (^LCCKLoadLatestMessagesHandler)(LCCKConversationViewController *co
  * @param granted 该会话允许被展示
  * @param error 消息为何不允许被发送
  */
-typedef void (^LCCKConversationListShowHookCompletionHandler)(NSArray<id<LCCKConversationDelegate> > *conversations, NSError *error);
-typedef void (^LCCKConversationListShowHookBlock)(NSArray<id<LCCKConversationDelegate> > *conversations, LCCKConversationListShowHookCompletionHandler completionHandler);
+typedef void (^LCCKConversationListShowHookCompletionHandler)(NSArray<id<LCCKConversationProtocol> > *conversations, NSError *error);
+typedef void (^LCCKConversationListShowHookBlock)(NSArray<id<LCCKConversationProtocol> > *conversations, LCCKConversationListShowHookCompletionHandler completionHandler);
 
 /*!
  * 用于HOOK掉展示会话的行为，可以实现比如：禁止黑名单用户会话
@@ -489,7 +489,7 @@ typedef void (^LCCKConversationListShowHookBlock)(NSArray<id<LCCKConversationDel
  *  选中某个对话后的回调
  *  @param conversation 被选中的对话
  */
-typedef void(^LCCKDidSelectConversationsListCellBlock)(NSIndexPath *indexPath, id<LCCKConversationDelegate> conversation, LCCKConversationListViewController *controller);
+typedef void(^LCCKDidSelectConversationsListCellBlock)(NSIndexPath *indexPath, id<LCCKConversationProtocol> conversation, LCCKConversationListViewController *controller);
 
 /*!
  *  选中某个对话后的回调
@@ -505,7 +505,7 @@ typedef void(^LCCKDidSelectConversationsListCellBlock)(NSIndexPath *indexPath, i
  *  删除某个对话后的回调
  *  @param conversation 被选中的对话
  */
-typedef void(^LCCKDidDeleteConversationsListCellBlock)(NSIndexPath *indexPath, id<LCCKConversationDelegate> conversation, LCCKConversationListViewController *controller);
+typedef void(^LCCKDidDeleteConversationsListCellBlock)(NSIndexPath *indexPath, id<LCCKConversationProtocol> conversation, LCCKConversationListViewController *controller);
 
 /*!
  *  删除某个对话后的回调
@@ -523,7 +523,7 @@ typedef void(^LCCKDidDeleteConversationsListCellBlock)(NSIndexPath *indexPath, i
  *  - param conversation, 对话
  *  - param editActions, 默认的菜单数组，成员为 UITableViewRowAction 类型
  */
-typedef NSArray *(^LCCKConversationEditActionsBlock)(NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions, id<LCCKConversationDelegate> conversation, LCCKConversationListViewController *controller);
+typedef NSArray *(^LCCKConversationEditActionsBlock)(NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions, id<LCCKConversationProtocol> conversation, LCCKConversationListViewController *controller);
 
 /*!
  *  可以通过这个block设置对话列表中每个对话的左滑菜单，这个是同步调用的，需要尽快返回，否则会卡住UI

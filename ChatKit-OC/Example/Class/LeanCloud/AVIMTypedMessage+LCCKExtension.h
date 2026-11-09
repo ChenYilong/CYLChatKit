@@ -7,7 +7,7 @@
 //
 
 //  Moved from ChatKit to the demo: ChatKit no longer depends on LeanCloud.
-//  This category makes `AVIMTypedMessage` conform to ChatKit's `LCCKIMMessageDelegate`,
+//  This category makes `AVIMTypedMessage` conform to ChatKit's `LCCKIMMessageProtocol`,
 //  so built-in and custom LeanCloud messages can pass through ChatKit's UI.
 
 #import <AVOSCloudIM/AVOSCloudIM.h>
@@ -18,12 +18,12 @@
 #endif
 @class LCCKMessage;
 
-@interface AVIMTypedMessage (LCCKExtension) <LCCKIMMessageDelegate>
+@interface AVIMTypedMessage (LCCKExtension) <LCCKIMMessageProtocol>
 
-#pragma mark - LCCKIMMessageDelegate
+#pragma mark - LCCKIMMessageProtocol
 
 - (NSString *)lcck_senderId;
-- (void)lcck_setSenderId:(NSString *)senderId;
+- (void)setLcck_senderId:(NSString *)senderId;
 - (LCCKMessageOwnerType)lcck_ownerType;
 - (LCCKMessageSendState)lcck_sendStatus;
 - (int64_t)lcck_sendTimestamp;

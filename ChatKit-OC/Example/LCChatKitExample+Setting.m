@@ -177,7 +177,7 @@
     // 自定义Cell菜单
     [[LCChatKit sharedInstance] setConversationEditActionBlock:^NSArray *(
                                                NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions,
-                                               id<LCCKConversationDelegate> conversation, LCCKConversationListViewController *controller) {
+                                               id<LCCKConversationProtocol> conversation, LCCKConversationListViewController *controller) {
          return [self lcck_exampleConversationEditActionAtIndexPath:indexPath
                                                        conversation:conversation
                                                          controller:controller];
@@ -190,14 +190,14 @@
 - (void)lcck_setupConversationsCellOperation { 
     //选中某个对话后的回调,设置事件响应函数
     [[LCChatKit sharedInstance] setDidSelectConversationsListCellBlock:^(
-                                                                         NSIndexPath *indexPath, id<LCCKConversationDelegate> conversation,
+                                                                         NSIndexPath *indexPath, id<LCCKConversationProtocol> conversation,
                                                                          LCCKConversationListViewController *controller) {
         [[self class] exampleOpenConversationViewControllerWithConversaionId:conversation.conversationId
          fromNavigationController:controller.navigationController];
     }];
     //删除某个对话后的回调 (一般不需要做处理)
     [[LCChatKit sharedInstance] setDidDeleteConversationsListCellBlock:^(
-                                                                         NSIndexPath *indexPath, id<LCCKConversationDelegate> conversation,
+                                                                         NSIndexPath *indexPath, id<LCCKConversationProtocol> conversation,
                                                                          LCCKConversationListViewController *controller){
         // TODO:
     }];
@@ -209,7 +209,7 @@
  */
 - (void)lcck_setupOpenConversation {
     [[LCChatKit sharedInstance] setFetchConversationHandler:^(
-                                                              id<LCCKConversationDelegate> conversation,
+                                                              id<LCCKConversationProtocol> conversation,
                                                               LCCKConversationViewController *aConversationController) {
         if (!conversation.createAt) { //如果没有创建时间，直接return
             return;
@@ -327,12 +327,12 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
         
         LCCKMessageMediaType mediaType = message.mediaType;
         BOOL isNormalMediaTypeMessage = ({
-            (mediaType == kLCCKMessageMediaTypeText ||
-             mediaType == kLCCKMessageMediaTypeImage ||
-             mediaType == kLCCKMessageMediaTypeAudio ||
-             mediaType == kLCCKMessageMediaTypeVideo ||
-             mediaType == kLCCKMessageMediaTypeLocation ||
-             mediaType == kLCCKMessageMediaTypeFile);
+            (mediaType == LCCKMessageMediaTypeText ||
+             mediaType == LCCKMessageMediaTypeImage ||
+             mediaType == LCCKMessageMediaTypeAudio ||
+             mediaType == LCCKMessageMediaTypeVideo ||
+             mediaType == LCCKMessageMediaTypeLocation ||
+             mediaType == LCCKMessageMediaTypeFile);
         });
         LCCKMessageOwnerType ownerType = [userInfo[LCCKLongPressMessageUserInfoKeyMessageOwner] unsignedIntegerValue];
         LCCKConversationViewController *fromController = userInfo[LCCKLongPressMessageUserInfoKeyFromController];
@@ -340,7 +340,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
         
         NSMutableArray *menuItems = [NSMutableArray array];
         
-        if (mediaType == kLCCKMessageMediaTypeText) {
+        if (mediaType == LCCKMessageMediaTypeText) {
             LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"copy") block:^{
                 UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
                 [pasteboard setString:[message text]];
@@ -523,8 +523,8 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
 - (void)lcck_setupFilterMessage {
     //注意：在 `[RedpacketConfig lcck_setting]` 中已经设置过该 `setFilterMessagesBlock:` ，注意不要重复设置。
     //这里演示如何筛选新的消息记录，以及新接收到的消息，以群定向消息为例：
-    [[LCChatKit sharedInstance] setFilterMessagesBlock:^(id<LCCKConversationDelegate> conversation,
-                              NSArray<id<LCCKIMMessageDelegate>> *messages,
+    [[LCChatKit sharedInstance] setFilterMessagesBlock:^(id<LCCKConversationProtocol> conversation,
+                              NSArray<id<LCCKIMMessageProtocol>> *messages,
                               LCCKFilterMessagesCompletionHandler completionHandler) {
          if (conversation.lcck_type == LCCKConversationTypeSingle) {
              completionHandler(messages, nil);
@@ -559,7 +559,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
 }
 
 - (void)lcck_setupSendMessageHook {
-    [[LCChatKit sharedInstance] setSendMessageHookBlock:^(LCCKConversationViewController *conversationController, id<LCCKIMMessageDelegate> message, LCCKSendMessageHookCompletionHandler completionHandler) {
+    [[LCChatKit sharedInstance] setSendMessageHookBlock:^(LCCKConversationViewController *conversationController, id<LCCKIMMessageProtocol> message, LCCKSendMessageHookCompletionHandler completionHandler) {
         if ([[message lcck_senderId] isEqualToString:@"Jerry"]) {
             NSInteger code = 0;
             NSString *errorReasonText = @"不允许Jerry发送消息";
@@ -675,14 +675,14 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
  *  @return 返回UITableViewRowAction类型的数组
  */
 - (NSArray *)lcck_exampleConversationEditActionAtIndexPath:(NSIndexPath *)indexPath
-                                              conversation:(id<LCCKConversationDelegate>)conversation
+                                              conversation:(id<LCCKConversationProtocol>)conversation
                                                 controller:(LCCKConversationListViewController *)controller {
     // 如果需要自定义其他会话的菜单，在此编辑
     return [self lcck_rightButtonsAtIndexPath:indexPath conversation:conversation controller:controller];
 }
 
 - (NSArray *)lcck_rightButtonsAtIndexPath:(NSIndexPath *)indexPath
-                             conversation:(id<LCCKConversationDelegate>)conversation
+                             conversation:(id<LCCKConversationProtocol>)conversation
                                controller:(LCCKConversationListViewController *)controller {
     NSString *title = nil;
     UITableViewRowActionHandler handler = nil;
@@ -722,7 +722,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 - (void)lcck_markReadStatusAtIndexPath:(NSIndexPath *)indexPath
                                  title:(NSString **)title
                                 handle:(UITableViewRowActionHandler *)handler
-                          conversation:(id<LCCKConversationDelegate>)conversation
+                          conversation:(id<LCCKConversationProtocol>)conversation
                             controller:(LCCKConversationListViewController *)controller {
     NSString *conversationId = conversation.conversationId;
     if (title) {
@@ -795,7 +795,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 
 - (void)lcck_memberInfoChanged
 {
-    [[LCChatKit sharedInstance] setMemberInfoChangedBlock:^(id<LCCKConversationDelegate> conversation, NSString *byClientId, NSString *clientId, NSUInteger role) {
+    [[LCChatKit sharedInstance] setMemberInfoChangedBlock:^(id<LCCKConversationProtocol> conversation, NSString *byClientId, NSString *clientId, NSUInteger role) {
         NSString *roleString = @"Member";
         if (role == AVIMConversationMemberRoleOwner) {
             roleString = @"Owner";

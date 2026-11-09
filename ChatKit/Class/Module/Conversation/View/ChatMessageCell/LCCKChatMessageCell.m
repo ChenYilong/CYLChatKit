@@ -332,13 +332,13 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     NSInteger userType = 0;
     LCCKMessageSendState sendStatus;
     if ([message lcck_isCustomMessage]) {
-        NSString *senderClientId = [(id<LCCKIMMessageDelegate>)message lcck_senderId];
+        NSString *senderClientId = [(id<LCCKIMMessageProtocol>)message lcck_senderId];
         NSError *error;
         //TODO:如果我正在群里聊天，这时有人进入群聊，需要异步获取头像等信息，模仿ConversationList的做法。
         [[LCCKUserSystemService sharedInstance] getCachedProfileIfExists:senderClientId name:&nickName avatarURL:&avatarURL userTye:&userType error:&error];
         if (!nickName)  { nickName = senderClientId; }
         self.message = nil;
-        sendStatus = [(id<LCCKIMMessageDelegate>)message lcck_sendStatus];
+        sendStatus = [(id<LCCKIMMessageProtocol>)message lcck_sendStatus];
     } else {
         self.message = message;
         nickName = self.message.localDisplayName;
@@ -525,7 +525,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
                     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
                     [pasteboard setString:[self.message text]];
                 }];
-                if (self.mediaType == kLCCKMessageMediaTypeText) {
+                if (self.mediaType == LCCKMessageMediaTypeText) {
                     menuItems = @[copyItem];
                 }
             }

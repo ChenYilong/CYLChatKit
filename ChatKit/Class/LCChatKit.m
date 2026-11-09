@@ -142,7 +142,7 @@
     self.sessionService.disableSingleSignOn = disableSingleSignOn;
 }
 
-- (void)setMemberInfoChangedBlock:(void (^)(id<LCCKConversationDelegate> conversation, NSString *byClientId, NSString *clientId, NSUInteger role))block {
+- (void)setMemberInfoChangedBlock:(void (^)(id<LCCKConversationProtocol> conversation, NSString *byClientId, NSString *clientId, NSUInteger role))block {
     self.sessionService.memberInfoChangedBlock = block;
 }
 #pragma mark - LCCKUserSystemService
@@ -320,7 +320,7 @@
     [self.conversationService didReceiveRemoteNotification:userInfo];
 }
 
-- (void)insertRecentConversation:(id<LCCKConversationDelegate>)conversation {
+- (void)insertRecentConversation:(id<LCCKConversationProtocol>)conversation {
     [self.conversationService insertRecentConversation:conversation];
 }
 

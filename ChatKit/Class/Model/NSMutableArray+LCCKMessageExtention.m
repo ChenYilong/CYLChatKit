@@ -23,7 +23,7 @@
         
         void(^filteredMessageCallback)(NSArray *_avimTypedMessages) = ^(NSArray *_avimTypedMessages) {
             id<LCCKIMProvider> IMProvider = [LCChatKit sharedInstance].IMProvider;
-            for (id<LCCKIMMessageDelegate> typedMessage in _avimTypedMessages) {
+            for (id<LCCKIMMessageProtocol> typedMessage in _avimTypedMessages) {
                 id message = [IMProvider displayMessageFromIMMessage:typedMessage];
                 if (message) {
                     [messages addObject:message];

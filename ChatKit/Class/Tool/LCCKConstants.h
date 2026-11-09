@@ -17,27 +17,29 @@
 
 /*!
  * Media type of a message, owned by ChatKit so the UI layer does not depend on any IM SDK.
- * It is an `int8_t` and the raw values match the LeanCloud `AVIMMessageMediaType` values,
- * so an IM provider can cast between the two types directly.
+ * The underlying type is `int8_t` and the raw values match the LeanCloud `AVIMMessageMediaType`
+ * values, so an IM provider can cast between the two types directly.
  * Positive values are reserved for custom messages.
  */
-typedef int8_t LCCKMessageMediaType;
-
-static LCCKMessageMediaType const kLCCKMessageMediaTypeNone = 0;
-static LCCKMessageMediaType const kLCCKMessageMediaTypeText = -1;
-static LCCKMessageMediaType const kLCCKMessageMediaTypeImage = -2;
-static LCCKMessageMediaType const kLCCKMessageMediaTypeAudio = -3;
-static LCCKMessageMediaType const kLCCKMessageMediaTypeVideo = -4;
-static LCCKMessageMediaType const kLCCKMessageMediaTypeLocation = -5;
-static LCCKMessageMediaType const kLCCKMessageMediaTypeFile = -6;
-static LCCKMessageMediaType const kLCCKMessageMediaTypeSystem = -7;
-static LCCKMessageMediaType const kLCCKMessageMediaTypeRecalled = -127;
+typedef NS_ENUM(int8_t, LCCKMessageMediaType) {
+    LCCKMessageMediaTypeNone = 0,
+    LCCKMessageMediaTypeText = -1,
+    LCCKMessageMediaTypeImage = -2,
+    LCCKMessageMediaTypeAudio = -3,
+    LCCKMessageMediaTypeVideo = -4,
+    LCCKMessageMediaTypeLocation = -5,
+    LCCKMessageMediaTypeFile = -6,
+    LCCKMessageMediaTypeSystem = -7,
+    LCCKMessageMediaTypeRecalled = -127,
+};
 
 /*!
- * Error code an IM provider reports when the connection to the IM server is lost.
- * The value matches LeanCloud's `AVIMErrorCodeConnectionLost`.
+ * Error codes ChatKit recognizes from an IM provider.
+ * `LCCKIMErrorCodeConnectionLost` matches LeanCloud's `AVIMErrorCodeConnectionLost`.
  */
-static NSInteger const LCCKIMErrorCodeConnectionLost = 9001;
+typedef NS_ENUM(NSInteger, LCCKIMErrorCode) {
+    LCCKIMErrorCodeConnectionLost = 9001,
+};
 
 #pragma mark - Base ViewController Life Time Block
 ///=============================================================================
@@ -216,8 +218,8 @@ typedef NS_ENUM(NSUInteger, LCCKMessageOwnerType){
     LCCKMessageOwnerTypeOther /**< 接收到的他人消息 */,
 };
 
-/// Kept for source compatibility. Use `kLCCKMessageMediaTypeSystem` in new code.
-static LCCKMessageMediaType const kAVIMMessageMediaTypeSystem = kLCCKMessageMediaTypeSystem;
+/// Kept for source compatibility. Use `LCCKMessageMediaTypeSystem` in new code.
+static LCCKMessageMediaType const kAVIMMessageMediaTypeSystem = LCCKMessageMediaTypeSystem;
 
 /**
  *  消息发送状态,自己发送的消息时有

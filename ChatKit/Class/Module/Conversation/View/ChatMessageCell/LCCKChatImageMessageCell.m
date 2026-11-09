@@ -232,7 +232,7 @@
 }
 
 + (LCCKMessageMediaType)classMediaType {
-    return kLCCKMessageMediaTypeImage;
+    return LCCKMessageMediaTypeImage;
 }
 
 @end

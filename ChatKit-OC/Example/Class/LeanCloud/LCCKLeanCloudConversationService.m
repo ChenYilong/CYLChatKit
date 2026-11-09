@@ -184,19 +184,19 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     return [names componentsJoinedByString:@","];
 }
 
-- (void)joinConversation:(id<LCCKConversationDelegate>)conversation callback:(LCCKBooleanResultBlock)callback {
+- (void)joinConversation:(id<LCCKConversationProtocol>)conversation callback:(LCCKBooleanResultBlock)callback {
     [(AVIMConversation *)conversation joinWithCallback:^(BOOL succeeded, NSError * _Nullable error) {
         !callback ?: callback(succeeded, error);
     }];
 }
 
-- (void)markConversationAsRead:(id<LCCKConversationDelegate>)conversation {
+- (void)markConversationAsRead:(id<LCCKConversationProtocol>)conversation {
     AVIMConversation *avimConversation = (AVIMConversation *)conversation;
     [avimConversation readInBackground];
     [avimConversation setUnreadMessagesMentioned:NO];
 }
 
-- (void)prepareConversation:(id<LCCKConversationDelegate>)conversation {
+- (void)prepareConversation:(id<LCCKConversationProtocol>)conversation {
     [self pinIMClientToConversationIfNeeded:(AVIMConversation *)conversation];
 }
 
@@ -215,14 +215,14 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
 
 #pragma mark - LCCKIMMessageProvider
 
-- (id)displayMessageFromIMMessage:(id<LCCKIMMessageDelegate>)message {
+- (id)displayMessageFromIMMessage:(id<LCCKIMMessageProtocol>)message {
     if (![message isKindOfClass:[AVIMTypedMessage class]]) {
         return nil;
     }
     return [LCCKMessage messageWithAVIMTypedMessage:(AVIMTypedMessage *)message];
 }
 
-- (id<LCCKIMMessageDelegate>)IMMessageFromMessage:(id)message {
+- (id<LCCKIMMessageProtocol>)IMMessageFromMessage:(id)message {
     if ([message isKindOfClass:[AVIMTypedMessage class]]) {
         return message;
     }
@@ -232,8 +232,8 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     return nil;
 }
 
-- (void)sendMessage:(id<LCCKIMMessageDelegate>)message
-       conversation:(id<LCCKConversationDelegate>)conversation
+- (void)sendMessage:(id<LCCKIMMessageProtocol>)message
+       conversation:(id<LCCKConversationProtocol>)conversation
         mentionList:(NSArray<NSString *> *)mentionList
       progressBlock:(LCCKProgressBlock)progressBlock
            callback:(LCCKBooleanResultBlock)block {
@@ -273,7 +273,7 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     [conversation sendMessage:message options:options progressBlock:progressBlock callback:block];
 }
 
-- (void)queryMessagesWithConversation:(id<LCCKConversationDelegate>)aConversation
+- (void)queryMessagesWithConversation:(id<LCCKConversationProtocol>)aConversation
                             messageId:(NSString *)messageId
                             timestamp:(int64_t)timestamp
                                 limit:(NSInteger)limit
@@ -307,9 +307,9 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     });
 }
 
-- (void)updateMessage:(id<LCCKIMMessageDelegate>)oldMessage
+- (void)updateMessage:(id<LCCKIMMessageProtocol>)oldMessage
              withText:(NSString *)text
-         conversation:(id<LCCKConversationDelegate>)conversation
+         conversation:(id<LCCKConversationProtocol>)conversation
              callback:(LCCKIMMessageResultBlock)callback {
     AVIMTypedMessage *newTypedMessage = [AVIMTextMessage messageWithText:text attributes:nil];
     [(AVIMConversation *)conversation updateMessage:(AVIMMessage *)oldMessage toNewMessage:newTypedMessage callback:^(BOOL succeeded, NSError * _Nullable error) {
@@ -317,8 +317,8 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     }];
 }
 
-- (void)recallMessage:(id<LCCKIMMessageDelegate>)message
-         conversation:(id<LCCKConversationDelegate>)conversation
+- (void)recallMessage:(id<LCCKIMMessageProtocol>)message
+         conversation:(id<LCCKConversationProtocol>)conversation
              callback:(LCCKIMMessageResultBlock)callback {
     [(AVIMConversation *)conversation recallMessage:(AVIMMessage *)message callback:^(BOOL succeeded, NSError * _Nullable error, AVIMRecalledMessage * _Nullable recalledMessage) {
         !callback ?: callback(succeeded, error, recalledMessage);
@@ -396,9 +396,9 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     }
 }
 
-- (void)insertRecentConversations:(NSArray<id<LCCKConversationDelegate>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
+- (void)insertRecentConversations:(NSArray<id<LCCKConversationProtocol>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
     dispatch_async(self.sqliteQueue, ^{
-        [conversations enumerateObjectsUsingBlock:^(id<LCCKConversationDelegate> _Nonnull aConversation, NSUInteger idx, BOOL * _Nonnull stop) {
+        [conversations enumerateObjectsUsingBlock:^(id<LCCKConversationProtocol> _Nonnull aConversation, NSUInteger idx, BOOL * _Nonnull stop) {
             AVIMConversation *conversation = (AVIMConversation *)aConversation;
             if (![conversation isKindOfClass:[AVIMConversation class]] || !conversation.createAt) {
                 return;
@@ -609,7 +609,7 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
             FilterCallback(originConversations);
             return;
         }
-        LCCKConversationListShowHookCompletionHandler conversationListShowHookCompletionHandler = ^(NSArray<id<LCCKConversationDelegate>> *conversations, NSError *aError) {
+        LCCKConversationListShowHookCompletionHandler conversationListShowHookCompletionHandler = ^(NSArray<id<LCCKConversationProtocol>> *conversations, NSError *aError) {
             FilterCallback(aError ? originConversations : (NSArray<AVIMConversation *> *)conversations);
         };
         conversationListShowHookBlock(originConversations, conversationListShowHookCompletionHandler);
@@ -755,7 +755,7 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     }];
 }
 
-- (void)insertFailedMessage:(id<LCCKIMMessageDelegate>)message {
+- (void)insertFailedMessage:(id<LCCKIMMessageProtocol>)message {
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:message];
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
         [db executeUpdate:LCCKInsertMessageSQL, message.messageId, message.conversationId, data];

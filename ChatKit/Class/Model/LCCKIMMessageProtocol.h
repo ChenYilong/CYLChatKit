@@ -1,5 +1,5 @@
 //
-//  LCCKIMMessageDelegate.h
+//  LCCKIMMessageProtocol.h
 //  CYLChatKit
 //
 //  Created by ChenYilong on 2026/11/09.
@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @attention Members are declared as methods instead of properties so that an existing SDK
  *            class can conform through a category without property attribute conflicts.
  */
-@protocol LCCKIMMessageDelegate <NSObject>
+@protocol LCCKIMMessageProtocol <NSObject>
 
 @required
 
@@ -46,7 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// The client id of the sender.
 - (nullable NSString *)lcck_senderId;
-- (void)lcck_setSenderId:(nullable NSString *)senderId;
+- (void)setLcck_senderId:(nullable NSString *)senderId;
 
 /// Whether the current user sent the message.
 - (LCCKMessageOwnerType)lcck_ownerType;

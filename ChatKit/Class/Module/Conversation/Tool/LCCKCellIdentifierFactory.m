@@ -9,7 +9,7 @@
 #import "LCCKCellIdentifierFactory.h"
 #import "LCCKMessage.h"
 #import "NSObject+LCCKExtension.h"
-#import "LCCKIMMessageDelegate.h"
+#import "LCCKIMMessageProtocol.h"
 #import "LCCKConstants.h"
 
 @implementation LCCKCellIdentifierFactory
@@ -29,7 +29,7 @@
     }
     
     if ([message lcck_isCustomMessage]) {
-        return [self cellIdentifierForCustomMessageConfiguration:(id<LCCKIMMessageDelegate>)message groupKey:groupKey];
+        return [self cellIdentifierForCustomMessageConfiguration:(id<LCCKIMMessageProtocol>)message groupKey:groupKey];
     }
     return [self cellIdentifierForDefaultMessageConfiguration:(LCCKMessage *)message groupKey:groupKey];
 }
@@ -38,7 +38,7 @@
     LCCKMessageOwnerType messageOwner = message.ownerType;
     LCCKMessageMediaType messageType = message.mediaType;
     if ([message lcck_isCustomLCCKMessage]) {
-        messageType = kLCCKMessageMediaTypeText;
+        messageType = LCCKMessageMediaTypeText;
     }
     NSNumber *key = [NSNumber numberWithInteger:messageType];
     Class aClass = [LCCKChatMessageCellMediaTypeDict objectForKey:key];
@@ -63,12 +63,12 @@
     return cellIdentifier;
 }
 
-+ (NSString *)cellIdentifierForCustomMessageConfiguration:(id<LCCKIMMessageDelegate>)message groupKey:(NSString *)groupKey {
++ (NSString *)cellIdentifierForCustomMessageConfiguration:(id<LCCKIMMessageProtocol>)message groupKey:(NSString *)groupKey {
     LCCKMessageOwnerType messageOwner = [message lcck_ownerType];
     LCCKMessageMediaType messageType = message.mediaType;
     // A custom message without a registered cell is shown with the text cell.
     if (![LCCKChatMessageCellMediaTypeDict objectForKey:@(messageType)]) {
-        messageType = kLCCKMessageMediaTypeText;
+        messageType = LCCKMessageMediaTypeText;
     }
     NSNumber *key = [NSNumber numberWithInteger:messageType];
     NSString *typeKey = NSStringFromClass([LCCKChatMessageCellMediaTypeDict objectForKey:key]);
@@ -95,7 +95,7 @@
         LCCKMessage *message_ = (LCCKMessage *)message;
         return message_.messageId ?: message_.systemText;
     }
-    id<LCCKIMMessageDelegate> message_ = (id<LCCKIMMessageDelegate>)message;
+    id<LCCKIMMessageProtocol> message_ = (id<LCCKIMMessageProtocol>)message;
     return message_.messageId;
 }
 

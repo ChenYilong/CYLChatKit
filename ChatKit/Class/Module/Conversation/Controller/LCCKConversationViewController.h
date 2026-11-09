@@ -6,8 +6,8 @@
 //  Copyright © 2018 ChenYilong（wechat id：chenyilong1010） . All rights reserved.
 //
 
-#import "LCCKConversationDelegate.h"
-#import "LCCKIMMessageDelegate.h"
+#import "LCCKConversationProtocol.h"
+#import "LCCKIMMessageProtocol.h"
 
 #import "LCCKChat.h"
 #import "LCCKBaseConversationViewController.h"
@@ -68,7 +68,7 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
 /*!
  * If `isAvailable` is NO, it will return nil
  */
-- (id<LCCKConversationDelegate>)getConversationIfExists;
+- (id<LCCKConversationProtocol>)getConversationIfExists;
 
 #pragma mark - send Message
 ///=============================================================================
@@ -114,11 +114,11 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
 
 /*!
  * 自定义消息位置发送
- * @param customMessage An IM SDK custom message conforming to `LCCKIMMessageDelegate`, such as an `AVIMTypedMessage` subclass for LeanCloud.
+ * @param customMessage An IM SDK custom message conforming to `LCCKIMMessageProtocol`, such as an `AVIMTypedMessage` subclass for LeanCloud.
  * @attention Remember to check if `isAvailable` is ture, making sure sending message after conversation has been fetched
  *            发送前必须检查 `isAvailable` 属性是否为YES, 确保发送行为是在 conversation 被 fetch 之后进行的。
  */
-- (void)sendCustomMessage:(id<LCCKIMMessageDelegate>)customMessage;
+- (void)sendCustomMessage:(id<LCCKIMMessageProtocol>)customMessage;
 
 /*!
  * 自定义消息位置发送
@@ -126,7 +126,7 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
  * @attention Remember to check if `isAvailable` is ture, making sure sending message after conversation has been fetched
  *            发送前必须检查 `isAvailable` 属性是否为YES, 确保发送行为是在 conversation 被 fetch 之后进行的。
  */
-- (void)sendCustomMessage:(id<LCCKIMMessageDelegate>)customMessage
+- (void)sendCustomMessage:(id<LCCKIMMessageProtocol>)customMessage
             progressBlock:(LCCKProgressBlock)progressBlock
                   success:(LCCKBooleanResultBlock)success
                    failed:(LCCKBooleanResultBlock)failed;

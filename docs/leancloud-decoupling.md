@@ -8,6 +8,22 @@ class, category, and call moved to the demo app (`ChatKit-OC/Example/Class/LeanC
 The UI layer now talks to the IM backend only through protocols, so another IM SDK can be
 plugged in without changing ChatKit. The UI is meant to look and behave exactly as before.
 
+## Naming
+
+New symbols follow the CYLTabBarController naming rules (its `AGENTS.md`, "Naming: keep the project's
+prefixes"), applied with this repository's prefix `LCCK` as CYLChatKit's `AGENTS.md` requires:
+
+- Every new class, protocol, typedef, enum, and constant starts with `LCCK`; files are named after their main type.
+- Enum cases are the type name plus the case, declared with `NS_ENUM`, without a `k` prefix
+  (`LCCKMessageMediaTypeText`, `LCCKIMErrorCodeConnectionLost`), like `CYLBadgeStyleRedDot`.
+- `Delegate` is reserved for delegates. Protocols describing a model use `Protocol`
+  (`LCCKConversationProtocol`, `LCCKIMMessageProtocol`, like `CYLBadgeProtocol`); role protocols use a role noun
+  (`LCCKIMProvider`, `LCCKIMSessionProvider`, like `CYLTabBarItemAnimationService`).
+- Every new category method and property starts with `lcck_`; a category property's setter is
+  `setLcck_name:` (`lcck_senderId` / `setLcck_senderId:`, like the existing `lcck_draft` / `setLcck_draft:`).
+- Names of already shipped APIs are kept (`+messageWithAVIMTypedMessage:`, `lcck_messagesWithAVIMMessages:`,
+  `alertAVIMError:`, `kAVIMMessageMediaTypeSystem`).
+
 ## Architecture
 
 ```
@@ -41,10 +57,10 @@ Demo: LCCKLeanCloudIMProvider ─────┘ forwards to LCCKLeanCloudSessio
 | Symbol | File | Purpose |
 |:---|:---|:---|
 | `LCCKIMProvider` (composed of `LCCKIMSessionProvider`, `LCCKIMConversationProvider`, `LCCKIMMessageProvider`, `LCCKIMRecentConversationProvider`, `LCCKIMFailedMessageProvider`, `LCCKIMPushProvider`) | `ChatKit/Class/Tool/Service/LCCKIMProvider.h` | Everything ChatKit needs from an IM backend, including the notification contract the provider must follow. |
-| `LCCKConversationDelegate` | `ChatKit/Class/Model/LCCKConversationDelegate.h` | Conversation model used by the UI. `AVIMConversation` conforms through the demo category. |
-| `LCCKIMMessageDelegate` | `ChatKit/Class/Model/LCCKIMMessageDelegate.h` | Opaque IM SDK message (custom messages and raw messages kept for paging, editing, recalling). `AVIMTypedMessage` conforms through the demo category. |
-| `LCCKMessageMediaType`, `kLCCKMessageMediaType*` | `LCCKConstants.h` | ChatKit-owned media type. It is `int8_t` with the same raw values as `AVIMMessageMediaType`. |
-| `LCCKIMErrorCodeConnectionLost` | `LCCKConstants.h` | Same value (9001) as LeanCloud's `AVIMErrorCodeConnectionLost`. |
+| `LCCKConversationProtocol` | `ChatKit/Class/Model/LCCKConversationProtocol.h` | Conversation model used by the UI. `AVIMConversation` conforms through the demo category. |
+| `LCCKIMMessageProtocol` | `ChatKit/Class/Model/LCCKIMMessageProtocol.h` | Opaque IM SDK message (custom messages and raw messages kept for paging, editing, recalling). `AVIMTypedMessage` conforms through the demo category. |
+| `LCCKMessageMediaType` (`LCCKMessageMediaTypeText`, …) | `LCCKConstants.h` | ChatKit-owned media type: `NS_ENUM(int8_t, …)` with the same raw values as `AVIMMessageMediaType`. |
+| `LCCKIMErrorCode` (`LCCKIMErrorCodeConnectionLost`) | `LCCKConstants.h` | Same value (9001) as LeanCloud's `AVIMErrorCodeConnectionLost`. |
 | `-[LCChatKit IMProvider]` | `LCChatKit.h` | Provider registration. |
 | `-[LCCKSessionService isClientOpened]`, `-handleSingleSignOnError:callback:` | `LCCKSessionService.h` | Replace `client.status` checks; providers call the latter for session conflicts. |
 | `-[LCCKConversationService sendMessage:conversation:mentionList:progressBlock:callback:]` | `LCCKConversationService.h` | Provider-neutral send. |
@@ -58,8 +74,8 @@ no warnings.
 
 | From ChatKit | To the demo |
 |:---|:---|
-| `AVIMConversation+LCCKExtension` | Same name; now conforms to `LCCKConversationDelegate`, adds `lcck_unreadCount` and `lcck_mentioned`. |
-| `AVIMTypedMessage+LCCKExtension` | Same name; now conforms to `LCCKIMMessageDelegate`. Declares the SDK's private `_typeDict` itself (it was declared in `LCCKConstants.h`). |
+| `AVIMConversation+LCCKExtension` | Same name; now conforms to `LCCKConversationProtocol`, adds `lcck_unreadCount` and `lcck_mentioned`. |
+| `AVIMTypedMessage+LCCKExtension` | Same name; now conforms to `LCCKIMMessageProtocol`. Declares the SDK's private `_typeDict` itself (it was declared in `LCCKConstants.h`). |
 | `AVIMMessage+LCCKExtension`, `AVIMEmotionMessage` | Same names. |
 | `+[LCCKMessage messageWithAVIMTypedMessage:]` | `LCCKMessage+LCCKExtension` (same selector). |
 | `+[LCCKCommonUtils getPathFromFile:]`, `+isCacheDataAvailableForFile:` | `LCCKCommonUtils+LCCKExtension` (same selectors). |
@@ -84,17 +100,21 @@ Removed:
 
 Source-breaking changes for apps that used LeanCloud types through ChatKit:
 
-- Block and method signatures now use `id<LCCKConversationDelegate>` instead of `AVIMConversation *`
+- Block and method signatures now use `id<LCCKConversationProtocol>` instead of `AVIMConversation *`
   (`LCCKConversationResultBlock`, `LCCKFetchConversationHandler`, conversation list blocks and delegate,
   `-getConversationIfExists`, `currentConversation`, `insertRecentConversation:`).
-- `LCCKFilterMessagesBlock` and `LCCKSendMessageHookBlock` receive `id<LCCKIMMessageDelegate>` messages;
+- `LCCKFilterMessagesBlock` and `LCCKSendMessageHookBlock` receive `id<LCCKIMMessageProtocol>` messages;
   with the LeanCloud provider these are still `AVIMTypedMessage` objects.
-- `sendCustomMessage:` takes `id<LCCKIMMessageDelegate>`; `AVIMTypedMessage` subclasses still work.
+- `sendCustomMessage:` takes `id<LCCKIMMessageProtocol>`; `AVIMTypedMessage` subclasses still work.
 - `setMemberInfoChangedBlock:` passes `NSUInteger role` (the `AVIMConversationMemberRole` value).
 - `LCCKGenerateSignatureCompletionHandler` takes `id signature` (an `AVIMSignature` for LeanCloud).
 - `client` properties are `id` (an `AVIMClient` for LeanCloud). `LCCKMessage.message` is `id`.
 - `LCCKMessageDelegate.mediaType` and `+[LCCKChatMessageCell classMediaType]` use `LCCKMessageMediaType`.
-  Because both types are `int8_t`, existing custom cells returning `kAVIMMessageMediaType*` values compile unchanged.
+  The raw values are unchanged, so behavior is the same, but a custom cell that still declares
+  `+ (AVIMMessageMediaType)classMediaType` gets a `-Wmismatched-return-types` warning (not an error).
+  Change its return type to `LCCKMessageMediaType`; `kAVIMMessageMediaType*` return values still work.
+  (Checked with clang: the warning appears whether `LCCKMessageMediaType` is an `NS_ENUM` or a plain
+  `int8_t` typedef, so the type-safe `NS_ENUM` was chosen.)
 - `ChatKitHeaders.h` no longer imports `AVOSCloud`/`AVOSCloudIM`; app files using LeanCloud must import them.
 
 Kept for compatibility: `kAVIMMessageMediaTypeSystem`, `alertAVIMError:`/`filterAVIMError:`,

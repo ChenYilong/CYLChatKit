@@ -136,7 +136,7 @@
 }
 
 + (LCCKMessageMediaType)classMediaType {
-    return kLCCKMessageMediaTypeText;
+    return LCCKMessageMediaTypeText;
 } 
 
 - (UIColor *)conversationViewMessageLinkColorLeft {

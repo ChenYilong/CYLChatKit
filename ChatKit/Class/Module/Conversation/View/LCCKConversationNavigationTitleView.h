@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-#import "LCCKConversationDelegate.h"
+#import "LCCKConversationProtocol.h"
 
 @interface LCCKConversationNavigationTitleView : UIView
 
-- (instancetype)initWithConversation:(id<LCCKConversationDelegate>)conversation navigationController:(UINavigationController *)navigationController;
+- (instancetype)initWithConversation:(id<LCCKConversationProtocol>)conversation navigationController:(UINavigationController *)navigationController;
 
 @end

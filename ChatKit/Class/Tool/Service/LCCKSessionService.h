@@ -39,7 +39,7 @@ FOUNDATION_EXTERN NSString *const LCCKSessionServiceErrorDemain;
  * Invoked by the IM provider when a member's role changes.
  * `role` is the provider's role value, for example an `AVIMConversationMemberRole`.
  */
-@property (nonatomic, copy) void (^ memberInfoChangedBlock)(id<LCCKConversationDelegate> conversation, NSString *byClientId, NSString *clientId, NSUInteger role);
+@property (nonatomic, copy) void (^ memberInfoChangedBlock)(id<LCCKConversationProtocol> conversation, NSString *byClientId, NSString *clientId, NSUInteger role);
 
 - (void)reconnectForViewController:(UIViewController *)reconnectForViewController callback:(LCCKBooleanResultBlock)aCallback;
 

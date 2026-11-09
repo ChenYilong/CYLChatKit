@@ -102,7 +102,7 @@
 }
 
 + (LCCKMessageMediaType)classMediaType {
-    return kLCCKMessageMediaTypeSystem;
+    return LCCKMessageMediaTypeSystem;
 }
 
 - (UIColor *)conversationViewTimeLineTextColor {

@@ -1,5 +1,5 @@
 //
-//  LCCKConversationDelegate.h
+//  LCCKConversationProtocol.h
 //  CYLChatKit
 //
 //  Created by ChenYilong on 2026/11/09.
@@ -12,7 +12,7 @@
 
 #import <Foundation/Foundation.h>
 #import "LCCKConstants.h"
-#import "LCCKIMMessageDelegate.h"
+#import "LCCKIMMessageProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @attention Members are declared as methods instead of properties so that an existing SDK
  *            class can conform through a category without property attribute conflicts.
  */
-@protocol LCCKConversationDelegate <NSObject>
+@protocol LCCKConversationProtocol <NSObject>
 
 @required
 
@@ -82,7 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
  * The last message visible to the current user, used for the conversation list preview.
  * It is the IM SDK message, not converted for display, so every media type keeps its preview text.
  */
-- (nullable id<LCCKIMMessageDelegate>)lcck_lastMessage;
+- (nullable id<LCCKIMMessageProtocol>)lcck_lastMessage;
 
 /// The date of the last message.
 - (nullable NSDate *)lcck_lastMessageAt;

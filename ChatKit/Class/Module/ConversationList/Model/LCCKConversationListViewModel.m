@@ -77,7 +77,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    id<LCCKConversationDelegate> conversation = [self.dataArray objectAtIndex:indexPath.row];
+    id<LCCKConversationProtocol> conversation = [self.dataArray objectAtIndex:indexPath.row];
     
     LCCKCellForRowBlock cellForRowBlock = [[LCCKConversationListService sharedInstance] cellForRowBlock];
     if (cellForRowBlock) {
@@ -162,7 +162,7 @@
 
 - (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
     LCCKConversationEditActionsBlock conversationEditActionBlock = [[LCCKConversationListService sharedInstance] conversationEditActionBlock];
-    id<LCCKConversationDelegate> conversation = nil;
+    id<LCCKConversationProtocol> conversation = nil;
     if ((NSUInteger)indexPath.row < self.dataArray.count) {
         conversation = [self.dataArray objectAtIndex:indexPath.row];
     }
@@ -241,7 +241,7 @@
                                               rowActionWithStyle:UITableViewRowActionStyleNormal
                                               title:LCCKLocalizedStrings(@"Delete")
                                               handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
-                                                  id<LCCKConversationDelegate> conversation = [self.dataArray objectAtIndex:indexPath.row];
+                                                  id<LCCKConversationProtocol> conversation = [self.dataArray objectAtIndex:indexPath.row];
                                                   [[LCCKConversationService sharedInstance] deleteRecentConversationWithConversationId:conversation.conversationId];
                                                   [self refresh];
                                                   LCCKDidDeleteConversationsListCellBlock conversationsListDidDeleteItemBlock = [LCCKConversationListService sharedInstance].didDeleteConversationsListCellBlock;
@@ -253,7 +253,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    id<LCCKConversationDelegate> conversation = [self.dataArray objectAtIndex:indexPath.row];
+    id<LCCKConversationProtocol> conversation = [self.dataArray objectAtIndex:indexPath.row];
     
     id didSelectBlock = [LCCKConversationListService sharedInstance].didSelectConversationsListCellBlock;
     BOOL impDelegate = [self.conversationListViewController.delegate respondsToSelector:@selector(conversation:tableView:didSelectRowAtIndexPath:)];
@@ -280,7 +280,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     LCCKHeightForRowBlock heightForRowBlock = [[LCCKConversationListService sharedInstance] heightForRowBlock];
     if (heightForRowBlock) {
-        id<LCCKConversationDelegate> conversation = [self.dataArray objectAtIndex:indexPath.row];
+        id<LCCKConversationProtocol> conversation = [self.dataArray objectAtIndex:indexPath.row];
         return heightForRowBlock(tableView, indexPath, conversation);
     }
     return LCCKConversationListCellDefaultHeight;
@@ -342,7 +342,7 @@
     if (remoteNotificationConversationId) {
         // 进入之前推送弹框点击的对话
         __block BOOL found = NO;
-        [self.dataArray enumerateObjectsUsingBlock:^(id<LCCKConversationDelegate> _Nonnull conversation, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self.dataArray enumerateObjectsUsingBlock:^(id<LCCKConversationProtocol> _Nonnull conversation, NSUInteger idx, BOOL * _Nonnull stop) {
             if ([conversation.conversationId isEqualToString:remoteNotificationConversationId]) {
                 //TODO: If has section.
                 NSIndexPath *indexPath = [NSIndexPath indexPathWithIndex:idx];

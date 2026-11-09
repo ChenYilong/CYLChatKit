@@ -74,7 +74,7 @@
         _senderId = senderId;
         _timestamp = timestamp;
         _serverMessageId = serverMessageId;
-        _mediaType = kLCCKMessageMediaTypeText;
+        _mediaType = LCCKMessageMediaTypeText;
     }
     return self;
 }
@@ -145,7 +145,7 @@
     self = [super init];
     if (self) {
         _systemText = text;
-        _mediaType = kLCCKMessageMediaTypeSystem;
+        _mediaType = LCCKMessageMediaTypeSystem;
         _ownerType = LCCKMessageOwnerTypeSystem;
     }
     return self;
@@ -157,7 +157,7 @@
         _systemText = localFeedbackText;
         _localMessageId = [[NSUUID UUID] UUIDString];
         _timestamp = LCCK_CURRENT_TIMESTAMP;
-        _mediaType = kLCCKMessageMediaTypeSystem;
+        _mediaType = LCCKMessageMediaTypeSystem;
         _ownerType = LCCKMessageOwnerTypeSystem;
     }
     return self;
@@ -191,7 +191,7 @@
         _serverMessageId = serverMessageId;
         _sender = sender;
         _senderId = senderId;
-        _mediaType = kLCCKMessageMediaTypeImage;
+        _mediaType = LCCKMessageMediaTypeImage;
     }
     return self;
 }
@@ -212,7 +212,7 @@
         _senderId = senderId;
         _timestamp = timestamp;
         _serverMessageId = serverMessageId;
-        _mediaType = kLCCKMessageMediaTypeVideo;
+        _mediaType = LCCKMessageMediaTypeVideo;
     }
     return self;
 }
@@ -246,7 +246,7 @@
         _timestamp = timestamp;
         _serverMessageId = serverMessageId;
         _read = hasRead;
-        _mediaType = kLCCKMessageMediaTypeAudio;
+        _mediaType = LCCKMessageMediaTypeAudio;
     }
     return self;
 }
@@ -294,7 +294,7 @@
         _senderId = senderId;
         _timestamp = timestamp;
         _serverMessageId = serverMessageId;
-        _mediaType = kLCCKMessageMediaTypeLocation;
+        _mediaType = LCCKMessageMediaTypeLocation;
     }
     return self;
 }
@@ -391,7 +391,7 @@
 - (id)copyWithZone:(NSZone *)zone {
     LCCKMessage *message;
     switch (self.mediaType) {
-        case kLCCKMessageMediaTypeText: {
+        case LCCKMessageMediaTypeText: {
             message = [[[self class] allocWithZone:zone] initWithText:[self.text copy]
                                                              senderId:[self.senderId copy]
                                                                sender:[self.sender copyWithZone:nil]
@@ -400,7 +400,7 @@
             
         }
             break;
-        case kLCCKMessageMediaTypeImage: {
+        case LCCKMessageMediaTypeImage: {
             message =  [[[self class] allocWithZone:zone] initWithPhoto:[self.photo copy]
                                                              photoWidth:self.photoWidth
                                                             photoHeight:self.photoHeight
@@ -415,7 +415,7 @@
             
         }
             break;
-        case kLCCKMessageMediaTypeVideo: {
+        case LCCKMessageMediaTypeVideo: {
             message = [[[self class] allocWithZone:zone] initWithVideoConverPhoto:[self.videoConverPhoto copy]
                                                                         videoPath:[self.videoPath copy]
                                                                          videoURL:[self.videoURL copy]
@@ -426,7 +426,7 @@
             
         }
             break;
-        case kLCCKMessageMediaTypeAudio: {
+        case LCCKMessageMediaTypeAudio: {
             message =  [[[self class] allocWithZone:zone] initWithVoicePath:[self.voicePath copy]
                                                                    voiceURL:[self.voiceURL copy]
                                                               voiceDuration:[self.voiceDuration copy]
@@ -447,7 +447,7 @@
             //
             //        }
             //            break;
-        case kLCCKMessageMediaTypeLocation: {
+        case LCCKMessageMediaTypeLocation: {
             message =  [[[self class] allocWithZone:zone] initWithLocalPositionPhoto:[self.localPositionPhoto copy]
                                                                         geolocations:[self.geolocations copy]
                                                                             location:[self.location copy]
@@ -457,13 +457,15 @@
                                                                      serverMessageId:[self.serverMessageId copy]];
         }
             break;
-        case kLCCKMessageMediaTypeSystem: {
+        case LCCKMessageMediaTypeSystem: {
             message = [[[self class] allocWithZone:zone] initWithSystemText:[self.systemText copy]];
         }
             break;
-        case kLCCKMessageMediaTypeNone: {
+        case LCCKMessageMediaTypeNone: {
             //TODO:
         }
+            break;
+        default:
             break;
     }
     //    message.photo = [self.photo copy];

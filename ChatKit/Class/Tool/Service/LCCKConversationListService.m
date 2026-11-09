@@ -16,7 +16,7 @@
 // *  @param conversation 需要设置最近消息内容的对话
 // *  @return 无需自定义最近消息内容返回nil
 // */
-//typedef NSString *(^LCCKConversationsLatestMessageContent)(id<LCCKConversationDelegate> conversation);
+//typedef NSString *(^LCCKConversationsLatestMessageContent)(id<LCCKConversationProtocol> conversation);
 //
 ///**
 // *  设置某个对话的最近消息内容后的回调
@@ -60,7 +60,7 @@
         });
         return;
     }
-    [IMProvider findRecentConversationsWithBlock:^(NSArray<id<LCCKConversationDelegate>> *conversations, NSInteger totalUnreadCount, NSError *error) {
+    [IMProvider findRecentConversationsWithBlock:^(NSArray<id<LCCKConversationProtocol>> *conversations, NSInteger totalUnreadCount, NSError *error) {
         !block ?: block(conversations, totalUnreadCount, error);
     }];
 }

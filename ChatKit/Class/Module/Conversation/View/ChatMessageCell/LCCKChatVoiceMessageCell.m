@@ -141,7 +141,7 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
         if (identifier) {
             NSString *messageId = message.messageId;
             if (messageId == identifier) {
-                if (message.mediaType == kLCCKMessageMediaTypeAudio) {
+                if (message.mediaType == LCCKMessageMediaTypeAudio) {
                     [self setVoiceMessageState:[[LCCKAVAudioPlayer sharePlayer] audioPlayerState]];
                 }
             }
@@ -250,7 +250,7 @@ static void * const LCCKChatVoiceMessageCellVoiceMessageStateContext = (void*)&L
 }
 
 + (LCCKMessageMediaType)classMediaType {
-    return kLCCKMessageMediaTypeAudio;
+    return LCCKMessageMediaTypeAudio;
 }
 
 @end

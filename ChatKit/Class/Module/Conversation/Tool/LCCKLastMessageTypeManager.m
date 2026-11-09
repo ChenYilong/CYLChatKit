@@ -19,10 +19,10 @@ static NSMutableDictionary *attributedStringCache = nil;
 
 @implementation LCCKLastMessageTypeManager
 
-+ (NSString *)getMessageTitle:(id<LCCKIMMessageDelegate>)message {
++ (NSString *)getMessageTitle:(id<LCCKIMMessageProtocol>)message {
     NSString *title;
     switch (message.mediaType) {
-        case kLCCKMessageMediaTypeText: {
+        case LCCKMessageMediaTypeText: {
             //Custom message
             BOOL isCustom = [[message.attributes valueForKey:LCCKCustomMessageIsCustomKey] boolValue];
             if (!isCustom) {
@@ -32,27 +32,27 @@ static NSMutableDictionary *attributedStringCache = nil;
             title = [self titleForCustomMessage:message];
             break;
         }
-        case kLCCKMessageMediaTypeAudio:
+        case LCCKMessageMediaTypeAudio:
             title = LCCKLocalizedStrings(@"Voice");
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
             
-        case kLCCKMessageMediaTypeImage:
+        case LCCKMessageMediaTypeImage:
             title = LCCKLocalizedStrings(@"Photo");
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
             
-        case kLCCKMessageMediaTypeLocation:
+        case LCCKMessageMediaTypeLocation:
             title = LCCKLocalizedStrings(@"Location");
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
             
-        case kLCCKMessageMediaTypeVideo:
+        case LCCKMessageMediaTypeVideo:
             title = LCCKLocalizedStrings(@"Video");
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
 
-        case kLCCKMessageMediaTypeRecalled:
+        case LCCKMessageMediaTypeRecalled:
             title = @"";
             break;
             
@@ -63,7 +63,7 @@ static NSMutableDictionary *attributedStringCache = nil;
     return title;
 }
 
-+ (NSString *)titleForCustomMessage:(id<LCCKIMMessageDelegate>)customMessage {
++ (NSString *)titleForCustomMessage:(id<LCCKIMMessageProtocol>)customMessage {
     NSString *typeTitleKey = [customMessage.attributes valueForKey:LCCKCustomMessageTypeTitleKey];
     NSString *title = @"";
     do {
@@ -80,7 +80,7 @@ static NSMutableDictionary *attributedStringCache = nil;
     return title;
 }
 
-+ (NSAttributedString *)attributedStringWithMessage:(id<LCCKIMMessageDelegate>)message conversation:(id<LCCKConversationDelegate>)conversation userName:(NSString *)userName {
++ (NSAttributedString *)attributedStringWithMessage:(id<LCCKIMMessageProtocol>)message conversation:(id<LCCKConversationProtocol>)conversation userName:(NSString *)userName {
     NSString *title = [self getMessageTitle:message];
     if (conversation.lcck_type == LCCKConversationTypeGroup) {
         if (!userName) {

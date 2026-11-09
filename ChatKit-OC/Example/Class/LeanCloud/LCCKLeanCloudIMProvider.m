@@ -79,37 +79,37 @@
     [self.conversations createConversationWithMembers:members type:type unique:unique callback:callback];
 }
 
-- (void)joinConversation:(id<LCCKConversationDelegate>)conversation callback:(LCCKBooleanResultBlock)callback {
+- (void)joinConversation:(id<LCCKConversationProtocol>)conversation callback:(LCCKBooleanResultBlock)callback {
     [self.conversations joinConversation:conversation callback:callback];
 }
 
-- (void)markConversationAsRead:(id<LCCKConversationDelegate>)conversation {
+- (void)markConversationAsRead:(id<LCCKConversationProtocol>)conversation {
     [self.conversations markConversationAsRead:conversation];
 }
 
-- (void)prepareConversation:(id<LCCKConversationDelegate>)conversation {
+- (void)prepareConversation:(id<LCCKConversationProtocol>)conversation {
     [self.conversations prepareConversation:conversation];
 }
 
 #pragma mark - LCCKIMMessageProvider
 
-- (id)displayMessageFromIMMessage:(id<LCCKIMMessageDelegate>)message {
+- (id)displayMessageFromIMMessage:(id<LCCKIMMessageProtocol>)message {
     return [self.conversations displayMessageFromIMMessage:message];
 }
 
-- (id<LCCKIMMessageDelegate>)IMMessageFromMessage:(id)message {
+- (id<LCCKIMMessageProtocol>)IMMessageFromMessage:(id)message {
     return [self.conversations IMMessageFromMessage:message];
 }
 
-- (void)sendMessage:(id<LCCKIMMessageDelegate>)message
-       conversation:(id<LCCKConversationDelegate>)conversation
+- (void)sendMessage:(id<LCCKIMMessageProtocol>)message
+       conversation:(id<LCCKConversationProtocol>)conversation
         mentionList:(NSArray<NSString *> *)mentionList
       progressBlock:(LCCKProgressBlock)progressBlock
            callback:(LCCKBooleanResultBlock)callback {
     [self.conversations sendMessage:message conversation:conversation mentionList:mentionList progressBlock:progressBlock callback:callback];
 }
 
-- (void)queryMessagesWithConversation:(id<LCCKConversationDelegate>)conversation
+- (void)queryMessagesWithConversation:(id<LCCKConversationProtocol>)conversation
                             messageId:(NSString *)messageId
                             timestamp:(int64_t)timestamp
                                 limit:(NSInteger)limit
@@ -117,15 +117,15 @@
     [self.conversations queryMessagesWithConversation:conversation messageId:messageId timestamp:timestamp limit:limit callback:callback];
 }
 
-- (void)updateMessage:(id<LCCKIMMessageDelegate>)oldMessage
+- (void)updateMessage:(id<LCCKIMMessageProtocol>)oldMessage
              withText:(NSString *)text
-         conversation:(id<LCCKConversationDelegate>)conversation
+         conversation:(id<LCCKConversationProtocol>)conversation
              callback:(LCCKIMMessageResultBlock)callback {
     [self.conversations updateMessage:oldMessage withText:text conversation:conversation callback:callback];
 }
 
-- (void)recallMessage:(id<LCCKIMMessageDelegate>)message
-         conversation:(id<LCCKConversationDelegate>)conversation
+- (void)recallMessage:(id<LCCKIMMessageProtocol>)message
+         conversation:(id<LCCKConversationProtocol>)conversation
              callback:(LCCKIMMessageResultBlock)callback {
     [self.conversations recallMessage:message conversation:conversation callback:callback];
 }
@@ -140,7 +140,7 @@
     [self.conversations setupDatabaseWithUserId:userId];
 }
 
-- (NSArray<id<LCCKConversationDelegate>> *)allRecentConversations {
+- (NSArray<id<LCCKConversationProtocol>> *)allRecentConversations {
     return [self.conversations allRecentConversations];
 }
 
@@ -148,11 +148,11 @@
     return [self.conversations isRecentConversationExistWithConversationId:conversationId];
 }
 
-- (void)insertRecentConversations:(NSArray<id<LCCKConversationDelegate>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
+- (void)insertRecentConversations:(NSArray<id<LCCKConversationProtocol>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
     [self.conversations insertRecentConversations:conversations shouldRefreshWhenFinished:shouldRefreshWhenFinished];
 }
 
-- (void)updateRecentConversation:(NSArray<id<LCCKConversationDelegate>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
+- (void)updateRecentConversation:(NSArray<id<LCCKConversationProtocol>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
     [self.conversations updateRecentConversation:conversations shouldRefreshWhenFinished:shouldRefreshWhenFinished];
 }
 
@@ -198,7 +198,7 @@
     [self.conversations insertFailedLCCKMessage:message];
 }
 
-- (void)insertFailedMessage:(id<LCCKIMMessageDelegate>)message {
+- (void)insertFailedMessage:(id<LCCKIMMessageProtocol>)message {
     [self.conversations insertFailedMessage:message];
 }
 

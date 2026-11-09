@@ -6,7 +6,7 @@
 //  Copyright © 2016年 ElonChan . All rights reserved.
 //
 //  Moved from ChatKit to the demo: ChatKit no longer depends on LeanCloud.
-//  This category makes `AVIMConversation` conform to ChatKit's `LCCKConversationDelegate`.
+//  This category makes `AVIMConversation` conform to ChatKit's `LCCKConversationProtocol`.
 //
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #if __has_include(<ChatKit/LCChatKit.h>)
@@ -16,7 +16,7 @@
 #endif
 #import "AVIMTypedMessage+LCCKExtension.h"
 
-@interface AVIMConversation (LCCKExtension) <LCCKConversationDelegate>
+@interface AVIMConversation (LCCKExtension) <LCCKConversationProtocol>
 
 /**
  *  最后一条消息。通过 SDK 的消息缓存找到的

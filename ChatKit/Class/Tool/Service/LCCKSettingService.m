@@ -80,7 +80,7 @@ static BOOL LCCKAllLogsEnabled;
     return [[self getFilesPath] stringByAppendingFormat:@"%@", objectId];
 }
 
-- (NSString *)videoPathOfMessage:(id<LCCKIMMessageDelegate>)message {
+- (NSString *)videoPathOfMessage:(id<LCCKIMMessageProtocol>)message {
     // 视频播放会根据文件扩展名来识别格式
     NSString *format = nil;
     if ([message respondsToSelector:@selector(format)]) {

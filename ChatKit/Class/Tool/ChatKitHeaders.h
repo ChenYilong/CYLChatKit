@@ -22,8 +22,8 @@
     #import <CYLChatKit/LCCKServiceDefinition.h>
     #import <CYLChatKit/LCCKConversationViewController.h>
     #import <CYLChatKit/LCCKConversationListViewController.h>
-    #import <CYLChatKit/LCCKConversationDelegate.h>
-    #import <CYLChatKit/LCCKIMMessageDelegate.h>
+    #import <CYLChatKit/LCCKConversationProtocol.h>
+    #import <CYLChatKit/LCCKIMMessageProtocol.h>
     #import <CYLChatKit/LCCKIMProvider.h>
     #import <CYLChatKit/UIImageView+LCCKExtension.h>
     #import <CYLChatKit/LCCKBaseTableViewController.h>
@@ -60,8 +60,8 @@
     #import "LCCKServiceDefinition.h"
     #import "LCCKConversationViewController.h"
     #import "LCCKConversationListViewController.h"
-    #import "LCCKConversationDelegate.h"
-    #import "LCCKIMMessageDelegate.h"
+    #import "LCCKConversationProtocol.h"
+    #import "LCCKIMMessageProtocol.h"
     #import "LCCKIMProvider.h"
     #import "UIImageView+LCCKExtension.h"
     #import "LCCKBaseTableViewController.h"

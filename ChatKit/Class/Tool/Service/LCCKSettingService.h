@@ -46,9 +46,9 @@ FOUNDATION_EXTERN NSString *const LCCKSettingServiceErrorDomain;
  *  根据消息来获取视频文件的路径。
  */
 /*!
- * @param message A video message conforming to `LCCKIMMessageDelegate`. If it responds to `format`, the format is used as the file extension.
+ * @param message A video message conforming to `LCCKIMMessageProtocol`. If it responds to `format`, the format is used as the file extension.
  */
-- (NSString *)videoPathOfMessage:(id<LCCKIMMessageDelegate>)message;
+- (NSString *)videoPathOfMessage:(id<LCCKIMMessageProtocol>)message;
 
 // please call in application:didFinishLaunchingWithOptions:launchOptions
 /*!

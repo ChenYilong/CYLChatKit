@@ -19,7 +19,7 @@
 //
 //  Notification contract. The provider posts the following notifications, defined in
 //  `LCCKConstants.h`, so the UI can refresh. Conversation values conform to
-//  `LCCKConversationDelegate`; message values conform to `LCCKIMMessageDelegate`.
+//  `LCCKConversationProtocol`; message values conform to `LCCKIMMessageProtocol`.
 //
 //  - `LCCKNotificationMessageReceived`: object is a dictionary with
 //    `LCCKMessageNotifacationUserInfoConversationKey` and `LCCKDidReceiveMessagesUserInfoMessagesKey`
@@ -36,16 +36,16 @@
 
 #import <Foundation/Foundation.h>
 #import "LCCKConstants.h"
-#import "LCCKConversationDelegate.h"
-#import "LCCKIMMessageDelegate.h"
+#import "LCCKConversationProtocol.h"
+#import "LCCKIMMessageProtocol.h"
 
 @class LCCKMessage;
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void (^LCCKIMConversationResultBlock)(id<LCCKConversationDelegate> _Nullable conversation, NSError * _Nullable error);
-typedef void (^LCCKIMMessageResultBlock)(BOOL succeeded, NSError * _Nullable error, id<LCCKIMMessageDelegate> _Nullable message);
-typedef void (^LCCKIMRecentConversationsResultBlock)(NSArray<id<LCCKConversationDelegate>> * _Nullable conversations, NSInteger totalUnreadCount, NSError * _Nullable error);
+typedef void (^LCCKIMConversationResultBlock)(id<LCCKConversationProtocol> _Nullable conversation, NSError * _Nullable error);
+typedef void (^LCCKIMMessageResultBlock)(BOOL succeeded, NSError * _Nullable error, id<LCCKIMMessageProtocol> _Nullable message);
+typedef void (^LCCKIMRecentConversationsResultBlock)(NSArray<id<LCCKConversationProtocol>> * _Nullable conversations, NSInteger totalUnreadCount, NSError * _Nullable error);
 
 #pragma mark - Session
 
@@ -96,7 +96,7 @@ typedef void (^LCCKIMRecentConversationsResultBlock)(NSArray<id<LCCKConversation
 
 - (void)fetchConversationWithConversationId:(NSString *)conversationId callback:(nullable LCCKIMConversationResultBlock)callback;
 
-/// The callback array contains objects conforming to `LCCKConversationDelegate`.
+/// The callback array contains objects conforming to `LCCKConversationProtocol`.
 - (void)fetchConversationsWithConversationIds:(NSSet<NSString *> *)conversationIds callback:(nullable LCCKArrayResultBlock)callback;
 
 /// Fetches, or creates if needed, the one-to-one conversation with `peerId`.
@@ -111,15 +111,15 @@ typedef void (^LCCKIMRecentConversationsResultBlock)(NSArray<id<LCCKConversation
                              callback:(nullable LCCKIMConversationResultBlock)callback;
 
 /// Adds the current user to the conversation. Used when `enableAutoJoin` is YES.
-- (void)joinConversation:(id<LCCKConversationDelegate>)conversation callback:(nullable LCCKBooleanResultBlock)callback;
+- (void)joinConversation:(id<LCCKConversationProtocol>)conversation callback:(nullable LCCKBooleanResultBlock)callback;
 
 /// Marks all messages of the conversation as read on the server and clears its mention flag.
-- (void)markConversationAsRead:(id<LCCKConversationDelegate>)conversation;
+- (void)markConversationAsRead:(id<LCCKConversationProtocol>)conversation;
 
 @optional
 
 /// Called before ChatKit uses a conversation, for example to attach it to the current SDK client.
-- (void)prepareConversation:(id<LCCKConversationDelegate>)conversation;
+- (void)prepareConversation:(id<LCCKConversationProtocol>)conversation;
 
 @end
 
@@ -135,21 +135,21 @@ typedef void (^LCCKIMRecentConversationsResultBlock)(NSArray<id<LCCKConversation
  * @return An `LCCKMessage` for a built-in media type, the message itself for a supported custom
  *         message, or nil if the message should not be displayed (for example, a recalled message).
  */
-- (nullable id)displayMessageFromIMMessage:(id<LCCKIMMessageDelegate>)message;
+- (nullable id)displayMessageFromIMMessage:(id<LCCKIMMessageProtocol>)message;
 
 /*!
  * Converts a message the UI wants to send into an SDK message.
- * @param message An `LCCKMessage`, or a custom message that already conforms to `LCCKIMMessageDelegate`.
+ * @param message An `LCCKMessage`, or a custom message that already conforms to `LCCKIMMessageProtocol`.
  * @return The SDK message, or nil if the message cannot be sent.
  */
-- (nullable id<LCCKIMMessageDelegate>)IMMessageFromMessage:(id)message;
+- (nullable id<LCCKIMMessageProtocol>)IMMessageFromMessage:(id)message;
 
 /*!
  * Sends a message.
  * @param mentionList Client ids mentioned in the message. May be empty.
  */
-- (void)sendMessage:(id<LCCKIMMessageDelegate>)message
-       conversation:(id<LCCKConversationDelegate>)conversation
+- (void)sendMessage:(id<LCCKIMMessageProtocol>)message
+       conversation:(id<LCCKConversationProtocol>)conversation
         mentionList:(nullable NSArray<NSString *> *)mentionList
       progressBlock:(nullable LCCKProgressBlock)progressBlock
            callback:(nullable LCCKBooleanResultBlock)callback;
@@ -157,23 +157,23 @@ typedef void (^LCCKIMRecentConversationsResultBlock)(NSArray<id<LCCKConversation
 /*!
  * Loads history messages, newest last.
  * @param timestamp 0 loads the latest page; otherwise loads messages before `messageId` and `timestamp`.
- * The callback array contains objects conforming to `LCCKIMMessageDelegate`.
+ * The callback array contains objects conforming to `LCCKIMMessageProtocol`.
  */
-- (void)queryMessagesWithConversation:(id<LCCKConversationDelegate>)conversation
+- (void)queryMessagesWithConversation:(id<LCCKConversationProtocol>)conversation
                             messageId:(nullable NSString *)messageId
                             timestamp:(int64_t)timestamp
                                 limit:(NSInteger)limit
                              callback:(nullable LCCKArrayResultBlock)callback;
 
 /// Replaces the text of a sent message. The callback returns the new SDK message.
-- (void)updateMessage:(id<LCCKIMMessageDelegate>)oldMessage
+- (void)updateMessage:(id<LCCKIMMessageProtocol>)oldMessage
              withText:(NSString *)text
-         conversation:(id<LCCKConversationDelegate>)conversation
+         conversation:(id<LCCKConversationProtocol>)conversation
              callback:(nullable LCCKIMMessageResultBlock)callback;
 
 /// Recalls a sent message. The callback returns the recalled SDK message.
-- (void)recallMessage:(id<LCCKIMMessageDelegate>)message
-         conversation:(id<LCCKConversationDelegate>)conversation
+- (void)recallMessage:(id<LCCKIMMessageProtocol>)message
+         conversation:(id<LCCKConversationProtocol>)conversation
              callback:(nullable LCCKIMMessageResultBlock)callback;
 
 @optional
@@ -198,10 +198,10 @@ typedef void (^LCCKIMRecentConversationsResultBlock)(NSArray<id<LCCKConversation
 
 @required
 
-- (NSArray<id<LCCKConversationDelegate>> *)allRecentConversations;
+- (NSArray<id<LCCKConversationProtocol>> *)allRecentConversations;
 - (BOOL)isRecentConversationExistWithConversationId:(NSString *)conversationId;
-- (void)insertRecentConversations:(NSArray<id<LCCKConversationDelegate>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
-- (void)updateRecentConversation:(NSArray<id<LCCKConversationDelegate>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
+- (void)insertRecentConversations:(NSArray<id<LCCKConversationProtocol>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
+- (void)updateRecentConversation:(NSArray<id<LCCKConversationProtocol>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 - (void)deleteRecentConversationWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 - (void)updateUnreadCountToZeroWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 - (void)increaseUnreadCount:(NSUInteger)increaseUnreadCount withConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
@@ -234,7 +234,7 @@ typedef void (^LCCKIMRecentConversationsResultBlock)(NSArray<id<LCCKConversation
 @required
 
 - (void)insertFailedLCCKMessage:(LCCKMessage *)message;
-- (void)insertFailedMessage:(id<LCCKIMMessageDelegate>)message;
+- (void)insertFailedMessage:(id<LCCKIMMessageProtocol>)message;
 - (BOOL)deleteFailedMessageByRecordId:(NSString *)recordId;
 - (NSArray<LCCKMessage *> *)failedMessagesByConversationId:(NSString *)conversationId;
 - (NSArray<NSString *> *)failedMessageIdsByConversationId:(NSString *)conversationId;

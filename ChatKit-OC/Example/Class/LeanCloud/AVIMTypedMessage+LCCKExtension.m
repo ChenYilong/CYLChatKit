@@ -13,13 +13,13 @@ FOUNDATION_EXTERN NSMutableDictionary const *_typeDict;
 
 @implementation AVIMTypedMessage (LCCKExtension)
 
-#pragma mark - LCCKIMMessageDelegate
+#pragma mark - LCCKIMMessageProtocol
 
 - (NSString *)lcck_senderId {
     return self.clientId;
 }
 
-- (void)lcck_setSenderId:(NSString *)senderId {
+- (void)setLcck_senderId:(NSString *)senderId {
     [self setValue:senderId forKey:@"clientId"];
 }
 
@@ -54,12 +54,12 @@ FOUNDATION_EXTERN NSMutableDictionary const *_typeDict;
 + (AVIMTypedMessage *)lcck_messageWithLCCKMessage:(LCCKMessage *)message {
     AVIMTypedMessage *avimTypedMessage;
     switch (message.mediaType) {
-        case kAVIMMessageMediaTypeText: {
+        case LCCKMessageMediaTypeText: {
             avimTypedMessage = [AVIMTextMessage messageWithText:message.text attributes:nil];
             break;
         }
-        case kAVIMMessageMediaTypeVideo:
-        case kAVIMMessageMediaTypeImage: {
+        case LCCKMessageMediaTypeVideo:
+        case LCCKMessageMediaTypeImage: {
             
             NSString *localPhotoPath = message.photoPath;
             NSString *remotePhotoPath = message.originPhotoURL;
@@ -76,20 +76,22 @@ FOUNDATION_EXTERN NSMutableDictionary const *_typeDict;
             
             break;
         }
-        case kAVIMMessageMediaTypeAudio: {
+        case LCCKMessageMediaTypeAudio: {
             avimTypedMessage = [AVIMAudioMessage messageWithText:nil attachedFilePath:message.voicePath attributes:nil];
             break;
         }
-        case kAVIMMessageMediaTypeLocation: {
+        case LCCKMessageMediaTypeLocation: {
             avimTypedMessage = [AVIMLocationMessage messageWithText:message.geolocations
                                                            latitude:message.location.coordinate.latitude
                                                           longitude:message.location.coordinate.longitude
                                                          attributes:nil];
             break;
-        case kAVIMMessageMediaTypeNone:
+        case LCCKMessageMediaTypeNone:
             //TODO:
             break;
         }
+        default:
+            break;
     }
     [avimTypedMessage setObject:@(LCCK_CURRENT_TIMESTAMP) forKey:@"sendTimestamp"];
     return avimTypedMessage;

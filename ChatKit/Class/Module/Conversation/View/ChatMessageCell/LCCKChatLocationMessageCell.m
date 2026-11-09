@@ -109,7 +109,7 @@
 }
 
 + (LCCKMessageMediaType)classMediaType {
-    return kLCCKMessageMediaTypeLocation;
+    return LCCKMessageMediaTypeLocation;
 }
 
 @end
