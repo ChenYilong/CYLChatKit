@@ -7,7 +7,7 @@
 //
 
 //  Moved from ChatKit to the demo: ChatKit no longer depends on LeanCloud.
-//  This category makes `AVIMTypedMessage` conform to ChatKit's `LCCKIMMessageProtocol`,
+//  This category makes `AVIMTypedMessage` conform to ChatKit's `CYLIMMessageProtocol`,
 //  so built-in and custom LeanCloud messages can pass through ChatKit's UI.
 
 #import <AVOSCloudIM/AVOSCloudIM.h>
@@ -16,17 +16,17 @@
 #else
 #import "LCChatKit.h"
 #endif
-@class LCCKMessage;
+@class CYLMessage;
 
-@interface AVIMTypedMessage (LCCKExtension) <LCCKIMMessageProtocol>
+@interface AVIMTypedMessage (LCCKExtension) <CYLIMMessageProtocol>
 
-#pragma mark - LCCKIMMessageProtocol
+#pragma mark - CYLIMMessageProtocol
 
-- (NSString *)lcck_senderId;
-- (void)setLcck_senderId:(NSString *)senderId;
-- (LCCKMessageOwnerType)lcck_ownerType;
-- (LCCKMessageSendState)lcck_sendStatus;
-- (int64_t)lcck_sendTimestamp;
+- (NSString *)cyl_senderId;
+- (void)setCyl_senderId:(NSString *)senderId;
+- (CYLMessageOwnerType)cyl_ownerType;
+- (CYLMessageSendState)cyl_sendStatus;
+- (int64_t)cyl_sendTimestamp;
 
 #pragma mark - LeanCloud helpers
 
@@ -35,7 +35,7 @@
  */
 - (BOOL)lcck_isSupportThisCustomMessage;
 
-+ (AVIMTypedMessage *)lcck_messageWithLCCKMessage:(LCCKMessage *)message;
++ (AVIMTypedMessage *)lcck_messageWithLCCKMessage:(CYLMessage *)message;
 - (void)lcck_setObject:(id)object forKey:(NSString *)key;
 
 @end

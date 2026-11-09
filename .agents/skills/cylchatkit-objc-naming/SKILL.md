@@ -9,17 +9,20 @@ Follow the existing public API style; do not rename released symbols as a cleanu
 
 ## Identifiers
 
-- Prefix ChatKit-owned public classes, protocols, enums, and exported constants with `LCCK` (for example, `LCCKMessage` and `LCCKConversationViewController`).
-- New class files must begin with the repository's established class prefix, `LCCK`; do not import `CYL` or another unrelated prefix from a different project. If an identifier is copied or adapted from another project, rename the new identifier and file to follow CYLChatKit conventions.
+- Prefix core (`ChatKit/`) classes, protocols, typedefs, enums, exported constants, and C functions with `CYL` (for example, `CYLMessage` and `CYLConversationViewController`), following the CYLTabBarController naming rules. Enum cases are the type name plus the case, without a `k` prefix (`CYLMessageMediaTypeText`).
+- Core must not contain `LCCK`, `lcck_`, or `AVOS`. If an identifier is copied or adapted from another project, rename it and its file to the `CYL` convention.
+- Avoid clashes with `CYLTabBarController` and `CYLDeallocBlockExecutor`: if a class, header, macro, constant, or category selector already exists there, use a `CYLChat` prefix instead (`CYLChatBaseViewController`, `CYLChatConstants.h`).
+- Use `Delegate` only for delegates; model protocols end in `Protocol` (`CYLConversationProtocol`).
+- The demo (`ChatKit-OC/`) keeps `LCCK` for its own symbols.
 - Use UpperCamelCase for types and enum cases, and lowerCamelCase for properties, parameters, and selector components.
-- Use a descriptive `LCCK`-prefixed name for file-scope constants. Keep implementation-private constants `static`.
+- Use a descriptive `CYL`-prefixed name for file-scope constants. Keep implementation-private constants `static`.
 - Keep third-party and vendored identifiers in their upstream naming style.
 
 ## Files and categories
 
-- Name a class header and implementation after the class: `LCCKMessage.h` and `LCCKMessage.m`.
-- Name category files `Type+LCCKExtension.h` / `.m`, and use the same category name in the declaration.
-- Prefix every new category method with `lcck_` to avoid collisions. Do not use `cyl_` unless CYLChatKit itself adopts that convention in a deliberate, repository-wide API change.
+- Name a class header and implementation after the class: `CYLMessage.h` and `CYLMessage.m`.
+- Name category files `Type+CYLExtension.h` / `.m`, and use the same category name in the declaration.
+- Prefix every category method and property with `cyl_`; a category property's setter is `setCyl_name:`.
 - Place new files in the existing `Model`, `Controller`, `View`, `Tool`, or `Service` hierarchy that matches their responsibility.
 
 ## API compatibility

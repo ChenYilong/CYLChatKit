@@ -38,7 +38,7 @@
         //当存在无法识别的自定义消息，SDK会返回 AVIMMessage 类型
         AVIMMessage *message = self;
         NSString *jsonString = message.content;
-        NSDictionary *json = [jsonString lcck_JSONValue];
+        NSDictionary *json = [jsonString cyl_JSONValue];
         do {
             NSString *customMessageDegradeKey = [json valueForKey:@"_lctext"];
             if (customMessageDegradeKey.length > 0) {
@@ -46,12 +46,12 @@
                 break;
             }
             attr = [json valueForKey:@"_lcattrs"];
-            NSString *customMessageAttrDegradeKey = [attr valueForKey:LCCKCustomMessageDegradeKey];
+            NSString *customMessageAttrDegradeKey = [attr valueForKey:CYLCustomMessageDegradeKey];
             if (customMessageAttrDegradeKey.length > 0) {
                 messageText = customMessageAttrDegradeKey;
                 break;
             }
-            messageText = LCCKLocalizedStrings(@"unknownMessage");
+            messageText = CYLLocalizedStrings(@"unknownMessage");
             break;
         } while (NO);
     }
@@ -60,7 +60,7 @@
     [typedMessage setValue:self.messageId forKey:@"messageId"];
     [typedMessage setValue:@(self.sendTimestamp) forKey:@"sendTimestamp"];
     [typedMessage setValue:self.clientId forKey:@"clientId"];
-    [typedMessage lcck_setObject:@(YES) forKey:LCCKCustomMessageIsCustomKey];
+    [typedMessage lcck_setObject:@(YES) forKey:CYLCustomMessageIsCustomKey];
     return typedMessage;
 }
 

@@ -67,51 +67,51 @@
 #pragma mark - LCChatKit Method
 
 + (void)setAppId:(NSString *)appId appKey:(NSString *)appKey {
-    id<LCCKIMProvider> IMProvider = [LCChatKit sharedInstance].IMProvider;
+    id<CYLIMProvider> IMProvider = [LCChatKit sharedInstance].IMProvider;
     if ([IMProvider respondsToSelector:@selector(setAppId:appKey:)]) {
         [IMProvider setAppId:appId appKey:appKey];
     }
     [LCChatKit sharedInstance].appId = appId;
     [LCChatKit sharedInstance].appKey = appKey;
-    if ([LCCKSettingService allLogsEnabled]) {
-        LCCKLog(@"ChatKit Version is %@", [LCCKSettingService ChatKitVersion]);
+    if ([CYLSettingService allLogsEnabled]) {
+        CYLLog(@"ChatKit Version is %@", [CYLSettingService ChatKitVersion]);
     }
 }
 
 #pragma mark -
 #pragma mark - Service Delegate Method
 
-- (LCCKSessionService *)sessionService {
-    return [LCCKSessionService sharedInstance];
+- (CYLSessionService *)sessionService {
+    return [CYLSessionService sharedInstance];
 }
 
-- (LCCKUserSystemService *)userSystemService {
-    return [LCCKUserSystemService sharedInstance];
+- (CYLUserSystemService *)userSystemService {
+    return [CYLUserSystemService sharedInstance];
 }
 
-- (LCCKSignatureService *)signatureService {
-    return [LCCKSignatureService sharedInstance];
+- (CYLSignatureService *)signatureService {
+    return [CYLSignatureService sharedInstance];
 }
 
-- (LCCKSettingService *)settingService {
-    return [LCCKSettingService sharedInstance];
+- (CYLSettingService *)settingService {
+    return [CYLSettingService sharedInstance];
 }
 
-- (LCCKUIService *)UIService {
-    return [LCCKUIService sharedInstance];
+- (CYLUIService *)UIService {
+    return [CYLUIService sharedInstance];
 }
 
-- (LCCKConversationService *)conversationService {
-    return [LCCKConversationService sharedInstance];
+- (CYLConversationService *)conversationService {
+    return [CYLConversationService sharedInstance];
 }
 
-- (LCCKConversationListService *)conversationListService {
-    return [LCCKConversationListService sharedInstance];
+- (CYLConversationListService *)conversationListService {
+    return [CYLConversationListService sharedInstance];
 }
 
-#pragma mark - LCCKSessionService
+#pragma mark - CYLSessionService
 ///=============================================================================
-/// @name LCCKSessionService
+/// @name CYLSessionService
 ///=============================================================================
 
 - (NSString *)clientId {
@@ -122,19 +122,19 @@
     return self.sessionService.client;
 }
 
-- (void)openWithClientId:(NSString *)clientId callback:(LCCKBooleanResultBlock)callback {
+- (void)openWithClientId:(NSString *)clientId callback:(CYLBooleanResultBlock)callback {
     [self.sessionService openWithClientId:clientId callback:callback];
 }
 
-- (void)openWithClientId:(NSString *)clientId force:(BOOL)force callback:(LCCKBooleanResultBlock)callback {
+- (void)openWithClientId:(NSString *)clientId force:(BOOL)force callback:(CYLBooleanResultBlock)callback {
     [self.sessionService openWithClientId:clientId force:force callback:callback];
 }
 
-- (void)closeWithCallback:(LCCKBooleanResultBlock)callback {
+- (void)closeWithCallback:(CYLBooleanResultBlock)callback {
     [self.sessionService closeWithCallback:callback];
 }
 
-- (void)setForceReconnectSessionBlock:(LCCKForceReconnectSessionBlock)forceReconnectSessionBlock {
+- (void)setForceReconnectSessionBlock:(CYLForceReconnectSessionBlock)forceReconnectSessionBlock {
     [self.sessionService setForceReconnectSessionBlock:forceReconnectSessionBlock];
 }
 
@@ -142,15 +142,15 @@
     self.sessionService.disableSingleSignOn = disableSingleSignOn;
 }
 
-- (void)setMemberInfoChangedBlock:(void (^)(id<LCCKConversationProtocol> conversation, NSString *byClientId, NSString *clientId, NSUInteger role))block {
+- (void)setMemberInfoChangedBlock:(void (^)(id<CYLConversationProtocol> conversation, NSString *byClientId, NSString *clientId, NSUInteger role))block {
     self.sessionService.memberInfoChangedBlock = block;
 }
-#pragma mark - LCCKUserSystemService
+#pragma mark - CYLUserSystemService
 ///=============================================================================
-/// @name LCCKUserSystemService
+/// @name CYLUserSystemService
 ///=============================================================================
 
-- (void)setFetchProfilesBlock:(LCCKFetchProfilesBlock)fetchProfilesBlock {
+- (void)setFetchProfilesBlock:(CYLFetchProfilesBlock)fetchProfilesBlock {
     [self.userSystemService setFetchProfilesBlock:fetchProfilesBlock];
 }
 
@@ -166,93 +166,93 @@
     [self.userSystemService getCachedProfileIfExists:userId name:name avatarURL:avatarURL error:error];
 }
 
-- (NSArray<id<LCCKUserDelegate>> *)getCachedProfilesIfExists:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error {
+- (NSArray<id<CYLUserDelegate>> *)getCachedProfilesIfExists:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error {
    return [self.userSystemService getCachedProfilesIfExists:userIds error:error];
 }
-- (NSArray<id<LCCKUserDelegate>> *)getCachedProfilesIfExists:(NSArray<NSString *> *)userIds shouldSameCount:(BOOL)shouldSameCount error:(NSError * __autoreleasing *)error {
+- (NSArray<id<CYLUserDelegate>> *)getCachedProfilesIfExists:(NSArray<NSString *> *)userIds shouldSameCount:(BOOL)shouldSameCount error:(NSError * __autoreleasing *)error {
     return [self.userSystemService getCachedProfilesIfExists:userIds shouldSameCount:shouldSameCount error:error];
 }
 
-- (void)getProfileInBackgroundForUserId:(NSString *)userId callback:(LCCKUserResultCallBack)callback {
+- (void)getProfileInBackgroundForUserId:(NSString *)userId callback:(CYLUserResultCallBack)callback {
     [self.userSystemService getProfileInBackgroundForUserId:userId callback:callback];
 }
 
-- (void)getProfilesInBackgroundForUserIds:(NSArray<NSString *> *)userIds callback:(LCCKUserResultsCallBack)callback {
+- (void)getProfilesInBackgroundForUserIds:(NSArray<NSString *> *)userIds callback:(CYLUserResultsCallBack)callback {
     [self.userSystemService getProfilesInBackgroundForUserIds:userIds callback:callback];
 }
 
-- (NSArray<id<LCCKUserDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error {
+- (NSArray<id<CYLUserDelegate>> *)getProfilesForUserIds:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error {
     return [self.userSystemService getProfilesForUserIds:userIds error:error];
 }
 
-#pragma mark - LCCKSignatureService
+#pragma mark - CYLSignatureService
 ///=============================================================================
-/// @name LCCKSignatureService
+/// @name CYLSignatureService
 ///=============================================================================
 
-- (void)setGenerateSignatureBlock:(LCCKGenerateSignatureBlock)generateSignatureBlock {
+- (void)setGenerateSignatureBlock:(CYLGenerateSignatureBlock)generateSignatureBlock {
     [self.signatureService setGenerateSignatureBlock:generateSignatureBlock];
 }
 
-- (LCCKGenerateSignatureBlock)generateSignatureBlock {
+- (CYLGenerateSignatureBlock)generateSignatureBlock {
     return [self.signatureService generateSignatureBlock];
 }
 
-#pragma mark - LCCKUIService
+#pragma mark - CYLUIService
 ///=============================================================================
-/// @name LCCKUIService
+/// @name CYLUIService
 ///=============================================================================
 
-- (void)setOpenProfileBlock:(LCCKOpenProfileBlock)openProfileBlock {
+- (void)setOpenProfileBlock:(CYLOpenProfileBlock)openProfileBlock {
     [self.UIService setOpenProfileBlock:openProfileBlock];
 }
 
-- (void)setPreviewImageMessageBlock:(LCCKPreviewImageMessageBlock)previewImageMessageBlock {
+- (void)setPreviewImageMessageBlock:(CYLPreviewImageMessageBlock)previewImageMessageBlock {
     [self.UIService setPreviewImageMessageBlock:previewImageMessageBlock];
 }
 
-- (void)setPreviewLocationMessageBlock:(LCCKPreviewLocationMessageBlock)previewLocationMessageBlock {
+- (void)setPreviewLocationMessageBlock:(CYLPreviewLocationMessageBlock)previewLocationMessageBlock {
     [self.UIService setPreviewLocationMessageBlock:previewLocationMessageBlock];
 }
 
-- (void)setShowNotificationBlock:(LCCKShowNotificationBlock)showNotificationBlock {
+- (void)setShowNotificationBlock:(CYLShowNotificationBlock)showNotificationBlock {
     [self.UIService setShowNotificationBlock:showNotificationBlock];
 }
-- (void)setHUDActionBlock:(LCCKHUDActionBlock)HUDActionBlock {
+- (void)setHUDActionBlock:(CYLHUDActionBlock)HUDActionBlock {
     [self.UIService setHUDActionBlock:HUDActionBlock];
 }
 
-- (void)setAvatarImageViewCornerRadiusBlock:(LCCKAvatarImageViewCornerRadiusBlock)avatarImageViewCornerRadiusBlock {
+- (void)setAvatarImageViewCornerRadiusBlock:(CYLAvatarImageViewCornerRadiusBlock)avatarImageViewCornerRadiusBlock {
     [self.UIService setAvatarImageViewCornerRadiusBlock:avatarImageViewCornerRadiusBlock];
 }
 
-- (LCCKAvatarImageViewCornerRadiusBlock)avatarImageViewCornerRadiusBlock {
+- (CYLAvatarImageViewCornerRadiusBlock)avatarImageViewCornerRadiusBlock {
     return self.UIService.avatarImageViewCornerRadiusBlock;
 }
 
-- (void)setLongPressMessageBlock:(LCCKLongPressMessageBlock)longPressMessageBlock {
+- (void)setLongPressMessageBlock:(CYLLongPressMessageBlock)longPressMessageBlock {
     return [self.UIService setLongPressMessageBlock:longPressMessageBlock];
 }
 
-- (LCCKLongPressMessageBlock)longPressMessageBlock {
+- (CYLLongPressMessageBlock)longPressMessageBlock {
     return self.UIService.longPressMessageBlock;
 }
 
-#pragma mark - LCCKSettingService
+#pragma mark - CYLSettingService
 ///=============================================================================
-/// @name LCCKSettingService
+/// @name CYLSettingService
 ///=============================================================================
 
 + (void)setAllLogsEnabled:(BOOL)enabled {
-    [LCCKSettingService setAllLogsEnabled:YES];
+    [CYLSettingService setAllLogsEnabled:YES];
 }
 
 + (BOOL)allLogsEnabled {
-   return [LCCKSettingService allLogsEnabled];
+   return [CYLSettingService allLogsEnabled];
 }
 
 + (NSString *)ChatKitVersion {
-    return [LCCKSettingService ChatKitVersion];
+    return [CYLSettingService ChatKitVersion];
 }
 
 - (void)syncBadge {
@@ -279,40 +279,40 @@
     [self.settingService setBackgroundImage:image forConversationId:conversationId scaledToSize:scaledToSize];
 }
 
-#pragma mark - LCCKConversationService
+#pragma mark - CYLConversationService
 ///=============================================================================
-/// @name LCCKConversationService
+/// @name CYLConversationService
 ///=============================================================================
 
-- (void)setFetchConversationHandler:(LCCKFetchConversationHandler)fetchConversationHandler {
+- (void)setFetchConversationHandler:(CYLFetchConversationHandler)fetchConversationHandler {
     [self.conversationService setFetchConversationHandler:fetchConversationHandler];
 }
 
-- (void)setConversationInvalidedHandler:(LCCKConversationInvalidedHandler)conversationInvalidedHandler {
+- (void)setConversationInvalidedHandler:(CYLConversationInvalidedHandler)conversationInvalidedHandler {
     [self.conversationService setConversationInvalidedHandler:conversationInvalidedHandler];
 }
 
-- (void)setLoadLatestMessagesHandler:(LCCKLoadLatestMessagesHandler)loadLatestMessagesHandler {
+- (void)setLoadLatestMessagesHandler:(CYLLoadLatestMessagesHandler)loadLatestMessagesHandler {
     [self.conversationService setLoadLatestMessagesHandler:loadLatestMessagesHandler];
 }
 
-- (void)setFilterMessagesBlock:(LCCKFilterMessagesBlock)filterMessagesBlock {
+- (void)setFilterMessagesBlock:(CYLFilterMessagesBlock)filterMessagesBlock {
     [self.conversationService setFilterMessagesBlock:filterMessagesBlock];
 }
 
-- (void)setSendMessageHookBlock:(LCCKSendMessageHookBlock)sendMessageHookBlock {
+- (void)setSendMessageHookBlock:(CYLSendMessageHookBlock)sendMessageHookBlock {
     [self.conversationService setSendMessageHookBlock:sendMessageHookBlock];
 }
 
-- (void)createConversationWithMembers:(NSArray *)members type:(LCCKConversationType)type unique:(BOOL)unique callback:(LCCKConversationResultBlock)callback {
+- (void)createConversationWithMembers:(NSArray *)members type:(CYLConversationType)type unique:(BOOL)unique callback:(CYLConversationResultBlock)callback {
     [self.conversationService createConversationWithMembers:members type:type unique:unique callback:callback];
 }
 
-- (void)fetchConversationWithConversationId:(NSString *)conversationId callback:(LCCKConversationResultBlock)callback {
+- (void)fetchConversationWithConversationId:(NSString *)conversationId callback:(CYLConversationResultBlock)callback {
     [self.conversationService fetchConversationWithConversationId:conversationId callback:callback];
 }
 
-- (void)fetchConversationWithPeerId:(NSString *)peerId callback:(LCCKConversationResultBlock)callback {
+- (void)fetchConversationWithPeerId:(NSString *)peerId callback:(CYLConversationResultBlock)callback {
     [self.conversationService fetchConversationWithPeerId:peerId callback:callback];
 }
 
@@ -320,7 +320,7 @@
     [self.conversationService didReceiveRemoteNotification:userInfo];
 }
 
-- (void)insertRecentConversation:(id<LCCKConversationProtocol>)conversation {
+- (void)insertRecentConversation:(id<CYLConversationProtocol>)conversation {
     [self.conversationService insertRecentConversation:conversation];
 }
 
@@ -340,36 +340,36 @@
     return [self.conversationService removeAllCachedRecentConversations];
 }
 
-- (void)sendWelcomeMessageToPeerId:(NSString *)peerId text:(NSString *)text block:(LCCKBooleanResultBlock)block {
+- (void)sendWelcomeMessageToPeerId:(NSString *)peerId text:(NSString *)text block:(CYLBooleanResultBlock)block {
     [self.conversationService sendWelcomeMessageToPeerId:peerId text:text block:block];
 }
 
-- (void)sendWelcomeMessageToConversationId:(NSString *)conversationId text:(NSString *)text block:(LCCKBooleanResultBlock)block {
+- (void)sendWelcomeMessageToConversationId:(NSString *)conversationId text:(NSString *)text block:(CYLBooleanResultBlock)block {
     [self.conversationService sendWelcomeMessageToConversationId:conversationId text:text block:block];
 }
 
-#pragma mark - LCCKConversationsListService
+#pragma mark - CYLConversationsListService
 ///=============================================================================
-/// @name LCCKConversationsListService
+/// @name CYLConversationsListService
 ///=============================================================================
 
-- (void)setDidSelectConversationsListCellBlock:(LCCKDidSelectConversationsListCellBlock)didSelectConversationsListCellBlock {
+- (void)setDidSelectConversationsListCellBlock:(CYLDidSelectConversationsListCellBlock)didSelectConversationsListCellBlock {
     [self.conversationListService setDidSelectConversationsListCellBlock:didSelectConversationsListCellBlock];
 }
 
-- (void)setDidDeleteConversationsListCellBlock:(LCCKDidDeleteConversationsListCellBlock)didDeleteConversationsListCellBlock {
+- (void)setDidDeleteConversationsListCellBlock:(CYLDidDeleteConversationsListCellBlock)didDeleteConversationsListCellBlock {
     [self.conversationListService setDidDeleteConversationsListCellBlock:didDeleteConversationsListCellBlock];
 }
 
-- (void)setConversationEditActionBlock:(LCCKConversationEditActionsBlock)conversationEditActionBlock {
+- (void)setConversationEditActionBlock:(CYLConversationEditActionsBlock)conversationEditActionBlock {
     [self.conversationListService setConversationEditActionBlock:conversationEditActionBlock];
 }
 
-- (void)setMarkBadgeWithTotalUnreadCountBlock:(LCCKMarkBadgeWithTotalUnreadCountBlock)markBadgeWithTotalUnreadCountBlock {
+- (void)setMarkBadgeWithTotalUnreadCountBlock:(CYLMarkBadgeWithTotalUnreadCountBlock)markBadgeWithTotalUnreadCountBlock {
     [self.conversationListService setMarkBadgeWithTotalUnreadCountBlock:markBadgeWithTotalUnreadCountBlock];
 }
 
-- (void)setConversationListShowHookBlock:(LCCKConversationListShowHookBlock)conversationListShowHookBlock {
+- (void)setConversationListShowHookBlock:(CYLConversationListShowHookBlock)conversationListShowHookBlock {
     [self.conversationListService setConversationListShowHookBlock:conversationListShowHookBlock];
 }
 

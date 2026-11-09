@@ -13,7 +13,7 @@
 #else
 #import "LCChatKit.h"
 #endif
-@interface LCCKUser : AVUser <LCCKUserModelDelegate, LCCKUserModelDelegate, NSCoding, NSCopying>
+@interface LCCKUser : AVUser <CYLUserModelDelegate, CYLUserModelDelegate, NSCoding, NSCopying>
 
 /*!
  * @brief The user's id

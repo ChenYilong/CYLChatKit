@@ -36,7 +36,7 @@
 
 #pragma mark - SDK Life Control
 
-+ (void)invokeThisMethodBeforeLogoutSuccess:(LCCKVoidBlock)success failed:(LCCKErrorBlock)failed {
++ (void)invokeThisMethodBeforeLogoutSuccess:(CYLVoidBlock)success failed:(CYLErrorBlock)failed {
     //    [AVOSCloudIM handleRemoteNotificationsWithDeviceToken:nil];
     [[LCChatKit sharedInstance] removeAllCachedProfiles];
     [[LCChatKit sharedInstance] closeWithCallback:^(BOOL succeeded, NSError *error) {
@@ -44,20 +44,20 @@
             [self lcck_clearLocalClientInfo];
             [LCCKUtil showNotificationWithTitle:@"退出成功"
                                        subtitle:nil
-                                           type:LCCKMessageNotificationTypeSuccess];
+                                           type:CYLMessageNotificationTypeSuccess];
             !success ?: success();
         } else {
             [LCCKUtil showNotificationWithTitle:@"退出失败"
                                        subtitle:nil
-                                           type:LCCKMessageNotificationTypeError];
+                                           type:CYLMessageNotificationTypeError];
             !failed ?: failed(error);
         }
     }];
 }
 
 + (void)invokeThisMethodAfterLoginSuccessWithClientId:(NSString *)clientId
-                                              success:(LCCKVoidBlock)success
-                                               failed:(LCCKErrorBlock)failed {
+                                              success:(CYLVoidBlock)success
+                                               failed:(CYLErrorBlock)failed {
     [[self sharedInstance] exampleInit];
     [[LCChatKit sharedInstance] openWithClientId:clientId
                                         callback:^(BOOL succeeded, NSError *error) {
@@ -67,7 +67,7 @@
                                             } else {
                                                 [LCCKUtil showNotificationWithTitle:@"登陆失败"
                                                                            subtitle:nil
-                                                                               type:LCCKMessageNotificationTypeError];
+                                                                               type:CYLMessageNotificationTypeError];
                                                 !failed ?: failed(error);
                                             }
                                         }];
@@ -118,12 +118,12 @@
                                                            shouldSameCount:YES
                                                                      error:nil];
     NSString *currentClientID = [[LCChatKit sharedInstance] clientId];
-    LCCKContactListViewController *contactListViewController =
-    [[LCCKContactListViewController alloc]
+    CYLContactListViewController *contactListViewController =
+    [[CYLContactListViewController alloc]
      initWithContacts:[NSSet setWithArray:users]
      userIds:[NSSet setWithArray:allPersonIds]
      excludedUserIds:[NSSet setWithArray:@[ currentClientID ]]
-     mode:LCCKContactListModeMultipleSelection];
+     mode:CYLContactListModeMultipleSelection];
     contactListViewController.title = @"创建群聊";
     [contactListViewController setSelectedContactsCallback:^(UIViewController *viewController,
                                                              NSArray<NSString *> *peerIds) {
@@ -133,9 +133,9 @@
         [self lcck_showMessage:@"创建群聊..." toView:fromViewController.view];
         [[LCChatKit sharedInstance]
          createConversationWithMembers:peerIds
-         type:LCCKConversationTypeGroup
+         type:CYLConversationTypeGroup
          unique:YES
-         callback:^(id<LCCKConversationProtocol> conversation, NSError *error) {
+         callback:^(id<CYLConversationProtocol> conversation, NSError *error) {
              [self lcck_hideHUDForView:fromViewController.view];
              if (conversation) {
                  [self lcck_showSuccess:@"创建成功"
@@ -163,10 +163,10 @@
 + (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId
                                fromNavigationController:(UINavigationController *)navigationControlle {
 
-    LCCKConversationViewController *conversationViewController =
-    [[LCCKConversationViewController alloc] initWithPeerId:peerId];
+    CYLConversationViewController *conversationViewController =
+    [[CYLConversationViewController alloc] initWithPeerId:peerId];
     [conversationViewController
-     setViewWillDisappearBlock:^(LCCKBaseViewController *viewController, BOOL aAnimated) {
+     setViewWillDisappearBlock:^(CYLChatBaseViewController *viewController, BOOL aAnimated) {
          [self lcck_hideHUDForView:viewController.view];
      }];
     [self lcck_pushToViewController:conversationViewController];
@@ -175,15 +175,15 @@
 + (void)exampleOpenConversationViewControllerWithConversaionId:(NSString *)conversationId
                                       fromNavigationController:
 (UINavigationController *)aNavigationController {
-    LCCKConversationViewController *conversationViewController =
-    [[LCCKConversationViewController alloc] initWithConversationId:conversationId];
+    CYLConversationViewController *conversationViewController =
+    [[CYLConversationViewController alloc] initWithConversationId:conversationId];
     conversationViewController.enableAutoJoin = YES;
     [conversationViewController
-     setViewWillDisappearBlock:^(LCCKBaseViewController *viewController, BOOL aAnimated) {
+     setViewWillDisappearBlock:^(CYLChatBaseViewController *viewController, BOOL aAnimated) {
          [self lcck_hideHUDForView:viewController.view];
      }];
     [conversationViewController
-     setViewWillAppearBlock:^(LCCKBaseViewController *viewController, BOOL aAnimated) {
+     setViewWillAppearBlock:^(CYLChatBaseViewController *viewController, BOOL aAnimated) {
          [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent
                                                      animated:aAnimated];
      }];
@@ -205,18 +205,18 @@
                                                                         tabBarControllerConfig.tabBarController;
                                                                     }
                                                                      failed:^(NSError *error) {
-                                                                         LCCKLog(@"%@", error);
+                                                                         CYLLog(@"%@", error);
                                                                      }];
         }];
         [viewController presentViewController:loginViewController animated:YES completion:nil];
     }
                                                    failed:^(NSError *error) {
                                                        [LCCKUtil hideProgress];
-                                                       LCCKLog(@"%@", error);
+                                                       CYLLog(@"%@", error);
                                                    }];
 }
 
-- (void)exampleOpenProfileForUser:(id<LCCKUserDelegate>)user
+- (void)exampleOpenProfileForUser:(id<CYLUserDelegate>)user
                            userId:(NSString *)userId
                  parentController:(__kindof UIViewController *)parentController {
     NSString *currentClientId = [LCChatKit sharedInstance].clientId;
@@ -226,15 +226,15 @@
         title = [NSString stringWithFormat:@"打开自己的主页 \nClientId是 : %@", userId];
         subtitle = [NSString stringWithFormat:@"我自己的name是 : %@", user.name];
     
-    } else if ([parentController isKindOfClass:[LCCKConversationViewController class]]) {
-        LCCKConversationViewController *conversationViewController_ =
-        [[LCCKConversationViewController alloc] initWithPeerId:user.clientId ?: userId];
+    } else if ([parentController isKindOfClass:[CYLConversationViewController class]]) {
+        CYLConversationViewController *conversationViewController_ =
+        [[CYLConversationViewController alloc] initWithPeerId:user.clientId ?: userId];
         [[self class] lcck_pushToViewController:conversationViewController_];
         return;
     }
     [LCCKUtil showNotificationWithTitle:title
                                subtitle:subtitle
-                                   type:LCCKMessageNotificationTypeMessage];
+                                   type:CYLMessageNotificationTypeMessage];
 }
 
 #pragma mark -
@@ -260,7 +260,7 @@
     NSString *subtitle = [NSString stringWithFormat:@"User Id 是 : %@", clientId];
     [LCCKUtil showNotificationWithTitle:@"登陆成功"
                                subtitle:subtitle
-                                   type:LCCKMessageNotificationTypeSuccess];
+                                   type:CYLMessageNotificationTypeSuccess];
 }
 
 @end

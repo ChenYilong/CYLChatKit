@@ -84,7 +84,7 @@
 - (void)lcck_setFetchProfiles {
 #warning 注意：setFetchProfilesBlock 方法必须实现，如果不实现，ChatKit将无法显示用户头像、用户昵称。以下方法循环模拟了通过 userIds 同步查询 users 信息的过程，这里需要替换为 App 的 API 同步查询
     [[LCChatKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds,
-                             LCCKFetchProfilesCompletionHandler completionHandler) {
+                             CYLFetchProfilesCompletionHandler completionHandler) {
          if (userIds.count == 0) {
              NSInteger code = 0;
              NSString *errorReasonText = @"User ids is nil";
@@ -135,7 +135,7 @@
  * 需要使用同步请求
  */
 //- (void)lcck_setGenerateSignature {
-//    [[LCChatKit sharedInstance] setGenerateSignatureBlock:^(NSString *clientId, NSString     *conversationId, NSString *action, NSArray *clientIds, LCCKGenerateSignatureCompletionHandler completionHandler) {
+//    [[LCChatKit sharedInstance] setGenerateSignatureBlock:^(NSString *clientId, NSString     *conversationId, NSString *action, NSArray *clientIds, CYLGenerateSignatureCompletionHandler completionHandler) {
 //        NSMutableDictionary *paramsM = [NSMutableDictionary   dictionaryWithDictionary:@{@"token": [AccountManager sharedAccountManager].bestoneAccount.authentication_token}];
 //        if (clientIds.count) {
 //            [paramsM addEntriesFromDictionary:@{@"member_ids": clientIds}];
@@ -156,7 +156,7 @@
 //            signature_.timestamp = [responseObject[@"timestamp"] longLongValue];
 //            signature_.nonce = responseObject[@"nonce"];
 //            !completionHandler ?: completionHandler(signature_, nil);
-//            LCCKLog(@"签名请求成功。。。。");
+//            CYLLog(@"签名请求成功。。。。");
 //            dispatch_semaphore_signal(semaphore);
 //        } failure:^(NSError *error) {
 //            
@@ -167,7 +167,7 @@
 //            dispatch_semaphore_signal(semaphore);
 //        }];
 //        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-//        LCCKLog(@"我在等待信号量增加！。。。。。");
+//        CYLLog(@"我在等待信号量增加！。。。。。");
 //    }];
 //}
 
@@ -177,7 +177,7 @@
     // 自定义Cell菜单
     [[LCChatKit sharedInstance] setConversationEditActionBlock:^NSArray *(
                                                NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions,
-                                               id<LCCKConversationProtocol> conversation, LCCKConversationListViewController *controller) {
+                                               id<CYLConversationProtocol> conversation, CYLConversationListViewController *controller) {
          return [self lcck_exampleConversationEditActionAtIndexPath:indexPath
                                                        conversation:conversation
                                                          controller:controller];
@@ -190,15 +190,15 @@
 - (void)lcck_setupConversationsCellOperation { 
     //选中某个对话后的回调,设置事件响应函数
     [[LCChatKit sharedInstance] setDidSelectConversationsListCellBlock:^(
-                                                                         NSIndexPath *indexPath, id<LCCKConversationProtocol> conversation,
-                                                                         LCCKConversationListViewController *controller) {
+                                                                         NSIndexPath *indexPath, id<CYLConversationProtocol> conversation,
+                                                                         CYLConversationListViewController *controller) {
         [[self class] exampleOpenConversationViewControllerWithConversaionId:conversation.conversationId
          fromNavigationController:controller.navigationController];
     }];
     //删除某个对话后的回调 (一般不需要做处理)
     [[LCChatKit sharedInstance] setDidDeleteConversationsListCellBlock:^(
-                                                                         NSIndexPath *indexPath, id<LCCKConversationProtocol> conversation,
-                                                                         LCCKConversationListViewController *controller){
+                                                                         NSIndexPath *indexPath, id<CYLConversationProtocol> conversation,
+                                                                         CYLConversationListViewController *controller){
         // TODO:
     }];
 }
@@ -209,24 +209,24 @@
  */
 - (void)lcck_setupOpenConversation {
     [[LCChatKit sharedInstance] setFetchConversationHandler:^(
-                                                              id<LCCKConversationProtocol> conversation,
-                                                              LCCKConversationViewController *aConversationController) {
+                                                              id<CYLConversationProtocol> conversation,
+                                                              CYLConversationViewController *aConversationController) {
         if (!conversation.createAt) { //如果没有创建时间，直接return
             return;
         }
         [[self class] lcck_showMessage:@"加载历史记录..." toView:aConversationController.view];
         //判断会话的成员是否超过两个(即是否为群聊)
         if (conversation.members.count > 2) { //设置点击rightButton为群聊Style,和对应事件
-            [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleGroupProfile
-                                                          action:^(__kindof LCCKBaseViewController *viewController, UIBarButtonItem *sender, UIEvent *event) {
+            [aConversationController configureBarButtonItemStyle:CYLBarButtonItemStyleGroupProfile
+                                                          action:^(__kindof CYLChatBaseViewController *viewController, UIBarButtonItem *sender, UIEvent *event) {
                                                               LCCKGroupConversationDetailViewController *groupConversationDetailViewController = [LCCKGroupConversationDetailViewController new];
                                                               groupConversationDetailViewController.conversation = (AVIMConversation *)conversation;
                                                               [viewController.navigationController pushViewController:groupConversationDetailViewController animated:YES];
                                                           }];
         } else if (conversation.members.count == 2) { //设置点击rightButton为单聊的Style,和对应事件
             [aConversationController
-             configureBarButtonItemStyle:LCCKBarButtonItemStyleSingleProfile
-             action:^(__kindof LCCKBaseViewController *viewController, UIBarButtonItem *sender, UIEvent *event) {
+             configureBarButtonItemStyle:CYLBarButtonItemStyleSingleProfile
+             action:^(__kindof CYLChatBaseViewController *viewController, UIBarButtonItem *sender, UIEvent *event) {
                  
              
 //                 NSString *title = @"打开用户详情";
@@ -235,7 +235,7 @@
                                                                                                   [LCChatKit sharedInstance].clientId
                                                                                                   ]];
                  NSString *peerId = [members filteredArrayUsingPredicate:predicate][0];
-                 [[LCChatKit sharedInstance] getProfileInBackgroundForUserId:peerId callback:^(id<LCCKUserDelegate> user, NSError *error) {
+                 [[LCChatKit sharedInstance] getProfileInBackgroundForUserId:peerId callback:^(id<CYLUserDelegate> user, NSError *error) {
                      LCCKSingleConversationDetailViewController *singleConversationDetailViewController = [LCCKSingleConversationDetailViewController new];
                      singleConversationDetailViewController.conversation = (AVIMConversation *)conversation;
                      [viewController.navigationController pushViewController:singleConversationDetailViewController animated:YES];
@@ -252,8 +252,8 @@
  */
 - (void)lcck_setupConversationInvalidedHandler {
     [[LCChatKit sharedInstance] setConversationInvalidedHandler:^(NSString *conversationId,
-                                       LCCKConversationViewController *conversationController,
-                                       id<LCCKUserDelegate> administrator, NSError *error) {
+                                       CYLConversationViewController *conversationController,
+                                       id<CYLUserDelegate> administrator, NSError *error) {
          NSString *title;
          NSString *subTitle;
          //错误码参考：https://leancloud.cn/docs/realtime_v2.html#%E4%BA%91%E7%AB%AF%E9%94%99%E8%AF%AF%E7%A0%81%E8%AF%B4%E6%98%8E
@@ -267,17 +267,17 @@
              title = @"进群失败！";
              subTitle = [NSString stringWithFormat:@"请联系管理员%@",
                          administrator.name ?: administrator.clientId];
-             LCCKLog(@"%@", error.description);
+             CYLLog(@"%@", error.description);
              [LCCKUtil showNotificationWithTitle:title
                                         subtitle:subTitle
-                                            type:LCCKMessageNotificationTypeError];
+                                            type:CYLMessageNotificationTypeError];
          } else if (error.code == 4304) {
              [conversationController.navigationController popToRootViewControllerAnimated:YES];
              title = @"群已满，普通群人数上限为500";
              subTitle = @"暂态聊天室无人数限制";
              [LCCKUtil showNotificationWithTitle:title
                                         subtitle:subTitle
-                                            type:LCCKMessageNotificationTypeError];
+                                            type:CYLMessageNotificationTypeError];
          }
      }];
 }
@@ -287,17 +287,17 @@
  */
 - (void)lcck_setupLoadLatestMessages {
     [[LCChatKit sharedInstance]
-setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationController,
+setLoadLatestMessagesHandler:^(CYLConversationViewController *conversationController,
                                     BOOL succeeded, NSError *error) {
          [[self class] lcck_hideHUDForView:conversationController.view];
          NSString *title;
-         LCCKMessageNotificationType type;
+         CYLMessageNotificationType type;
          if (succeeded) {
              title = @"聊天记录加载成功";
-             type = LCCKMessageNotificationTypeSuccess;
+             type = CYLMessageNotificationTypeSuccess;
          } else {
              title = @"聊天记录加载失败";
-             type = LCCKMessageNotificationTypeError;
+             type = CYLMessageNotificationTypeError;
          }
 #ifndef __OPTIMIZE__
          [LCCKUtil showNotificationWithTitle:title subtitle:nil type:type];
@@ -323,42 +323,42 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
  */
 - (void)lcck_setupLongPressMessage
 {
-    [LCChatKit.sharedInstance setLongPressMessageBlock:^NSArray<LCCKMenuItem *> *(LCCKMessage *message, NSDictionary *userInfo) {
+    [LCChatKit.sharedInstance setLongPressMessageBlock:^NSArray<CYLMenuItem *> *(CYLMessage *message, NSDictionary *userInfo) {
         
-        LCCKMessageMediaType mediaType = message.mediaType;
+        CYLMessageMediaType mediaType = message.mediaType;
         BOOL isNormalMediaTypeMessage = ({
-            (mediaType == LCCKMessageMediaTypeText ||
-             mediaType == LCCKMessageMediaTypeImage ||
-             mediaType == LCCKMessageMediaTypeAudio ||
-             mediaType == LCCKMessageMediaTypeVideo ||
-             mediaType == LCCKMessageMediaTypeLocation ||
-             mediaType == LCCKMessageMediaTypeFile);
+            (mediaType == CYLMessageMediaTypeText ||
+             mediaType == CYLMessageMediaTypeImage ||
+             mediaType == CYLMessageMediaTypeAudio ||
+             mediaType == CYLMessageMediaTypeVideo ||
+             mediaType == CYLMessageMediaTypeLocation ||
+             mediaType == CYLMessageMediaTypeFile);
         });
-        LCCKMessageOwnerType ownerType = [userInfo[LCCKLongPressMessageUserInfoKeyMessageOwner] unsignedIntegerValue];
-        LCCKConversationViewController *fromController = userInfo[LCCKLongPressMessageUserInfoKeyFromController];
-        LCCKChatMessageCell *messageCell = userInfo[LCCKLongPressMessageUserInfoKeyMessageCell];
+        CYLMessageOwnerType ownerType = [userInfo[CYLLongPressMessageUserInfoKeyMessageOwner] unsignedIntegerValue];
+        CYLConversationViewController *fromController = userInfo[CYLLongPressMessageUserInfoKeyFromController];
+        CYLChatMessageCell *messageCell = userInfo[CYLLongPressMessageUserInfoKeyMessageCell];
         
         NSMutableArray *menuItems = [NSMutableArray array];
         
-        if (mediaType == LCCKMessageMediaTypeText) {
-            LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"copy") block:^{
+        if (mediaType == CYLMessageMediaTypeText) {
+            CYLMenuItem *copyItem = [[CYLMenuItem alloc] initWithTitle:CYLLocalizedStrings(@"copy") block:^{
                 UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
                 [pasteboard setString:[message text]];
             }];
             [menuItems addObject:copyItem];
-            if (fromController && ownerType == LCCKMessageOwnerTypeSelf) {
-                LCCKMenuItem *modifyItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"modify") block:^{
-                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@?", LCCKLocalizedStrings(@"modify")] message:nil preferredStyle:UIAlertControllerStyleAlert];
-                    [alert addAction:[UIAlertAction actionWithTitle:LCCKLocalizedStrings(@"cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {}]];
+            if (fromController && ownerType == CYLMessageOwnerTypeSelf) {
+                CYLMenuItem *modifyItem = [[CYLMenuItem alloc] initWithTitle:CYLLocalizedStrings(@"modify") block:^{
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@?", CYLLocalizedStrings(@"modify")] message:nil preferredStyle:UIAlertControllerStyleAlert];
+                    [alert addAction:[UIAlertAction actionWithTitle:CYLLocalizedStrings(@"cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {}]];
                     [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
                         textField.text = messageCell.message.text;
                     }];
-                    UIAlertAction *modifyAction = [UIAlertAction actionWithTitle:LCCKLocalizedStrings(@"modify") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                        LCCKMessage *oldMessage = messageCell.message;
-                        LCCKMessage *newMessage = [[LCCKMessage alloc] initWithText:alert.textFields[0].text senderId:oldMessage.senderId sender:oldMessage.sender timestamp:oldMessage.timestamp serverMessageId:oldMessage.serverMessageId];
+                    UIAlertAction *modifyAction = [UIAlertAction actionWithTitle:CYLLocalizedStrings(@"modify") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        CYLMessage *oldMessage = messageCell.message;
+                        CYLMessage *newMessage = [[CYLMessage alloc] initWithText:alert.textFields[0].text senderId:oldMessage.senderId sender:oldMessage.sender timestamp:oldMessage.timestamp serverMessageId:oldMessage.serverMessageId];
                         [fromController modifyMessage:messageCell newMessage:newMessage callback:^(BOOL succeeded, NSError *error) {
                             if (succeeded) {
-                                LCCKLog(@"消息修改成功");
+                                CYLLog(@"消息修改成功");
                             }
                         }];
                     }];
@@ -370,17 +370,17 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
         }
         
         if (fromController && isNormalMediaTypeMessage) {
-            LCCKMenuItem *transpondItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"transpond") block:^{
+            CYLMenuItem *transpondItem = [[CYLMenuItem alloc] initWithTitle:CYLLocalizedStrings(@"transpond") block:^{
                 [self lcck_transpondMessage:message toConversationViewController:fromController];
             }];
             [menuItems addObject:transpondItem];
         }
         
-        if (fromController && ownerType == LCCKMessageOwnerTypeSelf && isNormalMediaTypeMessage) {
-            LCCKMenuItem *recallItem = [[LCCKMenuItem alloc] initWithTitle:LCCKLocalizedStrings(@"recall") block:^{
+        if (fromController && ownerType == CYLMessageOwnerTypeSelf && isNormalMediaTypeMessage) {
+            CYLMenuItem *recallItem = [[CYLMenuItem alloc] initWithTitle:CYLLocalizedStrings(@"recall") block:^{
                 [fromController recallMessage:messageCell callback:^(BOOL succeeded, NSError *error) {
                     if (succeeded) {
-                        LCCKLog(@"消息撤回成功");
+                        CYLLog(@"消息撤回成功");
                     }
                 }];
             }];
@@ -408,7 +408,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
  */
 - (void)lcck_setupForceReconect {
     [[LCChatKit sharedInstance] setForceReconnectSessionBlock:
-     ^(NSError *aError, BOOL granted, __kindof UIViewController *viewController, LCCKReconnectSessionCompletionHandler completionHandler) {
+     ^(NSError *aError, BOOL granted, __kindof UIViewController *viewController, CYLReconnectSessionCompletionHandler completionHandler) {
          
          BOOL isSingleSignOnOffline = (aError.code == 4111);
          
@@ -468,21 +468,21 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
  */
 - (void)lcck_setupHud {
     [[LCChatKit sharedInstance] setHUDActionBlock:^(UIViewController *viewController, UIView *view, NSString *title,
-                         LCCKMessageHUDActionType type) {
+                         CYLMessageHUDActionType type) {
          switch (type) {
-             case LCCKMessageHUDActionTypeShow:
+             case CYLMessageHUDActionTypeShow:
                  [[self class] lcck_showMessage:title toView:view];
                  break;
                  
-             case LCCKMessageHUDActionTypeHide:
+             case CYLMessageHUDActionTypeHide:
                  [[self class] lcck_hideHUDForView:view];
                  break;
                  
-             case LCCKMessageHUDActionTypeError:
+             case CYLMessageHUDActionTypeError:
                  [[self class] lcck_showError:title toView:view];
                  break;
                  
-             case LCCKMessageHUDActionTypeSuccess:
+             case CYLMessageHUDActionTypeSuccess:
                  [[self class] lcck_showSuccess:title toView:view];
                  break;
          }
@@ -493,12 +493,12 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
  *  打开用户主页的设置
  */
 - (void)lcck_setupOpenProfile {
-    [[LCChatKit sharedInstance] setOpenProfileBlock:^(NSString *userId, id<LCCKUserDelegate> user,
+    [[LCChatKit sharedInstance] setOpenProfileBlock:^(NSString *userId, id<CYLUserDelegate> user,
                                                       __kindof UIViewController *parentController) {
         if (!userId) {
             [LCCKUtil showNotificationWithTitle:@"用户不存在"
                                        subtitle:nil
-                                           type:LCCKMessageNotificationTypeError];
+                                           type:CYLMessageNotificationTypeError];
             return;
         }
         [self lcck_exampleOpenProfileForUser:user userId:userId parentController:parentController];
@@ -523,10 +523,10 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
 - (void)lcck_setupFilterMessage {
     //注意：在 `[RedpacketConfig lcck_setting]` 中已经设置过该 `setFilterMessagesBlock:` ，注意不要重复设置。
     //这里演示如何筛选新的消息记录，以及新接收到的消息，以群定向消息为例：
-    [[LCChatKit sharedInstance] setFilterMessagesBlock:^(id<LCCKConversationProtocol> conversation,
-                              NSArray<id<LCCKIMMessageProtocol>> *messages,
-                              LCCKFilterMessagesCompletionHandler completionHandler) {
-         if (conversation.lcck_type == LCCKConversationTypeSingle) {
+    [[LCChatKit sharedInstance] setFilterMessagesBlock:^(id<CYLConversationProtocol> conversation,
+                              NSArray<id<CYLIMMessageProtocol>> *messages,
+                              CYLFilterMessagesCompletionHandler completionHandler) {
+         if (conversation.cyl_type == CYLConversationTypeSingle) {
              completionHandler(messages, nil);
              return;
          }
@@ -538,7 +538,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
                  continue;
              }
              NSArray *visiableForPartClientIds = [typedMessage.attributes
-                                                  valueForKey:LCCKCustomMessageOnlyVisiableForPartClientIds];
+                                                  valueForKey:CYLCustomMessageOnlyVisiableForPartClientIds];
              if (!visiableForPartClientIds) {
                  [filterMessages addObject:typedMessage];
              } else if (visiableForPartClientIds.count > 0) {
@@ -559,8 +559,8 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
 }
 
 - (void)lcck_setupSendMessageHook {
-    [[LCChatKit sharedInstance] setSendMessageHookBlock:^(LCCKConversationViewController *conversationController, id<LCCKIMMessageProtocol> message, LCCKSendMessageHookCompletionHandler completionHandler) {
-        if ([[message lcck_senderId] isEqualToString:@"Jerry"]) {
+    [[LCChatKit sharedInstance] setSendMessageHookBlock:^(CYLConversationViewController *conversationController, id<CYLIMMessageProtocol> message, CYLSendMessageHookCompletionHandler completionHandler) {
+        if ([[message cyl_senderId] isEqualToString:@"Jerry"]) {
             NSInteger code = 0;
             NSString *errorReasonText = @"不允许Jerry发送消息";
             NSDictionary *errorInfo = @{
@@ -584,7 +584,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
  */
 - (void)lcck_setupNotification {
     [[LCChatKit sharedInstance] setShowNotificationBlock:^(UIViewController *viewController, NSString *title,
-                                NSString *subtitle, LCCKMessageNotificationType type) {
+                                NSString *subtitle, CYLMessageNotificationType type) {
          [self lcck_exampleShowNotificationWithTitle:title subtitle:subtitle type:type];
      }];
 }
@@ -603,11 +603,11 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
 
 - (void)lcck_exampleShowNotificationWithTitle:(NSString *)title
                                      subtitle:(NSString *)subtitle
-                                         type:(LCCKMessageNotificationType)type {
+                                         type:(CYLMessageNotificationType)type {
     [LCCKUtil showNotificationWithTitle:title subtitle:subtitle type:type];
 }
 
-- (void)lcck_exampleOpenProfileForUser:(id<LCCKUserDelegate>)user
+- (void)lcck_exampleOpenProfileForUser:(id<CYLUserDelegate>)user
                                 userId:(NSString *)userId
                       parentController:(__kindof UIViewController *)parentController {
     NSString *currentClientId = [LCChatKit sharedInstance].clientId;
@@ -617,15 +617,15 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
         title = [NSString stringWithFormat:@"打开自己的主页 \nClientId是 : %@", userId];
         subtitle = [NSString stringWithFormat:@"我自己的name是 : %@", user.name];
     }
-    else if ([parentController isKindOfClass:[LCCKConversationViewController class]]) {
-        LCCKConversationViewController *conversationViewController_ =
-        [[LCCKConversationViewController alloc] initWithPeerId:user.clientId ?: userId];
+    else if ([parentController isKindOfClass:[CYLConversationViewController class]]) {
+        CYLConversationViewController *conversationViewController_ =
+        [[CYLConversationViewController alloc] initWithPeerId:user.clientId ?: userId];
         [[self class] lcck_pushToViewController:conversationViewController_ fromViewController:parentController];
         return;
     }
     [LCCKUtil showNotificationWithTitle:title
                                subtitle:subtitle
-                                   type:LCCKMessageNotificationTypeMessage];
+                                   type:CYLMessageNotificationTypeMessage];
 }
 
 - (void)lcck_examplePreViewLocationMessageWithLocation:(CLLocation *)location
@@ -636,7 +636,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
      @(location.coordinate.longitude)];
     [LCCKUtil showNotificationWithTitle:title
                                subtitle:subTitle
-                                   type:LCCKMessageNotificationTypeMessage];
+                                   type:CYLMessageNotificationTypeMessage];
 }
 
 /**
@@ -650,7 +650,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
     if (totalUnreadCount > 0) {
         NSString *badgeValue = [NSString stringWithFormat:@"%ld", (long)totalUnreadCount];
         if (totalUnreadCount > 99) {
-            badgeValue = LCCKBadgeTextForNumberGreaterThanLimit;
+            badgeValue = CYLBadgeTextForNumberGreaterThanLimit;
         }
         [controller tabBarItem].badgeValue = badgeValue;
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:totalUnreadCount];
@@ -675,15 +675,15 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
  *  @return 返回UITableViewRowAction类型的数组
  */
 - (NSArray *)lcck_exampleConversationEditActionAtIndexPath:(NSIndexPath *)indexPath
-                                              conversation:(id<LCCKConversationProtocol>)conversation
-                                                controller:(LCCKConversationListViewController *)controller {
+                                              conversation:(id<CYLConversationProtocol>)conversation
+                                                controller:(CYLConversationListViewController *)controller {
     // 如果需要自定义其他会话的菜单，在此编辑
     return [self lcck_rightButtonsAtIndexPath:indexPath conversation:conversation controller:controller];
 }
 
 - (NSArray *)lcck_rightButtonsAtIndexPath:(NSIndexPath *)indexPath
-                             conversation:(id<LCCKConversationProtocol>)conversation
-                               controller:(LCCKConversationListViewController *)controller {
+                             conversation:(id<CYLConversationProtocol>)conversation
+                               controller:(CYLConversationListViewController *)controller {
     NSString *title = nil;
     UITableViewRowActionHandler handler = nil;
     [self lcck_markReadStatusAtIndexPath:indexPath
@@ -711,7 +711,7 @@ setLoadLatestMessagesHandler:^(LCCKConversationViewController *conversationContr
                                                               shouldInsert:NO];
                                                          }];
     actionItemChangeGroupAvatar.backgroundColor = [UIColor colorWithRed:251 / 255.f green:186 / 255.f blue:11 / 255.f alpha:1.0];
-    if (conversation.lcck_type == LCCKConversationTypeSingle) {
+    if (conversation.cyl_type == CYLConversationTypeSingle) {
         return @[ actionItemDelete, actionItemMore ];
     }
     return @[ actionItemDelete, actionItemMore, actionItemChangeGroupAvatar ];
@@ -722,8 +722,8 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 - (void)lcck_markReadStatusAtIndexPath:(NSIndexPath *)indexPath
                                  title:(NSString **)title
                                 handle:(UITableViewRowActionHandler *)handler
-                          conversation:(id<LCCKConversationProtocol>)conversation
-                            controller:(LCCKConversationListViewController *)controller {
+                          conversation:(id<CYLConversationProtocol>)conversation
+                            controller:(CYLConversationListViewController *)controller {
     NSString *conversationId = conversation.conversationId;
     if (title) {
         *title = @"标记为已读";
@@ -732,7 +732,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
         [controller.tableView setEditing:NO animated:YES];
         [[LCChatKit sharedInstance] updateUnreadCountToZeroWithConversationId:conversationId];
     };
-//    if (conversation.lcck_unreadCount > 0) {
+//    if (conversation.cyl_unreadCount > 0) {
 //    } else {
 //        if (title) {
 //            *title = @"标记为未读";
@@ -786,23 +786,23 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     [defaultsSet synchronize];
 }
 
-- (void)lcck_transpondMessage:(LCCKMessage *)message toConversationViewController:(LCCKConversationViewController *)conversationViewController
+- (void)lcck_transpondMessage:(CYLMessage *)message toConversationViewController:(CYLConversationViewController *)conversationViewController
 {
-    LCCKLog(@"消息转发");
+    CYLLog(@"消息转发");
 }
 
 // MARK: - Member Info Changed
 
 - (void)lcck_memberInfoChanged
 {
-    [[LCChatKit sharedInstance] setMemberInfoChangedBlock:^(id<LCCKConversationProtocol> conversation, NSString *byClientId, NSString *clientId, NSUInteger role) {
+    [[LCChatKit sharedInstance] setMemberInfoChangedBlock:^(id<CYLConversationProtocol> conversation, NSString *byClientId, NSString *clientId, NSUInteger role) {
         NSString *roleString = @"Member";
         if (role == AVIMConversationMemberRoleOwner) {
             roleString = @"Owner";
         } else if (role == AVIMConversationMemberRoleManager) {
             roleString = @"Manager";
         }
-        LCCKLog(@"conversation id: %@, by client id: %@, client id: %@, role: %@", conversation.conversationId, byClientId, clientId, roleString);
+        CYLLog(@"conversation id: %@, by client id: %@, client id: %@, role: %@", conversation.conversationId, byClientId, clientId, roleString);
     }];
 }
 

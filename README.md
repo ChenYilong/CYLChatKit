@@ -267,11 +267,11 @@ pod update
  使用 ChatKit 有几个关键性的步骤：
 
  > **IM provider (since the LeanCloud decoupling).** ChatKit is now UI only and no longer depends on LeanCloud.
- > Before step 1, register an object that implements `LCCKIMProvider`:
+ > Before step 1, register an object that implements `CYLIMProvider`:
  > `[LCChatKit sharedInstance].IMProvider = [[LCCKLeanCloudIMProvider alloc] init];`
  > The LeanCloud implementation (`LCCKLeanCloudIMProvider`) and its `AVOSCloud`/`AVOSCloudIM` pods live in the demo
  > (`ChatKit-OC/Example/Class/LeanCloud`). Copy that folder and add the two pods to use LeanCloud,
- > or implement `LCCKIMProvider` for another IM SDK. In the steps below, "LeanCloud" refers to the demo provider.
+ > or implement `CYLIMProvider` for another IM SDK. In the steps below, "LeanCloud" refers to the demo provider.
  > See [docs/leancloud-decoupling.md](docs/leancloud-decoupling.md).
 
  1. 在 `-[AppDelegate application:didFinishLaunchingWithOptions:]` 中调用 `-[LCChatKit setAppId:appKey:]` 来开启 LeanCloud 服务。需要到
@@ -280,7 +280,7 @@ pod update
 
  ![](http://ww2.sinaimg.cn/large/801b780ajw1f88fhsglsxj20dn08oq3d.jpg)
 
- 3. 实现 `-[[LCChatKit sharedInstance] setFetchProfilesBlock:]`，设置用户体系，里面要实现如何根据 userId 获取到一个 User 对象的逻辑。ChatKit 会在需要用到 User 信息时调用你设置的这个逻辑。更具体的设置方法请参考： [《ChatKit 自定义业务-设置单聊用户的头像和昵称》](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#设置单聊用户的头像和昵称) 。`LCCKUserSystemService.h` 文件中给出了例子，演示了如何集成 LeanCloud 原生的用户系统 `AVUser`。
+ 3. 实现 `-[[LCChatKit sharedInstance] setFetchProfilesBlock:]`，设置用户体系，里面要实现如何根据 userId 获取到一个 User 对象的逻辑。ChatKit 会在需要用到 User 信息时调用你设置的这个逻辑。更具体的设置方法请参考： [《ChatKit 自定义业务-设置单聊用户的头像和昵称》](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#设置单聊用户的头像和昵称) 。`CYLUserSystemService.h` 文件中给出了例子，演示了如何集成 LeanCloud 原生的用户系统 `AVUser`。
  4. 如果你实现了 `-[[LCChatKit sharedInstance] setGenerateSignatureBlock:]` 方法，那么 ChatKit 会自动为以下行为添加签名：`open`（开启聊天）、`start`（创建对话）、`kick`（踢人）、`invite`（邀请）。反之不会。
  5. 调用 `-[[LCChatKit sharedInstance] openWithClientId:callback:]` 开启 LeanCloud 的 IM 服务 LeanMessage，开始聊天。请确保在 open 操作之前已经实现 `-[[LCChatKit sharedInstance] setFetchProfilesBlock:]`，否则 ChatKit 将抛出异常进行提示。
  6. 调用 `-[[LCChatKit sharedInstance] closeWithCallback:]` 关闭 LeanCloud 的 IM 服务，结束聊天。
@@ -328,14 +328,14 @@ ChatKit 提供了一个快速集成的演示类 `LCChatKitExample`，路径如�
  *
  *  用户即将退出登录时调用
  */
-+ (void)invokeThisMethodAfterLoginSuccessWithClientId:(NSString *)clientId success:(LCCKVoidBlock)success failed:(LCCKErrorBlock)failed;
++ (void)invokeThisMethodAfterLoginSuccessWithClientId:(NSString *)clientId success:(CYLVoidBlock)success failed:(CYLErrorBlock)failed;
 
 /*!
  *  入口胶水函数：登出入口函数
  *
  *  用户即将退出登录时调用
  */
-+ (void)invokeThisMethodBeforeLogoutSuccess:(LCCKVoidBlock)success failed:(LCCKErrorBlock)failed;
++ (void)invokeThisMethodBeforeLogoutSuccess:(CYLVoidBlock)success failed:(CYLErrorBlock)failed;
 + (void)invokeThisMethodInApplicationWillResignActive:(UIApplication *)application;
 + (void)invokeThisMethodInApplicationWillTerminate:(UIApplication *)application;
 ```
@@ -345,7 +345,7 @@ ChatKit 提供了一个快速集成的演示类 `LCChatKitExample`，路径如�
 主流的社交聊天软件，例如微信和 QQ 都会把最近联系人界面作为登录后的首页，可见其重要性。因此我们在 ChatKit 也提供了对话列表 `LCIMConversationListController` 页面，初始化方法非常简单：
 
 ```Objective-C
-LCCKConversationListViewController *firstViewController = [[LCCKConversationListViewController alloc] init];
+CYLConversationListViewController *firstViewController = [[CYLConversationListViewController alloc] init];
 ```
 
 因为最近联系人的所有信息都由 ChatKit 内部维护，不需要传入额外数据，所以直接展示这个 ViewController 即可。最近联系人界面的数据，依赖于本地数据库。这些数据会在聊天过程中自动进行更新，你无需进行繁琐的数据库操作。
@@ -359,12 +359,12 @@ LCCKConversationListViewController *firstViewController = [[LCCKConversationList
 
 ```Objective-C
 // 用于单聊，默认会创建一个只包含两个成员的 unique 对话(如果已经存在则直接进入，不会重复创建)
-LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithPeerId:peerId];
+CYLConversationViewController *conversationViewController = [[CYLConversationViewController alloc] initWithPeerId:peerId];
 ```
 
 ```Objective-C
 // 单聊或群聊，用于已经获取到一个对话基本信息的场合。
-LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithConversationId:conversationId];
+CYLConversationViewController *conversationViewController = [[CYLConversationViewController alloc] initWithConversationId:conversationId];
 ```
 
 这里注意，通过 `peerId` 初始化，内部实现时，如果没有一个 unique 对话刚好包含这两个成员，则会先创建一个 unique 对话，所以调用该方法时可能会导致 _Conversation 表中自动增加一条记录。同理，通过 `conversationId` 初始化群聊，内部实现时，如果不是对话成员会先把当前用户加入对话，并开启群聊。
@@ -374,9 +374,9 @@ LCCKConversationViewController *conversationViewController = [[LCCKConversationV
 按照上面的步骤，我们可以非常方便地打开最近联系人页面。但是我们会发现，点击其中的某个联系人／聊天群组，我们并不能直接进入聊天界面。要做到这一点，我们需要给 LCChatKit 设置上事件响应函数，示例代码如下：
 
 ```objective-c
-[[LCChatKit sharedInstance] setDidSelectConversationsListCellBlock:^(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller) {
+[[LCChatKit sharedInstance] setDidSelectConversationsListCellBlock:^(NSIndexPath *indexPath, AVIMConversation *conversation, CYLConversationListViewController *controller) {
     NSLog(@"conversation selected");
-    LCCKConversationViewController *conversationVC = [[LCCKConversationViewController alloc] initWithConversationId:conversation.conversationId];
+    CYLConversationViewController *conversationVC = [[CYLConversationViewController alloc] initWithConversationId:conversation.conversationId];
     [controller.navigationController pushViewController:conversationVC animated:YES];
 }];
 ```
@@ -389,21 +389,21 @@ LCCKConversationViewController *conversationViewController = [[LCCKConversationV
  *  选中某个对话后的回调 (比较常见的需求)
  *  @param conversation 被选中的对话
  */
-typedef void(^LCCKConversationsListDidSelectItemBlock)(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller);
+typedef void(^CYLConversationsListDidSelectItemBlock)(NSIndexPath *indexPath, AVIMConversation *conversation, CYLConversationListViewController *controller);
 /*!
  *  设置选中某个对话后的回调
  */
-- (void)setDidSelectConversationsListCellBlock:(LCCKConversationsListDidSelectItemBlock)didSelectItemBlock;
+- (void)setDidSelectConversationsListCellBlock:(CYLConversationsListDidSelectItemBlock)didSelectItemBlock;
 
 /*!
  *  删除某个对话后的回调 (一般不需要做处理)
  *  @param conversation 被选中的对话
  */
-typedef void(^LCCKConversationsListDidDeleteItemBlock)(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller);
+typedef void(^CYLConversationsListDidDeleteItemBlock)(NSIndexPath *indexPath, AVIMConversation *conversation, CYLConversationListViewController *controller);
 /*!
  *  设置删除某个对话后的回调
  */
-- (void)setDidDeleteConversationsListCellBlock:(LCCKConversationsListDidDeleteItemBlock)didDeleteItemBlock;
+- (void)setDidDeleteConversationsListCellBlock:(CYLConversationsListDidDeleteItemBlock)didDeleteItemBlock;
 
 /*!
  *  对话左滑菜单设置block (最近联系人页面有复杂的手势操作时，可以通过这里扩展实现)
@@ -411,11 +411,11 @@ typedef void(^LCCKConversationsListDidDeleteItemBlock)(NSIndexPath *indexPath, A
  *  @param conversation, 对话
  *  @param editActions, 默认的菜单数组，成员为 UITableViewRowAction 类型
  */
-typedef NSArray *(^LCCKConversationEditActionsBlock)(NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions, AVIMConversation *conversation, LCCKConversationListViewController *controller);
+typedef NSArray *(^CYLConversationEditActionsBlock)(NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions, AVIMConversation *conversation, CYLConversationListViewController *controller);
 /*!
  *  可以通过这个block设置对话列表中每个对话的左滑菜单，这个是同步调用的，需要尽快返回，否则会卡住UI
  */
-- (void)setConversationEditActionBlock:(LCCKConversationEditActionsBlock)conversationEditActionBlock;
+- (void)setConversationEditActionBlock:(CYLConversationEditActionsBlock)conversationEditActionBlock;
 ```
 
 ### 响应聊天界面的几类操作
@@ -424,12 +424,12 @@ typedef NSArray *(^LCCKConversationEditActionsBlock)(NSIndexPath *indexPath, NSA
 
 - 内部异常对话无法创建
 
-如果通过 peerId 打开对话，或者通过 conversationId 打开对话时，网络出现问题或 传入参数有误，那么对话根本无法进行，这时候我们可以通过给 LCCKConversationViewController 设定 conversationHandler 进行处理。示例代码如下：
+如果通过 peerId 打开对话，或者通过 conversationId 打开对话时，网络出现问题或 传入参数有误，那么对话根本无法进行，这时候我们可以通过给 CYLConversationViewController 设定 conversationHandler 进行处理。示例代码如下：
 
 ```objective-c
  [[LCChatKit sharedInstance] setFetchConversationHandler:^(
                                                               AVIMConversation *conversation,
-                                                              LCCKConversationViewController *aConversationController) {
+                                                              CYLConversationViewController *aConversationController) {
     if (!conversation) {
         // 显示错误提示信息
         [conversationController alert:@"failed to create/load conversation."];
@@ -439,32 +439,32 @@ typedef NSArray *(^LCCKConversationEditActionsBlock)(NSIndexPath *indexPath, NSA
 }];
 ```
 
-这里注意这个 `-setFetchConversationHandler:` 方法无需每次创建 `LCCKConversationViewController` 对象都要设置一遍，只需要设置一次，之后每次创建 `LCCKConversationViewController` 对象都会复用该设置。
+这里注意这个 `-setFetchConversationHandler:` 方法无需每次创建 `CYLConversationViewController` 对象都要设置一遍，只需要设置一次，之后每次创建 `CYLConversationViewController` 对象都会复用该设置。
 
 - 对话详情页展示
 
-在 QQ／微信之类的聊天应用中，聊天界面右上角会提供一个显示对话详细信息的按钮，点击可以打开对话详情页面，在那里可以进行改名、拉人、踢人、静音等操作。LCCKConversationViewController 中通过调用以下 API 也支持这一功能：
+在 QQ／微信之类的聊天应用中，聊天界面右上角会提供一个显示对话详细信息的按钮，点击可以打开对话详情页面，在那里可以进行改名、拉人、踢人、静音等操作。CYLConversationViewController 中通过调用以下 API 也支持这一功能：
 
 ```objective-c
-typedef void(^LCCKBarButtonItemActionBlock)(void);
+typedef void(^CYLBarButtonItemActionBlock)(void);
 
-typedef NS_ENUM(NSInteger, LCCKBarButtonItemStyle) {
-    LCCKBarButtonItemStyleSetting = 0,
-    LCCKBarButtonItemStyleMore,
-    LCCKBarButtonItemStyleAdd,
-    LCCKBarButtonItemStyleAddFriends,
-    LCCKBarButtonItemStyleShare,
-    LCCKBarButtonItemStyleSingleProfile,
-    LCCKBarButtonItemStyleGroupProfile,
+typedef NS_ENUM(NSInteger, CYLBarButtonItemStyle) {
+    CYLBarButtonItemStyleSetting = 0,
+    CYLBarButtonItemStyleMore,
+    CYLBarButtonItemStyleAdd,
+    CYLBarButtonItemStyleAddFriends,
+    CYLBarButtonItemStyleShare,
+    CYLBarButtonItemStyleSingleProfile,
+    CYLBarButtonItemStyleGroupProfile,
 };
 
-- (void)configureBarButtonItemStyle:(LCCKBarButtonItemStyle)style action:(LCCKBarButtonItemActionBlock)action;
+- (void)configureBarButtonItemStyle:(CYLBarButtonItemStyle)style action:(CYLBarButtonItemActionBlock)action;
 ```
 
 示例代码如下：
 
 ```objective-c
-[aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleGroupProfile
+[aConversationController configureBarButtonItemStyle:CYLBarButtonItemStyleGroupProfile
                                                           action:^(UIBarButtonItem *sender, UIEvent *event) {
     ConversationDetailViewController *detailVC = [[ConversationDetailViewController alloc] init];// 自己实现的对话详情页
     detailVC.conversation = conversation;
@@ -484,7 +484,7 @@ typedef NS_ENUM(NSInteger, LCCKBarButtonItemStyle) {
 
 添加 ChatKit 依赖的第三方库以及对应版本：
 
-- An `LCCKIMProvider` implementation. ChatKit no longer bundles LeanCloud; to use LeanCloud, add
+- An `CYLIMProvider` implementation. ChatKit no longer bundles LeanCloud; to use LeanCloud, add
   [AVOSCloud and AVOSCloudIM](https://github.com/leancloud/objc-sdk) and the demo's `ChatKit-OC/Example/Class/LeanCloud` folder.
 - [MJRefresh](https://github.com/CoderMJLee/MJRefresh) 3.1.9
 - [Masonry](https://github.com/SnapKit/Masonry) v1.0.1 

@@ -24,14 +24,14 @@
  *  用户登录时调用
  */
 + (void)invokeThisMethodAfterLoginSuccessWithClientId:(NSString *)clientId
-                                              success:(LCCKVoidBlock)success
-                                               failed:(LCCKErrorBlock)failed;
+                                              success:(CYLVoidBlock)success
+                                               failed:(CYLErrorBlock)failed;
 /*!
  *  入口胶水函数：登出入口函数
  *
  *  用户即将退出登录时调用
  */
-+ (void)invokeThisMethodBeforeLogoutSuccess:(LCCKVoidBlock)success failed:(LCCKErrorBlock)failed;
++ (void)invokeThisMethodBeforeLogoutSuccess:(CYLVoidBlock)success failed:(CYLErrorBlock)failed;
 
 #pragma mark - 以下是各个子功能的胶水函数
 ///=============================================================================

@@ -7,49 +7,49 @@
 //
 #import "LCChatKit.h"
 
-@class LCCKSessionService;
-@class LCCKUserSystemService;
-@class LCCKSignatureService;
-@class LCCKSettingService;
-@class LCCKUIService;
-@class LCCKConversationService;
-@class LCCKConversationListService;
+@class CYLSessionService;
+@class CYLUserSystemService;
+@class CYLSignatureService;
+@class CYLSettingService;
+@class CYLUIService;
+@class CYLConversationService;
+@class CYLConversationListService;
 
-@interface LCChatKit (LCCKServices)
+@interface LCChatKit (CYLServices)
 
 /*!
  * open or close client Service
  */
-@property (nonatomic, strong, readonly) LCCKSessionService *sessionService;
+@property (nonatomic, strong, readonly) CYLSessionService *sessionService;
 
 /*!
  * User-System Service
  */
-@property (nonatomic, strong, readonly) LCCKUserSystemService *userSystemService;
+@property (nonatomic, strong, readonly) CYLUserSystemService *userSystemService;
 
 /*!
  * Signature Service
  */
-@property (nonatomic, strong, readonly) LCCKSignatureService *signatureService;
+@property (nonatomic, strong, readonly) CYLSignatureService *signatureService;
 
 /*!
  * Setting Service
  */
-@property (nonatomic, strong, readonly) LCCKSettingService *settingService;
+@property (nonatomic, strong, readonly) CYLSettingService *settingService;
 
 /*!
  * UI Service
  */
-@property (nonatomic, strong, readonly) LCCKUIService *UIService;
+@property (nonatomic, strong, readonly) CYLUIService *UIService;
 
 /*!
  * Conversation Service
  */
-@property (nonatomic, strong, readonly) LCCKConversationService *conversationService;
+@property (nonatomic, strong, readonly) CYLConversationService *conversationService;
 
 /*!
  * Conversation List Service
  */
-@property (nonatomic, strong, readonly) LCCKConversationListService *conversationListService;
+@property (nonatomic, strong, readonly) CYLConversationListService *conversationListService;
 
 @end

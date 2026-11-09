@@ -1,0 +1,208 @@
+//
+//  CYLConversationService.h
+//  LeanCloudChatKit-iOS
+//
+//  v2.1.1 Created by ElonChan on 16/3/1.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import "CYLServiceDefinition.h"
+
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+    #import <CYLChatKit/LCChatKit.h>
+#else
+    #import "LCChatKit.h"
+#endif
+
+@class CYLMessage;
+
+@class CYLConversationViewController;
+
+/*!
+ * CYLConversationService Error Domain
+ */
+FOUNDATION_EXTERN NSString *const CYLConversationServiceErrorDomain;
+
+/*!
+ * Conversation state used by the UI. IM work and local storage are forwarded to `-[LCChatKit IMProvider]`.
+ */
+@interface CYLConversationService : CYLSingleton <CYLConversationService>
+
+/**
+ *  当前正在聊天的 conversationId，当前不在聊天界面则为nil。如果想判断当前是否在对话页面，请判断该值是否为nil。
+ */
+@property (nonatomic, strong) NSString *currentConversationId;
+
+/**
+ *  推送弹框点击时记录的 convid
+ */
+@property (nonatomic, strong) NSString *remoteNotificationConversationId;
+
+@property (nonatomic, assign, readonly, getter=isChatting) BOOL chatting;
+
+/*!
+ * 只要进过聊天页面，这个值总不为nil。当前不在聊天界面则为nil，这是因为考虑到可能会在对话页面，Present其它页面，比如联系人列表，需要用到currentConversation信息，所以如果想判断当前是否在对话页面，请判断currentConversationId是否为nil。
+ */
+@property (nonatomic, strong) id<CYLConversationProtocol> currentConversation;
+
+/*!
+ *  根据 conversationId 获取对话
+ *  @param conversationId 对话的 id
+ *  @param callback 回调
+ */
+- (void)fetchConversationWithConversationId:(NSString *)conversationId callback:(CYLConversationResultBlock)callback;
+- (void)fetchConversationsWithConversationIds:(NSSet *)conversationIds callback:(CYLArrayResultBlock)callback;
+
+/*!
+ *  根据 peerId 获取对话,
+ *  @attention  This will create new If not exist.
+ *  @param peerId   对方的 id
+ *  @param callback 回调
+ */
+- (void)fetchConversationWithPeerId:(NSString *)peerId callback:(CYLConversationResultBlock)callback;
+
+/*!
+ * @param message An SDK message conforming to `CYLIMMessageProtocol`, see `-[CYLIMProvider IMMessageFromMessage:]`.
+ * @attention The LeanCloud-specific `options:` variant moved to the demo's LeanCloud provider.
+ */
+- (void)sendMessage:(id<CYLIMMessageProtocol>)message
+       conversation:(id<CYLConversationProtocol>)conversation
+      progressBlock:(CYLProgressBlock)progressBlock
+           callback:(CYLBooleanResultBlock)block;
+
+- (void)sendMessage:(id<CYLIMMessageProtocol>)message
+       conversation:(id<CYLConversationProtocol>)conversation
+        mentionList:(NSArray<NSString *> *)mentionList
+      progressBlock:(CYLProgressBlock)progressBlock
+           callback:(CYLBooleanResultBlock)block;
+
+/*!
+ * The callback array contains SDK messages conforming to `CYLIMMessageProtocol`.
+ */
+- (void)queryTypedMessagesWithConversation:(id<CYLConversationProtocol>)conversation
+                                 messageId:(NSString *)messageId
+                                 timestamp:(int64_t)timestamp
+                                     limit:(NSInteger)limit
+                                     block:(CYLArrayResultBlock)block;
+
+/**
+ *  删除对话对应的UIProfile缓存，比如当用户信息发生变化时
+ *  @param  conversationID 对话，可以是单聊，也可是群聊
+ */
+- (void)removeCacheForConversationId:(NSString *)conversationID;
+- (void)updateConversationAsReadWithLastMessage:(id)lastMessage;
+
+#pragma mark - 最近对话的本地缓存，最近对话将保存在本地数据库中
+///=============================================================================
+/// @name 最近对话的本地缓存，最近对话将保存在本地数据库中
+///=============================================================================
+
+/**
+ *  会在 openClient 时调用
+ */
+- (void)setupDatabaseWithUserId:(NSString *)userId;
+
+- (void)insertRecentConversation:(id<CYLConversationProtocol>)conversation shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
+- (void)insertRecentConversations:(NSArray<id<CYLConversationProtocol>> *)conversations;
+- (void)insertRecentConversations:(NSArray<id<CYLConversationProtocol>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
+- (void)increaseUnreadCount:(NSUInteger)increaseUnreadCount withConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
+/**
+ *  更新 mentioned 值，当接收到消息发现 @了我的时候，设为 YES，进入聊天页面，设为 NO
+ *  @param mentioned  要更新的值
+ *  @param conversationId 相应对话
+ */
+- (void)updateMentioned:(BOOL)mentioned conversationId:(NSString *)conversationId;
+- (void)updateMentioned:(BOOL)mentioned conversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
+/**
+ *  更新 draft 值
+ *  @param draft  要更新的值
+ *  @param conversationId 相应对话
+ */
+- (void)updateDraft:(NSString *)draft conversationId:(NSString *)conversationId;
+- (void)updateDraft:(NSString *)draft conversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
+
+/**
+ *  更新每条最近对话记录里的 conversation 值，也即某对话的名字、成员可能变了，需要更新应用打开时，第一次加载最近对话列表时，会去向服务器要对话的最新数据，然后更新
+ *  @param conversations 要更新的对话
+ */
+- (void)updateRecentConversation:(NSArray *)conversations;
+- (void)updateRecentConversation:(NSArray *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
+- (void)increaseUnreadCountWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
+
+- (void)deleteRecentConversationWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
+- (void)updateUnreadCountToZeroWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
+ 
+/**
+ *  从数据库查找所有的对话，即所有的最近对话
+ *  @return 对话数据
+ */
+- (NSArray *)allRecentConversations;
+
+/**
+ *  判断某对话是否存在于本地数据库。接收到消息的时候用，sdk 传过来的对话的members 等数据可能是空的，如果本地数据库存在该对话，则不去服务器请求对话了。如果不存在，则向服务器请求对话的元数据。使得在最近对话列表，取出对话的时候，对话都有元数据。
+ *  @param conversationId 某对话
+ *  @return 是否存在
+ */
+- (BOOL)isRecentConversationExistWithConversationId:(NSString *)conversationId;
+
+- (NSString *)draftWithConversationId:(NSString *)conversationId;
+
+#pragma mark - FailedMessageStore
+///=============================================================================
+/// @name FailedMessageStore
+///=============================================================================
+
+/*!
+ *  失败消息的管理类，职责：
+ * 新建一个表 ，保存每个对话失败的消息。(message, convid)
+ * 每次进入聊天的时候，发现如果聊天连通，则把失败的消息发送出去。如果不通，则显示在列表后面。
+ * 重发的时候，如果重发成功，则消除表里的记录。失败则不做操作。
+ * 发送消息的时候，如果发送失败，则往失败的消息表里存一条记录。
+ * 该类主要维护了两张表：
+ 
+ 表： failed_messages的结构如下：
+ 
+ id       | conversationId | message
+ -------------|----------------|-------------
+ 
+ 表：conversations的结构如下：
+ 
+ id     |     data    | unreadCount |  mentioned
+ -------------|-------------|-------------|-------------
+ 
+ */
+
+/**
+ *  发送消息失败时调用
+ *  @param message 相应的消息
+ */
+- (void)insertFailedMessage:(id<CYLIMMessageProtocol>)message;
+- (void)insertFailedCYLMessage:(CYLMessage *)message;
+/**
+ *  重发成功的时候调用
+ *  @param recordId 记录的 id
+ *  @return
+ */
+- (BOOL)deleteFailedMessageByRecordId:(NSString *)recordId;
+
+/**
+ *  查找失败的消息。进入聊天页面时调用，若聊天服务连通，则把失败的消息重发，否则，加在列表尾部。
+ *  @param conversationId 对话的 id
+ *  @return 消息数组
+ */
+- (NSArray<CYLMessage *> *)failedMessagesByConversationId:(NSString *)conversationId;
+
+- (NSArray<CYLMessage *> *)failedMessageIdsByConversationId:(NSString *)conversationId;
+
+- (NSArray<CYLMessage *> *)failedMessagesByMessageIds:(NSArray *)messageIds;
+
+@end
+
+@interface CYLConversationService (CYLDeprecated)
+
+- (void)fecthConversationWithConversationId:(NSString *)conversationId callback:(CYLConversationResultBlock)callback CYL_DEPRECATED("deprecated after v0.8.11, use `-fetchConversationWithConversationId:callback:` instead");
+
+- (void)fecthConversationWithPeerId:(NSString *)peerId callback:(CYLConversationResultBlock)callback CYL_DEPRECATED("deprecated after v0.8.11, use `-fetchConversationWithPeerId:callback:` instead");
+
+@end

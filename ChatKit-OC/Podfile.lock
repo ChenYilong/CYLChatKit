@@ -12,7 +12,7 @@ PODS:
   - CYLChatKit (2.3.11):
     - CYLChatKit/Core (= 2.3.11)
   - CYLChatKit/Core (2.3.11):
-    - CYLDeallocBlockExecutor (~> 1.1.2)
+    - CYLDeallocBlockExecutor (~> 1.2.0)
     - DACircularProgress (~> 2.3.1)
     - FDStackView (~> 1.0)
     - FMDB (~> 2.6.2)
@@ -23,7 +23,7 @@ PODS:
     - pop (~> 1.0.9)
     - SDWebImage (~> 3.8.0)
     - "UITableView+FDTemplateLayoutCell"
-  - CYLDeallocBlockExecutor (1.1.2)
+  - CYLDeallocBlockExecutor (1.2.0)
   - CYLTabBarController (1.99.72):
     - CYLTabBarController/Core (= 1.99.72)
   - CYLTabBarController/Core (1.99.72)
@@ -89,8 +89,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AVOSCloud: b3cb1ed20d46c0d55083363522cb2ea593d51ac7
   AVOSCloudIM: ede93dc6155c3e73524469f5098a1ec2422915ae
-  CYLChatKit: 00d860d57f25c949d512531643b92ca413249831
-  CYLDeallocBlockExecutor: ecf39e45dcead9e120f460df5668b8f5093d178e
+  CYLChatKit: e3ccc3e226c3c44c792bf2f34e5b95f33afc82f3
+  CYLDeallocBlockExecutor: 1f8e904d846b8dadff88b2e5c2817df974cb63a9
   CYLTabBarController: 234ad57e11f7de17848ec78450c3b741781a0bb1
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   FDStackView: fc0697e5be2022c8af36ce66e9e2061006058ba8

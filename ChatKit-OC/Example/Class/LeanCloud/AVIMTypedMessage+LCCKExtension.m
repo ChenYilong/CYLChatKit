@@ -13,33 +13,33 @@ FOUNDATION_EXTERN NSMutableDictionary const *_typeDict;
 
 @implementation AVIMTypedMessage (LCCKExtension)
 
-#pragma mark - LCCKIMMessageProtocol
+#pragma mark - CYLIMMessageProtocol
 
-- (NSString *)lcck_senderId {
+- (NSString *)cyl_senderId {
     return self.clientId;
 }
 
-- (void)setLcck_senderId:(NSString *)senderId {
+- (void)setCyl_senderId:(NSString *)senderId {
     [self setValue:senderId forKey:@"clientId"];
 }
 
-- (LCCKMessageOwnerType)lcck_ownerType {
+- (CYLMessageOwnerType)cyl_ownerType {
     switch (self.ioType) {
         case AVIMMessageIOTypeOut:
-            return LCCKMessageOwnerTypeSelf;
+            return CYLMessageOwnerTypeSelf;
         case AVIMMessageIOTypeIn:
-            return LCCKMessageOwnerTypeOther;
+            return CYLMessageOwnerTypeOther;
         default:
-            return LCCKMessageOwnerTypeUnknown;
+            return CYLMessageOwnerTypeUnknown;
     }
 }
 
-- (LCCKMessageSendState)lcck_sendStatus {
-    // AVIMMessageStatus and LCCKMessageSendState share the same raw values.
-    return (LCCKMessageSendState)self.status;
+- (CYLMessageSendState)cyl_sendStatus {
+    // AVIMMessageStatus and CYLMessageSendState share the same raw values.
+    return (CYLMessageSendState)self.status;
 }
 
-- (int64_t)lcck_sendTimestamp {
+- (int64_t)cyl_sendTimestamp {
     return self.sendTimestamp;
 }
 
@@ -51,15 +51,15 @@ FOUNDATION_EXTERN NSMutableDictionary const *_typeDict;
     return class;
 }
 
-+ (AVIMTypedMessage *)lcck_messageWithLCCKMessage:(LCCKMessage *)message {
++ (AVIMTypedMessage *)lcck_messageWithLCCKMessage:(CYLMessage *)message {
     AVIMTypedMessage *avimTypedMessage;
     switch (message.mediaType) {
-        case LCCKMessageMediaTypeText: {
+        case CYLMessageMediaTypeText: {
             avimTypedMessage = [AVIMTextMessage messageWithText:message.text attributes:nil];
             break;
         }
-        case LCCKMessageMediaTypeVideo:
-        case LCCKMessageMediaTypeImage: {
+        case CYLMessageMediaTypeVideo:
+        case CYLMessageMediaTypeImage: {
             
             NSString *localPhotoPath = message.photoPath;
             NSString *remotePhotoPath = message.originPhotoURL;
@@ -76,24 +76,24 @@ FOUNDATION_EXTERN NSMutableDictionary const *_typeDict;
             
             break;
         }
-        case LCCKMessageMediaTypeAudio: {
+        case CYLMessageMediaTypeAudio: {
             avimTypedMessage = [AVIMAudioMessage messageWithText:nil attachedFilePath:message.voicePath attributes:nil];
             break;
         }
-        case LCCKMessageMediaTypeLocation: {
+        case CYLMessageMediaTypeLocation: {
             avimTypedMessage = [AVIMLocationMessage messageWithText:message.geolocations
                                                            latitude:message.location.coordinate.latitude
                                                           longitude:message.location.coordinate.longitude
                                                          attributes:nil];
             break;
-        case LCCKMessageMediaTypeNone:
+        case CYLMessageMediaTypeNone:
             //TODO:
             break;
         }
         default:
             break;
     }
-    [avimTypedMessage setObject:@(LCCK_CURRENT_TIMESTAMP) forKey:@"sendTimestamp"];
+    [avimTypedMessage setObject:@(CYL_CURRENT_TIMESTAMP) forKey:@"sendTimestamp"];
     return avimTypedMessage;
 }
 

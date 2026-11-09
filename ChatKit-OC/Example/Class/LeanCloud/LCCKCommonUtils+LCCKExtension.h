@@ -1,5 +1,5 @@
 //
-//  LCCKCommonUtils+LCCKExtension.h
+//  CYLCommonUtils+LCCKExtension.h
 //  ChatKit-OC
 //
 //  Created by ChenYilong on 2026/11/09.
@@ -9,9 +9,9 @@
 //  the selectors are unchanged.
 
 #import <AVOSCloud/AVOSCloud.h>
-#import "LCCKCommonUtils.h"
+#import "CYLCommonUtils.h"
 
-@interface LCCKCommonUtils (LCCKExtension)
+@interface CYLCommonUtils (LCCKExtension)
 
 + (NSString *)getPathFromFile:(AVFile *)file;
 

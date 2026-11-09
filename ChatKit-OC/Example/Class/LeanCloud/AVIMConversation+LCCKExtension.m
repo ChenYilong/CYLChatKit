@@ -8,16 +8,16 @@
 
 #import "AVIMConversation+LCCKExtension.h"
 #import <objc/runtime.h>
-#import "NSDate+LCCKDateTools.h"
+#import "NSDate+CYLDateTools.h"
 #import "AVIMMessage+LCCKExtension.h"
 
 @implementation AVIMConversation (LCCKExtension)
 
-- (AVIMTypedMessage *)lcck_lastMessage {
+- (AVIMTypedMessage *)cyl_lastMessage {
     AVIMTypedMessage *visiableLastMessage = nil;
     AVIMTypedMessage *lastMessageFromCache = [self.lastMessage lcck_getValidTypedMessage];
     id visiableForPartClientIds = [lastMessageFromCache.attributes
-                                   valueForKey:LCCKCustomMessageOnlyVisiableForPartClientIds];
+                                   valueForKey:CYLCustomMessageOnlyVisiableForPartClientIds];
     BOOL isArray = [visiableForPartClientIds isKindOfClass:[NSArray class]];
     BOOL isString = [visiableForPartClientIds isKindOfClass:[NSString class]];
     if (!visiableForPartClientIds) {
@@ -36,62 +36,62 @@
     return visiableLastMessage;
 }
 
-- (NSDate *)lcck_lastMessageAt {
+- (NSDate *)cyl_lastMessageAt {
     NSDate *dateFromServer = self.lastMessageAt;
-    NSDate *dateFromCache = [NSDate dateWithTimeIntervalSince1970:self.lcck_lastMessage.sendTimestamp / 1000];
-    BOOL isServerLate = [dateFromServer lcck_isLaterThan:dateFromCache];
+    NSDate *dateFromCache = [NSDate dateWithTimeIntervalSince1970:self.cyl_lastMessage.sendTimestamp / 1000];
+    BOOL isServerLate = [dateFromServer cyl_isLaterThan:dateFromCache];
     return isServerLate ? dateFromServer : dateFromCache;
 }
 
-- (NSInteger)lcck_unreadCount {
+- (NSInteger)cyl_unreadCount {
     return (NSInteger)self.unreadMessagesCount;
 }
 
-- (BOOL)lcck_mentioned {
+- (BOOL)cyl_mentioned {
     return self.unreadMessagesMentioned;
 }
 
-- (NSString *)lcck_badgeText {
+- (NSString *)cyl_badgeText {
     NSString *badgeText;
     NSUInteger unreadCount = self.unreadMessagesCount;
     if (unreadCount > 99) {
-        badgeText = LCCKBadgeTextForNumberGreaterThanLimit;
+        badgeText = CYLBadgeTextForNumberGreaterThanLimit;
     } else {
         badgeText = [NSString stringWithFormat:@"%@", @(unreadCount)];
     }
     return badgeText;
 }
 
-- (NSString *)lcck_draft {
-    return objc_getAssociatedObject(self, @selector(lcck_draft));
+- (NSString *)cyl_draft {
+    return objc_getAssociatedObject(self, @selector(cyl_draft));
 }
 
-- (void)setLcck_draft:(NSString *)lcck_draft {
-    objc_setAssociatedObject(self, @selector(lcck_draft), lcck_draft, OBJC_ASSOCIATION_COPY_NONATOMIC);
+- (void)setCyl_draft:(NSString *)cyl_draft {
+    objc_setAssociatedObject(self, @selector(cyl_draft), cyl_draft, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-- (LCCKConversationType)lcck_type {
+- (CYLConversationType)cyl_type {
     if (self.members.count == 2) {
-        return LCCKConversationTypeSingle;
+        return CYLConversationTypeSingle;
     }
     //系统对话按照群聊处理
-    return LCCKConversationTypeGroup;
+    return CYLConversationTypeGroup;
 }
 
-- (NSString *)lcck_displayName {
-    BOOL disablePreviewUserId = [LCCKSettingService sharedInstance].isDisablePreviewUserId;
+- (NSString *)cyl_displayName {
+    BOOL disablePreviewUserId = [CYLSettingService sharedInstance].isDisablePreviewUserId;
     NSString *displayName;
-    if ([self lcck_type] == LCCKConversationTypeSingle) {
-        NSString *peerId = [self lcck_peerId];
+    if ([self cyl_type] == CYLConversationTypeSingle) {
+        NSString *peerId = [self cyl_peerId];
         NSError *error = nil;
-        NSArray *peers = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:@[peerId] error:&error];
-        id<LCCKUserDelegate> peer;
+        NSArray *peers = [[CYLUserSystemService sharedInstance] getCachedProfilesIfExists:@[peerId] error:&error];
+        id<CYLUserDelegate> peer;
         if (peers.count > 0) {
             peer = peers[0];
         }
         displayName = peer.name ?: peerId;
         if (!peer.name && disablePreviewUserId) {
-            NSString *defaultNickNameWhenNil = LCCKLocalizedStrings(@"nickNameIsNil");
+            NSString *defaultNickNameWhenNil = CYLLocalizedStrings(@"nickNameIsNil");
             displayName = defaultNickNameWhenNil.length > 0 ? defaultNickNameWhenNil : @"";
         }
         return displayName;
@@ -100,13 +100,13 @@
         return self.name;
     }
     if (self.members.count == 0) {
-        return LCCKLocalizedStrings(@"SystemConversation");
+        return CYLLocalizedStrings(@"SystemConversation");
     }
-    return LCCKLocalizedStrings(@"GroupConversation");
+    return CYLLocalizedStrings(@"GroupConversation");
     
 }
 
-- (NSString *)lcck_peerId {
+- (NSString *)cyl_peerId {
     NSArray *members = self.members;
     if (members.count == 0) {
         //TODO: add debug model
@@ -118,7 +118,7 @@
         return members[0];
     }
     NSString *peerId;
-    if ([members[0] isEqualToString:[LCCKSessionService sharedInstance].clientId]) {
+    if ([members[0] isEqualToString:[CYLSessionService sharedInstance].clientId]) {
         peerId = members[1];
     } else {
         peerId = members[0];
@@ -126,12 +126,12 @@
     return peerId;
 }
 
-- (NSString *)lcck_title {
-    NSString *displayName = self.lcck_displayName;
-    if (!self.lcck_displayName || self.lcck_displayName.length == 0 ||  [self.lcck_displayName isEqualToString:LCCKLocalizedStrings(@"nickNameIsNil")]) {
-        displayName = LCCKLocalizedStrings(@"Chat");
+- (NSString *)cyl_title {
+    NSString *displayName = self.cyl_displayName;
+    if (!self.cyl_displayName || self.cyl_displayName.length == 0 ||  [self.cyl_displayName isEqualToString:CYLLocalizedStrings(@"nickNameIsNil")]) {
+        displayName = CYLLocalizedStrings(@"Chat");
     }
-    if (self.lcck_type == LCCKConversationTypeSingle || self.members.count == 0) {
+    if (self.cyl_type == CYLConversationTypeSingle || self.members.count == 0) {
         return displayName;
     } else {
         return [NSString stringWithFormat:@"%@(%ld)", displayName, (long)self.members.count];
@@ -139,7 +139,7 @@
     }
 }
 
-- (void)lcck_setConversationWithMute:(BOOL)mute callback:(LCCKBooleanResultBlock)callback {
+- (void)cyl_setConversationWithMute:(BOOL)mute callback:(CYLBooleanResultBlock)callback {
     if (mute) {
         [self muteWithCallback:^(BOOL succeeded, NSError * _Nullable error) {
             !callback ?: callback(succeeded, error);
@@ -151,7 +151,7 @@
     }
 }
 
-- (BOOL)lcck_isCreaterForCurrentUser {
+- (BOOL)cyl_isCreaterForCurrentUser {
     BOOL isCreater = [self.creator isEqualToString:[LCChatKit sharedInstance].clientId];
     return isCreater;
 }

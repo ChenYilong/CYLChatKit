@@ -26,7 +26,7 @@ typedef enum : NSUInteger {
            didSelectPeerIds:(NSArray *)peerIds;
 @end
 
-@interface LCCKContactListController : LCCKBaseTableViewController
+@interface LCCKContactListController : CYLChatBaseTableViewController
 
 @property (nonatomic, assign) LCCKContactListMode mode;
 @property (nonatomic, strong) NSArray *excludedPersonIDs;

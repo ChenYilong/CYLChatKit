@@ -1,5 +1,5 @@
 //
-//  LCCKMessage+LCCKExtension.h
+//  CYLMessage+LCCKExtension.h
 //  ChatKit-OC
 //
 //  Created by ChenYilong on 2026/11/09.
@@ -15,11 +15,11 @@
 #import "LCChatKit.h"
 #endif
 
-@interface LCCKMessage (LCCKExtension)
+@interface CYLMessage (LCCKExtension)
 
 /*!
  * Converts a LeanCloud message for display.
- * @return The message itself for a supported custom message, an `LCCKMessage` for a built-in type,
+ * @return The message itself for a supported custom message, an `CYLMessage` for a built-in type,
  *         or nil for messages ChatKit does not display (video, file, recalled).
  */
 + (id)messageWithAVIMTypedMessage:(AVIMTypedMessage *)message;

@@ -6,7 +6,7 @@
 //  Copyright © 2026 ChenYilong. All rights reserved.
 //
 //  A stateless adapter. Session state lives in `LCCKLeanCloudSessionService` and
-//  conversation state in `LCCKLeanCloudConversationService`; both are `LCCKSingleton`
+//  conversation state in `LCCKLeanCloudConversationService`; both are `CYLSingleton`
 //  subclasses that ChatKit resets after closing a session.
 
 #import "LCCKLeanCloudIMProvider.h"
@@ -27,7 +27,7 @@
     return [LCCKLeanCloudConversationService sharedInstance];
 }
 
-#pragma mark - LCCKIMSessionProvider
+#pragma mark - CYLIMSessionProvider
 
 - (NSString *)clientId {
     return self.session.clientId;
@@ -41,11 +41,11 @@
     return [self.session isClientOpened];
 }
 
-- (void)openWithClientId:(NSString *)clientId force:(BOOL)force callback:(LCCKBooleanResultBlock)callback {
+- (void)openWithClientId:(NSString *)clientId force:(BOOL)force callback:(CYLBooleanResultBlock)callback {
     [self.session openWithClientId:clientId force:force callback:callback];
 }
 
-- (void)closeWithCallback:(LCCKBooleanResultBlock)callback {
+- (void)closeWithCallback:(CYLBooleanResultBlock)callback {
     [self.session closeWithCallback:callback];
 }
 
@@ -61,86 +61,86 @@
     [AVOSCloud setAllLogsEnabled:YES];
 }
 
-#pragma mark - LCCKIMConversationProvider
+#pragma mark - CYLIMConversationProvider
 
-- (void)fetchConversationWithConversationId:(NSString *)conversationId callback:(LCCKIMConversationResultBlock)callback {
+- (void)fetchConversationWithConversationId:(NSString *)conversationId callback:(CYLIMConversationResultBlock)callback {
     [self.conversations fetchConversationWithConversationId:conversationId callback:callback];
 }
 
-- (void)fetchConversationsWithConversationIds:(NSSet<NSString *> *)conversationIds callback:(LCCKArrayResultBlock)callback {
+- (void)fetchConversationsWithConversationIds:(NSSet<NSString *> *)conversationIds callback:(CYLArrayResultBlock)callback {
     [self.conversations fetchConversationsWithConversationIds:conversationIds callback:callback];
 }
 
-- (void)fetchConversationWithPeerId:(NSString *)peerId callback:(LCCKIMConversationResultBlock)callback {
+- (void)fetchConversationWithPeerId:(NSString *)peerId callback:(CYLIMConversationResultBlock)callback {
     [self.conversations fetchConversationWithPeerId:peerId callback:callback];
 }
 
-- (void)createConversationWithMembers:(NSArray<NSString *> *)members type:(LCCKConversationType)type unique:(BOOL)unique callback:(LCCKIMConversationResultBlock)callback {
+- (void)createConversationWithMembers:(NSArray<NSString *> *)members type:(CYLConversationType)type unique:(BOOL)unique callback:(CYLIMConversationResultBlock)callback {
     [self.conversations createConversationWithMembers:members type:type unique:unique callback:callback];
 }
 
-- (void)joinConversation:(id<LCCKConversationProtocol>)conversation callback:(LCCKBooleanResultBlock)callback {
+- (void)joinConversation:(id<CYLConversationProtocol>)conversation callback:(CYLBooleanResultBlock)callback {
     [self.conversations joinConversation:conversation callback:callback];
 }
 
-- (void)markConversationAsRead:(id<LCCKConversationProtocol>)conversation {
+- (void)markConversationAsRead:(id<CYLConversationProtocol>)conversation {
     [self.conversations markConversationAsRead:conversation];
 }
 
-- (void)prepareConversation:(id<LCCKConversationProtocol>)conversation {
+- (void)prepareConversation:(id<CYLConversationProtocol>)conversation {
     [self.conversations prepareConversation:conversation];
 }
 
-#pragma mark - LCCKIMMessageProvider
+#pragma mark - CYLIMMessageProvider
 
-- (id)displayMessageFromIMMessage:(id<LCCKIMMessageProtocol>)message {
+- (id)displayMessageFromIMMessage:(id<CYLIMMessageProtocol>)message {
     return [self.conversations displayMessageFromIMMessage:message];
 }
 
-- (id<LCCKIMMessageProtocol>)IMMessageFromMessage:(id)message {
+- (id<CYLIMMessageProtocol>)IMMessageFromMessage:(id)message {
     return [self.conversations IMMessageFromMessage:message];
 }
 
-- (void)sendMessage:(id<LCCKIMMessageProtocol>)message
-       conversation:(id<LCCKConversationProtocol>)conversation
+- (void)sendMessage:(id<CYLIMMessageProtocol>)message
+       conversation:(id<CYLConversationProtocol>)conversation
         mentionList:(NSArray<NSString *> *)mentionList
-      progressBlock:(LCCKProgressBlock)progressBlock
-           callback:(LCCKBooleanResultBlock)callback {
+      progressBlock:(CYLProgressBlock)progressBlock
+           callback:(CYLBooleanResultBlock)callback {
     [self.conversations sendMessage:message conversation:conversation mentionList:mentionList progressBlock:progressBlock callback:callback];
 }
 
-- (void)queryMessagesWithConversation:(id<LCCKConversationProtocol>)conversation
+- (void)queryMessagesWithConversation:(id<CYLConversationProtocol>)conversation
                             messageId:(NSString *)messageId
                             timestamp:(int64_t)timestamp
                                 limit:(NSInteger)limit
-                             callback:(LCCKArrayResultBlock)callback {
+                             callback:(CYLArrayResultBlock)callback {
     [self.conversations queryMessagesWithConversation:conversation messageId:messageId timestamp:timestamp limit:limit callback:callback];
 }
 
-- (void)updateMessage:(id<LCCKIMMessageProtocol>)oldMessage
+- (void)updateMessage:(id<CYLIMMessageProtocol>)oldMessage
              withText:(NSString *)text
-         conversation:(id<LCCKConversationProtocol>)conversation
-             callback:(LCCKIMMessageResultBlock)callback {
+         conversation:(id<CYLConversationProtocol>)conversation
+             callback:(CYLIMMessageResultBlock)callback {
     [self.conversations updateMessage:oldMessage withText:text conversation:conversation callback:callback];
 }
 
-- (void)recallMessage:(id<LCCKIMMessageProtocol>)message
-         conversation:(id<LCCKConversationProtocol>)conversation
-             callback:(LCCKIMMessageResultBlock)callback {
+- (void)recallMessage:(id<CYLIMMessageProtocol>)message
+         conversation:(id<CYLConversationProtocol>)conversation
+             callback:(CYLIMMessageResultBlock)callback {
     [self.conversations recallMessage:message conversation:conversation callback:callback];
 }
 
-- (void)downloadAttachmentOfMessage:(LCCKMessage *)message completion:(void (^)(NSURL *, NSError *))completion {
+- (void)downloadAttachmentOfMessage:(CYLMessage *)message completion:(void (^)(NSURL *, NSError *))completion {
     [self.conversations downloadAttachmentOfMessage:message completion:completion];
 }
 
-#pragma mark - LCCKIMRecentConversationProvider
+#pragma mark - CYLIMRecentConversationProvider
 
 - (void)setupDatabaseWithUserId:(NSString *)userId {
     [self.conversations setupDatabaseWithUserId:userId];
 }
 
-- (NSArray<id<LCCKConversationProtocol>> *)allRecentConversations {
+- (NSArray<id<CYLConversationProtocol>> *)allRecentConversations {
     return [self.conversations allRecentConversations];
 }
 
@@ -148,11 +148,11 @@
     return [self.conversations isRecentConversationExistWithConversationId:conversationId];
 }
 
-- (void)insertRecentConversations:(NSArray<id<LCCKConversationProtocol>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
+- (void)insertRecentConversations:(NSArray<id<CYLConversationProtocol>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
     [self.conversations insertRecentConversations:conversations shouldRefreshWhenFinished:shouldRefreshWhenFinished];
 }
 
-- (void)updateRecentConversation:(NSArray<id<LCCKConversationProtocol>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
+- (void)updateRecentConversation:(NSArray<id<CYLConversationProtocol>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
     [self.conversations updateRecentConversation:conversations shouldRefreshWhenFinished:shouldRefreshWhenFinished];
 }
 
@@ -184,21 +184,21 @@
     return [self.conversations removeAllCachedRecentConversations];
 }
 
-- (void)findRecentConversationsWithBlock:(LCCKIMRecentConversationsResultBlock)block {
+- (void)findRecentConversationsWithBlock:(CYLIMRecentConversationsResultBlock)block {
     [self.conversations findRecentConversationsWithBlock:block];
 }
 
-- (void)fetchRelationConversationsFromServerCallback:(LCCKArrayResultBlock)block {
+- (void)fetchRelationConversationsFromServerCallback:(CYLArrayResultBlock)block {
     [self.conversations fetchRelationConversationsFromServerCallback:block];
 }
 
-#pragma mark - LCCKIMFailedMessageProvider
+#pragma mark - CYLIMFailedMessageProvider
 
-- (void)insertFailedLCCKMessage:(LCCKMessage *)message {
-    [self.conversations insertFailedLCCKMessage:message];
+- (void)insertFailedCYLMessage:(CYLMessage *)message {
+    [self.conversations insertFailedCYLMessage:message];
 }
 
-- (void)insertFailedMessage:(id<LCCKIMMessageProtocol>)message {
+- (void)insertFailedMessage:(id<CYLIMMessageProtocol>)message {
     [self.conversations insertFailedMessage:message];
 }
 
@@ -206,7 +206,7 @@
     return [self.conversations deleteFailedMessageByRecordId:recordId];
 }
 
-- (NSArray<LCCKMessage *> *)failedMessagesByConversationId:(NSString *)conversationId {
+- (NSArray<CYLMessage *> *)failedMessagesByConversationId:(NSString *)conversationId {
     return [self.conversations failedMessagesByConversationId:conversationId];
 }
 
@@ -214,11 +214,11 @@
     return [self.conversations failedMessageIdsByConversationId:conversationId];
 }
 
-- (NSArray<LCCKMessage *> *)failedMessagesByMessageIds:(NSArray<NSString *> *)messageIds {
+- (NSArray<CYLMessage *> *)failedMessagesByMessageIds:(NSArray<NSString *> *)messageIds {
     return [self.conversations failedMessagesByMessageIds:messageIds];
 }
 
-#pragma mark - LCCKIMPushProvider
+#pragma mark - CYLIMPushProvider
 
 - (void)registerForRemoteNotification {
     [AVOSCloud registerForRemoteNotification];
@@ -229,14 +229,14 @@
     [currentInstallation setDeviceTokenFromData:deviceToken];
     //FIXME: openClient 的时候也会将 clientId 注册到 channels，这里多余了？
     if (userId) {
-        [currentInstallation addUniqueObject:userId forKey:LCCKInstallationKeyChannels];
+        [currentInstallation addUniqueObject:userId forKey:CYLInstallationKeyChannels];
     }
     [currentInstallation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         NSLog(@"%@", error);
     }];
 }
 
-- (void)pushMessage:(NSString *)message userIds:(NSArray<NSString *> *)userIds block:(LCCKBooleanResultBlock)block {
+- (void)pushMessage:(NSString *)message userIds:(NSArray<NSString *> *)userIds block:(CYLBooleanResultBlock)block {
     AVPush *push = [[AVPush alloc] init];
     [push setChannels:userIds];
     [push setMessage:message];

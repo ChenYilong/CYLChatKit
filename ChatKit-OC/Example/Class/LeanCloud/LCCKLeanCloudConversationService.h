@@ -7,7 +7,7 @@
 //
 //  LeanCloud conversations, messages, and the local stores of recent conversations and
 //  failed messages, used by `LCCKLeanCloudIMProvider`.
-//  It is an `LCCKSingleton`, so ChatKit resets it together with its own services after closing a session.
+//  It is an `CYLSingleton`, so ChatKit resets it together with its own services after closing a session.
 
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #if __has_include(<ChatKit/LCChatKit.h>)
@@ -16,10 +16,10 @@
 #import "LCChatKit.h"
 #endif
 
-@interface LCCKLeanCloudConversationService : LCCKSingleton <LCCKIMConversationProvider,
-                                                             LCCKIMMessageProvider,
-                                                             LCCKIMRecentConversationProvider,
-                                                             LCCKIMFailedMessageProvider>
+@interface LCCKLeanCloudConversationService : CYLSingleton <CYLIMConversationProvider,
+                                                             CYLIMMessageProvider,
+                                                             CYLIMRecentConversationProvider,
+                                                             CYLIMFailedMessageProvider>
 
 /*!
  * Sends a message with LeanCloud send options. The default options request a receipt.
@@ -28,7 +28,7 @@
        conversation:(AVIMConversation *)conversation
             options:(AVIMMessageSendOption)options
         mentionList:(NSArray<NSString *> *)mentionList
-      progressBlock:(LCCKProgressBlock)progressBlock
-           callback:(LCCKBooleanResultBlock)block;
+      progressBlock:(CYLProgressBlock)progressBlock
+           callback:(CYLBooleanResultBlock)block;
 
 @end

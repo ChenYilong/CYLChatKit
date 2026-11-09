@@ -57,7 +57,7 @@
     [MBProgressHUD hideHUDForView:window animated:YES];
 }
 
-+ (void)showNotificationWithTitle:(NSString *)title subtitle:(NSString *)subtitle type:(LCCKMessageNotificationType)type duration:(CGFloat)duration {
++ (void)showNotificationWithTitle:(NSString *)title subtitle:(NSString *)subtitle type:(CYLMessageNotificationType)type duration:(CGFloat)duration {
     /**
      在这里使用了LCChatKit提供的默认样式显示提示信息
      在你的app中，也可以换成你app中已有的提示方式
@@ -66,16 +66,16 @@
     //TODO:
     TWMessageBarMessageType type_;
     switch (type) {
-        case LCCKMessageNotificationTypeError:
+        case CYLMessageNotificationTypeError:
             type_ = TWMessageBarMessageTypeError;
             break;
-        case LCCKMessageNotificationTypeSuccess:
+        case CYLMessageNotificationTypeSuccess:
             type_ = TWMessageBarMessageTypeSuccess;
             break;
-        case LCCKMessageNotificationTypeWarning:
+        case CYLMessageNotificationTypeWarning:
             type_ = TWMessageBarMessageTypeInfo;
             break;
-        case LCCKMessageNotificationTypeMessage:
+        case CYLMessageNotificationTypeMessage:
             type_ = TWMessageBarMessageTypeInfo;
             break;
     }
@@ -86,7 +86,7 @@
                                                       callback:nil];
 }
 
-+ (void)showNotificationWithTitle:(NSString *)title subtitle:(NSString *)subtitle type:(LCCKMessageNotificationType)type {
++ (void)showNotificationWithTitle:(NSString *)title subtitle:(NSString *)subtitle type:(CYLMessageNotificationType)type {
     [self showNotificationWithTitle:title subtitle:subtitle type:type duration:1.f];
 }
 

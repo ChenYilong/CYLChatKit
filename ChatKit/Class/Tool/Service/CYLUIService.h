@@ -1,0 +1,32 @@
+//
+//  CYLUIService.h
+//  LeanCloudChatKit-iOS
+//
+//  v2.1.1 Created by ElonChan on 16/3/1.
+//  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import "CYLServiceDefinition.h"
+
+/**
+ *  UIService Error Domain
+ */
+FOUNDATION_EXTERN NSString *const CYLUIServiceErrorDomain;
+
+@interface CYLUIService : CYLSingleton <CYLUIService>
+
+/*!
+ *  未读数发生变化
+ *  @param aCount 总的未读数
+ */
+typedef void(^CYLUnreadCountChangedBlock)(NSInteger count);
+@property (nonatomic, copy, readonly) CYLUnreadCountChangedBlock unreadCountChangedBlock;
+- (void)setUnreadCountChangedBlock:(CYLUnreadCountChangedBlock)unreadCountChangedBlock;
+//TODO:
+/**
+ *  新消息通知
+ */
+typedef void(^CYLOnNewMessageBlock)(NSString *senderId, NSString *content, NSInteger type, NSDate *time);
+
+@end

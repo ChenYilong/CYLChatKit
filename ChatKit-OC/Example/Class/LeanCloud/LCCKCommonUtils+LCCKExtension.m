@@ -1,14 +1,14 @@
 //
-//  LCCKCommonUtils+LCCKExtension.m
+//  CYLCommonUtils+LCCKExtension.m
 //  ChatKit-OC
 //
 //  Created by ChenYilong on 2026/11/09.
 //  Copyright © 2026 ChenYilong. All rights reserved.
 //
 
-#import "LCCKCommonUtils+LCCKExtension.h"
+#import "CYLCommonUtils+LCCKExtension.h"
 
-@implementation LCCKCommonUtils (LCCKExtension)
+@implementation CYLCommonUtils (LCCKExtension)
 
 + (NSString *)getPathFromFile:(AVFile *)file {
     NSString *pathForFile = [file persistentCachePath];

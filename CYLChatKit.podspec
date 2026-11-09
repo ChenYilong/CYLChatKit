@@ -16,8 +16,6 @@ Pod::Spec.new do |s|
 
   s.subspec 'Core' do |core|
     core.source_files = 'ChatKit', 'ChatKit/**/*.{h,m}'
-    # A stale 2016 copy of LCChatKit that duplicates ChatKit/Class/LCChatKit.{h,m}.
-    core.exclude_files = 'ChatKit/LCChatKit.{h,m}'
     core.public_header_files = 'ChatKit/**/*.h'
     core.vendored_frameworks = 'ChatKit/Class/Tool/Vendor/VoiceLib/lame.framework'
     core.resources = 'ChatKit/Class/Resources/*', 'ChatKit/**/*.xib'
@@ -35,7 +33,7 @@ Pod::Spec.new do |s|
     core.dependency "DACircularProgress", "~> 2.3.1"
     core.dependency "MLLabel", "~> 1.10.5"
     core.dependency "MWPhotoBrowser", "~> 2.1.2"
-    core.dependency "CYLDeallocBlockExecutor", "~> 1.1.2"
+    core.dependency "CYLDeallocBlockExecutor", "~> 1.2.0"
   end
 
   s.pod_target_xcconfig = {

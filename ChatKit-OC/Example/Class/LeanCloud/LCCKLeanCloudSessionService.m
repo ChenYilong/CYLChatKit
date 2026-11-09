@@ -2,18 +2,18 @@
 //  LCCKLeanCloudSessionService.m
 //  ChatKit-OC
 //
-//  Moved from ChatKit's LCCKSessionService (v2.1.1, created by ElonChan on 16/3/1).
+//  Moved from ChatKit's CYLSessionService (v2.1.1, created by ElonChan on 16/3/1).
 //  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 //  The LeanCloud IM session: AVIMClient lifecycle, client delegate callbacks, and
 //  received-message handling. UI-side logic (reconnect HUD, single sign-on alert)
-//  stays in ChatKit's LCCKSessionService.
+//  stays in ChatKit's CYLSessionService.
 
 #import "LCCKLeanCloudSessionService.h"
 #import "LCCKLeanCloudConversationService.h"
 #import "AVIMConversation+LCCKExtension.h"
 #import "AVIMMessage+LCCKExtension.h"
-#import "LCCKSoundManager.h"
+#import "CYLSoundManager.h"
 
 static NSString *const LCCKLeanCloudSessionServiceErrorDomain = @"LCCKLeanCloudSessionServiceErrorDomain";
 
@@ -33,19 +33,19 @@ static NSString *const LCCKLeanCloudSessionServiceErrorDomain = @"LCCKLeanCloudS
 }
 
 /*!
- * ChatKit's LCCKSessionService has validated `clientId` and dispatched to the main queue.
+ * ChatKit's CYLSessionService has validated `clientId` and dispatched to the main queue.
  */
-- (void)openWithClientId:(NSString *)clientId force:(BOOL)force callback:(LCCKBooleanResultBlock)callback {
+- (void)openWithClientId:(NSString *)clientId force:(BOOL)force callback:(CYLBooleanResultBlock)callback {
     _clientId = clientId;
     [[LCCKLeanCloudConversationService sharedInstance] setupDatabaseWithUserId:_clientId];
     //判断是否是第一次使用该appId
-    [[LCChatKit sharedInstance] lcck_isFirstLaunchToEvent:[LCChatKit sharedInstance].appId
+    [[LCChatKit sharedInstance] cyl_isFirstLaunchToEvent:[LCChatKit sharedInstance].appId
                                                evenUpdate:YES
                                               firstLaunch:^BOOL(){
                                                   return [[LCChatKit sharedInstance] removeAllCachedRecentConversations];
                                               }];
     NSString *tag;
-    if (![LCCKSessionService sharedInstance].disableSingleSignOn) {
+    if (![CYLSessionService sharedInstance].disableSingleSignOn) {
         tag = clientId;
     }
     _client = [[AVIMClient alloc] initWithClientId:clientId tag:tag];
@@ -63,7 +63,7 @@ static NSString *const LCCKLeanCloudSessionServiceErrorDomain = @"LCCKLeanCloudS
     }
     [_client openWithOption:option callback:^(BOOL succeeded, NSError *error) {
         [self updateConnectStatus];
-        BOOL isFirstLaunchForClientId = [[LCChatKit sharedInstance] lcck_isFirstLaunchToEvent:clientId
+        BOOL isFirstLaunchForClientId = [[LCChatKit sharedInstance] cyl_isFirstLaunchToEvent:clientId
                                                                                    evenUpdate:YES
                                                                                   firstLaunch:^BOOL(){
                                                                                       return YES;
@@ -88,7 +88,7 @@ static NSString *const LCCKLeanCloudSessionServiceErrorDomain = @"LCCKLeanCloudS
     }];
 }
 
-- (void)closeWithCallback:(LCCKBooleanResultBlock)callback {
+- (void)closeWithCallback:(CYLBooleanResultBlock)callback {
     [_client closeWithCallback:^(BOOL succeeded, NSError *error) {
         !callback ?: callback(succeeded, error);
     }];
@@ -106,7 +106,7 @@ static NSString *const LCCKLeanCloudSessionServiceErrorDomain = @"LCCKLeanCloudS
 
 - (void)imClientResumed:(AVIMClient *)imClient {
     [self updateConnectStatus];
-    [NSNotificationCenter.defaultCenter postNotificationName:LCCKNotificationSessionResumed object:nil];
+    [NSNotificationCenter.defaultCenter postNotificationName:CYLNotificationSessionResumed object:nil];
 }
 
 - (void)imClientClosed:(AVIMClient *)imClient error:(NSError * _Nullable)error {
@@ -116,9 +116,9 @@ static NSString *const LCCKLeanCloudSessionServiceErrorDomain = @"LCCKLeanCloudS
 /*!
  * Another device logged in with the same client id: let ChatKit ask the user and reconnect.
  */
-- (void)handleSingleSignOnError:(NSError *)aError callback:(LCCKBooleanResultBlock)aCallback {
+- (void)handleSingleSignOnError:(NSError *)aError callback:(CYLBooleanResultBlock)aCallback {
     if (aError.code == AVIMErrorCodeSessionConflict) {
-        [[LCCKSessionService sharedInstance] handleSingleSignOnError:aError callback:aCallback];
+        [[CYLSessionService sharedInstance] handleSingleSignOnError:aError callback:aCallback];
     }
 }
 
@@ -138,7 +138,7 @@ static NSString *const LCCKLeanCloudSessionServiceErrorDomain = @"LCCKLeanCloudS
     }
     ///
     self.connect = _client.status == AVIMClientStatusOpened;
-    [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConnectivityUpdated object:@(self.connect)];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CYLNotificationConnectivityUpdated object:@(self.connect)];
 }
 
 #pragma mark - signature
@@ -148,8 +148,8 @@ static NSString *const LCCKLeanCloudSessionServiceErrorDomain = @"LCCKLeanCloudS
                                   action:(NSString *)action
                        actionOnClientIds:(NSArray *)clientIds {
     __block AVIMSignature *signature_;
-    LCCKGenerateSignatureBlock generateSignatureBlock = [[LCChatKit sharedInstance] generateSignatureBlock];
-    LCCKGenerateSignatureCompletionHandler completionHandler = ^(AVIMSignature *signature, NSError *error) {
+    CYLGenerateSignatureBlock generateSignatureBlock = [[LCChatKit sharedInstance] generateSignatureBlock];
+    CYLGenerateSignatureCompletionHandler completionHandler = ^(AVIMSignature *signature, NSError *error) {
         if (!error) {
             signature_ = signature;
         } else {
@@ -179,7 +179,7 @@ static NSString *const LCCKLeanCloudSessionServiceErrorDomain = @"LCCKLeanCloudS
         return;
     }
     if (!message.messageId) {
-        LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"Receive Message , but MessageId is nil");
+        CYLLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"Receive Message , but MessageId is nil");
         return;
     }
     void (^fetchedConversationCallback)() = ^() {
@@ -200,21 +200,21 @@ static NSString *const LCCKLeanCloudSessionServiceErrorDomain = @"LCCKLeanCloudS
         return;
     }
     NSDictionary *userInfo = @{
-                               LCCKMessageNotifacationUserInfoConversationKey : conversation,
-                               LCCKMessageNotifacationUserInfoMessageKey : message,
+                               CYLMessageNotifacationUserInfoConversationKey : conversation,
+                               CYLMessageNotifacationUserInfoMessageKey : message,
                                };
-    [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationMessageDelivered object:userInfo];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CYLNotificationMessageDelivered object:userInfo];
 }
 
 - (void)conversation:(AVIMConversation *)conversation didUpdateForKey:(AVIMConversationUpdatedKey)key {
-    NSString *currentConversationId = LCCKConversationService.sharedInstance.currentConversationId;
+    NSString *currentConversationId = CYLConversationService.sharedInstance.currentConversationId;
     NSString *conversationId = conversation.conversationId;
     
     if ([key isEqualToString:AVIMConversationUpdatedKeyUnreadMessagesCount]) {
         if ([currentConversationId isEqualToString:conversationId]) {
             // do nothing.
         } else {
-            [LCCKConversationService.sharedInstance insertRecentConversation:conversation shouldRefreshWhenFinished:true];
+            [CYLConversationService.sharedInstance insertRecentConversation:conversation shouldRefreshWhenFinished:true];
         }
         return;
     }
@@ -223,7 +223,7 @@ static NSString *const LCCKLeanCloudSessionServiceErrorDomain = @"LCCKLeanCloudS
         if ([currentConversationId isEqualToString:conversationId]) {
             // do nothing
         } else {
-            [LCCKConversationService.sharedInstance insertRecentConversation:conversation shouldRefreshWhenFinished:true];
+            [CYLConversationService.sharedInstance insertRecentConversation:conversation shouldRefreshWhenFinished:true];
         }
         return;
     }
@@ -232,7 +232,7 @@ static NSString *const LCCKLeanCloudSessionServiceErrorDomain = @"LCCKLeanCloudS
         if ([currentConversationId isEqualToString:conversationId]) {
             // do nothing
         } else {
-            [LCCKConversationService.sharedInstance insertRecentConversation:conversation shouldRefreshWhenFinished:true];
+            [CYLConversationService.sharedInstance insertRecentConversation:conversation shouldRefreshWhenFinished:true];
         }
         return;
     }
@@ -240,13 +240,13 @@ static NSString *const LCCKLeanCloudSessionServiceErrorDomain = @"LCCKLeanCloudS
 }
 
 - (void)conversation:(AVIMConversation *)conversation messageHasBeenUpdated:(AVIMMessage *)message {
-    NSString *currentConversationId = LCCKConversationService.sharedInstance.currentConversationId;
+    NSString *currentConversationId = CYLConversationService.sharedInstance.currentConversationId;
     NSString *conversationId = conversation.conversationId;
     if ([currentConversationId isEqualToString:conversationId]) {
         NSDictionary *userInfo = @{
-                                   LCCKMessageNotifacationUserInfoConversationKey: conversation,
-                                   LCCKMessageNotifacationUserInfoMessageKey: message };
-        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationMessageUpdated object:userInfo];
+                                   CYLMessageNotifacationUserInfoConversationKey: conversation,
+                                   CYLMessageNotifacationUserInfoMessageKey: message };
+        [[NSNotificationCenter defaultCenter] postNotificationName:CYLNotificationMessageUpdated object:userInfo];
     }
 }
 
@@ -254,18 +254,18 @@ static NSString *const LCCKLeanCloudSessionServiceErrorDomain = @"LCCKLeanCloudS
 didMemberInfoUpdateBy:(NSString *)byClientId
             memberId:(NSString *)memberId
                 role:(AVIMConversationMemberRole)role {
-    void (^memberInfoChangedBlock)(id<LCCKConversationProtocol>, NSString *, NSString *, NSUInteger) = [LCCKSessionService sharedInstance].memberInfoChangedBlock;
+    void (^memberInfoChangedBlock)(id<CYLConversationProtocol>, NSString *, NSString *, NSUInteger) = [CYLSessionService sharedInstance].memberInfoChangedBlock;
     !memberInfoChangedBlock ?: memberInfoChangedBlock(conversation, byClientId, memberId, (NSUInteger)role);
 }
 
-- (void)makeSureConversation:(AVIMConversation *)conversation isAvailableCallback:(LCCKVoidBlock)callback {
+- (void)makeSureConversation:(AVIMConversation *)conversation isAvailableCallback:(CYLVoidBlock)callback {
     if (!conversation.createAt && ![[LCCKLeanCloudConversationService sharedInstance] isRecentConversationExistWithConversationId:conversation.conversationId]) {
         [conversation fetchWithCallback:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
                 !callback ?: callback();
                 return;
             }
-            LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), error);
+            CYLLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), error);
         }];
     } else {
         !callback ?: callback();
@@ -273,9 +273,9 @@ didMemberInfoUpdateBy:(NSString *)byClientId
 }
 
 - (void)conversation:(AVIMConversation *)conversation kickedByClientId:(NSString *)clientId {
-    [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConversationInvalided object:clientId];
-    if ([[LCCKConversationService sharedInstance].currentConversationId isEqualToString:conversation.conversationId]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationCurrentConversationInvalided object:clientId];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CYLNotificationConversationInvalided object:clientId];
+    if ([[CYLConversationService sharedInstance].currentConversationId isEqualToString:conversation.conversationId]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:CYLNotificationCurrentConversationInvalided object:clientId];
     }
 }
 
@@ -284,10 +284,10 @@ didMemberInfoUpdateBy:(NSString *)byClientId
 - (void)receiveMessage:(AVIMTypedMessage *)message conversation:(AVIMConversation *)conversation {
     if (message.mediaType > 0) {
         NSDictionary *userInfo = @{
-                                   LCCKMessageNotifacationUserInfoConversationKey : conversation,
-                                   LCCKDidReceiveCustomMessageUserInfoMessageKey : message,
+                                   CYLMessageNotifacationUserInfoConversationKey : conversation,
+                                   CYLDidReceiveCustomMessageUserInfoMessageKey : message,
                                    };
-        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationCustomTransientMessageReceived object:userInfo];
+        [[NSNotificationCenter defaultCenter] postNotificationName:CYLNotificationCustomTransientMessageReceived object:userInfo];
     }
     if (!message || !conversation) {
         return;
@@ -302,23 +302,23 @@ didMemberInfoUpdateBy:(NSString *)byClientId
     void (^checkMentionedMessageCallback)() = ^(NSArray *filterdMessages) {
         // - 插入最近对话列表
         // 下面的LCCKNotificationMessageReceived也会通知ConversationListVC刷新
-        [[LCCKConversationService sharedInstance] insertRecentConversation:conversation shouldRefreshWhenFinished:NO];
+        [[CYLConversationService sharedInstance] insertRecentConversation:conversation shouldRefreshWhenFinished:NO];
         // - 播放接收音
         if (!isUnreadMessage) {
             [self playLoudReceiveSoundIfNeededForConversation:conversation];
         }
         NSDictionary *userInfo = @{
-                                   LCCKMessageNotifacationUserInfoConversationKey : conversation,
-                                   LCCKDidReceiveMessagesUserInfoMessagesKey : filterdMessages,
+                                   CYLMessageNotifacationUserInfoConversationKey : conversation,
+                                   CYLDidReceiveMessagesUserInfoMessagesKey : filterdMessages,
                                    };
         // - 通知相关页面接收到了消息：“当前对话页面”、“最近对话页面”；
-        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationMessageReceived object:userInfo];
+        [[NSNotificationCenter defaultCenter] postNotificationName:CYLNotificationMessageReceived object:userInfo];
     };
     
     void(^filteredMessageCallback)(NSArray *originalMessages) = ^(NSArray *filterdMessages) {
         if (filterdMessages.count == 0) { return; }
         // - 在最近对话列表页时，检查是否有人@我
-        if ([LCCKConversationService.sharedInstance.currentConversationId isEqualToString:conversation.conversationId] && [LCCKConversationService.sharedInstance isChatting] && isUnreadMessage) {
+        if ([CYLConversationService.sharedInstance.currentConversationId isEqualToString:conversation.conversationId] && [CYLConversationService.sharedInstance isChatting] && isUnreadMessage) {
             [conversation readInBackground];
             conversation.unreadMessagesMentioned = false;
             !checkMentionedMessageCallback ?: checkMentionedMessageCallback(filterdMessages);
@@ -327,18 +327,18 @@ didMemberInfoUpdateBy:(NSString *)byClientId
             [self isMentionedByMessages:filterdMessages callback:^(BOOL succeeded, NSError *error) {
                 !checkMentionedMessageCallback ?: checkMentionedMessageCallback(filterdMessages);
                 if (succeeded) {
-                    [[LCCKConversationService sharedInstance] updateMentioned:YES conversationId:conversation.conversationId];
+                    [[CYLConversationService sharedInstance] updateMentioned:YES conversationId:conversation.conversationId];
                     // 下面的LCCKNotificationMessageReceived也会通知ConversationListVC刷新
-                    // [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationUnreadsUpdated object:nil];
+                    // [[NSNotificationCenter defaultCenter] postNotificationName:CYLNotificationUnreadsUpdated object:nil];
                 }
             }];
             
         }
     };
     
-    LCCKFilterMessagesBlock filterMessagesBlock = [LCCKConversationService sharedInstance].filterMessagesBlock;
+    CYLFilterMessagesBlock filterMessagesBlock = [CYLConversationService sharedInstance].filterMessagesBlock;
     if (filterMessagesBlock) {
-        LCCKFilterMessagesCompletionHandler filterMessagesCompletionHandler = ^(NSArray *filteredMessages, NSError *error) {
+        CYLFilterMessagesCompletionHandler filterMessagesCompletionHandler = ^(NSArray *filteredMessages, NSError *error) {
             if (!error) {
                 !filteredMessageCallback ?: filteredMessageCallback([filteredMessages copy]);
             }
@@ -353,9 +353,9 @@ didMemberInfoUpdateBy:(NSString *)byClientId
  * 如果是未读消息，会在 query 时播放一次，避免重复播放
  */
 - (void)playLoudReceiveSoundIfNeededForConversation:(AVIMConversation *)conversation {
-    if ([LCCKConversationService sharedInstance].chatting) {
+    if ([CYLConversationService sharedInstance].chatting) {
         //FIXME:
-//        [conversation markAsReadInBackgroundForMessage:conversation.lcck_lastMessage];
+//        [conversation markAsReadInBackgroundForMessage:conversation.cyl_lastMessage];
         [conversation readInBackground];
         return;
     }
@@ -366,8 +366,8 @@ didMemberInfoUpdateBy:(NSString *)byClientId
         return;
     }
     self.playingSound = YES;
-    [[LCCKSoundManager defaultManager] playLoudReceiveSoundIfNeed];
-    [[LCCKSoundManager defaultManager] vibrateIfNeed];
+    [[CYLSoundManager defaultManager] playLoudReceiveSoundIfNeed];
+    [[CYLSoundManager defaultManager] vibrateIfNeed];
     //一定时间之内只播放声音一次
     NSUInteger delaySeconds = 1;
     dispatch_time_t when = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delaySeconds * NSEC_PER_SEC));
@@ -378,7 +378,7 @@ didMemberInfoUpdateBy:(NSString *)byClientId
 
 #pragma mark - mention
 
-- (void)isMentionedByMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(LCCKBooleanResultBlock)callback {
+- (void)isMentionedByMessages:(NSArray<AVIMTypedMessage *> *)messages callback:(CYLBooleanResultBlock)callback {
     if (!messages || messages.count == 0) {
         NSInteger code = 0;
         NSString *errorReasonText = @"no message to check";
@@ -394,7 +394,7 @@ didMemberInfoUpdateBy:(NSString *)byClientId
     }
 
     __block BOOL isMentioned = NO;
-    [[LCCKUserSystemService sharedInstance] fetchCurrentUserInBackground:^(id<LCCKUserDelegate> currentUser, NSError *error) {
+    [[CYLUserSystemService sharedInstance] fetchCurrentUserInBackground:^(id<CYLUserDelegate> currentUser, NSError *error) {
         NSString *queueBaseLabel = [NSString stringWithFormat:@"com.chatkit.%@", NSStringFromClass([self class])];
         const char *queueName = [[NSString stringWithFormat:@"%@.%@.ForBarrier",queueBaseLabel, [[NSUUID UUID] UUIDString]] UTF8String];
         dispatch_queue_t queue = dispatch_queue_create(queueName, DISPATCH_QUEUE_CONCURRENT);
@@ -439,14 +439,14 @@ didMemberInfoUpdateBy:(NSString *)byClientId
     }];
 }
 
-- (BOOL)isMentionedByText:(NSString *)text currentUser:(id<LCCKUserDelegate>)currentUser {
+- (BOOL)isMentionedByText:(NSString *)text currentUser:(id<CYLUserDelegate>)currentUser {
     if (!text || (text.length == 0)) {
         return NO;
     }
     NSString *patternWithUserName = [NSString stringWithFormat:@"@%@ ",currentUser.name ?: currentUser.clientId];
     NSString *patternWithLowercaseAll = @"@all ";
     NSString *patternWithUppercaseAll = @"@All ";
-    BOOL isMentioned = [text lcck_containsString:patternWithUserName] || [text lcck_containsString:patternWithLowercaseAll] || [text lcck_containsString:patternWithUppercaseAll];
+    BOOL isMentioned = [text cyl_containsString:patternWithUserName] || [text cyl_containsString:patternWithLowercaseAll] || [text cyl_containsString:patternWithUppercaseAll];
     if(isMentioned) {
         return YES;
     } else {

@@ -25,7 +25,7 @@
 页面	| 位置	| 定制点	| 定制方式
 -------------|-------------|-------------|-------------
 全局	| 顶部导航栏	| 背景色、文字颜色等样式	| 系统API
-全局	| 顶部导航栏	| 导航按钮	| 既可以使用 `-[LCCKBaseViewController configureBarButtonItemStyle:action:]`，</p>又可以在各个Controller的 `setViewDidLoadBlock:` 中调用系统API
+全局	| 顶部导航栏	| 导航按钮	| 既可以使用 `-[CYLBaseViewController configureBarButtonItemStyle:action:]`，</p>又可以在各个Controller的 `setViewDidLoadBlock:` 中调用系统API
 全局	| TableView	| 分割线、背景色、Cell文字颜色、Cell背景色等 | 【plist】</p>TableView-XXX </p>	ChatKit-Theme.plist中 </p>**【plist】是指资源包 MessageBubble.bundle 中的 MessageBubble-Customize.plist </p>或者是 Other.bundle 中的 ChatKit-Theme.plist 文件，下同** 
 全局 | 核心流程</p>（聊天、对话列表话及相关页面） | 支持国际化 | 自定义 Other.bundle 为 CustomizedChatKit.Other.bundle，并修改或增加其中的本地化文件
 全局	| 头像样式	| 头像圆角	|  `-[LCChatKit setAvatarImageViewCornerRadiusBlock:]`
@@ -212,30 +212,30 @@ edge_insets: 气泡背景区域（红色）和内容区域（白色）间距：
 
 ## 控制状态栏、导航栏、Tabbar等
 
-ChatKit 提供的各个 Controller 都遵循 LCCKViewControllerEventProtocol 协议，你可以在 controller 的 `-setViewDidLoadBlock:`、`-setViewWillAppearBlock:`、`-setViewDidAppearBlock:`、`-setViewWillDisappearBlock:`、`-setViewDidDisappearBlock:`等 block 中，调用相关的系统API，以便控制状态栏、导航栏、Tabbar等。
+ChatKit 提供的各个 Controller 都遵循 CYLViewControllerEventProtocol 协议，你可以在 controller 的 `-setViewDidLoadBlock:`、`-setViewWillAppearBlock:`、`-setViewDidAppearBlock:`、`-setViewWillDisappearBlock:`、`-setViewDidDisappearBlock:`等 block 中，调用相关的系统API，以便控制状态栏、导航栏、Tabbar等。
 
 例如：
 
 
  ```Objective-C
-    [conversationViewController setViewWillAppearBlock:^(LCCKBaseViewController *viewController, BOOL aAnimated) {
+    [conversationViewController setViewWillAppearBlock:^(CYLBaseViewController *viewController, BOOL aAnimated) {
         [viewController.navigationController setNavigationBarHidden:NO animated:aAnimated];
     }];
  ```
  
  ```Objective-C
-    [conversationViewController setViewWillAppearBlock:^(LCCKBaseViewController *viewController, BOOL aAnimated) {
+    [conversationViewController setViewWillAppearBlock:^(CYLBaseViewController *viewController, BOOL aAnimated) {
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:aAnimated];
     }];
  ```
  
 ## 会话列表页面的导航栏标题
 
-在 LCCKConversationListViewController 的 `setViewDidLoadBlock:` 中修改导航栏标题。
+在 CYLConversationListViewController 的 `setViewDidLoadBlock:` 中修改导航栏标题。
 
  ```Objective-C
-    LCCKConversationListViewController *firstViewController = [[LCCKConversationListViewController alloc] init];
-    [firstViewController setViewDidLoadBlock:^(LCCKBaseViewController *viewController) {
+    CYLConversationListViewController *firstViewController = [[CYLConversationListViewController alloc] init];
+    [firstViewController setViewDidLoadBlock:^(CYLBaseViewController *viewController) {
         viewController.navigationItem.title = @"消息";
     }];
  ```
@@ -250,9 +250,9 @@ ChatKit 提供的各个 Controller 都遵循 LCCKViewControllerEventProtocol 协
  - 单聊默认显示对方昵称，群聊显示 `conversation` 的 name 字段值
 
  ```Objective-C
-    LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithConversationId:conversationId];
+    CYLConversationViewController *conversationViewController = [[CYLConversationViewController alloc] initWithConversationId:conversationId];
     conversationViewController.disableTitleAutoConfig = YES;
-    [conversationViewController setViewDidLoadBlock:^(LCCKBaseViewController *viewController) {
+    [conversationViewController setViewDidLoadBlock:^(CYLBaseViewController *viewController) {
         viewController.navigationItem.title = @"消息";
     }];
  ```
@@ -279,7 +279,7 @@ ChatKit 提供的各个 Controller 都遵循 LCCKViewControllerEventProtocol 协
 
 
  ```Objective-C
-    [[LCChatKit sharedInstance] setShowNotificationBlock:^(UIViewController *viewController, NSString *title, NSString *subtitle, LCCKMessageNotificationType type) {
+    [[LCChatKit sharedInstance] setShowNotificationBlock:^(UIViewController *viewController, NSString *title, NSString *subtitle, CYLMessageNotificationType type) {
         [self exampleShowNotificationWithTitle:title subtitle:subtitle type:type];
     }];
     
@@ -289,21 +289,21 @@ HUD
 
 
  ```Objective-C
-    [[LCChatKit sharedInstance] setHUDActionBlock:^(UIViewController *viewController, UIView *view, NSString *title, LCCKMessageHUDActionType type) {
+    [[LCChatKit sharedInstance] setHUDActionBlock:^(UIViewController *viewController, UIView *view, NSString *title, CYLMessageHUDActionType type) {
         switch (type) {
-            case LCCKMessageHUDActionTypeShow:
+            case CYLMessageHUDActionTypeShow:
                 [[self class] lcck_showMessage:title toView:view];
                 break;
                 
-            case LCCKMessageHUDActionTypeHide:
+            case CYLMessageHUDActionTypeHide:
                 [[self class] lcck_hideHUDForView:view];
                 break;
                 
-            case LCCKMessageHUDActionTypeError:
+            case CYLMessageHUDActionTypeError:
                 [[self class] lcck_showError:title toView:view];
                 break;
                 
-            case LCCKMessageHUDActionTypeSuccess:
+            case CYLMessageHUDActionTypeSuccess:
                 [[self class] lcck_showSuccess:title toView:view];
                 break;
         }

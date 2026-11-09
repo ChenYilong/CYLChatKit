@@ -14,9 +14,11 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
 
 ## Objective-C and API rules
 
-- Follow the established `LCCK` prefix for ChatKit-owned public classes, protocols, enums, and constants. Keep vendor code and third-party APIs unchanged.
-- New class and protocol files must use the prefix already established by this repository (`LCCK`), and each header/implementation filename must match its primary type. Do not copy the `CYL` prefix from another project into CYLChatKit.
-- Name new category files `Type+LCCKExtension.h` / `.m`; prefix new category methods with `lcck_`. Use a different project prefix only when that prefix is already the convention in the target repository. Do not rename released symbols to normalize naming.
+- Core (`ChatKit/`) uses the `CYL` prefix for classes, protocols, typedefs, enums, constants, and C functions, following the CYLTabBarController naming rules. Category methods and properties use `cyl_` (setter `setCyl_name:`). Core contains no `LCCK`, `lcck_`, or `AVOS`; keep it that way. Keep vendor code and third-party APIs unchanged.
+- Each header/implementation filename must match its primary type. Name new category files `Type+CYLExtension.h` / `.m`.
+- Before adding a `CYL` name to core, check that `CYLTabBarController` (linked by the demo) and `CYLDeallocBlockExecutor` (a core dependency) do not already define the same class, header, macro, constant, or category selector. Use a `CYLChat` prefix for core names that would collide (for example `CYLChatBaseViewController`, `CYLChatConstants.h`).
+- The demo (`ChatKit-OC/`) keeps the `LCCK` prefix for its own symbols and uses the core `CYL` API.
+- `LCChatKit` and `ChatKitHeaders.h` keep their names. Do not rename released symbols to normalize naming beyond this repository-wide change.
 - Write repository instructions, skills, comments, and user-facing documentation in English.
 - Preserve existing public names, including historical spellings, to avoid breaking clients. New identifiers should follow the naming skill.
 - Use full HTTPS GitHub issue URLs in code comments that explain issue-specific fixes.

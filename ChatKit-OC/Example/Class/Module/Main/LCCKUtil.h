@@ -25,14 +25,14 @@
  */
 + (void)showNotificationWithTitle:(NSString *)title
                          subtitle:(NSString *)subtitle
-                             type:(LCCKMessageNotificationType)type;
+                             type:(CYLMessageNotificationType)type;
 
 /**
  *  显示提示信息
  */
 + (void)showNotificationWithTitle:(NSString *)title
                          subtitle:(NSString *)subtitle
-                             type:(LCCKMessageNotificationType)type
+                             type:(CYLMessageNotificationType)type
                          duration:(CGFloat)duration;
 
 /**

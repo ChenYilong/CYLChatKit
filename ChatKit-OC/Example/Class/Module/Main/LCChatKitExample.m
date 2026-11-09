@@ -58,29 +58,29 @@ static NSMutableDictionary *_sharedInstances = nil;
     [AVOSCloud handleRemoteNotificationsWithDeviceToken:deviceToken];
 }
 
-+ (void)invokeThisMethodBeforeLogoutSuccess:(LCCKVoidBlock)success failed:(LCCKErrorBlock)failed {
++ (void)invokeThisMethodBeforeLogoutSuccess:(CYLVoidBlock)success failed:(CYLErrorBlock)failed {
     //    [AVOSCloudIM handleRemoteNotificationsWithDeviceToken:nil];
     [[LCChatKit sharedInstance] removeAllCachedProfiles];
     [[LCChatKit sharedInstance] removeAllCachedRecentConversations];
     [[LCChatKit sharedInstance] closeWithCallback:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
-            [LCCKUtil showNotificationWithTitle:@"退出成功" subtitle:nil type:LCCKMessageNotificationTypeSuccess];
+            [LCCKUtil showNotificationWithTitle:@"退出成功" subtitle:nil type:CYLMessageNotificationTypeSuccess];
             !success ?: success();
         } else {
-            [LCCKUtil showNotificationWithTitle:@"退出失败" subtitle:nil type:LCCKMessageNotificationTypeError];
+            [LCCKUtil showNotificationWithTitle:@"退出失败" subtitle:nil type:CYLMessageNotificationTypeError];
             !failed ?: failed(error);
         }
     }];
 }
 
-+ (void)invokeThisMethodAfterLoginSuccessWithClientId:(NSString *)clientId success:(LCCKVoidBlock)success failed:(LCCKErrorBlock)failed  {
++ (void)invokeThisMethodAfterLoginSuccessWithClientId:(NSString *)clientId success:(CYLVoidBlock)success failed:(CYLErrorBlock)failed  {
     [[LCChatKit sharedInstance] openWithClientId:clientId callback:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             NSString *subtitle = [NSString stringWithFormat:@"User Id 是 : %@", clientId];
-            [LCCKUtil showNotificationWithTitle:@"登陆成功" subtitle:subtitle type:LCCKMessageNotificationTypeSuccess];
+            [LCCKUtil showNotificationWithTitle:@"登陆成功" subtitle:subtitle type:CYLMessageNotificationTypeSuccess];
             !success ?: success();
         } else {
-            [LCCKUtil showNotificationWithTitle:@"登陆失败" subtitle:nil type:LCCKMessageNotificationTypeError];
+            [LCCKUtil showNotificationWithTitle:@"登陆失败" subtitle:nil type:CYLMessageNotificationTypeError];
             !failed ?: failed(error);
         }
     }];
@@ -152,7 +152,7 @@ static NSMutableDictionary *_sharedInstances = nil;
         !callback ?: callback([users copy], nil);
     }];
     
-    [[LCChatKit sharedInstance] setDidSelectItemBlock:^(NSIndexPath *indexPath, id<LCCKConversationProtocol> conversation, LCCKConversationListViewController *controller) {
+    [[LCChatKit sharedInstance] setDidSelectItemBlock:^(NSIndexPath *indexPath, id<CYLConversationProtocol> conversation, CYLConversationListViewController *controller) {
         [[self class] exampleOpenConversationViewControllerWithConversaionId:conversation.conversationId fromNavigationController:nil];
     }];
     
@@ -160,8 +160,8 @@ static NSMutableDictionary *_sharedInstances = nil;
         [self examplePreviewImageMessageWithIndex:index allVisibleImages:allVisibleImages allVisibleThumbs:allVisibleThumbs];
     }];
     
-    [[LCChatKit sharedInstance] setLongPressMessageBlock:^NSArray<UIMenuItem *> *(LCCKMessage *message, NSDictionary *userInfo) {
-        LCCKMenuItem *copyItem = [[LCCKMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"copy", @"LCChatKitString", @"复制文本消息")
+    [[LCChatKit sharedInstance] setLongPressMessageBlock:^NSArray<UIMenuItem *> *(CYLMessage *message, NSDictionary *userInfo) {
+        CYLMenuItem *copyItem = [[CYLMenuItem alloc] initWithTitle:NSLocalizedStringFromTable(@"copy", @"LCChatKitString", @"复制文本消息")
                                                                block:^{
                                                                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
                                                                    [pasteboard setString:[message text]];
@@ -173,7 +173,7 @@ static NSMutableDictionary *_sharedInstances = nil;
         return menuItems;
     }];
     
-    //    [[LCChatKit sharedInstance] setDidDeleteItemBlock:^(NSIndexPath *indexPath, id<LCCKConversationProtocol> conversation, LCCKConversationListViewController *controller) {
+    //    [[LCChatKit sharedInstance] setDidDeleteItemBlock:^(NSIndexPath *indexPath, id<CYLConversationProtocol> conversation, CYLConversationListViewController *controller) {
     //        //TODO:
     //    }];
     
@@ -188,12 +188,12 @@ static NSMutableDictionary *_sharedInstances = nil;
         return 5;
     }];
     
-    [[LCChatKit sharedInstance] setShowNotificationBlock:^(UIViewController *viewController, NSString *title, NSString *subtitle, LCCKMessageNotificationType type) {
+    [[LCChatKit sharedInstance] setShowNotificationBlock:^(UIViewController *viewController, NSString *title, NSString *subtitle, CYLMessageNotificationType type) {
         [self exampleShowNotificationWithTitle:title subtitle:subtitle type:type];
     }];
     
     // 自定义Cell菜单
-    [[LCChatKit sharedInstance] setConversationEditActionBlock:^NSArray *(NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions, id<LCCKConversationProtocol> conversation, LCCKConversationListViewController *controller) {
+    [[LCChatKit sharedInstance] setConversationEditActionBlock:^NSArray *(NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions, id<CYLConversationProtocol> conversation, CYLConversationListViewController *controller) {
         return [self exampleConversationEditActionAtIndexPath:indexPath conversation:conversation controller:controller];
     }];
     
@@ -205,7 +205,7 @@ static NSMutableDictionary *_sharedInstances = nil;
         [self examplePreViewLocationMessageWithLocation:location geolocations:geolocations];
     }];
     
-    [[LCChatKit sharedInstance] setSessionNotOpenedHandler:^(UIViewController *viewController, LCCKBooleanResultBlock callback) {
+    [[LCChatKit sharedInstance] setSessionNotOpenedHandler:^(UIViewController *viewController, CYLBooleanResultBlock callback) {
         [[self class] showMessage:@"正在重新连接聊天服务..." toView:viewController.view];
         [[LCChatKit sharedInstance] openWithClientId:[LCChatKit sharedInstance].clientId callback:^(BOOL succeeded, NSError *error) {
             [[self class] hideHUDForView:viewController.view];
@@ -221,8 +221,8 @@ static NSMutableDictionary *_sharedInstances = nil;
 }
 
 - (NSArray *)exampleConversationEditActionAtIndexPath:(NSIndexPath *)indexPath
-                                         conversation:(id<LCCKConversationProtocol>)conversation
-                                           controller:(LCCKConversationListViewController *)controller {
+                                         conversation:(id<CYLConversationProtocol>)conversation
+                                           controller:(CYLConversationListViewController *)controller {
     // 如果需要自定义其他会话的菜单，在此编辑
     return [self rightButtonsAtIndexPath:indexPath conversation:conversation controller:controller];
 }
@@ -232,9 +232,9 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 - (void)markReadStatusAtIndexPath:(NSIndexPath *)indexPath
                             title:(NSString **)title
                            handle:(UITableViewRowActionHandler *)handler
-                     conversation:(id<LCCKConversationProtocol>)conversation
-                       controller:(LCCKConversationListViewController *)controller {
-    if (conversation.lcck_unreadCount > 0) {
+                     conversation:(id<CYLConversationProtocol>)conversation
+                       controller:(CYLConversationListViewController *)controller {
+    if (conversation.cyl_unreadCount > 0) {
         if (*title == nil) {
             *title = @"标记为已读";
         }
@@ -256,8 +256,8 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 }
 
 - (NSArray *)rightButtonsAtIndexPath:(NSIndexPath *)indexPath
-                        conversation:(id<LCCKConversationProtocol>)conversation
-                          controller:(LCCKConversationListViewController *)controller {
+                        conversation:(id<CYLConversationProtocol>)conversation
+                          controller:(CYLConversationListViewController *)controller {
     NSString *title = nil;
     UITableViewRowActionHandler handler = nil;
     [self markReadStatusAtIndexPath:indexPath
@@ -287,16 +287,16 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
  *  打开单聊页面
  */
 + (void)exampleOpenConversationViewControllerWithPeerId:(NSString *)peerId fromNavigationController:(UINavigationController *)navigationController {
-    LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithPeerId:peerId];
-    [conversationViewController setViewDidLoadBlock:^(LCCKBaseViewController *viewController) {
+    CYLConversationViewController *conversationViewController = [[CYLConversationViewController alloc] initWithPeerId:peerId];
+    [conversationViewController setViewDidLoadBlock:^(CYLChatBaseViewController *viewController) {
         [self showMessage:@"加载历史记录..."];
-        [viewController configureBarButtonItemStyle:LCCKBarButtonItemStyleSingleProfile action:^{
+        [viewController configureBarButtonItemStyle:CYLBarButtonItemStyleSingleProfile action:^{
             NSString *title = @"打开用户详情";
             NSString *subTitle = [NSString stringWithFormat:@"用户id：%@", peerId];
-            [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeMessage];
+            [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:CYLMessageNotificationTypeMessage];
         }];
     }];
-    [conversationViewController setConversationHandler:^(id<LCCKConversationProtocol> conversation, LCCKConversationViewController *aConversationController) {
+    [conversationViewController setConversationHandler:^(id<CYLConversationProtocol> conversation, CYLConversationViewController *aConversationController) {
         if (!conversation) {
             [aConversationController.navigationController popViewControllerAnimated:YES];
             return;
@@ -305,13 +305,13 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
     [conversationViewController setLoadHistoryMessagesHandler:^(BOOL succeeded, NSError *error) {
         [self hideHUD];
         NSString *title;
-        LCCKMessageNotificationType type;
+        CYLMessageNotificationType type;
         if (succeeded) {
             title = @"聊天记录加载成功";
-            type = LCCKMessageNotificationTypeSuccess;
+            type = CYLMessageNotificationTypeSuccess;
         } else {
             title = @"聊天记录加载失败";
-            type = LCCKMessageNotificationTypeError;
+            type = CYLMessageNotificationTypeError;
         }
         [LCCKUtil showNotificationWithTitle:title subtitle:nil type:type];
     }];
@@ -319,20 +319,20 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 }
 
 + (void)exampleOpenConversationViewControllerWithConversaionId:(NSString *)conversationId fromNavigationController:(UINavigationController *)aNavigationController {
-    LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithConversationId:conversationId];
-    [conversationViewController setConversationHandler:^(id<LCCKConversationProtocol> conversation, LCCKConversationViewController *aConversationController) {
+    CYLConversationViewController *conversationViewController = [[CYLConversationViewController alloc] initWithConversationId:conversationId];
+    [conversationViewController setConversationHandler:^(id<CYLConversationProtocol> conversation, CYLConversationViewController *aConversationController) {
         if (!conversation) {
             [aConversationController.navigationController popViewControllerAnimated:YES];
             return;
         }
         if (conversation.members.count > 2) {
-            [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleGroupProfile action:^{
+            [aConversationController configureBarButtonItemStyle:CYLBarButtonItemStyleGroupProfile action:^{
                 NSString *title = @"打开群聊详情";
                 NSString *subTitle = [NSString stringWithFormat:@"群聊id：%@", conversationId];
-                [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeMessage];
+                [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:CYLMessageNotificationTypeMessage];
             }];
         } else {
-            [aConversationController configureBarButtonItemStyle:LCCKBarButtonItemStyleSingleProfile action:^{
+            [aConversationController configureBarButtonItemStyle:CYLBarButtonItemStyleSingleProfile action:^{
                 NSString *title = @"打开用户详情";
                 
                 NSArray *members = conversation.members;
@@ -340,7 +340,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
                 NSString *peerId = [members filteredArrayUsingPredicate:predicate][0];
 
                 NSString *subTitle = [NSString stringWithFormat:@"用户id：%@", peerId];
-                [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeMessage];
+                [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:CYLMessageNotificationTypeMessage];
             }];
         }
         
@@ -350,39 +350,39 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
                 [self hideHUD];
                 NSString *title;
                 NSString *subtitle;
-                LCCKMessageNotificationType type;
+                CYLMessageNotificationType type;
                 if (error) {
                     title = @"加入聊天室失败";
                     subtitle = error.localizedDescription;
-                    type = LCCKMessageNotificationTypeError;
+                    type = CYLMessageNotificationTypeError;
                     [aConversationController.navigationController popViewControllerAnimated:YES];
                 } else {
                     title = @"加入聊天室";
-                    type = LCCKMessageNotificationTypeSuccess;
+                    type = CYLMessageNotificationTypeSuccess;
                 }
                 [LCCKUtil showNotificationWithTitle:title subtitle:subtitle type:type];
             }];
         }
     }];
     
-    [conversationViewController setViewDidLoadBlock:^(LCCKBaseViewController *viewController) {
+    [conversationViewController setViewDidLoadBlock:^(CYLChatBaseViewController *viewController) {
         [self showMessage:@"加载历史记录..."];
     }];
     [conversationViewController setLoadHistoryMessagesHandler:^(BOOL succeeded, NSError *error) {
         [self hideHUD];
         NSString *title;
-        LCCKMessageNotificationType type;
+        CYLMessageNotificationType type;
         if (succeeded) {
             title = @"聊天记录加载成功";
-            type = LCCKMessageNotificationTypeSuccess;
+            type = CYLMessageNotificationTypeSuccess;
         } else {
             title = @"聊天记录加载失败";
-            type = LCCKMessageNotificationTypeError;
+            type = CYLMessageNotificationTypeError;
         }
         [LCCKUtil showNotificationWithTitle:title subtitle:nil type:type];
     }];
     
-    [conversationViewController setViewWillDisappearBlock:^(LCCKBaseViewController *viewController, BOOL aAnimated) {
+    [conversationViewController setViewWillDisappearBlock:^(CYLChatBaseViewController *viewController, BOOL aAnimated) {
         [self hideHUD];
     }];
     [self pushToViewController:conversationViewController];
@@ -410,7 +410,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 - (void)examplePreViewLocationMessageWithLocation:(CLLocation *)location geolocations:(NSString *)geolocations {
     NSString *title = [NSString stringWithFormat:@"打开地理位置：%@", geolocations];
     NSString *subTitle = [NSString stringWithFormat:@"纬度：%@\n经度：%@",@(location.coordinate.latitude), @(location.coordinate.longitude)];
-    [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeMessage];
+    [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:CYLMessageNotificationTypeMessage];
 }
 
 - (void)examplePreviewImageMessageWithIndex:(NSUInteger)index allVisibleImages:(NSArray *)allVisibleImages allVisibleThumbs:(NSArray *)allVisibleThumbs {
@@ -471,10 +471,10 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 
 - (void)exampleOpenProfileForUserId:(NSString *)userId {
     NSString *subtitle = [NSString stringWithFormat:@"User Id 是 : %@", userId];
-    [LCCKUtil showNotificationWithTitle:@"打开用户主页" subtitle:subtitle type:LCCKMessageNotificationTypeMessage];
+    [LCCKUtil showNotificationWithTitle:@"打开用户主页" subtitle:subtitle type:CYLMessageNotificationTypeMessage];
 }
 
-- (void)exampleShowNotificationWithTitle:(NSString *)title subtitle:(NSString *)subtitle type:(LCCKMessageNotificationType)type {
+- (void)exampleShowNotificationWithTitle:(NSString *)title subtitle:(NSString *)subtitle type:(CYLMessageNotificationType)type {
     [LCCKUtil showNotificationWithTitle:title subtitle:subtitle type:type];
 }
 

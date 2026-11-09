@@ -30,8 +30,8 @@
  */
 - (CYLTabBarController *)tabBarController {
     if (_tabBarController == nil) {
-        LCCKConversationListViewController *firstViewController = [[LCCKConversationListViewController alloc] init];
-        UINavigationController *firstNavigationController = [[LCCKBaseNavigationController alloc]
+        CYLConversationListViewController *firstViewController = [[CYLConversationListViewController alloc] init];
+        UINavigationController *firstNavigationController = [[CYLChatBaseNavigationController alloc]
                                                        initWithRootViewController:firstViewController];
         
         LCCKContactListController *secondViewController = [[LCCKContactListController alloc] init];
@@ -39,7 +39,7 @@
         NSUserDefaults *defaultsGet = [NSUserDefaults standardUserDefaults];
         NSString *currentClientID = [defaultsGet stringForKey:LCCK_KEY_USERID];
         secondViewController.excludedPersonIDs = @[ currentClientID ];
-        UINavigationController *secondNavigationController = [[LCCKBaseNavigationController alloc]
+        UINavigationController *secondNavigationController = [[CYLChatBaseNavigationController alloc]
                                                         initWithRootViewController:secondViewController];
         
         

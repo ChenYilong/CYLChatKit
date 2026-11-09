@@ -6,7 +6,7 @@
 //  Copyright © 2026 ChenYilong. All rights reserved.
 //
 //  The LeanCloud IM session used by `LCCKLeanCloudIMProvider`.
-//  It is an `LCCKSingleton`, so ChatKit resets it together with its own services after closing a session.
+//  It is an `CYLSingleton`, so ChatKit resets it together with its own services after closing a session.
 
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #if __has_include(<ChatKit/LCChatKit.h>)
@@ -15,7 +15,7 @@
 #import "LCChatKit.h"
 #endif
 
-@interface LCCKLeanCloudSessionService : LCCKSingleton
+@interface LCCKLeanCloudSessionService : CYLSingleton
 
 @property (nonatomic, copy, readonly) NSString *clientId;
 
@@ -31,8 +31,8 @@
 
 - (BOOL)isClientOpened;
 
-- (void)openWithClientId:(NSString *)clientId force:(BOOL)force callback:(LCCKBooleanResultBlock)callback;
+- (void)openWithClientId:(NSString *)clientId force:(BOOL)force callback:(CYLBooleanResultBlock)callback;
 
-- (void)closeWithCallback:(LCCKBooleanResultBlock)callback;
+- (void)closeWithCallback:(CYLBooleanResultBlock)callback;
 
 @end

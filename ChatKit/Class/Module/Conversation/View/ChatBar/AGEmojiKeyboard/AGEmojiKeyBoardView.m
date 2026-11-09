@@ -11,7 +11,7 @@
 
 #define SCREENWIDTH [[UIScreen mainScreen] bounds].size.width
 
-#define kLCCKTopLineBackgroundColor [UIColor colorWithRed:184/255.0f green:184/255.0f blue:184/255.0f alpha:1.0f]
+#define kCYLTopLineBackgroundColor [UIColor colorWithRed:184/255.0f green:184/255.0f blue:184/255.0f alpha:1.0f]
 
 static const CGFloat ButtonWidth = 45;
 static const CGFloat ButtonHeight = 37;
@@ -172,7 +172,7 @@ NSString *const RecentUsedEmojiCharactersKey = @"RecentUsedEmojiCharactersKey";
       self.bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.bounds) - 40, SCREENWIDTH, 40)];
       self.bottomView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
       UIImageView *topLine = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, SCREENWIDTH - 70, 1.0f)];
-      topLine.backgroundColor = kLCCKTopLineBackgroundColor;
+      topLine.backgroundColor = kCYLTopLineBackgroundColor;
       [self.bottomView addSubview:topLine];
       UIButton *sendButton = [[UIButton alloc] initWithFrame:CGRectMake(SCREENWIDTH - 70, 0, 70, 40)];
       sendButton.backgroundColor = [UIColor colorWithRed:0.0f/255.0f green:70.0f/255.0f blue:1.0f alpha:1.0f];

@@ -6,7 +6,7 @@
 //  Copyright © 2016年 ElonChan . All rights reserved.
 //
 //  Moved from ChatKit to the demo: ChatKit no longer depends on LeanCloud.
-//  This category makes `AVIMConversation` conform to ChatKit's `LCCKConversationProtocol`.
+//  This category makes `AVIMConversation` conform to ChatKit's `CYLConversationProtocol`.
 //
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #if __has_include(<ChatKit/LCChatKit.h>)
@@ -16,57 +16,57 @@
 #endif
 #import "AVIMTypedMessage+LCCKExtension.h"
 
-@interface AVIMConversation (LCCKExtension) <LCCKConversationProtocol>
+@interface AVIMConversation (LCCKExtension) <CYLConversationProtocol>
 
 /**
  *  最后一条消息。通过 SDK 的消息缓存找到的
  */
-@property (nonatomic, strong, readonly) AVIMTypedMessage *lcck_lastMessage;
-@property (nonatomic, strong, readonly) NSDate *lcck_lastMessageAt;
+@property (nonatomic, strong, readonly) AVIMTypedMessage *cyl_lastMessage;
+@property (nonatomic, strong, readonly) NSDate *cyl_lastMessageAt;
 
 /**
  *  未读消息数，即 `unreadMessagesCount`
  */
-- (NSInteger)lcck_unreadCount;
+- (NSInteger)cyl_unreadCount;
 
 /**
  *  是否有人提到了你，即 `unreadMessagesMentioned`
  */
-- (BOOL)lcck_mentioned;
+- (BOOL)cyl_mentioned;
 
 /*!
  * 如果未读消息数未超出100，显示数字，否则显示省略号
  */
-- (NSString *)lcck_badgeText;
+- (NSString *)cyl_badgeText;
 
 /*!
  * 草稿
  */
-@property (nonatomic, copy) NSString *lcck_draft;
+@property (nonatomic, copy) NSString *cyl_draft;
 
 /**
  *  对话的类型，通过成员数量来判断。系统对话按照群聊来处理。
  *
  *  @return 单聊或群聊
  */
-- (LCCKConversationType)lcck_type;
+- (CYLConversationType)cyl_type;
 
 /**
  *  单聊对话的对方的 clientId
  */
-- (NSString *)lcck_peerId;
+- (NSString *)cyl_peerId;
 
 /**
  *  对话显示的名称。单聊显示对方名字，群聊显示对话的 name
  */
-- (NSString *)lcck_displayName;
+- (NSString *)cyl_displayName;
 
 /**
  *  对话的标题。如 兴趣群(30)
  */
-- (NSString *)lcck_title;
+- (NSString *)cyl_title;
 
-- (void)lcck_setConversationWithMute:(BOOL)mute callback:(LCCKBooleanResultBlock)callback;
-- (BOOL)lcck_isCreaterForCurrentUser;
+- (void)cyl_setConversationWithMute:(BOOL)mute callback:(CYLBooleanResultBlock)callback;
+- (BOOL)cyl_isCreaterForCurrentUser;
 
 @end

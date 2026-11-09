@@ -2,20 +2,20 @@
 //  LCCKLeanCloudConversationService.m
 //  ChatKit-OC
 //
-//  Moved from ChatKit's LCCKConversationService and LCCKConversationListService
+//  Moved from ChatKit's CYLConversationService and CYLConversationListService
 //  (v2.1.1, created by ElonChan on 16/3/1 and 16/3/22).
 //  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 //  LeanCloud conversations and messages, and the SQLite stores of recent conversations
 //  and failed messages. ChatKit keeps the UI state (current conversation, hooks) in its own
-//  LCCKConversationService and calls this class through `LCCKLeanCloudIMProvider`.
+//  CYLConversationService and calls this class through `LCCKLeanCloudIMProvider`.
 
 #import "LCCKLeanCloudConversationService.h"
 #import "LCCKLeanCloudSessionService.h"
 #import "AVIMConversation+LCCKExtension.h"
 #import "AVIMTypedMessage+LCCKExtension.h"
 #import "AVIMMessage+LCCKExtension.h"
-#import "LCCKMessage+LCCKExtension.h"
+#import "CYLMessage+LCCKExtension.h"
 #if __has_include(<FMDB/FMDB.h>)
 #import <FMDB/FMDB.h>
 #else
@@ -56,14 +56,14 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     return [NSError errorWithDomain:LCCKLeanCloudConversationServiceErrorDomain code:code userInfo:errorInfo];
 }
 
-#pragma mark - LCCKIMConversationProvider
+#pragma mark - CYLIMConversationProvider
 
 /**
  *  根据 conversationId 获取对话
  *  @param convid   对话的 id
  *  @param callback
  */
-- (void)fetchConversationWithConversationId:(NSString *)conversationId callback:(LCCKIMConversationResultBlock)callback {
+- (void)fetchConversationWithConversationId:(NSString *)conversationId callback:(CYLIMConversationResultBlock)callback {
     AVIMConversation *conversation = [self.client conversationForId:conversationId];
     if (conversation) {
         !callback ?: callback(conversation, nil);
@@ -86,7 +86,7 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
 }
 
 - (void)fetchConversationsWithConversationIds:(NSSet *)conversationIds
-                                     callback:(LCCKArrayResultBlock)callback {
+                                     callback:(CYLArrayResultBlock)callback {
     AVIMConversationQuery *query = [self.client conversationQuery];
     [query whereKey:@"objectId" containedIn:[conversationIds allObjects]];
     query.limit = conversationIds.count;
@@ -102,7 +102,7 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     }];
 }
 
-- (void)fetchConversationWithPeerId:(NSString *)peerId callback:(LCCKIMConversationResultBlock)callback {
+- (void)fetchConversationWithPeerId:(NSString *)peerId callback:(CYLIMConversationResultBlock)callback {
     if (![LCCKLeanCloudSessionService sharedInstance].connect) {
         !callback ?: callback(nil, [self errorWithReason:@"Session not opened"]);
         return;
@@ -124,7 +124,7 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     }
     NSString *myId = [LCCKLeanCloudSessionService sharedInstance].clientId;
     NSArray *array = @[ myId, peerId ];
-    [self fetchConversationWithMembers:array type:LCCKConversationTypeSingle callback:callback];
+    [self fetchConversationWithMembers:array type:CYLConversationTypeSingle callback:callback];
 }
 
 - (void)checkDuplicateValueOfArray:(NSArray *)array {
@@ -136,7 +136,7 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     }
 }
 
-- (void)fetchConversationWithMembers:(NSArray *)members type:(LCCKConversationType)type callback:(LCCKIMConversationResultBlock)callback {
+- (void)fetchConversationWithMembers:(NSArray *)members type:(CYLConversationType)type callback:(CYLIMConversationResultBlock)callback {
     if ([members containsObject:[LCCKLeanCloudSessionService sharedInstance].clientId] == NO) {
         //TODO: add debug model
         NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"members should contain myself");
@@ -146,9 +146,9 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     [self createConversationWithMembers:members type:type unique:YES callback:callback];
 }
 
-- (void)createConversationWithMembers:(NSArray *)members type:(LCCKConversationType)type unique:(BOOL)unique callback:(LCCKIMConversationResultBlock)callback {
+- (void)createConversationWithMembers:(NSArray *)members type:(CYLConversationType)type unique:(BOOL)unique callback:(CYLIMConversationResultBlock)callback {
     NSString *name = nil;
-    if (type == LCCKConversationTypeGroup) {
+    if (type == CYLConversationTypeGroup) {
         // 群聊默认名字， 老王、小李
         name = [self groupConversaionDefaultNameForUserIds:members];
     }
@@ -160,7 +160,7 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
         // 创建一个新对话
         options = AVIMConversationOptionNone;
     }
-    [self.client createConversationWithName:name clientIds:members attributes:@{ LCCK_CONVERSATION_TYPE : @(type) } options:options callback:^(AVIMConversation * _Nullable conversation, NSError * _Nullable error) {
+    [self.client createConversationWithName:name clientIds:members attributes:@{ CYL_CONVERSATION_TYPE : @(type) } options:options callback:^(AVIMConversation * _Nullable conversation, NSError * _Nullable error) {
         !callback ?: callback(conversation, error);
     }];
 }
@@ -171,32 +171,32 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     NSString *currentClientId = [LCChatKit sharedInstance].clientId;
     [mutableArray addObject:currentClientId];
     userIds = [mutableArray copy];
-    NSArray<id<LCCKUserDelegate>> *array = [[LCCKUserSystemService sharedInstance] getCachedProfilesIfExists:userIds error:&error];
+    NSArray<id<CYLUserDelegate>> *array = [[CYLUserSystemService sharedInstance] getCachedProfilesIfExists:userIds error:&error];
     if (error || (array.count == 0)) {
         NSString *groupName = [userIds componentsJoinedByString:@","];
         return groupName;
     }
 
     NSMutableArray *names = [NSMutableArray array];
-    [array enumerateObjectsUsingBlock:^(id<LCCKUserDelegate>  _Nonnull user, NSUInteger idx, BOOL * _Nonnull stop) {
+    [array enumerateObjectsUsingBlock:^(id<CYLUserDelegate>  _Nonnull user, NSUInteger idx, BOOL * _Nonnull stop) {
         [names addObject:user.name ?: user.clientId];
     }];
     return [names componentsJoinedByString:@","];
 }
 
-- (void)joinConversation:(id<LCCKConversationProtocol>)conversation callback:(LCCKBooleanResultBlock)callback {
+- (void)joinConversation:(id<CYLConversationProtocol>)conversation callback:(CYLBooleanResultBlock)callback {
     [(AVIMConversation *)conversation joinWithCallback:^(BOOL succeeded, NSError * _Nullable error) {
         !callback ?: callback(succeeded, error);
     }];
 }
 
-- (void)markConversationAsRead:(id<LCCKConversationProtocol>)conversation {
+- (void)markConversationAsRead:(id<CYLConversationProtocol>)conversation {
     AVIMConversation *avimConversation = (AVIMConversation *)conversation;
     [avimConversation readInBackground];
     [avimConversation setUnreadMessagesMentioned:NO];
 }
 
-- (void)prepareConversation:(id<LCCKConversationProtocol>)conversation {
+- (void)prepareConversation:(id<CYLConversationProtocol>)conversation {
     [self pinIMClientToConversationIfNeeded:(AVIMConversation *)conversation];
 }
 
@@ -213,30 +213,30 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     }
 }
 
-#pragma mark - LCCKIMMessageProvider
+#pragma mark - CYLIMMessageProvider
 
-- (id)displayMessageFromIMMessage:(id<LCCKIMMessageProtocol>)message {
+- (id)displayMessageFromIMMessage:(id<CYLIMMessageProtocol>)message {
     if (![message isKindOfClass:[AVIMTypedMessage class]]) {
         return nil;
     }
-    return [LCCKMessage messageWithAVIMTypedMessage:(AVIMTypedMessage *)message];
+    return [CYLMessage messageWithAVIMTypedMessage:(AVIMTypedMessage *)message];
 }
 
-- (id<LCCKIMMessageProtocol>)IMMessageFromMessage:(id)message {
+- (id<CYLIMMessageProtocol>)IMMessageFromMessage:(id)message {
     if ([message isKindOfClass:[AVIMTypedMessage class]]) {
         return message;
     }
-    if ([message isKindOfClass:[LCCKMessage class]]) {
-        return [AVIMTypedMessage lcck_messageWithLCCKMessage:(LCCKMessage *)message];
+    if ([message isKindOfClass:[CYLMessage class]]) {
+        return [AVIMTypedMessage lcck_messageWithLCCKMessage:(CYLMessage *)message];
     }
     return nil;
 }
 
-- (void)sendMessage:(id<LCCKIMMessageProtocol>)message
-       conversation:(id<LCCKConversationProtocol>)conversation
+- (void)sendMessage:(id<CYLIMMessageProtocol>)message
+       conversation:(id<CYLConversationProtocol>)conversation
         mentionList:(NSArray<NSString *> *)mentionList
-      progressBlock:(LCCKProgressBlock)progressBlock
-           callback:(LCCKBooleanResultBlock)block {
+      progressBlock:(CYLProgressBlock)progressBlock
+           callback:(CYLBooleanResultBlock)block {
     [self sendMessage:(AVIMTypedMessage *)message
          conversation:(AVIMConversation *)conversation
               options:AVIMMessageSendOptionRequestReceipt
@@ -249,16 +249,16 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
        conversation:(AVIMConversation *)conversation
             options:(AVIMMessageSendOption)options
         mentionList:(NSArray<NSString *> *)mentionList
-      progressBlock:(LCCKProgressBlock)progressBlock
-           callback:(LCCKBooleanResultBlock)block {
-    id<LCCKUserDelegate> currentUser = [[LCCKUserSystemService sharedInstance] fetchCurrentUser];
+      progressBlock:(CYLProgressBlock)progressBlock
+           callback:(CYLBooleanResultBlock)block {
+    id<CYLUserDelegate> currentUser = [[CYLUserSystemService sharedInstance] fetchCurrentUser];
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
     // 云代码中获取到用户名，来设置推送消息, 老王:今晚约吗？
     if (currentUser.name && currentUser.name.length > 0) {
         // 避免为空造成崩溃
         [attributes setObject:currentUser.name forKey:@"username"];
     }
-    if ([LCCKSettingService sharedInstance].useDevPushCerticate) {
+    if ([CYLSettingService sharedInstance].useDevPushCerticate) {
         [attributes setObject:@YES forKey:@"dev"];
     }
     if (message.attributes == nil) {
@@ -273,11 +273,11 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     [conversation sendMessage:message options:options progressBlock:progressBlock callback:block];
 }
 
-- (void)queryMessagesWithConversation:(id<LCCKConversationProtocol>)aConversation
+- (void)queryMessagesWithConversation:(id<CYLConversationProtocol>)aConversation
                             messageId:(NSString *)messageId
                             timestamp:(int64_t)timestamp
                                 limit:(NSInteger)limit
-                             callback:(LCCKArrayResultBlock)block {
+                             callback:(CYLArrayResultBlock)block {
     AVIMConversation *conversation = (AVIMConversation *)aConversation;
     void (^callback)(NSArray *messages, NSError *error) = ^(NSArray *messages, NSError *error) {
         if (!messages) {
@@ -307,25 +307,25 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     });
 }
 
-- (void)updateMessage:(id<LCCKIMMessageProtocol>)oldMessage
+- (void)updateMessage:(id<CYLIMMessageProtocol>)oldMessage
              withText:(NSString *)text
-         conversation:(id<LCCKConversationProtocol>)conversation
-             callback:(LCCKIMMessageResultBlock)callback {
+         conversation:(id<CYLConversationProtocol>)conversation
+             callback:(CYLIMMessageResultBlock)callback {
     AVIMTypedMessage *newTypedMessage = [AVIMTextMessage messageWithText:text attributes:nil];
     [(AVIMConversation *)conversation updateMessage:(AVIMMessage *)oldMessage toNewMessage:newTypedMessage callback:^(BOOL succeeded, NSError * _Nullable error) {
         !callback ?: callback(succeeded, error, newTypedMessage);
     }];
 }
 
-- (void)recallMessage:(id<LCCKIMMessageProtocol>)message
-         conversation:(id<LCCKConversationProtocol>)conversation
-             callback:(LCCKIMMessageResultBlock)callback {
+- (void)recallMessage:(id<CYLIMMessageProtocol>)message
+         conversation:(id<CYLConversationProtocol>)conversation
+             callback:(CYLIMMessageResultBlock)callback {
     [(AVIMConversation *)conversation recallMessage:(AVIMMessage *)message callback:^(BOOL succeeded, NSError * _Nullable error, AVIMRecalledMessage * _Nullable recalledMessage) {
         !callback ?: callback(succeeded, error, recalledMessage);
     }];
 }
 
-- (void)downloadAttachmentOfMessage:(LCCKMessage *)message completion:(void (^)(NSURL *, NSError *))completion {
+- (void)downloadAttachmentOfMessage:(CYLMessage *)message completion:(void (^)(NSURL *, NSError *))completion {
     AVIMTypedMessage *typedMessage = message.message;
     if (![typedMessage isKindOfClass:[AVIMTypedMessage class]] || !typedMessage.file) {
         !completion ?: completion(nil, nil);
@@ -353,7 +353,7 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
 - (void)setupSucceedMessageDatabaseWithPath:(NSString *)path {
     self.databaseQueue = [FMDatabaseQueue databaseQueueWithPath:path];
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
-        [db executeUpdate:LCCKConversatoinTableCreateSQL];
+        [db executeUpdate:CYLConversatoinTableCreateSQL];
     }];
 }
 
@@ -369,18 +369,18 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     return conversation;
 }
 
-#pragma mark - LCCKIMRecentConversationProvider
+#pragma mark - CYLIMRecentConversationProvider
 
 - (void)updateUnreadCountToZeroWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
     AVIMConversation *cachedConversation = [self.conversationDictionary objectForKey:conversationId];
     [cachedConversation readInBackground];
     dispatch_async(self.sqliteQueue, ^{
         [self.databaseQueue inDatabase:^(FMDatabase *db) {
-            [db executeUpdate:LCCKConversationTableUpdateUnreadCountSQL  withArgumentsInArray:@[@0, conversationId]];
+            [db executeUpdate:CYLConversationTableUpdateUnreadCountSQL  withArgumentsInArray:@[@0, conversationId]];
         }];
     });
     if (shouldRefreshWhenFinished) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConversationListDataSourceUpdated object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:CYLNotificationConversationListDataSourceUpdated object:self];
     }
 }
 
@@ -388,17 +388,17 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     [self.conversationDictionary removeObjectForKey:conversationId];
     dispatch_async(self.sqliteQueue, ^{
         [self.databaseQueue inDatabase:^(FMDatabase *db) {
-            [db executeUpdate:LCCKConversationTableDeleteSQL withArgumentsInArray:@[conversationId]];
+            [db executeUpdate:CYLConversationTableDeleteSQL withArgumentsInArray:@[conversationId]];
         }];
     });
     if (shouldRefreshWhenFinished) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConversationListDataSourceUpdated object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:CYLNotificationConversationListDataSourceUpdated object:self];
     }
 }
 
-- (void)insertRecentConversations:(NSArray<id<LCCKConversationProtocol>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
+- (void)insertRecentConversations:(NSArray<id<CYLConversationProtocol>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
     dispatch_async(self.sqliteQueue, ^{
-        [conversations enumerateObjectsUsingBlock:^(id<LCCKConversationProtocol> _Nonnull aConversation, NSUInteger idx, BOOL * _Nonnull stop) {
+        [conversations enumerateObjectsUsingBlock:^(id<CYLConversationProtocol> _Nonnull aConversation, NSUInteger idx, BOOL * _Nonnull stop) {
             AVIMConversation *conversation = (AVIMConversation *)aConversation;
             if (![conversation isKindOfClass:[AVIMConversation class]] || !conversation.createAt) {
                 return;
@@ -409,13 +409,13 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
             }
             [self.databaseQueue inDatabase:^(FMDatabase *db) {
                 NSData *data = [self dataFromConversation:conversation];
-                [db executeUpdate:LCCKConversationTableInsertSQL withArgumentsInArray:@[conversation.conversationId, data, @0, @(NO), @""]];
+                [db executeUpdate:CYLConversationTableInsertSQL withArgumentsInArray:@[conversation.conversationId, data, @0, @(NO), @""]];
             }];
         }];
 
         dispatch_async(dispatch_get_main_queue(),^{
             if (shouldRefreshWhenFinished) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConversationListDataSourceUpdated object:self];
+                [[NSNotificationCenter defaultCenter] postNotificationName:CYLNotificationConversationListDataSourceUpdated object:self];
             }
         });
     });
@@ -434,51 +434,51 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     dispatch_async(self.sqliteQueue, ^{
         [self.databaseQueue inDatabase:^(FMDatabase *db) {
             if (increaseUnreadCount == 1) {
-                [db executeUpdate:LCCKConversationTableIncreaseOneUnreadCountSQL withArgumentsInArray:@[conversationId]];
+                [db executeUpdate:CYLConversationTableIncreaseOneUnreadCountSQL withArgumentsInArray:@[conversationId]];
             } else {
-                [db executeUpdate:LCCKConversationTableIncreaseUnreadCountSQL withArgumentsInArray:@[@(increaseUnreadCount) ,conversationId]];
+                [db executeUpdate:CYLConversationTableIncreaseUnreadCountSQL withArgumentsInArray:@[@(increaseUnreadCount) ,conversationId]];
             }
         }];
     });
     if (shouldRefreshWhenFinished) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConversationListDataSourceUpdated object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:CYLNotificationConversationListDataSourceUpdated object:self];
     }
 }
 
 - (void)updateMentioned:(BOOL)mentioned conversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
     dispatch_async(self.sqliteQueue, ^{
         [self.databaseQueue inDatabase:^(FMDatabase *db) {
-            [db executeUpdate:LCCKConversationTableUpdateMentionedSQL withArgumentsInArray:@[@(mentioned), conversationId]];
+            [db executeUpdate:CYLConversationTableUpdateMentionedSQL withArgumentsInArray:@[@(mentioned), conversationId]];
         }];
     });
     if (shouldRefreshWhenFinished) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConversationListDataSourceUpdated object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:CYLNotificationConversationListDataSourceUpdated object:self];
     }
 }
 
 - (NSString *)draftWithConversationId:(NSString *)conversationId {
     AVIMConversation *cachedConversation = [self.conversationDictionary objectForKey:conversationId];
-    return [cachedConversation.lcck_draft copy];
+    return [cachedConversation.cyl_draft copy];
 }
 
 - (void)updateDraft:(NSString *)draft conversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished {
     AVIMConversation *cachedConversation = [self.conversationDictionary objectForKey:conversationId];
-    cachedConversation.lcck_draft = [draft copy];
+    cachedConversation.cyl_draft = [draft copy];
     dispatch_async(self.sqliteQueue, ^{
         [self.databaseQueue inDatabase:^(FMDatabase *db) {
-            [db executeUpdate:LCCKConversationTableUpdateDraftSQL withArgumentsInArray:@[draft ?: @"", conversationId]];
+            [db executeUpdate:CYLConversationTableUpdateDraftSQL withArgumentsInArray:@[draft ?: @"", conversationId]];
         }];
     });
     if (shouldRefreshWhenFinished) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConversationListDataSourceUpdated object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:CYLNotificationConversationListDataSourceUpdated object:self];
     }
 }
 
 - (AVIMConversation *)createConversationFromResultSet:(FMResultSet *)resultSet {
-    NSData *data = [resultSet dataForColumn:LCCKConversationTableKeyData];
-    NSString *draft = [resultSet stringForColumn:LCCKConversationTableKeyDraft];
+    NSData *data = [resultSet dataForColumn:CYLConversationTableKeyData];
+    NSString *draft = [resultSet stringForColumn:CYLConversationTableKeyDraft];
     AVIMConversation *conversation = [self conversationFromData:data];
-    conversation.lcck_draft = draft;
+    conversation.cyl_draft = draft;
     [self pinIMClientToConversationIfNeeded:conversation];
     return conversation;
 }
@@ -492,7 +492,7 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     for (AVIMConversation *conversation in conversations) {
         AVIMConversation *cachedConversation = [self.conversationDictionary objectForKey:conversation.conversationId];
         if (cachedConversation) {
-            conversation.lcck_draft = [cachedConversation.lcck_draft copy];
+            conversation.cyl_draft = [cachedConversation.cyl_draft copy];
             [self.conversationDictionary setObject:conversation forKey:conversation.conversationId];
         }
     }
@@ -500,13 +500,13 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
         [self.databaseQueue inDatabase:^(FMDatabase *db) {
             [db beginTransaction];
             for (AVIMConversation *conversation in conversations) {
-                [db executeUpdate:LCCKConversationTableUpdateDataSQL, [self dataFromConversation:conversation], conversation.conversationId];
+                [db executeUpdate:CYLConversationTableUpdateDataSQL, [self dataFromConversation:conversation], conversation.conversationId];
             }
             [db commit];
         }];
     });
     if (shouldRefreshWhenFinished) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:LCCKNotificationConversationListDataSourceUpdated object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:CYLNotificationConversationListDataSourceUpdated object:self];
     }
 }
 
@@ -516,7 +516,7 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
 - (BOOL)removeAllCachedRecentConversations {
     __block BOOL removeAllCachedRecentConversationsSuccess = NO;
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
-        removeAllCachedRecentConversationsSuccess = [db executeUpdate:LCCKDeleteConversationTable];
+        removeAllCachedRecentConversationsSuccess = [db executeUpdate:CYLDeleteConversationTable];
     }];
     if (removeAllCachedRecentConversationsSuccess) {
         [self.conversationDictionary removeAllObjects];
@@ -526,7 +526,7 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
 
 #pragma mark - conversation list
 
-- (void)findRecentConversationsWithBlock:(LCCKIMRecentConversationsResultBlock)block {
+- (void)findRecentConversationsWithBlock:(CYLIMRecentConversationsResultBlock)block {
     [self selectOrRefreshConversationsWithBlock:^(NSArray *conversations, NSError *error) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
             NSMutableArray *filterConversation = [NSMutableArray arrayWithCapacity:conversations.count];
@@ -536,11 +536,11 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
                 BOOL hasHistory = (conversation.lastMessage);
                 if (hasHistory) {
                     [filterConversation addObject:conversation];
-                    if (conversation.lcck_type == LCCKConversationTypeSingle) {
-                        [userIds addObject:conversation.lcck_peerId];
+                    if (conversation.cyl_type == CYLConversationTypeSingle) {
+                        [userIds addObject:conversation.cyl_peerId];
                     } else {
-                        NSString *userId = conversation.lcck_lastMessage.clientId;
-                        (!userId || !conversation.lcck_lastMessage) ?: [userIds addObject:userId];
+                        NSString *userId = conversation.cyl_lastMessage.clientId;
+                        (!userId || !conversation.cyl_lastMessage) ?: [userIds addObject:userId];
                     }
                 }
                 if (conversation.muted == NO && conversation.unreadMessagesCount > 0) {
@@ -548,7 +548,7 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
                 }
             }
             NSArray *sortedRooms = [filterConversation sortedArrayUsingComparator:^NSComparisonResult(AVIMConversation *conv1, AVIMConversation *conv2) {
-                return (NSComparisonResult)(conv2.lcck_lastMessage.sendTimestamp - conv1.lcck_lastMessage.sendTimestamp);
+                return (NSComparisonResult)(conv2.cyl_lastMessage.sendTimestamp - conv1.cyl_lastMessage.sendTimestamp);
             }];
             dispatch_async(dispatch_get_main_queue(),^{
                 !block ?: block(sortedRooms, totalUnreadCount, error);
@@ -557,12 +557,12 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
             if (userIds.count == 0) {
                 return;
             }
-            [[LCCKUserSystemService sharedInstance] cacheUsersWithIds:userIds callback:nil];
+            [[CYLUserSystemService sharedInstance] cacheUsersWithIds:userIds callback:nil];
         });
     }];
 }
 
-- (void)fetchRelationConversationsFromServerCallback:(LCCKArrayResultBlock)block {
+- (void)fetchRelationConversationsFromServerCallback:(CYLArrayResultBlock)block {
     AVIMClient *client = self.client;
     AVIMConversationQuery *orConversationQuery = [client conversationQuery];
     orConversationQuery.cachePolicy = kAVIMCachePolicyIgnoreCache;
@@ -573,7 +573,7 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     }];
 }
 
-- (void)selectOrRefreshConversationsWithBlock:(LCCKArrayResultBlock)block {
+- (void)selectOrRefreshConversationsWithBlock:(CYLArrayResultBlock)block {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         NSArray *originConversations = [self allRecentConversations];
         void(^FilterCallback)(NSArray<AVIMConversation *> *conversations) = ^(NSArray<AVIMConversation *> *conversations) {
@@ -604,12 +604,12 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
 
         };
 
-        LCCKConversationListShowHookBlock conversationListShowHookBlock = [LCCKConversationListService sharedInstance].conversationListShowHookBlock;
+        CYLConversationListShowHookBlock conversationListShowHookBlock = [CYLConversationListService sharedInstance].conversationListShowHookBlock;
         if (!conversationListShowHookBlock) {
             FilterCallback(originConversations);
             return;
         }
-        LCCKConversationListShowHookCompletionHandler conversationListShowHookCompletionHandler = ^(NSArray<id<LCCKConversationProtocol>> *conversations, NSError *aError) {
+        CYLConversationListShowHookCompletionHandler conversationListShowHookCompletionHandler = ^(NSArray<id<CYLConversationProtocol>> *conversations, NSError *aError) {
             FilterCallback(aError ? originConversations : (NSArray<AVIMConversation *> *)conversations);
         };
         conversationListShowHookBlock(originConversations, conversationListShowHookCompletionHandler);
@@ -626,7 +626,7 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     if (!_conversationDictionary) {
         _conversationDictionary = [[NSMutableDictionary alloc] init];
         [self.databaseQueue inDatabase:^(FMDatabase *db) {
-            FMResultSet  *resultSet = [db executeQuery:LCCKConversationTableSelectSQL withArgumentsInArray:@[]];
+            FMResultSet  *resultSet = [db executeQuery:CYLConversationTableSelectSQL withArgumentsInArray:@[]];
             while ([resultSet next]) {
                 AVIMConversation *conversation = [self createConversationFromResultSet:resultSet];
                 BOOL isAvailable = conversation.createAt;
@@ -650,7 +650,7 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     return _sqliteQueue;
 }
 
-#pragma mark - LCCKIMFailedMessageProvider
+#pragma mark - CYLIMFailedMessageProvider
 ///=============================================================================
 /// @name FailedMessageStore
 ///=============================================================================
@@ -661,31 +661,31 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
  */
 - (void)setupFailedMessagesDBWithDatabasePath:(NSString *)path {
     if (!self.databaseQueue) {
-        LCCKLog(@"database queue should not be nil !!!!");
+        CYLLog(@"database queue should not be nil !!!!");
     }
     self.databaseQueue = [FMDatabaseQueue databaseQueueWithPath:path];
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
-        [db executeUpdate:LCCKCreateTableSQL];
+        [db executeUpdate:CYLCreateTableSQL];
     }];
 }
 
 - (NSDictionary *)recordFromResultSet:(FMResultSet *)resultSet {
     NSMutableDictionary *record = [NSMutableDictionary dictionary];
-    NSData *data = [resultSet dataForColumn:LCCKKeyMessage];
+    NSData *data = [resultSet dataForColumn:CYLKeyMessage];
     if (!data) {
         return nil;
     }
     id message = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    [record setObject:message forKey:LCCKKeyMessage];
-    NSString *idValue = [resultSet stringForColumn:LCCKKeyId];
-    [record setObject:idValue forKey:LCCKKeyId];
+    [record setObject:message forKey:CYLKeyMessage];
+    NSString *idValue = [resultSet stringForColumn:CYLKeyId];
+    [record setObject:idValue forKey:CYLKeyId];
     return record;
 }
 
 - (NSArray *)recordsByConversationId:(NSString *)conversationId {
     NSMutableArray *records = [NSMutableArray array];
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:LCCKSelectMessagesSQL, conversationId];
+        FMResultSet *resultSet = [db executeQuery:CYLSelectMessagesSQL, conversationId];
         while ([resultSet next]) {
             [records addObject:[self recordFromResultSet:resultSet]];
         }
@@ -698,7 +698,7 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     NSArray *records = [self recordsByConversationId:conversationId];
     NSMutableArray *messages = [NSMutableArray array];
     for (NSDictionary *record in records) {
-        [messages addObject:record[LCCKKeyMessage]];
+        [messages addObject:record[CYLKeyMessage]];
     }
     return messages;
 }
@@ -707,7 +707,7 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     NSArray *records = [self recordsByConversationId:conversationId];
     NSMutableArray *failedMessageIds = [NSMutableArray array];
     for (NSDictionary *record in records) {
-        [failedMessageIds addObject:record[LCCKKeyId]];
+        [failedMessageIds addObject:record[CYLKeyId]];
     }
     return failedMessageIds;
 }
@@ -715,7 +715,7 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
 - (NSArray *)recordsByMessageIds:(NSArray<NSString *> *)messageIds {
     NSString *messageIdsString = [messageIds componentsJoinedByString:@"','"];
     NSMutableArray *records = [NSMutableArray array];
-    NSString *query = [NSString stringWithFormat:LCCKSelectMessagesByIDSQL, messageIdsString];
+    NSString *query = [NSString stringWithFormat:CYLSelectMessagesByIDSQL, messageIdsString];
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
         FMResultSet *resultSet = [db executeQuery:query];
         while ([resultSet next]) {
@@ -734,7 +734,7 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
     }
     NSMutableArray *messages = [NSMutableArray array];
     for (NSDictionary *record in records) {
-        [messages addObject:record[LCCKKeyMessage]];
+        [messages addObject:record[CYLKeyMessage]];
     }
     return messages;
 }
@@ -742,23 +742,23 @@ static NSString *const LCCKLeanCloudConversationServiceErrorDomain = @"LCCKLeanC
 - (BOOL)deleteFailedMessageByRecordId:(NSString *)recordId {
     __block BOOL result;
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
-        result = [db executeUpdate:LCCKDeleteMessageSQL, recordId];
+        result = [db executeUpdate:CYLDeleteMessageSQL, recordId];
     }];
     return result;
 }
 
-- (void)insertFailedLCCKMessage:(LCCKMessage *)message {
+- (void)insertFailedCYLMessage:(CYLMessage *)message {
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:message];
     NSAssert(data, @"You can not insert nil message to DB");
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
-        [db executeUpdate:LCCKInsertMessageSQL, message.localMessageId, message.conversationId, data];
+        [db executeUpdate:CYLInsertMessageSQL, message.localMessageId, message.conversationId, data];
     }];
 }
 
-- (void)insertFailedMessage:(id<LCCKIMMessageProtocol>)message {
+- (void)insertFailedMessage:(id<CYLIMMessageProtocol>)message {
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:message];
     [self.databaseQueue inDatabase:^(FMDatabase *db) {
-        [db executeUpdate:LCCKInsertMessageSQL, message.messageId, message.conversationId, data];
+        [db executeUpdate:CYLInsertMessageSQL, message.messageId, message.conversationId, data];
     }];
 }
 

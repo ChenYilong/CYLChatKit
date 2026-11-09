@@ -66,9 +66,9 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
     [AVIMClient setUnreadNotificationEnabled:true];
     [AVIMClient setTimeoutIntervalInSeconds:20];
     //添加输入框底部插件，如需更换图标标题，可子类化，然后调用 `+registerSubclass`
-    [LCCKInputViewPluginTakePhoto registerSubclass];
-    [LCCKInputViewPluginPickImage registerSubclass];
-    [LCCKInputViewPluginLocation registerSubclass];
+    [CYLInputViewPluginTakePhoto registerSubclass];
+    [CYLInputViewPluginPickImage registerSubclass];
+    [CYLInputViewPluginLocation registerSubclass];
 
     self.window.rootViewController = loginViewController;
     self.window.backgroundColor = [UIColor whiteColor];

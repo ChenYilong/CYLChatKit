@@ -6,86 +6,86 @@
 //  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
-// ChatKit does not import any IM SDK. The IM backend is provided by the app through `LCCKIMProvider`.
+// ChatKit does not import any IM SDK. The IM backend is provided by the app through `CYLIMProvider`.
 #import <UIKit/UIKit.h>
 
 
 #if __has_include(<CYLChatKit/LCChatKit.h>)
 
-    #import <CYLChatKit/LCCKSessionService.h>
-    #import <CYLChatKit/LCCKUserSystemService.h>
-    #import <CYLChatKit/LCCKSignatureService.h>
-    #import <CYLChatKit/LCCKSettingService.h>
-    #import <CYLChatKit/LCCKUIService.h>
-    #import <CYLChatKit/LCCKConversationService.h>
-    #import <CYLChatKit/LCCKConversationListService.h>
-    #import <CYLChatKit/LCCKServiceDefinition.h>
-    #import <CYLChatKit/LCCKConversationViewController.h>
-    #import <CYLChatKit/LCCKConversationListViewController.h>
-    #import <CYLChatKit/LCCKConversationProtocol.h>
-    #import <CYLChatKit/LCCKIMMessageProtocol.h>
-    #import <CYLChatKit/LCCKIMProvider.h>
-    #import <CYLChatKit/UIImageView+LCCKExtension.h>
-    #import <CYLChatKit/LCCKBaseTableViewController.h>
-    #import <CYLChatKit/LCCKBaseNavigationController.h>
-    #import <CYLChatKit/LCCKMenuItem.h>
-    #import <CYLChatKit/UIImage+LCCKExtension.h>
-    #import <CYLChatKit/NSString+LCCKExtension.h>
-    #import <CYLChatKit/NSObject+LCCKIsFirstLaunch.h>
-    #import <CYLChatKit/LCCKContactListViewController.h>
-    #import <CYLChatKit/LCCKBaseViewController.h>
-    #import <CYLChatKit/LCCKBaseTableViewController.h>
-    #import <CYLChatKit/LCCKBaseNavigationController.h>
-    #import <CYLChatKit/LCCKBaseConversationViewController.h>
-    #import <CYLChatKit/LCCKContact.h>
-    #import <CYLChatKit/LCCKInputViewPlugin.h>
-    #import <CYLChatKit/LCCKInputViewPluginPickImage.h>
-    #import <CYLChatKit/LCCKInputViewPluginTakePhoto.h>
-    #import <CYLChatKit/LCCKInputViewPluginLocation.h>
-    #import <CYLChatKit/LCCKAlertController.h>
-    #import <CYLChatKit/NSFileManager+LCCKExtension.h>
-    #import <CYLChatKit/NSObject+LCCKExtension.h>
-    #import <CYLChatKit/LCCKChatMessageCell.h>
-    #import <CYLChatKit/LCCKConstants.h>
-#import <CYLChatKit/LCCKPhotoBrowser.h>
+    #import <CYLChatKit/CYLSessionService.h>
+    #import <CYLChatKit/CYLUserSystemService.h>
+    #import <CYLChatKit/CYLSignatureService.h>
+    #import <CYLChatKit/CYLSettingService.h>
+    #import <CYLChatKit/CYLUIService.h>
+    #import <CYLChatKit/CYLConversationService.h>
+    #import <CYLChatKit/CYLConversationListService.h>
+    #import <CYLChatKit/CYLServiceDefinition.h>
+    #import <CYLChatKit/CYLConversationViewController.h>
+    #import <CYLChatKit/CYLConversationListViewController.h>
+    #import <CYLChatKit/CYLConversationProtocol.h>
+    #import <CYLChatKit/CYLIMMessageProtocol.h>
+    #import <CYLChatKit/CYLIMProvider.h>
+    #import <CYLChatKit/UIImageView+CYLExtension.h>
+    #import <CYLChatKit/CYLChatBaseTableViewController.h>
+    #import <CYLChatKit/CYLChatBaseNavigationController.h>
+    #import <CYLChatKit/CYLMenuItem.h>
+    #import <CYLChatKit/UIImage+CYLExtension.h>
+    #import <CYLChatKit/NSString+CYLExtension.h>
+    #import <CYLChatKit/NSObject+CYLIsFirstLaunch.h>
+    #import <CYLChatKit/CYLContactListViewController.h>
+    #import <CYLChatKit/CYLChatBaseViewController.h>
+    #import <CYLChatKit/CYLChatBaseTableViewController.h>
+    #import <CYLChatKit/CYLChatBaseNavigationController.h>
+    #import <CYLChatKit/CYLBaseConversationViewController.h>
+    #import <CYLChatKit/CYLContact.h>
+    #import <CYLChatKit/CYLInputViewPlugin.h>
+    #import <CYLChatKit/CYLInputViewPluginPickImage.h>
+    #import <CYLChatKit/CYLInputViewPluginTakePhoto.h>
+    #import <CYLChatKit/CYLInputViewPluginLocation.h>
+    #import <CYLChatKit/CYLAlertController.h>
+    #import <CYLChatKit/NSFileManager+CYLExtension.h>
+    #import <CYLChatKit/NSObject+CYLExtension.h>
+    #import <CYLChatKit/CYLChatMessageCell.h>
+    #import <CYLChatKit/CYLChatConstants.h>
+#import <CYLChatKit/CYLPhotoBrowser.h>
 #else
 
-    #import "LCCKSessionService.h"
-    #import "LCCKUserSystemService.h"
-    #import "LCCKSignatureService.h"
-    #import "LCCKSettingService.h"
-    #import "LCCKUIService.h"
-    #import "LCCKConversationService.h"
-    #import "LCCKConversationListService.h"
-    #import "LCCKServiceDefinition.h"
-    #import "LCCKConversationViewController.h"
-    #import "LCCKConversationListViewController.h"
-    #import "LCCKConversationProtocol.h"
-    #import "LCCKIMMessageProtocol.h"
-    #import "LCCKIMProvider.h"
-    #import "UIImageView+LCCKExtension.h"
-    #import "LCCKBaseTableViewController.h"
-    #import "LCCKBaseNavigationController.h"
-    #import "LCCKMenuItem.h"
-    #import "UIImage+LCCKExtension.h"
-    #import "NSString+LCCKExtension.h"
-    #import "NSObject+LCCKIsFirstLaunch.h"
-    #import "LCCKContactListViewController.h"
-    #import "LCCKBaseViewController.h"
-    #import "LCCKBaseTableViewController.h"
-    #import "LCCKBaseNavigationController.h"
-    #import "LCCKBaseConversationViewController.h"
-    #import "LCCKContact.h"
-    #import "LCCKInputViewPlugin.h"
-    #import "LCCKInputViewPluginPickImage.h"
-    #import "LCCKInputViewPluginTakePhoto.h"
-    #import "LCCKInputViewPluginLocation.h"
-    #import "LCCKAlertController.h"
-    #import "NSFileManager+LCCKExtension.h"
-    #import "NSObject+LCCKExtension.h"
-    #import "LCCKChatMessageCell.h"
-    #import "LCCKConstants.h"
-    #import "LCCKPhotoBrowser.h"
+    #import "CYLSessionService.h"
+    #import "CYLUserSystemService.h"
+    #import "CYLSignatureService.h"
+    #import "CYLSettingService.h"
+    #import "CYLUIService.h"
+    #import "CYLConversationService.h"
+    #import "CYLConversationListService.h"
+    #import "CYLServiceDefinition.h"
+    #import "CYLConversationViewController.h"
+    #import "CYLConversationListViewController.h"
+    #import "CYLConversationProtocol.h"
+    #import "CYLIMMessageProtocol.h"
+    #import "CYLIMProvider.h"
+    #import "UIImageView+CYLExtension.h"
+    #import "CYLChatBaseTableViewController.h"
+    #import "CYLChatBaseNavigationController.h"
+    #import "CYLMenuItem.h"
+    #import "UIImage+CYLExtension.h"
+    #import "NSString+CYLExtension.h"
+    #import "NSObject+CYLIsFirstLaunch.h"
+    #import "CYLContactListViewController.h"
+    #import "CYLChatBaseViewController.h"
+    #import "CYLChatBaseTableViewController.h"
+    #import "CYLChatBaseNavigationController.h"
+    #import "CYLBaseConversationViewController.h"
+    #import "CYLContact.h"
+    #import "CYLInputViewPlugin.h"
+    #import "CYLInputViewPluginPickImage.h"
+    #import "CYLInputViewPluginTakePhoto.h"
+    #import "CYLInputViewPluginLocation.h"
+    #import "CYLAlertController.h"
+    #import "NSFileManager+CYLExtension.h"
+    #import "NSObject+CYLExtension.h"
+    #import "CYLChatMessageCell.h"
+    #import "CYLChatConstants.h"
+    #import "CYLPhotoBrowser.h"
 
 #endif
 
