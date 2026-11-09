@@ -108,8 +108,8 @@
     [self registerSubclass];
 }
 
-+ (AVIMMessageMediaType)classMediaType {
-    return kAVIMMessageMediaTypeLocation;
++ (LCCKMessageMediaType)classMediaType {
+    return kLCCKMessageMediaTypeLocation;
 }
 
 @end

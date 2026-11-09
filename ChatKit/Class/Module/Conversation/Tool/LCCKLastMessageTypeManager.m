@@ -7,20 +7,22 @@
 //
 
 #import "LCCKLastMessageTypeManager.h"
-#import <AVOSCloudIM/AVIMTypedMessage.h>
-#import <AVOSCloudIM/AVOSCloudIM.h>
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 #import "LCCKUserSystemService.h"
-#import "AVIMConversation+LCCKExtension.h"
 #import "NSObject+LCCKExtension.h"
 
 static NSMutableDictionary *attributedStringCache = nil;
 
 @implementation LCCKLastMessageTypeManager
 
-+ (NSString *)getMessageTitle:(AVIMTypedMessage *)message {
++ (NSString *)getMessageTitle:(id<LCCKIMMessageDelegate>)message {
     NSString *title;
     switch (message.mediaType) {
-        case kAVIMMessageMediaTypeText: {
+        case kLCCKMessageMediaTypeText: {
             //Custom message
             BOOL isCustom = [[message.attributes valueForKey:LCCKCustomMessageIsCustomKey] boolValue];
             if (!isCustom) {
@@ -30,27 +32,27 @@ static NSMutableDictionary *attributedStringCache = nil;
             title = [self titleForCustomMessage:message];
             break;
         }
-        case kAVIMMessageMediaTypeAudio:
+        case kLCCKMessageMediaTypeAudio:
             title = LCCKLocalizedStrings(@"Voice");
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
             
-        case kAVIMMessageMediaTypeImage:
+        case kLCCKMessageMediaTypeImage:
             title = LCCKLocalizedStrings(@"Photo");
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
             
-        case kAVIMMessageMediaTypeLocation:
+        case kLCCKMessageMediaTypeLocation:
             title = LCCKLocalizedStrings(@"Location");
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
             
-        case kAVIMMessageMediaTypeVideo:
+        case kLCCKMessageMediaTypeVideo:
             title = LCCKLocalizedStrings(@"Video");
             title = [NSString stringWithFormat:@"[%@]",title];
             break;
 
-        case kAVIMMessageMediaTypeRecalled:
+        case kLCCKMessageMediaTypeRecalled:
             title = @"";
             break;
             
@@ -61,7 +63,7 @@ static NSMutableDictionary *attributedStringCache = nil;
     return title;
 }
 
-+ (NSString *)titleForCustomMessage:(AVIMTypedMessage *)customMessage {
++ (NSString *)titleForCustomMessage:(id<LCCKIMMessageDelegate>)customMessage {
     NSString *typeTitleKey = [customMessage.attributes valueForKey:LCCKCustomMessageTypeTitleKey];
     NSString *title = @"";
     do {
@@ -78,7 +80,7 @@ static NSMutableDictionary *attributedStringCache = nil;
     return title;
 }
 
-+ (NSAttributedString *)attributedStringWithMessage:(AVIMTypedMessage *)message conversation:(AVIMConversation *)conversation userName:(NSString *)userName {
++ (NSAttributedString *)attributedStringWithMessage:(id<LCCKIMMessageDelegate>)message conversation:(id<LCCKConversationDelegate>)conversation userName:(NSString *)userName {
     NSString *title = [self getMessageTitle:message];
     if (conversation.lcck_type == LCCKConversationTypeGroup) {
         if (!userName) {
@@ -88,12 +90,12 @@ static NSMutableDictionary *attributedStringCache = nil;
         }
         title = [NSString stringWithFormat:@"%@%@", userName, title];
     }
-    if (conversation.muted && conversation.unreadMessagesCount > 0) {
-        title = [NSString stringWithFormat:@"[%@条] %@", @(conversation.unreadMessagesCount), title];
+    if (conversation.muted && conversation.lcck_unreadCount > 0) {
+        title = [NSString stringWithFormat:@"[%@条] %@", @(conversation.lcck_unreadCount), title];
     }
     
     NSString *mentionText = [NSString stringWithFormat:@"%@ ", LCCKLocalizedStrings(@"mentioned")];
-    BOOL hasMentioned = (message.mentioned || conversation.unreadMessagesMentioned);
+    BOOL hasMentioned = (message.mentioned || conversation.lcck_mentioned);
     if (conversation.lcck_draft.length > 0) {
         title = conversation.lcck_draft;
         NSString *draftText = [NSString stringWithFormat:@"[%@]", LCCKLocalizedStrings(@"draft")];

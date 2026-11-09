@@ -12,6 +12,10 @@ target 'ChatKit-OC' do
   #======================== Demo Dependency ================
   #=========================================================
 
+  # The LeanCloud IM backend (LCCKLeanCloudIMProvider) lives in the demo, not in ChatKit.
+  pod 'AVOSCloud', '11.5.2'
+  pod 'AVOSCloudIM', '11.5.2'
+
   pod 'CYLTabBarController', '1.99.72'
   pod 'TWMessageBarManager', '1.8.1'
   pod 'MLPAutoCompleteTextField', '1.5'

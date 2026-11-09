@@ -7,7 +7,6 @@
 //
 
 #import "LCCKBaseViewController.h"
-#import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCCKUIService.h"
 #import "UIImage+LCCKExtension.h"
 
@@ -112,7 +111,7 @@
 
 - (BOOL)alertAVIMError:(NSError *)error {
     if (error) {
-        if (error.code == AVIMErrorCodeConnectionLost) {
+        if (error.code == LCCKIMErrorCodeConnectionLost) {
             [self alert:@"未能连接聊天服务"];
         } else if ([error.domain isEqualToString:NSURLErrorDomain]) {
             [self alert:@"网络连接发生错误"];

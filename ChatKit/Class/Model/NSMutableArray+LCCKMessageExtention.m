@@ -22,8 +22,9 @@
     dispatch_group_async(group, queue, ^{
         
         void(^filteredMessageCallback)(NSArray *_avimTypedMessages) = ^(NSArray *_avimTypedMessages) {
-            for (AVIMTypedMessage *typedMessage in _avimTypedMessages) {
-                id message = [LCCKMessage messageWithAVIMTypedMessage:typedMessage];
+            id<LCCKIMProvider> IMProvider = [LCChatKit sharedInstance].IMProvider;
+            for (id<LCCKIMMessageDelegate> typedMessage in _avimTypedMessages) {
+                id message = [IMProvider displayMessageFromIMMessage:typedMessage];
                 if (message) {
                     [messages addObject:message];
                 }

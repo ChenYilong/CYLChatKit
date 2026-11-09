@@ -6,19 +6,17 @@
 //  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 #import "LCCKMessage.h"
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 #import "LCCKSessionService.h"
 #import "LCCKUserSystemService.h"
 
-#if __has_include(<AVOSCloudIM/AVIMTypedMessage.h>)
-#import <AVOSCloudIM/AVIMTypedMessage.h>
-#else
-#import "AVIMTypedMessage.h"
-#endif
-#import "AVIMConversation+LCCKExtension.h"
 #import "UIImage+LCCKExtension.h"
 //#define LCCKIsDebugging 1
 #import "NSObject+LCCKExtension.h"
-#import "LCCKCommonUtils.h"
 
 @interface LCCKMessage()
 
@@ -45,7 +43,7 @@
 //@property (nonatomic, copy)  NSString *sender;
 //@property (nonatomic, copy) NSString *name;
 
-@property (nonatomic, assign)  AVIMMessageMediaType mediaType;
+@property (nonatomic, assign)  LCCKMessageMediaType mediaType;
 
 @property (nonatomic, assign)  LCCKMessageReadState messageReadState;
 
@@ -76,7 +74,7 @@
         _senderId = senderId;
         _timestamp = timestamp;
         _serverMessageId = serverMessageId;
-        _mediaType = kAVIMMessageMediaTypeText;
+        _mediaType = kLCCKMessageMediaTypeText;
     }
     return self;
 }
@@ -147,7 +145,7 @@
     self = [super init];
     if (self) {
         _systemText = text;
-        _mediaType = kAVIMMessageMediaTypeSystem;
+        _mediaType = kLCCKMessageMediaTypeSystem;
         _ownerType = LCCKMessageOwnerTypeSystem;
     }
     return self;
@@ -159,7 +157,7 @@
         _systemText = localFeedbackText;
         _localMessageId = [[NSUUID UUID] UUIDString];
         _timestamp = LCCK_CURRENT_TIMESTAMP;
-        _mediaType = kAVIMMessageMediaTypeSystem;
+        _mediaType = kLCCKMessageMediaTypeSystem;
         _ownerType = LCCKMessageOwnerTypeSystem;
     }
     return self;
@@ -193,7 +191,7 @@
         _serverMessageId = serverMessageId;
         _sender = sender;
         _senderId = senderId;
-        _mediaType = kAVIMMessageMediaTypeImage;
+        _mediaType = kLCCKMessageMediaTypeImage;
     }
     return self;
 }
@@ -214,7 +212,7 @@
         _senderId = senderId;
         _timestamp = timestamp;
         _serverMessageId = serverMessageId;
-        _mediaType = kAVIMMessageMediaTypeVideo;
+        _mediaType = kLCCKMessageMediaTypeVideo;
     }
     return self;
 }
@@ -248,7 +246,7 @@
         _timestamp = timestamp;
         _serverMessageId = serverMessageId;
         _read = hasRead;
-        _mediaType = kAVIMMessageMediaTypeAudio;
+        _mediaType = kLCCKMessageMediaTypeAudio;
     }
     return self;
 }
@@ -296,95 +294,9 @@
         _senderId = senderId;
         _timestamp = timestamp;
         _serverMessageId = serverMessageId;
-        _mediaType = kAVIMMessageMediaTypeLocation;
+        _mediaType = kLCCKMessageMediaTypeLocation;
     }
     return self;
-}
-
-+ (id)messageWithAVIMTypedMessage:(AVIMTypedMessage *)message {
-    //FIXME:自定义消息
-    if ([message lcck_isCustomMessage]) {
-        if ([message lcck_isSupportThisCustomMessage]) {
-            return message;
-        }
-    }
-    NSError *error = nil;
-    NSString *senderId = message.clientId;
-    id<LCCKUserDelegate> sender = [[LCCKUserSystemService sharedInstance] getProfileForUserId:message.clientId error:&error];
-    LCCKMessage *lcckMessage;
-    NSTimeInterval time = message.sendTimestamp;
-    NSString *serverMessageId = message.messageId;
-    //FIXME:
-    AVIMMessageMediaType mediaType = message.mediaType;
-    switch (mediaType) {
-        case kAVIMMessageMediaTypeText: {
-            AVIMTextMessage *textMsg = (AVIMTextMessage *)message;
-            lcckMessage = [[LCCKMessage alloc] initWithText:textMsg.text senderId:senderId sender:sender timestamp:time serverMessageId:serverMessageId];
-            break;
-        }
-        case kAVIMMessageMediaTypeAudio: {
-            AVIMAudioMessage *audioMsg = (AVIMAudioMessage *)message;
-            NSString *duration = [NSString stringWithFormat:@"%.0f", audioMsg.duration];
-            NSString *voicePath;
-            NSFileManager *fileManager = [NSFileManager defaultManager];
-            NSString *localPath = [LCCKCommonUtils getPathFromFile:audioMsg.file];
-            NSString *pathForFile = localPath;
-            if ([fileManager fileExistsAtPath:pathForFile]){
-                voicePath = localPath;
-            } else {
-                voicePath = audioMsg.file.url;
-            }
-            lcckMessage = [[LCCKMessage alloc] initWithVoicePath:voicePath voiceURL:nil voiceDuration:duration senderId:senderId sender:sender timestamp:time serverMessageId:serverMessageId];
-            break;
-        }
-            
-        case kAVIMMessageMediaTypeLocation: {
-            AVIMLocationMessage *locationMsg = (AVIMLocationMessage *)message;
-            lcckMessage = [[LCCKMessage alloc] initWithLocalPositionPhoto:({
-                NSString *imageName = @"MessageBubble_Location";
-                UIImage *image = [UIImage lcck_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
-                image;})
-                                                             geolocations:locationMsg.text location:[[CLLocation alloc] initWithLatitude:locationMsg.latitude longitude:locationMsg.longitude] senderId:senderId sender:sender timestamp:time serverMessageId:serverMessageId];
-            break;
-        }
-        case kAVIMMessageMediaTypeImage: {
-            AVIMImageMessage *imageMsg = (AVIMImageMessage *)message;
-            NSString *imagePath = [LCCKCommonUtils getPathFromFile:imageMsg.file];
-            lcckMessage = [[LCCKMessage alloc] initWithPhoto:nil photoWidth:imageMsg.width photoHeight: imageMsg.height thumbnailPhoto:nil photoPath:imagePath thumbnailURL:nil originPhotoURL:[NSURL URLWithString:imageMsg.file.url] senderId:senderId sender:sender timestamp:time serverMessageId:serverMessageId];
-            break;
-        }
-        case kAVIMMessageMediaTypeVideo: {
-            return nil;
-       }
-        case kAVIMMessageMediaTypeFile: {
-            return nil;
-        }
-        case kAVIMMessageMediaTypeRecalled: {
-            return nil;
-        }
-        default: {
-            NSString *degradeContent;
-            @try {
-                degradeContent = [message.attributes objectForKey:LCCKCustomMessageDegradeKey];
-            } @catch (NSException *exception) {} @finally {
-                if (!degradeContent) {
-                    degradeContent = LCCKLocalizedStrings(@"unknownMessage");
-                }
-            }
-            lcckMessage = [[LCCKMessage alloc] initWithText:degradeContent senderId:senderId sender:sender timestamp:time serverMessageId:serverMessageId];
-            LCCKLog(@"%@", LCCKLocalizedStrings(@"unknownMessage"));
-            break;
-        }
-    }
-    
-    if ([[LCCKSessionService sharedInstance].clientId isEqualToString:message.clientId]) {
-        lcckMessage.ownerType = LCCKMessageOwnerTypeSelf;
-    } else {
-        lcckMessage.ownerType = LCCKMessageOwnerTypeOther;
-    }
-    lcckMessage.sendStatus = (LCCKMessageSendState)message.status;
-    lcckMessage.message = message;
-    return lcckMessage;
 }
 
 #pragma mark - NSCoding
@@ -479,7 +391,7 @@
 - (id)copyWithZone:(NSZone *)zone {
     LCCKMessage *message;
     switch (self.mediaType) {
-        case kAVIMMessageMediaTypeText: {
+        case kLCCKMessageMediaTypeText: {
             message = [[[self class] allocWithZone:zone] initWithText:[self.text copy]
                                                              senderId:[self.senderId copy]
                                                                sender:[self.sender copyWithZone:nil]
@@ -488,7 +400,7 @@
             
         }
             break;
-        case kAVIMMessageMediaTypeImage: {
+        case kLCCKMessageMediaTypeImage: {
             message =  [[[self class] allocWithZone:zone] initWithPhoto:[self.photo copy]
                                                              photoWidth:self.photoWidth
                                                             photoHeight:self.photoHeight
@@ -503,7 +415,7 @@
             
         }
             break;
-        case kAVIMMessageMediaTypeVideo: {
+        case kLCCKMessageMediaTypeVideo: {
             message = [[[self class] allocWithZone:zone] initWithVideoConverPhoto:[self.videoConverPhoto copy]
                                                                         videoPath:[self.videoPath copy]
                                                                          videoURL:[self.videoURL copy]
@@ -514,7 +426,7 @@
             
         }
             break;
-        case kAVIMMessageMediaTypeAudio: {
+        case kLCCKMessageMediaTypeAudio: {
             message =  [[[self class] allocWithZone:zone] initWithVoicePath:[self.voicePath copy]
                                                                    voiceURL:[self.voiceURL copy]
                                                               voiceDuration:[self.voiceDuration copy]
@@ -535,7 +447,7 @@
             //
             //        }
             //            break;
-        case kAVIMMessageMediaTypeLocation: {
+        case kLCCKMessageMediaTypeLocation: {
             message =  [[[self class] allocWithZone:zone] initWithLocalPositionPhoto:[self.localPositionPhoto copy]
                                                                         geolocations:[self.geolocations copy]
                                                                             location:[self.location copy]
@@ -545,11 +457,11 @@
                                                                      serverMessageId:[self.serverMessageId copy]];
         }
             break;
-        case kAVIMMessageMediaTypeSystem: {
+        case kLCCKMessageMediaTypeSystem: {
             message = [[[self class] allocWithZone:zone] initWithSystemText:[self.systemText copy]];
         }
             break;
-        case kAVIMMessageMediaTypeNone: {
+        case kLCCKMessageMediaTypeNone: {
             //TODO:
         }
             break;

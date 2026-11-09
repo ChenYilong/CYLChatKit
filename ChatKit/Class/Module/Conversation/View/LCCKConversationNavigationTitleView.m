@@ -34,7 +34,7 @@ static void * const LCCKConversationViewControllerMembersCountContext = (void*)&
 @property (nonatomic, strong) UIStackView *containerView;
 @property (nonatomic, strong) UIImageView *remindMuteImageView;
 @property (nonatomic, copy) NSString *conversationName;
-@property (nonatomic, strong) AVIMConversation *conversation;
+@property (nonatomic, strong) id<LCCKConversationDelegate> conversation;
 @end
 
 @implementation LCCKConversationNavigationTitleView
@@ -77,7 +77,7 @@ static void * const LCCKConversationViewControllerMembersCountContext = (void*)&
     });
 }
 
-- (instancetype)sharedInitWithConversation:(AVIMConversation *)conversation {
+- (instancetype)sharedInitWithConversation:(id<LCCKConversationDelegate>)conversation {
     [self addSubview:self.containerView];
     [conversation addObserver:self forKeyPath:@"muted" options:NSKeyValueObservingOptionNew context:LCCKConversationViewControllerMutedContext];
     [conversation addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:LCCKConversationViewControllerNameContext];
@@ -92,7 +92,7 @@ static void * const LCCKConversationViewControllerMembersCountContext = (void*)&
     return self;
 }
 
-- (instancetype)initWithConversation:(AVIMConversation *)conversation navigationController:(UINavigationController *)navigationController {
+- (instancetype)initWithConversation:(id<LCCKConversationDelegate>)conversation navigationController:(UINavigationController *)navigationController {
     if (self = [super init]) {
         _conversation = conversation;
         [self resetConversationName];

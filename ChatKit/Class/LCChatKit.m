@@ -22,8 +22,6 @@
 
 @implementation LCChatKit
 @synthesize forceReconnectSessionBlock = _forceReconnectSessionBlock;
-@synthesize clientId = _clientId;
-@synthesize client = _client;
 @synthesize fetchProfilesBlock = _fetchProfilesBlock;
 @synthesize generateSignatureBlock = _generateSignatureBlock;
 @synthesize openProfileBlock = _openProfileBlock;
@@ -69,7 +67,10 @@
 #pragma mark - LCChatKit Method
 
 + (void)setAppId:(NSString *)appId appKey:(NSString *)appKey {
-    [AVOSCloud setApplicationId:appId clientKey:appKey];
+    id<LCCKIMProvider> IMProvider = [LCChatKit sharedInstance].IMProvider;
+    if ([IMProvider respondsToSelector:@selector(setAppId:appKey:)]) {
+        [IMProvider setAppId:appId appKey:appKey];
+    }
     [LCChatKit sharedInstance].appId = appId;
     [LCChatKit sharedInstance].appKey = appKey;
     if ([LCCKSettingService allLogsEnabled]) {
@@ -117,7 +118,7 @@
     return self.sessionService.clientId;
 }
 
-- (AVIMClient *)client {
+- (id)client {
     return self.sessionService.client;
 }
 
@@ -125,7 +126,7 @@
     [self.sessionService openWithClientId:clientId callback:callback];
 }
 
-- (void)openWithClientId:(NSString *)clientId force:(BOOL)force callback:(AVIMBooleanResultBlock)callback {
+- (void)openWithClientId:(NSString *)clientId force:(BOOL)force callback:(LCCKBooleanResultBlock)callback {
     [self.sessionService openWithClientId:clientId force:force callback:callback];
 }
 
@@ -141,7 +142,7 @@
     self.sessionService.disableSingleSignOn = disableSingleSignOn;
 }
 
-- (void)setMemberInfoChangedBlock:(void (^)(AVIMConversation *conversation, NSString *byClientId, NSString *clientId, AVIMConversationMemberRole role))block {
+- (void)setMemberInfoChangedBlock:(void (^)(id<LCCKConversationDelegate> conversation, NSString *byClientId, NSString *clientId, NSUInteger role))block {
     self.sessionService.memberInfoChangedBlock = block;
 }
 #pragma mark - LCCKUserSystemService
@@ -303,15 +304,15 @@
     [self.conversationService setSendMessageHookBlock:sendMessageHookBlock];
 }
 
-- (void)createConversationWithMembers:(NSArray *)members type:(LCCKConversationType)type unique:(BOOL)unique callback:(AVIMConversationResultBlock)callback {
+- (void)createConversationWithMembers:(NSArray *)members type:(LCCKConversationType)type unique:(BOOL)unique callback:(LCCKConversationResultBlock)callback {
     [self.conversationService createConversationWithMembers:members type:type unique:unique callback:callback];
 }
 
-- (void)fetchConversationWithConversationId:(NSString *)conversationId callback:(AVIMConversationResultBlock)callback {
+- (void)fetchConversationWithConversationId:(NSString *)conversationId callback:(LCCKConversationResultBlock)callback {
     [self.conversationService fetchConversationWithConversationId:conversationId callback:callback];
 }
 
-- (void)fetchConversationWithPeerId:(NSString *)peerId callback:(AVIMConversationResultBlock)callback {
+- (void)fetchConversationWithPeerId:(NSString *)peerId callback:(LCCKConversationResultBlock)callback {
     [self.conversationService fetchConversationWithPeerId:peerId callback:callback];
 }
 
@@ -319,7 +320,7 @@
     [self.conversationService didReceiveRemoteNotification:userInfo];
 }
 
-- (void)insertRecentConversation:(AVIMConversation *)conversation {
+- (void)insertRecentConversation:(id<LCCKConversationDelegate>)conversation {
     [self.conversationService insertRecentConversation:conversation];
 }
 

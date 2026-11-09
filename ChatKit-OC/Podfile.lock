@@ -12,8 +12,6 @@ PODS:
   - CYLChatKit (2.3.11):
     - CYLChatKit/Core (= 2.3.11)
   - CYLChatKit/Core (2.3.11):
-    - AVOSCloud (~> 11.5.1)
-    - AVOSCloudIM (~> 11.5.1)
     - CYLDeallocBlockExecutor (~> 1.1.2)
     - DACircularProgress (~> 2.3.1)
     - FDStackView (~> 1.0)
@@ -53,6 +51,8 @@ PODS:
   - "UITableView+FDTemplateLayoutCell (1.6)"
 
 DEPENDENCIES:
+  - AVOSCloud (= 11.5.2)
+  - AVOSCloudIM (= 11.5.2)
   - CYLChatKit (from `../`)
   - CYLTabBarController (= 1.99.72)
   - FTPopOverMenu (= 2.1.4)
@@ -89,7 +89,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AVOSCloud: b3cb1ed20d46c0d55083363522cb2ea593d51ac7
   AVOSCloudIM: ede93dc6155c3e73524469f5098a1ec2422915ae
-  CYLChatKit: 26e7f26d6c626c3dff66a688acabcf17c9a0cd97
+  CYLChatKit: 00d860d57f25c949d512531643b92ca413249831
   CYLDeallocBlockExecutor: ecf39e45dcead9e120f460df5668b8f5093d178e
   CYLTabBarController: 234ad57e11f7de17848ec78450c3b741781a0bb1
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
@@ -108,6 +108,6 @@ SPEC CHECKSUMS:
   TWMessageBarManager: fd84e7948ba7968a2b5d9454859135761214ec56
   "UITableView+FDTemplateLayoutCell": 5c949b4a5059c404b442926c0e80f81d10a2d66f
 
-PODFILE CHECKSUM: ba170e3fcd6f787609eed9c1270db860658fb61d
+PODFILE CHECKSUM: 5f8cac08319ebc16c647ed5618980705c9788347
 
 COCOAPODS: 1.17.0

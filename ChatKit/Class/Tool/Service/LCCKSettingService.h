@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "LCCKServiceDefinition.h"
-#import <AVOSCloud/AVOSCloud.h>
-@class AVIMVideoMessage;
 /*!
  * LCCKSettingService Error Domain
  */
@@ -47,10 +45,17 @@ FOUNDATION_EXTERN NSString *const LCCKSettingServiceErrorDomain;
 /*!
  *  根据消息来获取视频文件的路径。
  */
-- (NSString *)videoPathOfMessage:(AVIMVideoMessage *)message;
+/*!
+ * @param message A video message conforming to `LCCKIMMessageDelegate`. If it responds to `format`, the format is used as the file extension.
+ */
+- (NSString *)videoPathOfMessage:(id<LCCKIMMessageDelegate>)message;
 
 // please call in application:didFinishLaunchingWithOptions:launchOptions
+/*!
+ * Push and badge methods are forwarded to `-[LCChatKit IMProvider]` when it implements `LCCKIMPushProvider`.
+ */
 - (void)registerForRemoteNotification;
+- (void)saveInstallationWithDeviceToken:(NSData *)deviceToken userId:(NSString *)userId;
 
 // push message
 - (void)pushMessage:(NSString *)message userIds:(NSArray *)userIds block:(LCCKBooleanResultBlock)block;

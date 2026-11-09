@@ -24,6 +24,9 @@
  */
 FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
 
+/*!
+ * Conversation state used by the UI. IM work and local storage are forwarded to `-[LCChatKit IMProvider]`.
+ */
 @interface LCCKConversationService : LCCKSingleton <LCCKConversationService>
 
 /**
@@ -41,7 +44,7 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
 /*!
  * 只要进过聊天页面，这个值总不为nil。当前不在聊天界面则为nil，这是因为考虑到可能会在对话页面，Present其它页面，比如联系人列表，需要用到currentConversation信息，所以如果想判断当前是否在对话页面，请判断currentConversationId是否为nil。
  */
-@property (nonatomic, strong) AVIMConversation *currentConversation;
+@property (nonatomic, strong) id<LCCKConversationDelegate> currentConversation;
 
 /*!
  *  根据 conversationId 获取对话
@@ -59,19 +62,25 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  */
 - (void)fetchConversationWithPeerId:(NSString *)peerId callback:(LCCKConversationResultBlock)callback;
 
-- (void)sendMessage:(AVIMTypedMessage *)message
-       conversation:(AVIMConversation *)conversation
-      progressBlock:(AVProgressBlock)progressBlock
+/*!
+ * @param message An SDK message conforming to `LCCKIMMessageDelegate`, see `-[LCCKIMProvider IMMessageFromMessage:]`.
+ * @attention The LeanCloud-specific `options:` variant moved to the demo's LeanCloud provider.
+ */
+- (void)sendMessage:(id<LCCKIMMessageDelegate>)message
+       conversation:(id<LCCKConversationDelegate>)conversation
+      progressBlock:(LCCKProgressBlock)progressBlock
            callback:(LCCKBooleanResultBlock)block;
 
-//FIXME:AVIMMessageSendOption-->AVIMMessageOption
-- (void)sendMessage:(AVIMTypedMessage *)message
-       conversation:(AVIMConversation *)conversation
-            options:(AVIMMessageSendOption)options
-      progressBlock:(AVProgressBlock)progressBlock
+- (void)sendMessage:(id<LCCKIMMessageDelegate>)message
+       conversation:(id<LCCKConversationDelegate>)conversation
+        mentionList:(NSArray<NSString *> *)mentionList
+      progressBlock:(LCCKProgressBlock)progressBlock
            callback:(LCCKBooleanResultBlock)block;
 
-- (void)queryTypedMessagesWithConversation:(AVIMConversation *)conversation
+/*!
+ * The callback array contains SDK messages conforming to `LCCKIMMessageDelegate`.
+ */
+- (void)queryTypedMessagesWithConversation:(id<LCCKConversationDelegate>)conversation
                                  messageId:(NSString *)messageId
                                  timestamp:(int64_t)timestamp
                                      limit:(NSInteger)limit
@@ -82,7 +91,7 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  *  @param  conversationID 对话，可以是单聊，也可是群聊
  */
 - (void)removeCacheForConversationId:(NSString *)conversationID;
-- (void)updateConversationAsReadWithLastMessage:(__kindof AVIMMessage *)lastMessage;
+- (void)updateConversationAsReadWithLastMessage:(id)lastMessage;
 
 #pragma mark - 最近对话的本地缓存，最近对话将保存在本地数据库中
 ///=============================================================================
@@ -94,9 +103,9 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  */
 - (void)setupDatabaseWithUserId:(NSString *)userId;
 
-- (void)insertRecentConversation:(AVIMConversation *)conversation shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
-- (void)insertRecentConversations:(NSArray<AVIMConversation *> *)conversations;
-- (void)insertRecentConversations:(NSArray<AVIMConversation *> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
+- (void)insertRecentConversation:(id<LCCKConversationDelegate>)conversation shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
+- (void)insertRecentConversations:(NSArray<id<LCCKConversationDelegate>> *)conversations;
+- (void)insertRecentConversations:(NSArray<id<LCCKConversationDelegate>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 - (void)increaseUnreadCount:(NSUInteger)increaseUnreadCount withConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 /**
  *  更新 mentioned 值，当接收到消息发现 @了我的时候，设为 YES，进入聊天页面，设为 NO
@@ -168,7 +177,7 @@ FOUNDATION_EXTERN NSString *const LCCKConversationServiceErrorDomain;
  *  发送消息失败时调用
  *  @param message 相应的消息
  */
-- (void)insertFailedMessage:(AVIMTypedMessage *)message;
+- (void)insertFailedMessage:(id<LCCKIMMessageDelegate>)message;
 - (void)insertFailedLCCKMessage:(LCCKMessage *)message;
 /**
  *  重发成功的时候调用

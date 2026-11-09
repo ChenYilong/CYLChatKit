@@ -9,13 +9,13 @@
 #import <UIKit/UIKit.h>
 
 @class LCCKConversationListViewController;
-@class AVIMConversation;
+#import "LCCKConversationDelegate.h"
 
 @interface LCCKConversationListViewModel : NSObject <UITableViewDelegate, UITableViewDataSource>
 
 - (instancetype)initWithConversationListViewController:(LCCKConversationListViewController *)conversationListViewController;
 
-@property (nonatomic, strong) NSMutableArray<AVIMConversation *> *dataArray;
+@property (nonatomic, strong) NSMutableArray<id<LCCKConversationDelegate>> *dataArray;
 
 - (void)refresh;
 

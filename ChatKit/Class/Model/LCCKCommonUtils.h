@@ -1,6 +1,6 @@
 //
 //  LCCKCommonUtils.h
-//  AVOSCloud
+//  CYLChatKit
 //
 //  Created by chenyilong on 14/6/2018.
 //
@@ -8,13 +8,7 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
-@class AVFile;
-
 @interface LCCKCommonUtils : NSObject
-
-+ (NSString *)getPathFromFile:(AVFile *)file;
-
-+ (BOOL)isCacheDataAvailableForFile:(AVFile *)file;
 
 + (void)recognitionWithImage:(UIImage *)image callback:(void(^)(NSDictionary *dict))callback;
 + (void)getLocationFromDataString:(NSString *)dataString

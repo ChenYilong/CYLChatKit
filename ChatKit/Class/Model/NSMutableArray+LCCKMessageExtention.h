@@ -10,6 +10,11 @@
 
 @interface NSMutableArray (LCCKMessageExtention)
 
+/*!
+ * Converts IM SDK messages (conforming to `LCCKIMMessageDelegate`) for display with
+ * `-[LCCKIMProvider displayMessageFromIMMessage:]`, after applying `filterMessagesBlock`.
+ * The historical name is kept for compatibility.
+ */
 + (NSMutableArray *)lcck_messagesWithAVIMMessages:(NSArray *)avimTypedMessage;
 
 - (void)lcck_removeMessageAtIndex:(NSUInteger)index;

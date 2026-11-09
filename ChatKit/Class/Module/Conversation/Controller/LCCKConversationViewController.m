@@ -49,7 +49,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 
 @interface LCCKConversationViewController () <LCCKChatBarDelegate, LCCKChatMessageCellDelegate, LCCKConversationViewModelDelegate, LCCKPhotoBrowserDelegate>
 
-@property (nonatomic, strong, readwrite) AVIMConversation *conversation;
+@property (nonatomic, strong, readwrite) id<LCCKConversationDelegate> conversation;
 //@property (copy, nonatomic) NSString *messageSender /**< 正在聊天的用户昵称 */;
 //@property (copy, nonatomic) NSString *avatarURL /**< 正在聊天的用户头像 */;
 /**< 正在聊天的用户 */
@@ -101,19 +101,19 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     return self;
 }
 
-- (AVIMConversation *)getConversationIfExists {
+- (id<LCCKConversationDelegate>)getConversationIfExists {
     if (_conversation) {
         return _conversation;
     }
     return nil;
 }
 
-- (AVIMConversation *)conversation {
+- (id<LCCKConversationDelegate>)conversation {
     if (_conversation) { return _conversation; }
     do {
         /* If object is clean, ignore save request. */
         if (_peerId) {
-            [[LCCKConversationService sharedInstance] fetchConversationWithPeerId:self.peerId callback:^(AVIMConversation *conversation, NSError *error) {
+            [[LCCKConversationService sharedInstance] fetchConversationWithPeerId:self.peerId callback:^(id<LCCKConversationDelegate> conversation, NSError *error) {
                 //SDK没有好友概念，任何两个ID均可会话，请APP层自行处理好友关系。
                 [self refreshConversation:conversation isJoined:YES error:error];
             }];
@@ -121,7 +121,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
         }
         /* If object is clean, ignore save request. */
         if (_conversationId) {
-            [[LCCKConversationService sharedInstance] fetchConversationWithConversationId:self.conversationId callback:^(AVIMConversation *conversation, NSError *error) {
+            [[LCCKConversationService sharedInstance] fetchConversationWithConversationId:self.conversationId callback:^(id<LCCKConversationDelegate> conversation, NSError *error) {
                 if (error) {
                     //如果用户已经已经被踢出群，此时依然能拿到 Conversation 对象，不会报 4401 错误，需要单独判断。即使后期服务端在这种情况下返回error，这里依然能正确处理。
                     [self refreshConversation:conversation isJoined:NO error:error];
@@ -139,7 +139,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
                     return;
                 }
                 if (self.isEnableAutoJoin) {
-                    [conversation joinWithCallback:^(BOOL succeeded, NSError *error) {
+                    [[LCChatKit sharedInstance].IMProvider joinConversation:conversation callback:^(BOOL succeeded, NSError *error) {
                         [self refreshConversation:conversation isJoined:succeeded error:error];
                         if (succeeded) {
                             self.firstTimeJoinGroup = YES;
@@ -171,7 +171,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     self.allowScrollToBottom = YES;
     self.loadingMoreMessage = NO;
     self.disableTextShowInFullScreen = NO;
-    BOOL clientStatusOpened = [LCCKSessionService sharedInstance].client.status == AVIMClientStatusOpened;
+    BOOL clientStatusOpened = [LCCKSessionService sharedInstance].isClientOpened;
     if (!clientStatusOpened) {
         [self refreshConversation:nil isJoined:NO];
         [[LCCKSessionService sharedInstance] reconnectForViewController:self callback:^(BOOL succeeded, NSError *error) {
@@ -365,13 +365,13 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     [self.chatViewModel sendLocalFeedbackTextMessge:localFeedbackTextMessge];
 }
 
-- (void)sendCustomMessage:(AVIMTypedMessage *)customMessage {
+- (void)sendCustomMessage:(id<LCCKIMMessageDelegate>)customMessage {
     [self makeSureSendValidMessageAfterFetchedConversation:customMessage];
     [self.chatViewModel sendCustomMessage:customMessage];
 }
 
-- (void)sendCustomMessage:(AVIMTypedMessage *)customMessage
-            progressBlock:(AVProgressBlock)progressBlock
+- (void)sendCustomMessage:(id<LCCKIMMessageDelegate>)customMessage
+            progressBlock:(LCCKProgressBlock)progressBlock
                   success:(LCCKBooleanResultBlock)success
                    failed:(LCCKBooleanResultBlock)failed {
     [self makeSureSendValidMessageAfterFetchedConversation:customMessage];
@@ -403,14 +403,14 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     if ([message isKindOfClass:[LCCKMessage class]]) {
         return;
     }
-    if ([message isKindOfClass:[AVIMTypedMessage class]]) {
+    if ([message conformsToProtocol:@protocol(LCCKIMMessageDelegate)]) {
         return;
     }
-    if ([[message class] isSubclassOfClass:[AVIMMessage class]]) {
+    {
         NSString *reason = [NSString stringWithFormat:formatString,
                             @(__PRETTY_FUNCTION__),
                             @(__LINE__),
-                            @"ChatKit only support sending AVIMTypedMessage"];
+                            @"ChatKit only support sending LCCKMessage or messages conforming to LCCKIMMessageDelegate"];
         //TODO: add debug model
         NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), reason);
         return;
@@ -439,7 +439,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     }
 }
 
-- (void)setupNavigationItemTitleWithConversation:(AVIMConversation *)conversation {
+- (void)setupNavigationItemTitleWithConversation:(id<LCCKConversationDelegate>)conversation {
     // Related report about the conversation title's initial position: https://github.com/leancloud/ChatKit-OC/issues/202
     if (self.navigationItem.title) {
         return;
@@ -460,7 +460,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     self.navigationItem.titleView = navigationItemTitle;
 }
 
-- (void)fetchConversationHandler:(AVIMConversation *)conversation {
+- (void)fetchConversationHandler:(id<LCCKConversationDelegate>)conversation {
     LCCKFetchConversationHandler fetchConversationHandler;
     do {
         if (_fetchConversationHandler) {
@@ -500,11 +500,11 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     }
 }
 
-- (void)refreshConversation:(AVIMConversation *)conversation isJoined:(BOOL)isJoined {
+- (void)refreshConversation:(id<LCCKConversationDelegate>)conversation isJoined:(BOOL)isJoined {
     [self refreshConversation:conversation isJoined:isJoined error:nil];
 }
 
-- (NSString *)getConversationIdIfExists:(AVIMConversation *)conversation {
+- (NSString *)getConversationIdIfExists:(id<LCCKConversationDelegate>)conversation {
     NSString *conversationId;
     do {
         if (self.conversationId) {
@@ -523,7 +523,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     return conversationId;
 }
 
-- (void)notJoinedHandler:(AVIMConversation *)conversation error:(NSError *)aError {
+- (void)notJoinedHandler:(id<LCCKConversationDelegate>)conversation error:(NSError *)aError {
     void(^notJoinedHandler)(id<LCCKUserDelegate> user, NSError *error) = ^(id<LCCKUserDelegate> user, NSError *error) {
         LCCKConversationInvalidedHandler conversationInvalidedHandler = [[LCCKConversationService sharedInstance] conversationInvalidedHandler];
         NSString *conversationId = [self getConversationIdIfExists:conversation];
@@ -551,13 +551,13 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
 /*!
  * conversation 不一定有值，可能为 nil
  */
-- (void)refreshConversation:(AVIMConversation *)aConversation isJoined:(BOOL)isJoined error:(NSError *)error {
+- (void)refreshConversation:(id<LCCKConversationDelegate>)aConversation isJoined:(BOOL)isJoined error:(NSError *)error {
     if (error) {
         [self notJoinedHandler:aConversation error:error];
         aConversation = nil;
     }
     
-    AVIMConversation *conversation;
+    id<LCCKConversationDelegate> conversation;
     if (isJoined && !error) {
         conversation = aConversation;
     }
@@ -576,11 +576,11 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     }];
 }
 
-- (void)callbackCurrentConversationEvenNotExists:(AVIMConversation *)conversation callback:(LCCKBooleanResultBlock)callback {
+- (void)callbackCurrentConversationEvenNotExists:(id<LCCKConversationDelegate>)conversation callback:(LCCKBooleanResultBlock)callback {
     if (conversation.createAt) {
-        if (!conversation.imClient) {
-            [conversation setValue:[LCCKSessionService sharedInstance].client forKey:@"imClient"];
-            LCCKLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"imClient is nil");
+        id<LCCKIMProvider> IMProvider = [LCChatKit sharedInstance].IMProvider;
+        if ([IMProvider respondsToSelector:@selector(prepareConversation:)]) {
+            [IMProvider prepareConversation:conversation];
         }
         BOOL hasDraft = (conversation.lcck_draft.length > 0);
         if (hasDraft) {
@@ -770,8 +770,8 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     } @catch (NSException *exc) {}
     if (!senderId) {
         @try {
-            AVIMTypedMessage *message = (AVIMTypedMessage *)messageCell.message;
-            senderId = message.clientId;
+            id<LCCKIMMessageDelegate> message = (id<LCCKIMMessageDelegate>)messageCell.message;
+            senderId = [message lcck_senderId];
         } @catch (NSException *exc) {}
     }
     id<LCCKUserDelegate> sender = nil;
@@ -794,17 +794,17 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     NSIndexPath *indexPath = [self.tableView indexPathForCell:messageCell];
     id<LCCKMessageDelegate> message = [self.chatViewModel.dataArray lcck_messageAtIndex:indexPath.row];
     switch (messageCell.mediaType) {
-        case kAVIMMessageMediaTypeAudio: {
+        case kLCCKMessageMediaTypeAudio: {
             LCCKMessage *voiceMessage = (LCCKMessage *)message;
             NSString *voiceFileName = voiceMessage.voicePath;//必须带后缀，.mp3；
             [[LCCKAVAudioPlayer sharePlayer] playAudioWithURLString:voiceFileName identifier:message.messageId];
         }
             break;
-        case kAVIMMessageMediaTypeImage: {
+        case kLCCKMessageMediaTypeImage: {
             [self imageMessageCellTappedMessageCell:messageCell];
         }
             break;
-        case kAVIMMessageMediaTypeLocation: {
+        case kLCCKMessageMediaTypeLocation: {
             LCCKMessage *locationMessage = (LCCKMessage *)message;
             NSDictionary *userInfo = @{
                                        /// 传递触发的UIViewController对象
@@ -991,7 +991,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     if (![self.tableView.visibleCells containsObject:messageCell]) {
         return;
     }
-    if (messageCell.mediaType == kAVIMMessageMediaTypeImage) {
+    if (messageCell.mediaType == kLCCKMessageMediaTypeImage) {
         [(LCCKChatImageMessageCell *)messageCell setUploadProgress:progress];
     }
     dispatch_async(dispatch_get_main_queue(), ^{

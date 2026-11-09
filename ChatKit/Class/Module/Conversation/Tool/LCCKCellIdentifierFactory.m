@@ -9,8 +9,7 @@
 #import "LCCKCellIdentifierFactory.h"
 #import "LCCKMessage.h"
 #import "NSObject+LCCKExtension.h"
-#import <AVOSCloudIM/AVIMConversation.h>
-#import "AVIMTypedMessage+LCCKExtension.h"
+#import "LCCKIMMessageDelegate.h"
 #import "LCCKConstants.h"
 
 @implementation LCCKCellIdentifierFactory
@@ -30,16 +29,16 @@
     }
     
     if ([message lcck_isCustomMessage]) {
-        return [self cellIdentifierForCustomMessageConfiguration:(AVIMTypedMessage *)message groupKey:groupKey];
+        return [self cellIdentifierForCustomMessageConfiguration:(id<LCCKIMMessageDelegate>)message groupKey:groupKey];
     }
     return [self cellIdentifierForDefaultMessageConfiguration:(LCCKMessage *)message groupKey:groupKey];
 }
 
 + (NSString *)cellIdentifierForDefaultMessageConfiguration:(LCCKMessage *)message groupKey:(NSString *)groupKey {
     LCCKMessageOwnerType messageOwner = message.ownerType;
-    AVIMMessageMediaType messageType = message.mediaType;
+    LCCKMessageMediaType messageType = message.mediaType;
     if ([message lcck_isCustomLCCKMessage]) {
-        messageType = kAVIMMessageMediaTypeText;
+        messageType = kLCCKMessageMediaTypeText;
     }
     NSNumber *key = [NSNumber numberWithInteger:messageType];
     Class aClass = [LCCKChatMessageCellMediaTypeDict objectForKey:key];
@@ -64,21 +63,22 @@
     return cellIdentifier;
 }
 
-+ (NSString *)cellIdentifierForCustomMessageConfiguration:(AVIMTypedMessage *)message groupKey:(NSString *)groupKey {
-    AVIMMessageIOType messageOwner = message.ioType;
-    AVIMMessageMediaType messageType = message.mediaType;
-    if (![message lcck_isSupportThisCustomMessage]) {
-        messageType = kAVIMMessageMediaTypeText;
++ (NSString *)cellIdentifierForCustomMessageConfiguration:(id<LCCKIMMessageDelegate>)message groupKey:(NSString *)groupKey {
+    LCCKMessageOwnerType messageOwner = [message lcck_ownerType];
+    LCCKMessageMediaType messageType = message.mediaType;
+    // A custom message without a registered cell is shown with the text cell.
+    if (![LCCKChatMessageCellMediaTypeDict objectForKey:@(messageType)]) {
+        messageType = kLCCKMessageMediaTypeText;
     }
     NSNumber *key = [NSNumber numberWithInteger:messageType];
     NSString *typeKey = NSStringFromClass([LCCKChatMessageCellMediaTypeDict objectForKey:key]);
     NSAssert(typeKey.length > 0, @"🔴类名与方法名：%@（在第%@行），描述：%@,%@", @(__PRETTY_FUNCTION__), @(__LINE__), @(message.mediaType), NSStringFromClass([message class]));
     NSString *ownerKey;
     switch (messageOwner) {
-        case AVIMMessageIOTypeOut:
+        case LCCKMessageOwnerTypeSelf:
             ownerKey = LCCKCellIdentifierOwnerSelf;
             break;
-        case AVIMMessageIOTypeIn:
+        case LCCKMessageOwnerTypeOther:
             ownerKey = LCCKCellIdentifierOwnerOther;
             break;
         default:
@@ -95,7 +95,7 @@
         LCCKMessage *message_ = (LCCKMessage *)message;
         return message_.messageId ?: message_.systemText;
     }
-    AVIMTypedMessage *message_ = (AVIMTypedMessage *)message;
+    id<LCCKIMMessageDelegate> message_ = (id<LCCKIMMessageDelegate>)message;
     return message_.messageId;
 }
 

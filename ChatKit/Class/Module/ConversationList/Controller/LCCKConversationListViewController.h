@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "LCCKBaseTableViewController.h"
 
-@class AVIMConversation;
+#import "LCCKConversationDelegate.h"
 
 @protocol LCCKConversationListViewControllerDelegate <NSObject>
 
@@ -17,12 +17,12 @@
 /**
  实现代理方法,可获得到cell点击事件的回调
  */
-- (void)conversation:(AVIMConversation *)conversation tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)conversation:(id<LCCKConversationDelegate>)conversation tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 
 /**
  实现代理方法,当默认的 Cell 或自定义的 Cell 需要配置时，该代理将被调用
  */
-- (void)conversation:(AVIMConversation *)conversation cell:(UITableViewCell *)cell tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)conversation:(id<LCCKConversationDelegate>)conversation cell:(UITableViewCell *)cell tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 /**

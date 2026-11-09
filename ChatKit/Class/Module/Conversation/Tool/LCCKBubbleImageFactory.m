@@ -14,13 +14,13 @@
 @implementation LCCKBubbleImageFactory
 
 + (UIImage *)bubbleImageViewForType:(LCCKMessageOwnerType)owner
-                        messageType:(AVIMMessageMediaType)messageMediaType
+                        messageType:(LCCKMessageMediaType)messageMediaType
                       isHighlighted:(BOOL)isHighlighted {
     BOOL isCustomMessage = NO;
     NSString *messageTypeString = @"message_";
     switch (messageMediaType) {
-        case kAVIMMessageMediaTypeImage:
-        case kAVIMMessageMediaTypeLocation:
+        case kLCCKMessageMediaTypeImage:
+        case kLCCKMessageMediaTypeLocation:
             messageTypeString = [messageTypeString stringByAppendingString:@"hollow_"];
             break;
         default:
@@ -31,8 +31,8 @@
         case LCCKMessageOwnerTypeSelf: {
             // 发送
             switch (messageMediaType) {
-                case kAVIMMessageMediaTypeImage:
-                case kAVIMMessageMediaTypeLocation:
+                case kLCCKMessageMediaTypeImage:
+                case kLCCKMessageMediaTypeLocation:
                     bubbleImageCapInsets = [LCCKSettingService sharedInstance].rightHollowCapMessageBubbleCustomize;
                     break;
                 default:
@@ -45,8 +45,8 @@
         case LCCKMessageOwnerTypeOther: {
             // 接收
             switch (messageMediaType) {
-                case kAVIMMessageMediaTypeImage:
-                case kAVIMMessageMediaTypeLocation:
+                case kLCCKMessageMediaTypeImage:
+                case kLCCKMessageMediaTypeLocation:
                     bubbleImageCapInsets = [LCCKSettingService sharedInstance].leftHollowCapMessageBubbleCustomize;
                     break;
                 default:

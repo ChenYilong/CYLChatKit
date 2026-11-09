@@ -7,10 +7,43 @@
 //
 
 #import "AVIMTypedMessage+LCCKExtension.h"
-#import "LCCKMessage.h"
-#import "LCCKConstants.h"
+
+/// The registry of `AVIMTypedMessage` subclasses, defined by the LeanCloud SDK.
+FOUNDATION_EXTERN NSMutableDictionary const *_typeDict;
 
 @implementation AVIMTypedMessage (LCCKExtension)
+
+#pragma mark - LCCKIMMessageDelegate
+
+- (NSString *)lcck_senderId {
+    return self.clientId;
+}
+
+- (void)lcck_setSenderId:(NSString *)senderId {
+    [self setValue:senderId forKey:@"clientId"];
+}
+
+- (LCCKMessageOwnerType)lcck_ownerType {
+    switch (self.ioType) {
+        case AVIMMessageIOTypeOut:
+            return LCCKMessageOwnerTypeSelf;
+        case AVIMMessageIOTypeIn:
+            return LCCKMessageOwnerTypeOther;
+        default:
+            return LCCKMessageOwnerTypeUnknown;
+    }
+}
+
+- (LCCKMessageSendState)lcck_sendStatus {
+    // AVIMMessageStatus and LCCKMessageSendState share the same raw values.
+    return (LCCKMessageSendState)self.status;
+}
+
+- (int64_t)lcck_sendTimestamp {
+    return self.sendTimestamp;
+}
+
+#pragma mark - LeanCloud helpers
 
 - (BOOL)lcck_isSupportThisCustomMessage {
     NSNumber *typeDictKey = @([(AVIMTypedMessage *)self mediaType]);

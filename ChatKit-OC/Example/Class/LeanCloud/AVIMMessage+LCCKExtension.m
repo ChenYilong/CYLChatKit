@@ -13,6 +13,7 @@
 #else
 #import "LCChatKit.h"
 #endif
+#import "AVIMTypedMessage+LCCKExtension.h"
 
 @implementation AVIMMessage (LCCKExtension)
 

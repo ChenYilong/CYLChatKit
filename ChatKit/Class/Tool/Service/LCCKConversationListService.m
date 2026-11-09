@@ -16,7 +16,7 @@
 // *  @param conversation 需要设置最近消息内容的对话
 // *  @return 无需自定义最近消息内容返回nil
 // */
-//typedef NSString *(^LCCKConversationsLatestMessageContent)(AVIMConversation *conversation);
+//typedef NSString *(^LCCKConversationsLatestMessageContent)(id<LCCKConversationDelegate> conversation);
 //
 ///**
 // *  设置某个对话的最近消息内容后的回调
@@ -30,16 +30,11 @@
 
 
 #import "LCCKConversationListService.h"
-#import "AVIMConversation+LCCKExtension.h"
-#import <AVOSCloudIM/AVOSCloudIM.h>
-#import "LCCKUserSystemService.h"
-#import "LCCKSessionService.h"
-#import "AVIMMessage+LCCKExtension.h"
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
+#else
 #import "LCChatKit.h"
-
-@interface LCCKConversationListService()
-@property (nonatomic, assign) BOOL refreshedFromServer;
-@end
+#endif
 
 @implementation LCCKConversationListService
 @synthesize didSelectConversationsListCellBlock = _didSelectConversationsListCellBlock;
@@ -48,103 +43,30 @@
 @synthesize markBadgeWithTotalUnreadCountBlock = _markBadgeWithTotalUnreadCountBlock;
 @synthesize conversationListShowHookBlock = _conversationListShowHookBlock;
 
-- (instancetype)init {
-    if (!(self = [super init])) {
-        return nil;
-    }
-    _refreshedFromServer = NO;
-    return self;
-}
-
+/*!
+ * Loading recent conversations depends on the IM SDK, so it is implemented by `-[LCChatKit IMProvider]`.
+ */
 - (void)findRecentConversationsWithBlock:(LCCKRecentConversationsCallback)block {
-    [self selectOrRefreshConversationsWithBlock:^(NSArray *conversations, NSError *error) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            NSMutableArray *filterConversation = [NSMutableArray arrayWithCapacity:conversations.count];
-            NSMutableSet *userIds = [NSMutableSet set];
-            NSUInteger totalUnreadCount = 0;
-            for (AVIMConversation *conversation in conversations) {
-                BOOL hasHistory = (conversation.lastMessage);
-                if (hasHistory) {
-                    [filterConversation addObject:conversation];
-                    if (conversation.lcck_type == LCCKConversationTypeSingle) {
-                        [userIds addObject:conversation.lcck_peerId];
-                    } else {
-                        NSString *userId = conversation.lcck_lastMessage.clientId;
-                        (!userId || !conversation.lcck_lastMessage) ?: [userIds addObject:userId];
-                    }
-                }
-                if (conversation.muted == NO && conversation.unreadMessagesCount > 0) {
-                    totalUnreadCount += conversation.unreadMessagesCount;
-                }
-            }
-            NSArray *sortedRooms = [filterConversation sortedArrayUsingComparator:^NSComparisonResult(AVIMConversation *conv1, AVIMConversation *conv2) {
-                return (NSComparisonResult)(conv2.lcck_lastMessage.sendTimestamp - conv1.lcck_lastMessage.sendTimestamp);
-            }];
-            dispatch_async(dispatch_get_main_queue(),^{
-                !block ?: block(sortedRooms, totalUnreadCount, error);
-            });
-            
-            if (userIds.count == 0) {
-                return;
-            }
-            [[LCCKUserSystemService sharedInstance] cacheUsersWithIds:userIds callback:nil];
+    id<LCCKIMProvider> IMProvider = [LCChatKit sharedInstance].IMProvider;
+    if (!IMProvider) {
+        NSInteger code = 0;
+        NSDictionary *errorInfo = @{
+                                    @"code" : @(code),
+                                    NSLocalizedDescriptionKey : @"IM provider not set. Set `-[LCChatKit setIMProvider:]` first.",
+                                    };
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:code userInfo:errorInfo];
+        dispatch_async(dispatch_get_main_queue(),^{
+            !block ?: block(@[], 0, error);
         });
-    }];
-}
-
-- (void)fetchRelationConversationsFromServerCallback:(AVIMArrayResultBlock)block {
-    AVIMClient *client = [LCCKSessionService sharedInstance].client;
-    AVIMConversationQuery *orConversationQuery = [client conversationQuery];
-    orConversationQuery.cachePolicy = kAVIMCachePolicyIgnoreCache;
-    orConversationQuery.option = AVIMConversationQueryOptionWithMessage;
-    orConversationQuery.limit = 100;
-    [orConversationQuery findConversationsWithCallback:^(NSArray<AVIMConversation *> * _Nullable conversations, NSError * _Nullable error) {
-        !block ?: block(conversations, error);
-    }];
-}
-
-- (void)selectOrRefreshConversationsWithBlock:(AVIMArrayResultBlock)block {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        NSArray *originConversations = [[LCCKConversationService sharedInstance] allRecentConversations];
-        void(^FilterCallback)(NSArray<AVIMConversation *> *conversations) = ^(NSArray<AVIMConversation *> *conversations) {
-            if (self.refreshedFromServer || ![LCCKSessionService sharedInstance].connect) {
-                dispatch_async(dispatch_get_main_queue(),^{
-                    !block ?: block(conversations, nil);
-                });
-                return;
-            }
-            
-            NSMutableSet *conversationIds = [NSMutableSet set];
-            for (AVIMConversation *conversation in conversations) {
-                [conversationIds addObject:conversation.conversationId];
-            }
-            [[LCCKConversationService sharedInstance] fetchConversationsWithConversationIds:conversationIds callback:^(NSArray<AVIMConversation *> *objects, NSError *error) {
-                if (error) {
-                    !block ?: block(conversations, error);
-                    return ;
-                }
-                self.refreshedFromServer = YES;
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-                    [[LCCKConversationService sharedInstance] updateRecentConversation:conversations];
-                    dispatch_async(dispatch_get_main_queue(),^{
-                        !block ?: block(conversations, error);
-                    });
-                });
-            }];
-            
-        };
-        
-        if (![LCCKConversationListService sharedInstance].conversationListShowHookBlock) {
-            FilterCallback(originConversations);
-            return;
-        }
-        LCCKConversationListShowHookBlock conversationListShowHookBlock = [LCCKConversationListService sharedInstance].conversationListShowHookBlock;
-        LCCKConversationListShowHookCompletionHandler conversationListShowHookCompletionHandler = ^(NSArray<AVIMConversation *> *conversations, NSError *aError) {
-            FilterCallback(aError ? originConversations : conversations);
-        };
-        conversationListShowHookBlock(originConversations, conversationListShowHookCompletionHandler);
         return;
-    });
+    }
+    [IMProvider findRecentConversationsWithBlock:^(NSArray<id<LCCKConversationDelegate>> *conversations, NSInteger totalUnreadCount, NSError *error) {
+        !block ?: block(conversations, totalUnreadCount, error);
+    }];
+}
+
+- (void)fetchRelationConversationsFromServerCallback:(LCCKArrayResultBlock)block {
+    [[LCChatKit sharedInstance].IMProvider fetchRelationConversationsFromServerCallback:block];
 }
 
 #pragma mark -
@@ -188,10 +110,6 @@
 
 - (LCCKConversationListShowHookBlock)conversationListShowHookBlock {
     return _conversationListShowHookBlock;
-}
-
-- (void)dealloc {
-    _refreshedFromServer = NO;
 }
 
 @end

@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "LCCKServiceDefinition.h"
-#import <AVOSCloudIM/AVOSCloudIM.h>
 
 /**
  *  UIService Error Domain

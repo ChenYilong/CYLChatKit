@@ -266,6 +266,14 @@ pod update
 
  使用 ChatKit 有几个关键性的步骤：
 
+ > **IM provider (since the LeanCloud decoupling).** ChatKit is now UI only and no longer depends on LeanCloud.
+ > Before step 1, register an object that implements `LCCKIMProvider`:
+ > `[LCChatKit sharedInstance].IMProvider = [[LCCKLeanCloudIMProvider alloc] init];`
+ > The LeanCloud implementation (`LCCKLeanCloudIMProvider`) and its `AVOSCloud`/`AVOSCloudIM` pods live in the demo
+ > (`ChatKit-OC/Example/Class/LeanCloud`). Copy that folder and add the two pods to use LeanCloud,
+ > or implement `LCCKIMProvider` for another IM SDK. In the steps below, "LeanCloud" refers to the demo provider.
+ > See [docs/leancloud-decoupling.md](docs/leancloud-decoupling.md).
+
  1. 在 `-[AppDelegate application:didFinishLaunchingWithOptions:]` 中调用 `-[LCChatKit setAppId:appKey:]` 来开启 LeanCloud 服务。需要到
  [LeanCloud（原名 `AVOS` ）](https://leancloud.cn/?source=T6M35E4H) 申请一个 AppId 和一个 AppKey，可以在控制台里创建应用，替换 Demo 中的 AppId 和 AppKey。
  2. 调用 `-[LCChatKit sharedInstance]` 来初始化一个单例对象。为了让这个库更易入手，避免引入过多公开的类和概念，我们采用了设计模式中的「门面模式」，将你在使用 ChatKit 库时所需要用到的所有方法都放在了 `LCChatKit` 这一个类中。它是一个 Mediator，是整个库的入口。如果不作出特殊说明，下面所说的「调用 API」，调用方都是 `-[LCChatKit sharedInstance]` 。示意图如下：
@@ -476,8 +484,8 @@ typedef NS_ENUM(NSInteger, LCCKBarButtonItemStyle) {
 
 添加 ChatKit 依赖的第三方库以及对应版本：
 
-- [AVOSCloud](https://github.com/leancloud/objc-sdk) v3.6.1
-- [AVOSCloudIM](https://github.com/leancloud/objc-sdk) v3.6.1
+- An `LCCKIMProvider` implementation. ChatKit no longer bundles LeanCloud; to use LeanCloud, add
+  [AVOSCloud and AVOSCloudIM](https://github.com/leancloud/objc-sdk) and the demo's `ChatKit-OC/Example/Class/LeanCloud` folder.
 - [MJRefresh](https://github.com/CoderMJLee/MJRefresh) 3.1.9
 - [Masonry](https://github.com/SnapKit/Masonry) v1.0.1 
 - [SDWebImage](https://github.com/rs/SDWebImage) v3.8.0

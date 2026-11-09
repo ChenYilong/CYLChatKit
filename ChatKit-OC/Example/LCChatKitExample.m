@@ -135,7 +135,7 @@
          createConversationWithMembers:peerIds
          type:LCCKConversationTypeGroup
          unique:YES
-         callback:^(AVIMConversation *conversation, NSError *error) {
+         callback:^(id<LCCKConversationDelegate> conversation, NSError *error) {
              [self lcck_hideHUDForView:fromViewController.view];
              if (conversation) {
                  [self lcck_showSuccess:@"创建成功"

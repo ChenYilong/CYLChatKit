@@ -7,11 +7,15 @@
 //
 
 #import "LCCKSettingService.h"
-#import "AVOSCloudIM/AVIMVideoMessage.h"
 #import "NSBundle+LCCKExtension.h"
 #import "NSString+LCCKExtension.h"
 #import "UIImage+LCCKExtension.h"
 #import "LCCKConversationService.h"
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 
 NSString *const LCCKSettingServiceErrorDomain = @"LCCKSettingServiceErrorDomain";
 
@@ -31,7 +35,14 @@ static BOOL LCCKAllLogsEnabled;
 
 + (void)setAllLogsEnabled:(BOOL)enabled {
     LCCKAllLogsEnabled = enabled;
-    [AVOSCloud setAllLogsEnabled:YES];
+    id<LCCKIMProvider> IMProvider = [LCChatKit sharedInstance].IMProvider;
+    if ([IMProvider respondsToSelector:@selector(setAllLogsEnabled:)]) {
+        [IMProvider setAllLogsEnabled:YES];
+    }
+}
+
+- (id<LCCKIMProvider>)pushProvider {
+    return [LCChatKit sharedInstance].IMProvider;
 }
 
 + (BOOL)allLogsEnabled {
@@ -69,64 +80,63 @@ static BOOL LCCKAllLogsEnabled;
     return [[self getFilesPath] stringByAppendingFormat:@"%@", objectId];
 }
 
-- (NSString *)videoPathOfMessage:(AVIMVideoMessage *)message {
+- (NSString *)videoPathOfMessage:(id<LCCKIMMessageDelegate>)message {
     // 视频播放会根据文件扩展名来识别格式
-    return [[self getFilesPath] stringByAppendingFormat:@"%@.%@", message.messageId, message.format];
+    NSString *format = nil;
+    if ([message respondsToSelector:@selector(format)]) {
+        format = [(id)message valueForKey:@"format"];
+    }
+    return [[self getFilesPath] stringByAppendingFormat:@"%@.%@", message.messageId, format];
 }
 
 - (void)registerForRemoteNotification {
-    [AVOSCloud registerForRemoteNotification];
+    id<LCCKIMProvider> pushProvider = self.pushProvider;
+    if ([pushProvider respondsToSelector:@selector(registerForRemoteNotification)]) {
+        [pushProvider registerForRemoteNotification];
+    }
 }
 
 - (void)saveInstallationWithDeviceToken:(NSData *)deviceToken userId:(NSString *)userId {
-    AVInstallation *currentInstallation = [AVInstallation currentInstallation];
-    [currentInstallation setDeviceTokenFromData:deviceToken];
-    //FIXME: openClient 的时候也会将 clientId 注册到 channels，这里多余了？
-    if (userId) {
-        [currentInstallation addUniqueObject:userId forKey:LCCKInstallationKeyChannels];
+    id<LCCKIMProvider> pushProvider = self.pushProvider;
+    if ([pushProvider respondsToSelector:@selector(saveInstallationWithDeviceToken:userId:)]) {
+        [pushProvider saveInstallationWithDeviceToken:deviceToken userId:userId];
     }
-    [currentInstallation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        NSLog(@"%@", error);
-    }];
 }
 
 //TODO:Never used
-- (void)pushMessage:(NSString *)message userIds:(NSArray *)userIds block:(AVBooleanResultBlock)block {
-    AVPush *push = [[AVPush alloc] init];
-    [push setChannels:userIds];
-    [push setMessage:message];
-    [push sendPushInBackgroundWithBlock:block];
+- (void)pushMessage:(NSString *)message userIds:(NSArray *)userIds block:(LCCKBooleanResultBlock)block {
+    id<LCCKIMProvider> pushProvider = self.pushProvider;
+    if ([pushProvider respondsToSelector:@selector(pushMessage:userIds:block:)]) {
+        [pushProvider pushMessage:message userIds:userIds block:block];
+        return;
+    }
+    !block ?: block(NO, nil);
 }
 
 - (void)cleanBadge {
-    UIApplication *application = [UIApplication sharedApplication];
-    NSInteger num = application.applicationIconBadgeNumber;
-    if (num != 0) {
-        AVInstallation *currentInstallation = [AVInstallation currentInstallation];
-        [currentInstallation setBadge:0];
-        [currentInstallation saveInBackgroundWithBlock: ^(BOOL succeeded, NSError *error) {
-            NSLog(@"%@", error ? error : @"succeed");
-        }];
-        application.applicationIconBadgeNumber = 0;
+    id<LCCKIMProvider> pushProvider = self.pushProvider;
+    if ([pushProvider respondsToSelector:@selector(cleanBadge)]) {
+        [pushProvider cleanBadge];
+        return;
     }
+    UIApplication *application = [UIApplication sharedApplication];
+    application.applicationIconBadgeNumber = 0;
     [application cancelAllLocalNotifications];
 }
 
 - (void)syncBadge {
-    AVInstallation *currentInstallation = [AVInstallation currentInstallation];
-    if (currentInstallation.badge != [UIApplication sharedApplication].applicationIconBadgeNumber) {
-        [currentInstallation setBadge:[UIApplication sharedApplication].applicationIconBadgeNumber];
-        [currentInstallation saveEventually: ^(BOOL succeeded, NSError *error) {
-            NSLog(@"%@", error ? error : @"succeed");
-        }];
-    } else {
-        //        NSLog(@"badge not changed");
+    id<LCCKIMProvider> pushProvider = self.pushProvider;
+    if ([pushProvider respondsToSelector:@selector(syncBadge)]) {
+        [pushProvider syncBadge];
     }
 }
 
 - (void)setUseDevPushCerticate:(BOOL)useDevPushCerticate {
     _useDevPushCerticate = useDevPushCerticate;
-    [AVPush setProductionMode:!_useDevPushCerticate];
+    id<LCCKIMProvider> pushProvider = self.pushProvider;
+    if ([pushProvider respondsToSelector:@selector(setUseDevPushCerticate:)]) {
+        [pushProvider setUseDevPushCerticate:useDevPushCerticate];
+    }
 }
 
 - (NSDictionary *)defaultSettings {

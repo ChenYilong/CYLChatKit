@@ -7,13 +7,16 @@
 //
 
 #import "LCCKConversationListViewModel.h"
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 #import "LCCKConversationListCell.h"
-#import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCCKUserDelegate.h"
 #import "LCCKUserSystemService.h"
 #import "LCCKConversationListViewController.h"
 #import "LCCKConstants.h"
-#import "AVIMConversation+LCCKExtension.h"
 #import "LCCKLastMessageTypeManager.h"
 #import "NSDate+LCCKDateTools.h"
 #import "LCCKConversationListService.h"
@@ -74,7 +77,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
+    id<LCCKConversationDelegate> conversation = [self.dataArray objectAtIndex:indexPath.row];
     
     LCCKCellForRowBlock cellForRowBlock = [[LCCKConversationListService sharedInstance] cellForRowBlock];
     if (cellForRowBlock) {
@@ -96,7 +99,7 @@
         peerId = conversation.lcck_peerId;
         cell.clientId = conversation.lcck_peerId;
     } else {
-        peerId = conversation.lcck_lastMessage.clientId;
+        peerId = conversation.lcck_lastMessage.lcck_senderId;
         cell.clientId = nil;
     }
     if (peerId) {
@@ -120,7 +123,7 @@
         cell.messageTextLabel.attributedText = [LCCKLastMessageTypeManager attributedStringWithMessage:conversation.lcck_lastMessage conversation:conversation userName:displayName];
         cell.timestampLabel.text = [conversation.lcck_lastMessageAt lcck_timeAgoSinceNow];
     }
-    if (conversation.unreadMessagesCount > 0) {
+    if (conversation.lcck_unreadCount > 0) {
         if (conversation.muted) {
             cell.litteBadgeView.hidden = NO;
         } else {
@@ -159,7 +162,7 @@
 
 - (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
     LCCKConversationEditActionsBlock conversationEditActionBlock = [[LCCKConversationListService sharedInstance] conversationEditActionBlock];
-    AVIMConversation *conversation = nil;
+    id<LCCKConversationDelegate> conversation = nil;
     if ((NSUInteger)indexPath.row < self.dataArray.count) {
         conversation = [self.dataArray objectAtIndex:indexPath.row];
     }
@@ -238,7 +241,7 @@
                                               rowActionWithStyle:UITableViewRowActionStyleNormal
                                               title:LCCKLocalizedStrings(@"Delete")
                                               handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
-                                                  AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
+                                                  id<LCCKConversationDelegate> conversation = [self.dataArray objectAtIndex:indexPath.row];
                                                   [[LCCKConversationService sharedInstance] deleteRecentConversationWithConversationId:conversation.conversationId];
                                                   [self refresh];
                                                   LCCKDidDeleteConversationsListCellBlock conversationsListDidDeleteItemBlock = [LCCKConversationListService sharedInstance].didDeleteConversationsListCellBlock;
@@ -250,7 +253,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
+    id<LCCKConversationDelegate> conversation = [self.dataArray objectAtIndex:indexPath.row];
     
     id didSelectBlock = [LCCKConversationListService sharedInstance].didSelectConversationsListCellBlock;
     BOOL impDelegate = [self.conversationListViewController.delegate respondsToSelector:@selector(conversation:tableView:didSelectRowAtIndexPath:)];
@@ -277,7 +280,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     LCCKHeightForRowBlock heightForRowBlock = [[LCCKConversationListService sharedInstance] heightForRowBlock];
     if (heightForRowBlock) {
-        AVIMConversation *conversation = [self.dataArray objectAtIndex:indexPath.row];
+        id<LCCKConversationDelegate> conversation = [self.dataArray objectAtIndex:indexPath.row];
         return heightForRowBlock(tableView, indexPath, conversation);
     }
     return LCCKConversationListCellDefaultHeight;
@@ -339,7 +342,7 @@
     if (remoteNotificationConversationId) {
         // 进入之前推送弹框点击的对话
         __block BOOL found = NO;
-        [self.dataArray enumerateObjectsUsingBlock:^(AVIMConversation * _Nonnull conversation, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self.dataArray enumerateObjectsUsingBlock:^(id<LCCKConversationDelegate> _Nonnull conversation, NSUInteger idx, BOOL * _Nonnull stop) {
             if ([conversation.conversationId isEqualToString:remoteNotificationConversationId]) {
                 //TODO: If has section.
                 NSIndexPath *indexPath = [NSIndexPath indexPathWithIndex:idx];

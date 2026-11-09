@@ -47,7 +47,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 @interface LCCKChatMessageCell ()<LCCKSendImageViewDelegate>
 
 //@property (nonatomic, strong, readwrite) LCCKMessage *message;
-@property (nonatomic, assign, readwrite) AVIMMessageMediaType mediaType;
+@property (nonatomic, assign, readwrite) LCCKMessageMediaType mediaType;
 @property (nonatomic, strong) UIColor *conversationViewSenderNameTextColor;
 
 @end
@@ -61,12 +61,12 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
 + (void)registerSubclass {
     if ([self conformsToProtocol:@protocol(LCCKChatMessageCellSubclassing)]) {
         Class<LCCKChatMessageCellSubclassing> class = self;
-        AVIMMessageMediaType mediaType = [class classMediaType];
+        LCCKMessageMediaType mediaType = [class classMediaType];
         [self registerClass:class forMediaType:mediaType];
     }
 }
 
-+ (Class)classForMediaType:(AVIMMessageMediaType)mediaType {
++ (Class)classForMediaType:(LCCKMessageMediaType)mediaType {
     NSNumber *key = [NSNumber numberWithInteger:mediaType];
     Class class = [LCCKChatMessageCellMediaTypeDict objectForKey:key];
     if (!class) {
@@ -75,7 +75,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     return class;
 }
 
-+ (void)registerClass:(Class)class forMediaType:(AVIMMessageMediaType)mediaType {
++ (void)registerClass:(Class)class forMediaType:(LCCKMessageMediaType)mediaType {
     if (!LCCKChatMessageCellMediaTypeDict) {
         LCCKChatMessageCellMediaTypeDict = [[NSMutableDictionary alloc] init];
     }
@@ -332,13 +332,13 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     NSInteger userType = 0;
     LCCKMessageSendState sendStatus;
     if ([message lcck_isCustomMessage]) {
-        NSString *senderClientId = [(AVIMTypedMessage *)message clientId];
+        NSString *senderClientId = [(id<LCCKIMMessageDelegate>)message lcck_senderId];
         NSError *error;
         //TODO:如果我正在群里聊天，这时有人进入群聊，需要异步获取头像等信息，模仿ConversationList的做法。
         [[LCCKUserSystemService sharedInstance] getCachedProfileIfExists:senderClientId name:&nickName avatarURL:&avatarURL userTye:&userType error:&error];
         if (!nickName)  { nickName = senderClientId; }
         self.message = nil;
-        sendStatus = (LCCKMessageSendState)[(AVIMTypedMessage *)message status];
+        sendStatus = [(id<LCCKIMMessageDelegate>)message lcck_sendStatus];
     } else {
         self.message = message;
         nickName = self.message.localDisplayName;
@@ -525,7 +525,7 @@ static CGFloat const LCCK_MSG_CELL_NICKNAME_FONT_SIZE = 12;
                     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
                     [pasteboard setString:[self.message text]];
                 }];
-                if (self.mediaType == kAVIMMessageMediaTypeText) {
+                if (self.mediaType == kLCCKMessageMediaTypeText) {
                     menuItems = @[copyItem];
                 }
             }

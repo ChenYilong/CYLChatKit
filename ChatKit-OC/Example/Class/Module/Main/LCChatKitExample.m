@@ -17,6 +17,10 @@
 #import "LCCKUser.h"
 #import "MWPhotoBrowser.h"
 #import <objc/runtime.h>
+#import <AVOSCloud/AVOSCloud.h>
+#import <AVOSCloudIM/AVOSCloudIM.h>
+#import "LCCKLeanCloudIMProvider.h"
+#import "AVIMConversation+LCCKExtension.h"
 
 //==================================================================================================================================
 //If you want to see the storage of this demo, log in public account of leancloud.cn, search for the app named `LeanCloudChatKit-iOS`.
@@ -119,6 +123,8 @@ static NSMutableDictionary *_sharedInstances = nil;
 #ifndef __OPTIMIZE__
 //    [LCChatKit setAllLogsEnabled:YES];
 #endif
+    // ChatKit is UI only. Plug in the LeanCloud IM backend before starting ChatKit.
+    [LCChatKit sharedInstance].IMProvider = [[LCCKLeanCloudIMProvider alloc] init];
     [LCChatKit setAppId:LCCKAPPID appKey:LCCKAPPKEY];
     [[LCChatKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, LCCKFetchProfilesCallBack callback) {
         if (userIds.count == 0) {
@@ -146,7 +152,7 @@ static NSMutableDictionary *_sharedInstances = nil;
         !callback ?: callback([users copy], nil);
     }];
     
-    [[LCChatKit sharedInstance] setDidSelectItemBlock:^(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller) {
+    [[LCChatKit sharedInstance] setDidSelectItemBlock:^(NSIndexPath *indexPath, id<LCCKConversationDelegate> conversation, LCCKConversationListViewController *controller) {
         [[self class] exampleOpenConversationViewControllerWithConversaionId:conversation.conversationId fromNavigationController:nil];
     }];
     
@@ -167,7 +173,7 @@ static NSMutableDictionary *_sharedInstances = nil;
         return menuItems;
     }];
     
-    //    [[LCChatKit sharedInstance] setDidDeleteItemBlock:^(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller) {
+    //    [[LCChatKit sharedInstance] setDidDeleteItemBlock:^(NSIndexPath *indexPath, id<LCCKConversationDelegate> conversation, LCCKConversationListViewController *controller) {
     //        //TODO:
     //    }];
     
@@ -187,7 +193,7 @@ static NSMutableDictionary *_sharedInstances = nil;
     }];
     
     // 自定义Cell菜单
-    [[LCChatKit sharedInstance] setConversationEditActionBlock:^NSArray *(NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions, AVIMConversation *conversation, LCCKConversationListViewController *controller) {
+    [[LCChatKit sharedInstance] setConversationEditActionBlock:^NSArray *(NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions, id<LCCKConversationDelegate> conversation, LCCKConversationListViewController *controller) {
         return [self exampleConversationEditActionAtIndexPath:indexPath conversation:conversation controller:controller];
     }];
     
@@ -215,7 +221,7 @@ static NSMutableDictionary *_sharedInstances = nil;
 }
 
 - (NSArray *)exampleConversationEditActionAtIndexPath:(NSIndexPath *)indexPath
-                                         conversation:(AVIMConversation *)conversation
+                                         conversation:(id<LCCKConversationDelegate>)conversation
                                            controller:(LCCKConversationListViewController *)controller {
     // 如果需要自定义其他会话的菜单，在此编辑
     return [self rightButtonsAtIndexPath:indexPath conversation:conversation controller:controller];
@@ -226,7 +232,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 - (void)markReadStatusAtIndexPath:(NSIndexPath *)indexPath
                             title:(NSString **)title
                            handle:(UITableViewRowActionHandler *)handler
-                     conversation:(AVIMConversation *)conversation
+                     conversation:(id<LCCKConversationDelegate>)conversation
                        controller:(LCCKConversationListViewController *)controller {
     if (conversation.lcck_unreadCount > 0) {
         if (*title == nil) {
@@ -250,7 +256,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 }
 
 - (NSArray *)rightButtonsAtIndexPath:(NSIndexPath *)indexPath
-                        conversation:(AVIMConversation *)conversation
+                        conversation:(id<LCCKConversationDelegate>)conversation
                           controller:(LCCKConversationListViewController *)controller {
     NSString *title = nil;
     UITableViewRowActionHandler handler = nil;
@@ -290,7 +296,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
             [LCCKUtil showNotificationWithTitle:title subtitle:subTitle type:LCCKMessageNotificationTypeMessage];
         }];
     }];
-    [conversationViewController setConversationHandler:^(AVIMConversation *conversation, LCCKConversationViewController *aConversationController) {
+    [conversationViewController setConversationHandler:^(id<LCCKConversationDelegate> conversation, LCCKConversationViewController *aConversationController) {
         if (!conversation) {
             [aConversationController.navigationController popViewControllerAnimated:YES];
             return;
@@ -314,7 +320,7 @@ typedef void (^UITableViewRowActionHandler)(UITableViewRowAction *action, NSInde
 
 + (void)exampleOpenConversationViewControllerWithConversaionId:(NSString *)conversationId fromNavigationController:(UINavigationController *)aNavigationController {
     LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithConversationId:conversationId];
-    [conversationViewController setConversationHandler:^(AVIMConversation *conversation, LCCKConversationViewController *aConversationController) {
+    [conversationViewController setConversationHandler:^(id<LCCKConversationDelegate> conversation, LCCKConversationViewController *aConversationController) {
         if (!conversation) {
             [aConversationController.navigationController popViewControllerAnimated:YES];
             return;

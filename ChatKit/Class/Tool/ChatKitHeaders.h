@@ -6,17 +6,8 @@
 //  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
-#if __has_include(<AVOSCloud/AVOSCloud.h>)
-    #import <AVOSCloud/AVOSCloud.h>
-#else
-    #import "AVOSCloud.h"
-#endif
-
-#if __has_include(<AVOSCloudIM/AVOSCloudIM.h>)
-    #import <AVOSCloudIM/AVOSCloudIM.h>
-#else
-    #import "AVOSCloudIM.h"
-#endif
+// ChatKit does not import any IM SDK. The IM backend is provided by the app through `LCCKIMProvider`.
+#import <UIKit/UIKit.h>
 
 
 #if __has_include(<CYLChatKit/LCChatKit.h>)
@@ -31,7 +22,9 @@
     #import <CYLChatKit/LCCKServiceDefinition.h>
     #import <CYLChatKit/LCCKConversationViewController.h>
     #import <CYLChatKit/LCCKConversationListViewController.h>
-    #import <CYLChatKit/AVIMConversation+LCCKExtension.h>
+    #import <CYLChatKit/LCCKConversationDelegate.h>
+    #import <CYLChatKit/LCCKIMMessageDelegate.h>
+    #import <CYLChatKit/LCCKIMProvider.h>
     #import <CYLChatKit/UIImageView+LCCKExtension.h>
     #import <CYLChatKit/LCCKBaseTableViewController.h>
     #import <CYLChatKit/LCCKBaseNavigationController.h>
@@ -45,7 +38,6 @@
     #import <CYLChatKit/LCCKBaseNavigationController.h>
     #import <CYLChatKit/LCCKBaseConversationViewController.h>
     #import <CYLChatKit/LCCKContact.h>
-    #import <CYLChatKit/AVIMTypedMessage+LCCKExtension.h>
     #import <CYLChatKit/LCCKInputViewPlugin.h>
     #import <CYLChatKit/LCCKInputViewPluginPickImage.h>
     #import <CYLChatKit/LCCKInputViewPluginTakePhoto.h>
@@ -68,7 +60,9 @@
     #import "LCCKServiceDefinition.h"
     #import "LCCKConversationViewController.h"
     #import "LCCKConversationListViewController.h"
-    #import "AVIMConversation+LCCKExtension.h"
+    #import "LCCKConversationDelegate.h"
+    #import "LCCKIMMessageDelegate.h"
+    #import "LCCKIMProvider.h"
     #import "UIImageView+LCCKExtension.h"
     #import "LCCKBaseTableViewController.h"
     #import "LCCKBaseNavigationController.h"
@@ -82,7 +76,6 @@
     #import "LCCKBaseNavigationController.h"
     #import "LCCKBaseConversationViewController.h"
     #import "LCCKContact.h"
-    #import "AVIMTypedMessage+LCCKExtension.h"
     #import "LCCKInputViewPlugin.h"
     #import "LCCKInputViewPluginPickImage.h"
     #import "LCCKInputViewPluginTakePhoto.h"

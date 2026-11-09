@@ -17,6 +17,9 @@
 #import "LCChatKit.h"
 #endif
 #import "LCCKLoginViewController.h"
+#import <AVOSCloud/AVOSCloud.h>
+#import <AVOSCloudIM/AVOSCloudIM.h>
+#import "LCCKLeanCloudIMProvider.h"
 
 #if XCODE_VERSION_GREATER_THAN_OR_EQUAL_TO_8
 /// Notification become independent from UIKit
@@ -56,6 +59,8 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
     // 如果APP是在国外使用，开启北美节点
     // 必须在 APPID 初始化之前调用，否则走的是中国节点。
     // [AVOSCloud setServiceRegion:AVServiceRegionUS];
+    // ChatKit is UI only. Plug in the LeanCloud IM backend before starting ChatKit.
+    [LCChatKit sharedInstance].IMProvider = [[LCCKLeanCloudIMProvider alloc] init];
     [LCChatKit setAppId:LCCKAPPID appKey:LCCKAPPKEY];
     // 启用未读消息
     [AVIMClient setUnreadNotificationEnabled:true];

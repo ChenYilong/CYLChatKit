@@ -8,9 +8,6 @@
 
 #import "AVIMConversation+LCCKExtension.h"
 #import <objc/runtime.h>
-#import "LCCKUserSystemService.h"
-#import "LCCKSessionService.h"
-#import "LCCKUserDelegate.h"
 #import "NSDate+LCCKDateTools.h"
 #import "AVIMMessage+LCCKExtension.h"
 
@@ -44,6 +41,14 @@
     NSDate *dateFromCache = [NSDate dateWithTimeIntervalSince1970:self.lcck_lastMessage.sendTimestamp / 1000];
     BOOL isServerLate = [dateFromServer lcck_isLaterThan:dateFromCache];
     return isServerLate ? dateFromServer : dateFromCache;
+}
+
+- (NSInteger)lcck_unreadCount {
+    return (NSInteger)self.unreadMessagesCount;
+}
+
+- (BOOL)lcck_mentioned {
+    return self.unreadMessagesMentioned;
 }
 
 - (NSString *)lcck_badgeText {

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4459B163B4A7175E7A402F77 /* LCCKIMMessageDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F296B9460D056E30E8C1788 /* LCCKIMMessageDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F248A5AA7010DCF26C891C8 /* LCCKConversationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 806A7A5E4536E4B5311C7205 /* LCCKConversationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A0B72601CED6851004FDACC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B725F1CED6851004FDACC /* SystemConfiguration.framework */; };
 		9A0B72621CED6858004FDACC /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B72611CED6858004FDACC /* MobileCoreServices.framework */; };
 		9A0B72641CED685F004FDACC /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B72631CED685F004FDACC /* CoreTelephony.framework */; };
@@ -14,10 +16,6 @@
 		9A6061C11CEC949E00D14D73 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9A6061C01CEC949E00D14D73 /* Info.plist */; };
 		9AAFA2101E14FBA4006618E0 /* LCChatKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AAFA1251E14FBA3006618E0 /* LCChatKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9AAFA2111E14FBA4006618E0 /* LCChatKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AAFA1261E14FBA3006618E0 /* LCChatKit.m */; };
-		9AAFA2121E14FBA4006618E0 /* AVIMMessage+LCCKExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AAFA1281E14FBA3006618E0 /* AVIMMessage+LCCKExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9AAFA2131E14FBA4006618E0 /* AVIMMessage+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AAFA1291E14FBA3006618E0 /* AVIMMessage+LCCKExtension.m */; };
-		9AAFA2141E14FBA4006618E0 /* AVIMTypedMessage+LCCKExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AAFA12A1E14FBA3006618E0 /* AVIMTypedMessage+LCCKExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9AAFA2151E14FBA4006618E0 /* AVIMTypedMessage+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AAFA12B1E14FBA3006618E0 /* AVIMTypedMessage+LCCKExtension.m */; };
 		9AAFA2161E14FBA4006618E0 /* LCCKMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AAFA12C1E14FBA3006618E0 /* LCCKMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9AAFA2171E14FBA4006618E0 /* LCCKMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AAFA12D1E14FBA3006618E0 /* LCCKMessage.m */; };
 		9AAFA2181E14FBA4006618E0 /* LCCKMessageDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AAFA12E1E14FBA3006618E0 /* LCCKMessageDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -47,8 +45,6 @@
 		9AAFA2301E14FBA4006618E0 /* LCCKLocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AAFA14E1E14FBA3006618E0 /* LCCKLocationController.m */; };
 		9AAFA2311E14FBA4006618E0 /* LCCKTextFullScreenViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AAFA14F1E14FBA3006618E0 /* LCCKTextFullScreenViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9AAFA2321E14FBA4006618E0 /* LCCKTextFullScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AAFA1501E14FBA3006618E0 /* LCCKTextFullScreenViewController.m */; };
-		9AAFA2331E14FBA4006618E0 /* AVIMConversation+LCCKExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AAFA1521E14FBA3006618E0 /* AVIMConversation+LCCKExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9AAFA2341E14FBA4006618E0 /* AVIMConversation+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AAFA1531E14FBA3006618E0 /* AVIMConversation+LCCKExtension.m */; };
 		9AAFA2351E14FBA4006618E0 /* LCCKConversationViewModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AAFA1541E14FBA3006618E0 /* LCCKConversationViewModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9AAFA2361E14FBA4006618E0 /* LCCKConversationViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AAFA1551E14FBA3006618E0 /* LCCKConversationViewModel.m */; };
 		9AAFA2371E14FBA4006618E0 /* LCCKImageManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AAFA1581E14FBA3006618E0 /* LCCKImageManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -504,12 +500,16 @@
 		9AC44E9F1E15154300619112 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AC44D7F1E15154300619112 /* README.md */; };
 		A16B478E229429CA00A222B8 /* Lan.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A16B478D229429CA00A222B8 /* Lan.bundle */; };
 		A16B496122966BE500A222B8 /* EmojiLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A16B496322966BE500A222B8 /* EmojiLocalizable.strings */; };
+		E27FDD858E61B7C77E1D5ED6 /* LCCKIMProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B3DBCE3CF66E4B8ED80D93 /* LCCKIMProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E6E190C7D2A26EEF593AB9CD /* libPods-ChatKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9601FCE9729A0FE4669D33E /* libPods-ChatKit.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		00B3DBCE3CF66E4B8ED80D93 /* LCCKIMProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = LCCKIMProvider.h; sourceTree = "<group>"; };
+		2F296B9460D056E30E8C1788 /* LCCKIMMessageDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = LCCKIMMessageDelegate.h; sourceTree = "<group>"; };
 		44B343625F3F83AFA1F15140 /* Pods-ChatKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit/Pods-ChatKit.debug.xcconfig"; sourceTree = "<group>"; };
 		5159CA305046AA97933FF01E /* Pods-ChatKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit/Pods-ChatKit.release.xcconfig"; sourceTree = "<group>"; };
+		806A7A5E4536E4B5311C7205 /* LCCKConversationDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = LCCKConversationDelegate.h; sourceTree = "<group>"; };
 		9A0B725F1CED6851004FDACC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9A0B72611CED6858004FDACC /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		9A0B72631CED685F004FDACC /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -519,10 +519,6 @@
 		9A6061C01CEC949E00D14D73 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9AAFA1251E14FBA3006618E0 /* LCChatKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCChatKit.h; sourceTree = "<group>"; };
 		9AAFA1261E14FBA3006618E0 /* LCChatKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCChatKit.m; sourceTree = "<group>"; };
-		9AAFA1281E14FBA3006618E0 /* AVIMMessage+LCCKExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVIMMessage+LCCKExtension.h"; sourceTree = "<group>"; };
-		9AAFA1291E14FBA3006618E0 /* AVIMMessage+LCCKExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AVIMMessage+LCCKExtension.m"; sourceTree = "<group>"; };
-		9AAFA12A1E14FBA3006618E0 /* AVIMTypedMessage+LCCKExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVIMTypedMessage+LCCKExtension.h"; sourceTree = "<group>"; };
-		9AAFA12B1E14FBA3006618E0 /* AVIMTypedMessage+LCCKExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AVIMTypedMessage+LCCKExtension.m"; sourceTree = "<group>"; };
 		9AAFA12C1E14FBA3006618E0 /* LCCKMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKMessage.h; sourceTree = "<group>"; };
 		9AAFA12D1E14FBA3006618E0 /* LCCKMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKMessage.m; sourceTree = "<group>"; };
 		9AAFA12E1E14FBA3006618E0 /* LCCKMessageDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKMessageDelegate.h; sourceTree = "<group>"; };
@@ -552,8 +548,6 @@
 		9AAFA14E1E14FBA3006618E0 /* LCCKLocationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKLocationController.m; sourceTree = "<group>"; };
 		9AAFA14F1E14FBA3006618E0 /* LCCKTextFullScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKTextFullScreenViewController.h; sourceTree = "<group>"; };
 		9AAFA1501E14FBA3006618E0 /* LCCKTextFullScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKTextFullScreenViewController.m; sourceTree = "<group>"; };
-		9AAFA1521E14FBA3006618E0 /* AVIMConversation+LCCKExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVIMConversation+LCCKExtension.h"; sourceTree = "<group>"; };
-		9AAFA1531E14FBA3006618E0 /* AVIMConversation+LCCKExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AVIMConversation+LCCKExtension.m"; sourceTree = "<group>"; };
 		9AAFA1541E14FBA3006618E0 /* LCCKConversationViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKConversationViewModel.h; sourceTree = "<group>"; };
 		9AAFA1551E14FBA3006618E0 /* LCCKConversationViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKConversationViewModel.m; sourceTree = "<group>"; };
 		9AAFA1581E14FBA3006618E0 /* LCCKImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKImageManager.h; sourceTree = "<group>"; };
@@ -1091,10 +1085,6 @@
 		9AAFA1271E14FBA3006618E0 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				9AAFA1281E14FBA3006618E0 /* AVIMMessage+LCCKExtension.h */,
-				9AAFA1291E14FBA3006618E0 /* AVIMMessage+LCCKExtension.m */,
-				9AAFA12A1E14FBA3006618E0 /* AVIMTypedMessage+LCCKExtension.h */,
-				9AAFA12B1E14FBA3006618E0 /* AVIMTypedMessage+LCCKExtension.m */,
 				9AAFA12C1E14FBA3006618E0 /* LCCKMessage.h */,
 				9AAFA12D1E14FBA3006618E0 /* LCCKMessage.m */,
 				9AAFA12E1E14FBA3006618E0 /* LCCKMessageDelegate.h */,
@@ -1103,6 +1093,8 @@
 				9AAFA1311E14FBA3006618E0 /* NSMutableArray+LCCKMessageExtention.m */,
 				9AAFA1321E14FBA3006618E0 /* NSObject+LCCKExtension.h */,
 				9AAFA1331E14FBA3006618E0 /* NSObject+LCCKExtension.m */,
+				806A7A5E4536E4B5311C7205 /* LCCKConversationDelegate.h */,
+				2F296B9460D056E30E8C1788 /* LCCKIMMessageDelegate.h */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1198,8 +1190,6 @@
 		9AAFA1511E14FBA3006618E0 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				9AAFA1521E14FBA3006618E0 /* AVIMConversation+LCCKExtension.h */,
-				9AAFA1531E14FBA3006618E0 /* AVIMConversation+LCCKExtension.m */,
 				9AAFA1541E14FBA3006618E0 /* LCCKConversationViewModel.h */,
 				9AAFA1551E14FBA3006618E0 /* LCCKConversationViewModel.m */,
 			);
@@ -1427,6 +1417,7 @@
 				9AAFA1DB1E14FBA4006618E0 /* LCCKUIService.m */,
 				9AAFA1DC1E14FBA4006618E0 /* LCCKUserSystemService.h */,
 				9AAFA1DD1E14FBA4006618E0 /* LCCKUserSystemService.m */,
+				00B3DBCE3CF66E4B8ED80D93 /* LCCKIMProvider.h */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -2141,7 +2132,6 @@
 			files = (
 				9AAFA2451E14FBA4006618E0 /* LCCKCellIdentifierFactory.h in Headers */,
 				9AC44DAA1E15154300619112 /* FMResultSet.h in Headers */,
-				9AAFA2121E14FBA4006618E0 /* AVIMMessage+LCCKExtension.h in Headers */,
 				9AAFA2A21E14FBA5006618E0 /* NSObject+LCCKIsFirstLaunch.h in Headers */,
 				9AC44DB21E15154300619112 /* MASConstraintMaker.h in Headers */,
 				9AAFA2AA1E14FBA5006618E0 /* LCCKSettingService.h in Headers */,
@@ -2183,7 +2173,6 @@
 				9AAFA2371E14FBA4006618E0 /* LCCKImageManager.h in Headers */,
 				9AC44E431E15154300619112 /* POP.h in Headers */,
 				9AC44E791E15154300619112 /* NSData+ImageContentType.h in Headers */,
-				9AAFA2141E14FBA4006618E0 /* AVIMTypedMessage+LCCKExtension.h in Headers */,
 				9AC44DB71E15154300619112 /* MASUtilities.h in Headers */,
 				9AC44DFB1E15154300619112 /* MLTextAttachment.h in Headers */,
 				9AC44E4E1E15154300619112 /* POPAnimationInternal.h in Headers */,
@@ -2315,7 +2304,6 @@
 				9AAFA2961E14FBA5006618E0 /* UIImage+LCCKExtension.h in Headers */,
 				9AC44E881E15154300619112 /* SDWebImagePrefetcher.h in Headers */,
 				9AC44DBC1E15154300619112 /* NSArray+MASAdditions.h in Headers */,
-				9AAFA2331E14FBA4006618E0 /* AVIMConversation+LCCKExtension.h in Headers */,
 				9AC44DA91E15154300619112 /* FMDB.h in Headers */,
 				9AC44D871E15154300619112 /* DACircularProgressView.h in Headers */,
 				9AAFA2B01E14FBA5006618E0 /* LCCKUserSystemService.h in Headers */,
@@ -2368,6 +2356,9 @@
 				9AC44D8D1E15154300619112 /* FDGapLayoutGuide.h in Headers */,
 				9AAFA29E1E14FBA5006618E0 /* LCCKConstants.h in Headers */,
 				9AAFA2101E14FBA4006618E0 /* LCChatKit.h in Headers */,
+				4F248A5AA7010DCF26C891C8 /* LCCKConversationDelegate.h in Headers */,
+				4459B163B4A7175E7A402F77 /* LCCKIMMessageDelegate.h in Headers */,
+				E27FDD858E61B7C77E1D5ED6 /* LCCKIMProvider.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2506,7 +2497,6 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ChatKit/Pods-ChatKit-resources.sh",
-				"${PODS_ROOT}/AVOSCloud/AVOS/AVOSCloud/AVOSCloud_Art.inc",
 				"${PODS_CONFIGURATION_BUILD_DIR}/FMDB/FMDB_Privacy.bundle",
 				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/MJRefresh/MJRefresh.Privacy.bundle",
@@ -2514,7 +2504,6 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AVOSCloud_Art.inc",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FMDB_Privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.Privacy.bundle",
@@ -2618,7 +2607,6 @@
 				9AAFA2A31E14FBA5006618E0 /* NSObject+LCCKIsFirstLaunch.m in Sources */,
 				9AAFA2271E14FBA4006618E0 /* LCCKContactListViewController.m in Sources */,
 				9AAFA2AD1E14FBA5006618E0 /* LCCKSignatureService.m in Sources */,
-				9AAFA2341E14FBA4006618E0 /* AVIMConversation+LCCKExtension.m in Sources */,
 				9AC44DBD1E15154300619112 /* NSArray+MASAdditions.m in Sources */,
 				9AC44DED1E15154300619112 /* UIScrollView+MJExtension.m in Sources */,
 				9AC44DC51E15154300619112 /* ViewController+MASAdditions.m in Sources */,
@@ -2629,7 +2617,6 @@
 				9AC44D9C1E15154300619112 /* FDTransformLayer.m in Sources */,
 				9AAFA27E1E14FBA5006618E0 /* LCCKConversationListViewModel.m in Sources */,
 				9AC44E601E15154300619112 /* POPDecayAnimation.mm in Sources */,
-				9AAFA2131E14FBA4006618E0 /* AVIMMessage+LCCKExtension.m in Sources */,
 				9AC44DEB1E15154300619112 /* MJRefreshConst.m in Sources */,
 				9AC44E7A1E15154300619112 /* NSData+ImageContentType.m in Sources */,
 				9AC44E6A1E15154300619112 /* POPPropertyAnimation.mm in Sources */,
@@ -2640,7 +2627,6 @@
 				9AAFA21B1E14FBA4006618E0 /* NSMutableArray+LCCKMessageExtention.m in Sources */,
 				9AAFA2781E14FBA5006618E0 /* LCCKConversationNavigationTitleView.m in Sources */,
 				9AAFA2521E14FBA4006618E0 /* LCCKMessageVoiceFactory.m in Sources */,
-				9AAFA2151E14FBA4006618E0 /* AVIMTypedMessage+LCCKExtension.m in Sources */,
 				9AC44E891E15154300619112 /* SDWebImagePrefetcher.m in Sources */,
 				9AAFA25E1E14FBA5006618E0 /* LCCKInputViewPlugin.m in Sources */,
 				9AAFA2A51E14FBA5006618E0 /* LCCKConversationListService.m in Sources */,

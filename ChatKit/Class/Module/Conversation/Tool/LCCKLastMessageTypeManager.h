@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-@class AVIMConversation;
-@class AVIMTypedMessage;
+#import "LCCKConversationDelegate.h"
+#import "LCCKIMMessageDelegate.h"
 
 @interface LCCKLastMessageTypeManager : NSObject
 
@@ -18,6 +18,6 @@
  *  @param conversation 对话
  *  @return 修饰文本。红色的 [有人@你]
  */
-+ (NSAttributedString *)attributedStringWithMessage:(AVIMTypedMessage *)message conversation:(AVIMConversation *)conversation userName:(NSString *)userName;
++ (NSAttributedString *)attributedStringWithMessage:(id<LCCKIMMessageDelegate>)message conversation:(id<LCCKConversationDelegate>)conversation userName:(NSString *)userName;
 
 @end

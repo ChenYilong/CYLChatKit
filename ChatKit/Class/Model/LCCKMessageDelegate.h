@@ -21,7 +21,7 @@
 @property(nonatomic, assign, readonly) int photoHeight;
 @property (nonatomic, copy, readonly) NSString *photoPath;
 @property (nonatomic, strong, readonly) NSURL *originPhotoURL;
-@property (nonatomic, assign, readonly) AVIMMessageMediaType mediaType;
+@property (nonatomic, assign, readonly) LCCKMessageMediaType mediaType;
 
 @optional
 

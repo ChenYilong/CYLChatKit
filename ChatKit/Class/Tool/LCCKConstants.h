@@ -6,8 +6,38 @@
 //  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //  Common typdef and constants, and so on.
 
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "LCCKUserDelegate.h"
-#import <AVOSCloudIM/AVOSCloudIM.h>
+
+#pragma mark - Message Media Type
+///=============================================================================
+/// @name Message Media Type
+///=============================================================================
+
+/*!
+ * Media type of a message, owned by ChatKit so the UI layer does not depend on any IM SDK.
+ * It is an `int8_t` and the raw values match the LeanCloud `AVIMMessageMediaType` values,
+ * so an IM provider can cast between the two types directly.
+ * Positive values are reserved for custom messages.
+ */
+typedef int8_t LCCKMessageMediaType;
+
+static LCCKMessageMediaType const kLCCKMessageMediaTypeNone = 0;
+static LCCKMessageMediaType const kLCCKMessageMediaTypeText = -1;
+static LCCKMessageMediaType const kLCCKMessageMediaTypeImage = -2;
+static LCCKMessageMediaType const kLCCKMessageMediaTypeAudio = -3;
+static LCCKMessageMediaType const kLCCKMessageMediaTypeVideo = -4;
+static LCCKMessageMediaType const kLCCKMessageMediaTypeLocation = -5;
+static LCCKMessageMediaType const kLCCKMessageMediaTypeFile = -6;
+static LCCKMessageMediaType const kLCCKMessageMediaTypeSystem = -7;
+static LCCKMessageMediaType const kLCCKMessageMediaTypeRecalled = -127;
+
+/*!
+ * Error code an IM provider reports when the connection to the IM server is lost.
+ * The value matches LeanCloud's `AVIMErrorCodeConnectionLost`.
+ */
+static NSInteger const LCCKIMErrorCodeConnectionLost = 9001;
 
 #pragma mark - Base ViewController Life Time Block
 ///=============================================================================
@@ -186,7 +216,8 @@ typedef NS_ENUM(NSUInteger, LCCKMessageOwnerType){
     LCCKMessageOwnerTypeOther /**< 接收到的他人消息 */,
 };
 
-static AVIMMessageMediaType const kAVIMMessageMediaTypeSystem = -7;
+/// Kept for source compatibility. Use `kLCCKMessageMediaTypeSystem` in new code.
+static LCCKMessageMediaType const kAVIMMessageMediaTypeSystem = kLCCKMessageMediaTypeSystem;
 
 /**
  *  消息发送状态,自己发送的消息时有
@@ -279,7 +310,6 @@ static NSString *const LCCKCustomMessageConversationTypeKey = @"conversationType
 ///=============================================================================
 
 FOUNDATION_EXTERN NSMutableDictionary const * LCCKChatMessageCellMediaTypeDict;
-FOUNDATION_EXTERN NSMutableDictionary const *_typeDict;
 
 static NSString *const LCCKCellIdentifierDefault = @"LCCKCellIdentifierDefault";
 static NSString *const LCCKCellIdentifierCustom = @"LCCKCellIdentifierCustom";

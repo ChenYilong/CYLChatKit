@@ -8,6 +8,11 @@
 
 #import "LCCKChatImageMessageCell.h"
 #import "UIImage+LCCKExtension.h"
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 
 #if __has_include(<SDWebImage/UIImageView+WebCache.h>)
 #import <SDWebImage/UIImageView+WebCache.h>
@@ -69,6 +74,36 @@
     }
 }
 
+/*!
+ * Downloads the image through the IM provider, or from `originPhotoURL` if the provider does not download attachments.
+ */
+- (void)downloadAttachmentOfMessage:(LCCKMessage *)message completion:(void (^)(NSURL *filePath, NSError *error))completion {
+    id<LCCKIMProvider> IMProvider = [LCChatKit sharedInstance].IMProvider;
+    if ([IMProvider respondsToSelector:@selector(downloadAttachmentOfMessage:completion:)]) {
+        [IMProvider downloadAttachmentOfMessage:message completion:completion];
+        return;
+    }
+    NSURL *URL = message.originPhotoURL;
+    if (!URL) {
+        !completion ?: completion(nil, nil);
+        return;
+    }
+    NSURLSessionDownloadTask *task = [[NSURLSession sharedSession] downloadTaskWithURL:URL completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+        NSURL *filePath = nil;
+        if (location && !error) {
+            NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSUUID UUID] UUIDString]];
+            NSURL *destination = [NSURL fileURLWithPath:path];
+            if ([[NSFileManager defaultManager] moveItemAtURL:location toURL:destination error:nil]) {
+                filePath = destination;
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            !completion ?: completion(filePath, error);
+        });
+    }];
+    [task resume];
+}
+
 - (void)configureCellWithData:(LCCKMessage *)message {
     [super configureCellWithData:message];
     UIImage *thumbnailPhoto = message.thumbnailPhoto;
@@ -112,8 +147,7 @@
             UIImage *newImage = [image lcck_imageByScalingAspectFillWithOriginSize:photoSize];
             self.messageImageView.contentMode = UIViewContentModeScaleAspectFit;
             self.messageImageView.image = newImage;
-            AVIMImageMessage *imgMessage = (AVIMImageMessage *)message.message;
-            [imgMessage.file downloadWithCompletionHandler:^(NSURL * _Nullable filePath, NSError * _Nullable error) {
+            [self downloadAttachmentOfMessage:message completion:^(NSURL * _Nullable filePath, NSError * _Nullable error) {
                 if (filePath.absoluteString.length > 0) {
                     NSData *data = [NSData dataWithContentsOfURL:filePath];
                     UIImage *image = [UIImage imageWithData:data];
@@ -197,8 +231,8 @@
     [self registerSubclass];
 }
 
-+ (AVIMMessageMediaType)classMediaType {
-    return kAVIMMessageMediaTypeImage;
++ (LCCKMessageMediaType)classMediaType {
+    return kLCCKMessageMediaTypeImage;
 }
 
 @end

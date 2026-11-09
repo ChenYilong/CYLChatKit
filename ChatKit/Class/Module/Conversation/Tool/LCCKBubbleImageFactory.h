@@ -8,11 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "LCCKConstants.h"
-#import <AVOSCloudIM/AVOSCloudIM.h>
-
 @interface LCCKBubbleImageFactory : NSObject
 
 + (UIImage *)bubbleImageViewForType:(LCCKMessageOwnerType)owner
-                        messageType:(AVIMMessageMediaType)messageMediaType
+                        messageType:(LCCKMessageMediaType)messageMediaType
                       isHighlighted:(BOOL)isHighlighted;
 @end

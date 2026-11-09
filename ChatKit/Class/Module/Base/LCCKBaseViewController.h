@@ -64,6 +64,10 @@ typedef NS_ENUM(NSInteger, LCCKBarButtonItemStyle) {
 
 - (void)alert:(NSString *)message;
 
+/*!
+ * Shows an alert for an IM error. The historical name is kept for compatibility;
+ * it handles errors from any `LCCKIMProvider`. See `LCCKIMErrorCodeConnectionLost`.
+ */
 - (BOOL)alertAVIMError:(NSError *)error;
 
 - (BOOL)filterAVIMError:(NSError *)error;

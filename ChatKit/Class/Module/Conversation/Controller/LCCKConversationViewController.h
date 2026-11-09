@@ -6,7 +6,8 @@
 //  Copyright © 2018 ChenYilong（wechat id：chenyilong1010） . All rights reserved.
 //
 
-@class AVIMConversation;
+#import "LCCKConversationDelegate.h"
+#import "LCCKIMMessageDelegate.h"
 
 #import "LCCKChat.h"
 #import "LCCKBaseConversationViewController.h"
@@ -67,7 +68,7 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
 /*!
  * If `isAvailable` is NO, it will return nil
  */
-- (AVIMConversation *)getConversationIfExists;
+- (id<LCCKConversationDelegate>)getConversationIfExists;
 
 #pragma mark - send Message
 ///=============================================================================
@@ -113,10 +114,11 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
 
 /*!
  * 自定义消息位置发送
+ * @param customMessage An IM SDK custom message conforming to `LCCKIMMessageDelegate`, such as an `AVIMTypedMessage` subclass for LeanCloud.
  * @attention Remember to check if `isAvailable` is ture, making sure sending message after conversation has been fetched
  *            发送前必须检查 `isAvailable` 属性是否为YES, 确保发送行为是在 conversation 被 fetch 之后进行的。
  */
-- (void)sendCustomMessage:(AVIMTypedMessage *)customMessage;
+- (void)sendCustomMessage:(id<LCCKIMMessageDelegate>)customMessage;
 
 /*!
  * 自定义消息位置发送
@@ -124,8 +126,8 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
  * @attention Remember to check if `isAvailable` is ture, making sure sending message after conversation has been fetched
  *            发送前必须检查 `isAvailable` 属性是否为YES, 确保发送行为是在 conversation 被 fetch 之后进行的。
  */
-- (void)sendCustomMessage:(AVIMTypedMessage *)customMessage
-            progressBlock:(AVProgressBlock)progressBlock
+- (void)sendCustomMessage:(id<LCCKIMMessageDelegate>)customMessage
+            progressBlock:(LCCKProgressBlock)progressBlock
                   success:(LCCKBooleanResultBlock)success
                    failed:(LCCKBooleanResultBlock)failed;
 
@@ -154,8 +156,8 @@ FOUNDATION_EXTERN NSString *const LCCKConversationViewControllerErrorDomain;
 ///=============================================================================
 
 /*!
- * 设置获取 AVIMConversation 对象结束后的 Handler。 这里可以做异常处理，比如获取失败等操作。
- * 获取失败时，LCCKConversationHandler 返回值中的AVIMConversation 为 nil，成功时为正确的 conversation 值。
+ * 设置获取 conversation 对象结束后的 Handler。 这里可以做异常处理，比如获取失败等操作。
+ * 获取失败时，LCCKConversationHandler 返回值中的 conversation 为 nil，成功时为正确的 conversation 值。
  * @attention 执行优先级高于 LCChatKit 类中的同名方法，如果在 LCChatKit 中设置过同名方法，就可以不设置本类中的该方法。
  */
 - (void)setFetchConversationHandler:(LCCKFetchConversationHandler)fetchConversationHandler;

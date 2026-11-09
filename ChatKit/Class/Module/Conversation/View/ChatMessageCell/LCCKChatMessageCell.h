@@ -20,8 +20,6 @@
 #else
 #import "Masonry.h"
 #endif
-#import <AVOSCloudIM/AVOSCloudIM.h>
-
 #if __has_include(<MLLabel/MLLinkLabel.h>)
     #import <MLLabel/MLLinkLabel.h>
 #else
@@ -37,7 +35,7 @@
  子类实现此方法用于返回该类对应的消息类型
  @return 消息类型
  */
-+ (AVIMMessageMediaType)classMediaType;
++ (LCCKMessageMediaType)classMediaType;
 @end
 
 @protocol LCCKChatMessageCellDelegate <NSObject>
@@ -103,7 +101,7 @@
 /**
  *  消息的类型,只读类型,会根据自己的具体实例类型进行判断
  */
-@property (nonatomic, assign, readonly) AVIMMessageMediaType mediaType;
+@property (nonatomic, assign, readonly) LCCKMessageMediaType mediaType;
 
 /**
  *  消息的所有者,只读类型,会根据自己的reuseIdentifier进行判断

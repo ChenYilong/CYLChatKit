@@ -32,8 +32,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    BOOL clientStatusOpened = [LCCKSessionService sharedInstance].client.status == AVIMClientStatusOpened;
-    //NSAssert([LCCKSessionService sharedInstance].client.status == AVIMClientStatusOpened, @"client not opened");
+    BOOL clientStatusOpened = [LCCKSessionService sharedInstance].isClientOpened;
     if (!clientStatusOpened) {
         [[LCCKSessionService sharedInstance] reconnectForViewController:self callback:nil];
     }

@@ -6,15 +6,14 @@
 //  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //  All the Typedefine for all kinds of services.
 
-#import <AVOSCloudIM/AVOSCloudIM.h>
+#import <UIKit/UIKit.h>
 #import "LCCKConstants.h"
 #import "LCCKSingleton.h"
 #import "LCCKMenuItem.h"
+#import "LCCKConversationDelegate.h"
+#import "LCCKIMMessageDelegate.h"
+#import "LCCKIMProvider.h"
 #import <CoreLocation/CoreLocation.h>
-@class AVIMClient;
-@class AVIMConversation;
-@class AVIMSignature;
-@class AVIMConversation;
 @class LCCKConversationViewController;
 @class LCCKConversationListViewController;
 @class LCCKMessage;
@@ -35,7 +34,11 @@ typedef void (^LCCKReconnectSessionCompletionHandler)(BOOL succeeded, NSError *e
 typedef void (^LCCKForceReconnectSessionBlock)(NSError *error, BOOL granted, __kindof UIViewController *viewController, LCCKReconnectSessionCompletionHandler completionHandler);
 
 @property (nonatomic, copy, readonly) NSString *clientId;
-@property (nonatomic, strong, readonly) AVIMClient *client;
+/*!
+ * The underlying SDK client of the current `LCCKIMProvider`, if it exposes one.
+ * For the LeanCloud provider in the demo this is an `AVIMClient`.
+ */
+@property (nonatomic, strong, readonly) id client;
 @property (nonatomic, assign) BOOL disableSingleSignOn;
 @property (nonatomic, copy) LCCKForceReconnectSessionBlock forceReconnectSessionBlock;
 
@@ -48,7 +51,7 @@ typedef void (^LCCKForceReconnectSessionBlock)(NSError *error, BOOL granted, __k
 /*!
  * @param force Just for Single Sign On
  */
-- (void)openWithClientId:(NSString *)clientId force:(BOOL)force callback:(AVIMBooleanResultBlock)callback;
+- (void)openWithClientId:(NSString *)clientId force:(BOOL)force callback:(LCCKBooleanResultBlock)callback;
 /*!
  * @brief Close the client
  * @param callback Callback
@@ -60,7 +63,10 @@ typedef void (^LCCKForceReconnectSessionBlock)(NSError *error, BOOL granted, __k
  */
 - (void)setForceReconnectSessionBlock:(LCCKForceReconnectSessionBlock)forceReconnectSessionBlock;
 
-- (void)setMemberInfoChangedBlock:(void (^)(AVIMConversation *conversation, NSString *byClientId, NSString *clientId, AVIMConversationMemberRole role))block;
+/*!
+ * @param role The member role reported by the IM provider. For LeanCloud it is an `AVIMConversationMemberRole` value.
+ */
+- (void)setMemberInfoChangedBlock:(void (^)(id<LCCKConversationDelegate> conversation, NSString *byClientId, NSString *clientId, NSUInteger role))block;
 
 @end
 
@@ -128,9 +134,10 @@ typedef void(^LCCKFetchProfilesBlock)(NSArray<NSString *> *userIds, LCCKFetchPro
 
 /*!
  *  @brief The block to execute with the signature information for session. Always execute this block at some point when fetching signature information completes on main thread. Specify signature information how you want ChatKit pin to these actions: open, start(create conversation), kick, invite.
- *  @attention If you fetch AVIMSignature fails, you should reture nil, meanwhile, give the error reason.
+ *  @attention If you fetch the signature fails, you should reture nil, meanwhile, give the error reason.
+ *  @param signature The signature object your IM provider expects. For LeanCloud it is an `AVIMSignature`.
  */
-typedef void(^LCCKGenerateSignatureCompletionHandler)(AVIMSignature *signature, NSError *error);
+typedef void(^LCCKGenerateSignatureCompletionHandler)(id signature, NSError *error);
 
 /*!
  *  @brief If implemeted, this block will be invoked automatically for pinning signature to these actions: open, start(create conversation), kick, invite.
@@ -354,8 +361,8 @@ typedef CGFloat (^LCCKAvatarImageViewCornerRadiusBlock)(CGSize avatarImageViewSi
 /// @name LCCKConversationService
 ///=============================================================================
 
-typedef void (^LCCKConversationResultBlock)(AVIMConversation *conversation, NSError *error);
-typedef void (^LCCKFetchConversationHandler) (AVIMConversation *conversation, LCCKConversationViewController *conversationController);
+typedef void (^LCCKConversationResultBlock)(id<LCCKConversationDelegate> conversation, NSError *error);
+typedef void (^LCCKFetchConversationHandler) (id<LCCKConversationDelegate> conversation, LCCKConversationViewController *conversationController);
 typedef void (^LCCKConversationInvalidedHandler) (NSString *conversationId, LCCKConversationViewController *conversationController, id<LCCKUserDelegate> administrator, NSError *error);
 
 @protocol LCCKConversationService <NSObject>
@@ -363,8 +370,8 @@ typedef void (^LCCKConversationInvalidedHandler) (NSString *conversationId, LCCK
 @property (nonatomic, copy) LCCKFetchConversationHandler fetchConversationHandler;
 
 /*!
- * 设置获取 AVIMConversation 对象结束后的 Handler。 这里可以做异常处理，比如获取失败等操作。
- * 获取失败时，LCCKConversationHandler 返回值中的AVIMConversation 为 nil，成功时为正确的 conversation 值。
+ * 设置获取 conversation 对象结束后的 Handler。 这里可以做异常处理，比如获取失败等操作。
+ * 获取失败时，LCCKConversationHandler 返回值中的 conversation 为 nil，成功时为正确的 conversation 值。
  */
 - (void)setFetchConversationHandler:(LCCKFetchConversationHandler)fetchConversationHandler;
 
@@ -376,7 +383,10 @@ typedef void (^LCCKConversationInvalidedHandler) (NSString *conversationId, LCCK
 - (void)setConversationInvalidedHandler:(LCCKConversationInvalidedHandler)conversationInvalidedHandler;
 
 typedef void (^LCCKFilterMessagesCompletionHandler)(NSArray *filteredMessages, NSError *error);
-typedef void (^LCCKFilterMessagesBlock)(AVIMConversation *conversation, NSArray<AVIMTypedMessage *> *messages, LCCKFilterMessagesCompletionHandler completionHandler);
+/*!
+ * @param messages SDK messages conforming to `LCCKIMMessageDelegate`. Return the filtered SDK messages.
+ */
+typedef void (^LCCKFilterMessagesBlock)(id<LCCKConversationDelegate> conversation, NSArray<id<LCCKIMMessageDelegate>> *messages, LCCKFilterMessagesCompletionHandler completionHandler);
 
 /*!
  * 用于筛选消息，比如：群定向消息、筛选黑名单消息、黑名单消息
@@ -391,7 +401,10 @@ typedef void (^LCCKFilterMessagesBlock)(AVIMConversation *conversation, NSArray<
  * @param error 消息为何不允许被发送
  */
 typedef void (^LCCKSendMessageHookCompletionHandler)(BOOL granted, NSError *error);
-typedef void (^LCCKSendMessageHookBlock)(LCCKConversationViewController *conversationController, AVIMTypedMessage __kindof *message, LCCKSendMessageHookCompletionHandler completionHandler);
+/*!
+ * @param message The SDK message about to be sent, conforming to `LCCKIMMessageDelegate`.
+ */
+typedef void (^LCCKSendMessageHookBlock)(LCCKConversationViewController *conversationController, id<LCCKIMMessageDelegate> message, LCCKSendMessageHookCompletionHandler completionHandler);
 
 /*!
  * 用于HOOK掉发送消息的行为，可以实现比如：禁止黑名单用户发消息、禁止发送包含敏感词掉消息
@@ -412,7 +425,7 @@ typedef void (^LCCKLoadLatestMessagesHandler)(LCCKConversationViewController *co
  */
 - (void)setLoadLatestMessagesHandler:(LCCKLoadLatestMessagesHandler)loadLatestMessagesHandler;
 
-- (void)createConversationWithMembers:(NSArray *)members type:(LCCKConversationType)type unique:(BOOL)unique callback:(AVIMConversationResultBlock)callback;
+- (void)createConversationWithMembers:(NSArray *)members type:(LCCKConversationType)type unique:(BOOL)unique callback:(LCCKConversationResultBlock)callback;
 
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo;
 
@@ -420,7 +433,7 @@ typedef void (^LCCKLoadLatestMessagesHandler)(LCCKConversationViewController *co
  *  插入一条最近对话
  *  @param conversation 会话
  */
-- (void)insertRecentConversation:(AVIMConversation *)conversation;
+- (void)insertRecentConversation:(id<LCCKConversationDelegate>)conversation;
 
 /**
  *  增加未读数
@@ -461,8 +474,8 @@ typedef void (^LCCKLoadLatestMessagesHandler)(LCCKConversationViewController *co
  * @param granted 该会话允许被展示
  * @param error 消息为何不允许被发送
  */
-typedef void (^LCCKConversationListShowHookCompletionHandler)(NSArray<AVIMConversation *> *conversations, NSError *error);
-typedef void (^LCCKConversationListShowHookBlock)(NSArray<AVIMConversation *> *conversations, LCCKConversationListShowHookCompletionHandler completionHandler);
+typedef void (^LCCKConversationListShowHookCompletionHandler)(NSArray<id<LCCKConversationDelegate> > *conversations, NSError *error);
+typedef void (^LCCKConversationListShowHookBlock)(NSArray<id<LCCKConversationDelegate> > *conversations, LCCKConversationListShowHookCompletionHandler completionHandler);
 
 /*!
  * 用于HOOK掉展示会话的行为，可以实现比如：禁止黑名单用户会话
@@ -476,7 +489,7 @@ typedef void (^LCCKConversationListShowHookBlock)(NSArray<AVIMConversation *> *c
  *  选中某个对话后的回调
  *  @param conversation 被选中的对话
  */
-typedef void(^LCCKDidSelectConversationsListCellBlock)(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller);
+typedef void(^LCCKDidSelectConversationsListCellBlock)(NSIndexPath *indexPath, id<LCCKConversationDelegate> conversation, LCCKConversationListViewController *controller);
 
 /*!
  *  选中某个对话后的回调
@@ -492,7 +505,7 @@ typedef void(^LCCKDidSelectConversationsListCellBlock)(NSIndexPath *indexPath, A
  *  删除某个对话后的回调
  *  @param conversation 被选中的对话
  */
-typedef void(^LCCKDidDeleteConversationsListCellBlock)(NSIndexPath *indexPath, AVIMConversation *conversation, LCCKConversationListViewController *controller);
+typedef void(^LCCKDidDeleteConversationsListCellBlock)(NSIndexPath *indexPath, id<LCCKConversationDelegate> conversation, LCCKConversationListViewController *controller);
 
 /*!
  *  删除某个对话后的回调
@@ -510,7 +523,7 @@ typedef void(^LCCKDidDeleteConversationsListCellBlock)(NSIndexPath *indexPath, A
  *  - param conversation, 对话
  *  - param editActions, 默认的菜单数组，成员为 UITableViewRowAction 类型
  */
-typedef NSArray *(^LCCKConversationEditActionsBlock)(NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions, AVIMConversation *conversation, LCCKConversationListViewController *controller);
+typedef NSArray *(^LCCKConversationEditActionsBlock)(NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions, id<LCCKConversationDelegate> conversation, LCCKConversationListViewController *controller);
 
 /*!
  *  可以通过这个block设置对话列表中每个对话的左滑菜单，这个是同步调用的，需要尽快返回，否则会卡住UI

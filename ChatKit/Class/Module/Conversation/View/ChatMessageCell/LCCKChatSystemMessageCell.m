@@ -101,8 +101,8 @@
     [self registerSubclass];
 }
 
-+ (AVIMMessageMediaType)classMediaType {
-    return kAVIMMessageMediaTypeSystem;
++ (LCCKMessageMediaType)classMediaType {
+    return kLCCKMessageMediaTypeSystem;
 }
 
 - (UIColor *)conversationViewTimeLineTextColor {

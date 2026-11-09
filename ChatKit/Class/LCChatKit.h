@@ -14,16 +14,23 @@
  
  To use LCChatKit, steps are as follows:
  
- 1. Invoke `-[AVOSCloud setAppId:appKey:]` in `-[AppDelegate application:didFinishLaunchingWithOptions:]` to start LeanCloud service.
+ 0. Set `[LCChatKit sharedInstance].IMProvider` to an object implementing `LCCKIMProvider`. ChatKit is UI only and does not link an IM SDK; the demo app ships a LeanCloud implementation, `LCCKLeanCloudIMProvider`.
+ 1. Start your IM SDK in `-[AppDelegate application:didFinishLaunchingWithOptions:]`, for example `-[AVOSCloud setApplicationId:clientKey:]` for LeanCloud.
  2. Invoke `-[LCChatKit setAppId:appKey:]` after your login **everytime** to start ChatKit service.
- 3. Invoke `-[[LCChatKit sharedInstance] openWithClientId:callback:]` to log in LeanCloud IM service and begin chatting.
- 4. Invoke `-[[LCChatKit sharedInstance] closeWithCallback:]` to log out LeanCloud IM service and end chatting.
+ 3. Invoke `-[[LCChatKit sharedInstance] openWithClientId:callback:]` to log in the IM service and begin chatting.
+ 4. Invoke `-[[LCChatKit sharedInstance] closeWithCallback:]` to log out the IM service and end chatting.
  5. Implement `-[[LCChatKit sharedInstance] setFetchProfilesBlock:]`, so ChatKit can get user information by user id. `LCCKUserSystemService.h` file gives an example showing how to use AVUser as the user system.
  6. Implement `-[[LCChatKit sharedInstance] setGenerateSignatureBlock:]`. If implemeted, this method will be invoked automatically for pinning signature to these actions: open, start(create conversation), kick, invite.
  
  */
 
 @interface LCChatKit : NSObject <LCCKSessionService, LCCKUserSystemService, LCCKSignatureService, LCCKSettingService, LCCKUIService, LCCKConversationService, LCCKConversationsListService>
+
+/*!
+ * The IM backend used by ChatKit. Set it before calling `+setAppId:appKey:` or opening a session.
+ * The provider is kept when ChatKit services are reset after closing a session.
+ */
+@property (nonatomic, strong) id<LCCKIMProvider> IMProvider;
 
 /*!
  *  appId
@@ -37,7 +44,7 @@
 
 /*!
  *
- * @brief Set up application id(appId) and client key(appKey) to start LeanCloud service.
+ * @brief Set up application id(appId) and client key(appKey) to start ChatKit. If the IM provider implements `-setAppId:appKey:`, it is forwarded so the provider can start its SDK.
  * @attention 请区别 `[AVOSCloud setApplicationId:appId clientKey:appKey];` 与 `[LCChatKit setAppId:appId appKey:appKey];`。
               两者功能并不相同，前者不能代替后者。即使你在 `-[AppDelegate application:didFinishLaunchingWithOptions:]` 方法里已经设置过前者，也不能因此不调用后者。
               前者为 LeanCloud-SDK 初始化，后者为 ChatKit 初始化。后者需要你在**每次**登录操作时调用一次，前者只需要你在程序启动时调用。

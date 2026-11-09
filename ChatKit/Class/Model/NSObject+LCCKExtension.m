@@ -20,10 +20,13 @@
     return [self lcck_isCustomTypedMessage];
 }
 
+/*!
+ * A custom message is an IM SDK message (conforming to `LCCKIMMessageDelegate`) whose media type is greater than 0.
+ */
 - (BOOL)lcck_isCustomTypedMessage {
     BOOL isCustomMessage = NO;
-    if ([[self class] isSubclassOfClass:[AVIMTypedMessage class]]) {
-        if ((int)[(AVIMTypedMessage *)self mediaType] > 0) {
+    if ([self conformsToProtocol:@protocol(LCCKIMMessageDelegate)]) {
+        if ((int)[(id<LCCKIMMessageDelegate>)self mediaType] > 0) {
             isCustomMessage = YES;
         }
     }
@@ -42,7 +45,7 @@
 - (NSTimeInterval)lcck_messageTimestamp {
     NSTimeInterval selfMessageTimestamp;
     if ([self lcck_isCustomMessage]) {
-        NSTimeInterval sendTime = [(AVIMTypedMessage *)self sendTimestamp];
+        NSTimeInterval sendTime = [(id<LCCKIMMessageDelegate>)self lcck_sendTimestamp];
         //如果当前消息是正在发送的消息，则没有时间戳
         if (sendTime == 0) {
             sendTime = LCCK_CURRENT_TIMESTAMP;

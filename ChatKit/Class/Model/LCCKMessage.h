@@ -10,11 +10,14 @@
 #import <CoreLocation/CoreLocation.h>
 #import "LCCKMessageDelegate.h"
 
-@class AVIMTypedMessage;
 
 @interface LCCKMessage : NSObject <NSCoding, NSCopying, LCCKMessageDelegate>
 
-@property (nonatomic, strong) AVIMMessage *message;
+/*!
+ * The underlying IM SDK message this model was converted from, if any.
+ * Its type depends on the `LCCKIMProvider`; for LeanCloud it is an `AVIMTypedMessage`.
+ */
+@property (nonatomic, strong) id message;
 
 @property (nonatomic, copy, readonly) NSString *text;
 @property (nonatomic, copy, readonly) NSString *systemText;
@@ -157,7 +160,9 @@
                                  timestamp:(NSTimeInterval)timestamp
                            serverMessageId:(NSString *)serverMessageId;
 
-+ (id)messageWithAVIMTypedMessage:(AVIMTypedMessage *)message;
+// `+messageWithAVIMTypedMessage:` depends on LeanCloud and moved to the demo category
+// `LCCKMessage+LCCKExtension`. ChatKit converts SDK messages with
+// `-[LCCKIMProvider displayMessageFromIMMessage:]`.
 
 @end
 
