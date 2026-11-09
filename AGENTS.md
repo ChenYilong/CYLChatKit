@@ -48,3 +48,27 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
 - Default type meanings and emojis are: `chore` (build or auxiliary-tool changes, 🤖), `ci` (CI changes, 🎡), `docs` (documentation only, ✏️), `feat` (new feature, 🎸), `fix` (bug fix, 🐛), `perf` (performance improvement, ⚡️), `refactor` (code change that is neither a feature nor a fix, 💡), `style` (markup or formatting only, 💄), `test` (adding missing tests, 💍), and `release` (release commit, 🏹).
 - The question sequence is `type`, `scope`, `subject`, `body`, `breaking`, `issues`, and `lerna`. Their prompts ask for the change type, optional component scope, a short imperative subject, longer description, breaking changes, issues closed (for example `#123`), and affected packages; the final confirmation names the affected packages.
 - Follow established repository history when it intentionally uses a project-specific emoji instead of the default (for example, CYLTabBarController uses `feat: ✨`, `fix: 🐛`, `docs: 📝`, `chore: 🔧`, and `refactor: ♻️`). Keep commit text in English and the subject concise.
+
+### Commit-message hook before Commitizen commits
+
+Before a Commitizen-style commit, run the following from the repository root:
+
+```sh
+cat > .git/hooks/commit-msg << 'HOOKEOF'
+#!/bin/sh
+tmpfile="$1"
+if grep -qi "Co-Authored-By:" "$tmpfile" 2>/dev/null; then
+  tmp_clean=$(mktemp)
+  grep -vi "Co-Authored-By:" "$tmpfile" > "$tmp_clean"
+  cat "$tmp_clean" > "$tmpfile"
+  rm -f "$tmp_clean"
+fi
+HOOKEOF
+chmod +x .git/hooks/commit-msg
+```
+
+This overwrites the existing `commit-msg` hook and removes every line containing
+`Co-Authored-By:`, case-insensitively, including other authors' attribution.
+Inspect any existing hook before replacing it. The command assumes `.git` is
+a directory and Git uses its default hooks path; linked worktrees and custom
+`core.hooksPath` require the appropriate hooks path instead.
