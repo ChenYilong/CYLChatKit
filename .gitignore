@@ -35,6 +35,9 @@ Pods/
 # macOS AppleDouble metadata
 ._*
 
+# Obsidian folder-note metadata
+*.base
+
 # Malformed metadata/artifact names
 /..claude/
 /..git/

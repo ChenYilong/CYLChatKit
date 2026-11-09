@@ -5,7 +5,7 @@ filters:
     - file.basename != "instructions"
 views:
   - type: cards
-    name: Project documentation
+    name: Project documentation and commit records
     order:
       - file.name
     sort:
