@@ -15,7 +15,7 @@
  * `-[CYLIMProvider displayMessageFromIMMessage:]`, after applying `filterMessagesBlock`.
  * The historical name is kept for compatibility.
  */
-+ (NSMutableArray *)cyl_messagesWithAVIMMessages:(NSArray *)avimTypedMessage;
++ (NSMutableArray *)cyl_messagesWithCYLIMMessages:(NSArray *)cylimTypedMessage;
 
 - (void)cyl_removeMessageAtIndex:(NSUInteger)index;
 

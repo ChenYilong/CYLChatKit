@@ -285,13 +285,13 @@ NSString *const CYLConversationViewControllerErrorDomain = @"CYLConversationView
 
 - (void)sendTextMessage:(NSString *)text mentionList:(NSArray<NSString *> *)mentionList {
     if ([text length] > 0 ) {
-        CYLMessage *lcckMessage = [[CYLMessage alloc] initWithText:text
+        CYLMessage *cylMessage = [[CYLMessage alloc] initWithText:text
                                                             senderId:self.userId
                                                               sender:self.user
                                                            timestamp:CYL_CURRENT_TIMESTAMP
                                                      serverMessageId:nil];
-        [self makeSureSendValidMessage:lcckMessage afterFetchedConversationShouldWithAssert:NO];
-        [self.chatViewModel sendMessage:lcckMessage mentionList:mentionList];
+        [self makeSureSendValidMessage:cylMessage afterFetchedConversationShouldWithAssert:NO];
+        [self.chatViewModel sendMessage:cylMessage mentionList:mentionList];
     }
 }
 

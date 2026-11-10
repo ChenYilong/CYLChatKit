@@ -8,7 +8,7 @@
 //  The conversation model ChatKit's UI layer works with.
 //  ChatKit does not depend on any IM SDK; an `CYLIMProvider` hands conversation objects
 //  conforming to this protocol to the UI. For example, the LeanCloud provider in the demo
-//  makes `AVIMConversation` conform through a category.
+//  makes the LeanCloud SDK conversation class conform through a category.
 
 #import <Foundation/Foundation.h>
 #import "CYLChatConstants.h"

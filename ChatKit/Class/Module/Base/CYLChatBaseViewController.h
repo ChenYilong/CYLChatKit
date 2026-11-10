@@ -68,8 +68,8 @@ typedef NS_ENUM(NSInteger, CYLBarButtonItemStyle) {
  * Shows an alert for an IM error. The historical name is kept for compatibility;
  * it handles errors from any `CYLIMProvider`. See `CYLIMErrorCodeConnectionLost`.
  */
-- (BOOL)alertAVIMError:(NSError *)error;
+- (BOOL)alertCYLIMError:(NSError *)error;
 
-- (BOOL)filterAVIMError:(NSError *)error;
+- (BOOL)filterCYLIMError:(NSError *)error;
 
 @end

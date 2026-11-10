@@ -21,7 +21,7 @@ FOUNDATION_EXTERN NSString *const CYLSessionServiceErrorDemain;
 @property (nonatomic, copy, readonly) NSString *clientId;
 
 /*!
- * The underlying SDK client of the IM provider, if it exposes one (an `AVIMClient` for LeanCloud).
+ * The underlying SDK client of the IM provider, if it exposes one (the SDK client for LeanCloud).
  */
 @property (nonatomic, strong, readonly) id client;
 
@@ -37,7 +37,7 @@ FOUNDATION_EXTERN NSString *const CYLSessionServiceErrorDemain;
 
 /*!
  * Invoked by the IM provider when a member's role changes.
- * `role` is the provider's role value, for example an `AVIMConversationMemberRole`.
+ * `role` is the provider's role value, for example LeanCloud's member role value.
  */
 @property (nonatomic, copy) void (^ memberInfoChangedBlock)(id<CYLConversationProtocol> conversation, NSString *byClientId, NSString *clientId, NSUInteger role);
 

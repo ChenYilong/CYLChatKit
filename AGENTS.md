@@ -14,7 +14,7 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
 
 ## Objective-C and API rules
 
-- Core (`ChatKit/`) uses the `CYL` prefix for classes, protocols, typedefs, enums, constants, and C functions, following the CYLTabBarController naming rules. Category methods and properties use `cyl_` (setter `setCyl_name:`). Core contains no `LCCK`, `lcck_`, or `AVOS`; keep it that way. Keep vendor code and third-party APIs unchanged.
+- Core (`ChatKit/`) uses the `CYL` prefix for classes, protocols, typedefs, enums, constants, and C functions, following the CYLTabBarController naming rules. Category methods and properties use `cyl_` (setter `setCyl_name:`). Core contains no `LCCK`, `lcck_`, `AVOS`, or `AVIM` (in any letter case); keep it that way. Comments describe LeanCloud types in words instead of naming them. Keep vendor code and third-party APIs unchanged.
 - Each header/implementation filename must match its primary type. Name new category files `Type+CYLExtension.h` / `.m`.
 - Before adding a `CYL` name to core, check that `CYLTabBarController` (linked by the demo) and `CYLDeallocBlockExecutor` (a core dependency) do not already define the same class, header, macro, constant, or category selector. Use a `CYLChat` prefix for core names that would collide (for example `CYLChatBaseViewController`, `CYLChatConstants.h`).
 - The demo (`ChatKit-OC/`) keeps the `LCCK` prefix for its own symbols and uses the core `CYL` API.

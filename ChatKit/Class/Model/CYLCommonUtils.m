@@ -10,7 +10,7 @@
 
 @implementation CYLCommonUtils
 
-// `+getPathFromFile:` and `+isCacheDataAvailableForFile:` take a LeanCloud `AVFile`,
+// `+getPathFromFile:` and `+isCacheDataAvailableForFile:` take a LeanCloud file object,
 // so they moved to the demo category `CYLCommonUtils+CYLExtension`.
 
 + (void)recognitionWithImage:(UIImage *)image callback:(void(^)(NSDictionary *dict))callback {

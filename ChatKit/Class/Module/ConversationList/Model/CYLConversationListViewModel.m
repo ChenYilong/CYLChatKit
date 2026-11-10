@@ -301,7 +301,7 @@
     [[CYLConversationListService sharedInstance] findRecentConversationsWithBlock:^(NSArray *conversations, NSInteger totalUnreadCount, NSError *error) {
         dispatch_block_t finishBlock = ^{
             self.freshing = NO;
-            if ([self.conversationListViewController filterAVIMError:error]) {
+            if ([self.conversationListViewController filterCYLIMError:error]) {
                 self.dataArray = [NSMutableArray arrayWithArray:conversations];
                 [self.conversationListViewController.tableView cyl_reloadData];
                 [self selectConversationIfHasRemoteNotificatoinConvid];
@@ -325,7 +325,7 @@
         };
         if([CYLConversationListService sharedInstance].prepareConversationsWhenLoadBlock) {
             [CYLConversationListService sharedInstance].prepareConversationsWhenLoadBlock(conversations, ^(BOOL succeeded, NSError *error) {
-                if ([self.conversationListViewController filterAVIMError:error]) {
+                if ([self.conversationListViewController filterCYLIMError:error]) {
                     finishBlock();
                 } else {
                     self.freshing = NO;

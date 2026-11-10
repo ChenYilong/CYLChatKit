@@ -51,7 +51,7 @@
 
 @property (nonatomic, weak) CYLConversationViewController *parentConversationViewController;
 @property (nonatomic, strong) NSMutableArray *dataArray;
-@property (nonatomic, strong) NSMutableArray<id<CYLIMMessageProtocol>> *avimTypedMessage;
+@property (nonatomic, strong) NSMutableArray<id<CYLIMMessageProtocol>> *cylimTypedMessage;
 
 /*!
  * 懒加载，只在下拉刷新和第一次进入时，做消息流插入，所以在conversationViewController的生命周期里，只load一次就可以。
@@ -67,7 +67,7 @@
     if (self = [super init]) {
         _cyl_lock = dispatch_semaphore_create(1);
         _dataArray = [NSMutableArray array];
-        _avimTypedMessage = [NSMutableArray array];
+        _cylimTypedMessage = [NSMutableArray array];
         self.parentConversationViewController = parentConversationViewController;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveMessage:) name:CYLNotificationMessageReceived object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(conversationInvalided:) name:CYLNotificationCurrentConversationInvalided object:nil];
@@ -141,9 +141,9 @@
         [[CYLSoundManager defaultManager] playReceiveSoundIfNeed];
     }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        NSArray *lcckMessages = [NSMutableArray cyl_messagesWithAVIMMessages:messages];
+        NSArray *cylMessages = [NSMutableArray cyl_messagesWithCYLIMMessages:messages];
         dispatch_async(dispatch_get_main_queue(),^{
-            [self receivedNewMessages:lcckMessages];
+            [self receivedNewMessages:cylMessages];
         });
     });
 }
@@ -161,10 +161,10 @@
     if (![modifiedMessage conformsToProtocol:@protocol(CYLIMMessageProtocol)]) {
         return;
     }
-    for (int i = 0; i < self.avimTypedMessage.count; i++) {
-        id<CYLIMMessageProtocol> oldTypedMessage = self.avimTypedMessage[i];
+    for (int i = 0; i < self.cylimTypedMessage.count; i++) {
+        id<CYLIMMessageProtocol> oldTypedMessage = self.cylimTypedMessage[i];
         if ([modifiedMessage.messageId isEqualToString:oldTypedMessage.messageId]) {
-            self.avimTypedMessage[i] = modifiedMessage;
+            self.cylimTypedMessage[i] = modifiedMessage;
             break;
         }
     }
@@ -172,9 +172,9 @@
     for (int i = 0; i < self.dataArray.count; i++) {
         CYLMessage *oldMessage = self.dataArray[i];
         if ([oldMessage isKindOfClass:[CYLMessage class]] && [modifiedMessage.messageId isEqualToString:oldMessage.serverMessageId]) {
-            id lcckMessage = [self.IMProvider displayMessageFromIMMessage:modifiedMessage];
-            if (lcckMessage) {
-                self.dataArray[i] = lcckMessage;
+            id cylMessage = [self.IMProvider displayMessageFromIMMessage:modifiedMessage];
+            if (cylMessage) {
+                self.dataArray[i] = cylMessage;
                 [self.parentConversationViewController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
             } else if (modifiedMessage.mediaType == CYLMessageMediaTypeRecalled) {
                 [self.dataArray removeObjectAtIndex:i];
@@ -544,14 +544,14 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     NSError *messageNULLError = nil;
     
     
-    id avimTypedMessage = [self avimTypedMessageFromCYLMessage:aMessage theError:&messageNULLError];
+    id cylimTypedMessage = [self cylimTypedMessageFromCYLMessage:aMessage theError:&messageNULLError];
     
     
     void(^sendMessageCallBack)(CYLBooleanResultBlock theSuccess,
                                CYLBooleanResultBlock theFailed) = ^(CYLBooleanResultBlock theSuccess,
                                                                      CYLBooleanResultBlock theFailed) {
         // `mentionList` was never sent before ChatKit was decoupled from LeanCloud; nil keeps that behavior.
-        [[CYLConversationService sharedInstance] sendMessage:avimTypedMessage
+        [[CYLConversationService sharedInstance] sendMessage:cylimTypedMessage
                                                  conversation:self.currentConversation
                                                   mentionList:nil
                                                 progressBlock:progressBlock
@@ -581,19 +581,19 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
                     !failed ?: failed(YES, aError);
                 }
             };
-            sendMessageHookBlock(self.parentConversationViewController, avimTypedMessage, completionHandler);
+            sendMessageHookBlock(self.parentConversationViewController, cylimTypedMessage, completionHandler);
         }
     };
     
-    if (![avimTypedMessage cyl_isCustomMessage]) {
+    if (![cylimTypedMessage cyl_isCustomMessage]) {
         
         
 //       void(^CYLBooleanResultBlock)() = ^(void) {
-            if ([avimTypedMessage conformsToProtocol:@protocol(CYLIMMessageProtocol)]) {
-                //    if ([avimTypedMessage cyl_isCustomMessage]) {
-                [self setAttribute:@([self.parentConversationViewController getConversationIfExists].cyl_type) forKey:CYLCustomMessageConversationTypeKey toIMMessage:avimTypedMessage];
-                [avimTypedMessage setCyl_senderId:[CYLSessionService sharedInstance].clientId];//for CYLSendMessageHookBlock
-                [self.avimTypedMessage addObject:avimTypedMessage];
+            if ([cylimTypedMessage conformsToProtocol:@protocol(CYLIMMessageProtocol)]) {
+                //    if ([cylimTypedMessage cyl_isCustomMessage]) {
+                [self setAttribute:@([self.parentConversationViewController getConversationIfExists].cyl_type) forKey:CYLCustomMessageConversationTypeKey toIMMessage:cylimTypedMessage];
+                [cylimTypedMessage setCyl_senderId:[CYLSessionService sharedInstance].clientId];//for CYLSendMessageHookBlock
+                [self.cylimTypedMessage addObject:cylimTypedMessage];
             }
 //        };
         [self preloadMessageToTableView:aMessage callback:^{
@@ -646,9 +646,9 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     message.attributes = attributes;
 }
 
-- (id<CYLIMMessageProtocol>)avimTypedMessageFromCYLMessage:(CYLMessage *)aMessage
+- (id<CYLIMMessageProtocol>)cylimTypedMessageFromCYLMessage:(CYLMessage *)aMessage
                                                     theError:(NSError **)theError {
-    id<CYLIMMessageProtocol> avimTypedMessage;
+    id<CYLIMMessageProtocol> cylimTypedMessage;
     if ([aMessage isKindOfClass:[CYLMessage class]]) {
 //    if (![aMessage cyl_isCustomMessage]) {
         CYLMessage *message = (CYLMessage *)aMessage;
@@ -659,12 +659,12 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
         id<CYLUserDelegate> sender = [[CYLUserSystemService sharedInstance] fetchCurrentUser];
         message.sender = sender;
         message.ownerType = CYLMessageOwnerTypeSelf;
-        message.message = avimTypedMessage;
-        avimTypedMessage = [self.IMProvider IMMessageFromMessage:message];
+        message.message = cylimTypedMessage;
+        cylimTypedMessage = [self.IMProvider IMMessageFromMessage:message];
     } else if ([aMessage conformsToProtocol:@protocol(CYLIMMessageProtocol)]){
-        avimTypedMessage = (id<CYLIMMessageProtocol>)aMessage;
+        cylimTypedMessage = (id<CYLIMMessageProtocol>)aMessage;
     }
-    if (!avimTypedMessage) {
+    if (!cylimTypedMessage) {
         NSInteger code = 0;
         NSString *errorReasonText = @"message is nil";
         NSDictionary *errorInfo = @{
@@ -679,7 +679,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
         }
         return nil;
     }
-    return avimTypedMessage;
+    return cylimTypedMessage;
 }
 
 - (void)sendLocalFeedbackTextMessge:(NSString *)localFeedbackTextMessge {
@@ -715,23 +715,23 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     CYLMessage *oldMessage = self.dataArray[indexPath.row];
     int oldTypedMessageIndex = -1;
     id<CYLIMMessageProtocol> oldTypedMessage = nil;
-    for (int i = 0; i < self.avimTypedMessage.count; i++) {
-        id<CYLIMMessageProtocol> item = self.avimTypedMessage[i];
+    for (int i = 0; i < self.cylimTypedMessage.count; i++) {
+        id<CYLIMMessageProtocol> item = self.cylimTypedMessage[i];
         if ([oldMessage.serverMessageId isEqualToString:item.messageId]) {
             oldTypedMessageIndex = i;
             oldTypedMessage = item;
             break;
         }
     }
-    if (oldTypedMessage && oldTypedMessageIndex >= 0 && oldTypedMessageIndex < self.avimTypedMessage.count) {
+    if (oldTypedMessage && oldTypedMessageIndex >= 0 && oldTypedMessageIndex < self.cylimTypedMessage.count) {
         [self.IMProvider updateMessage:oldTypedMessage
                               withText:newMessage.text
                           conversation:CYLConversationService.sharedInstance.currentConversation
                               callback:^(BOOL succeeded, NSError * _Nullable error, id<CYLIMMessageProtocol> _Nullable newTypedMessage) {
             if (succeeded && newTypedMessage) {
-                id lcckMessage = [self.IMProvider displayMessageFromIMMessage:newTypedMessage];
-                if (lcckMessage) {
-                    self.dataArray[indexPath.row] = lcckMessage;
+                id cylMessage = [self.IMProvider displayMessageFromIMMessage:newTypedMessage];
+                if (cylMessage) {
+                    self.dataArray[indexPath.row] = cylMessage;
                     [self.parentConversationViewController.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
                 }
             }
@@ -746,22 +746,22 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     CYLMessage *oldMessage = self.dataArray[indexPath.row];
     int oldTypedMessageIndex = -1;
     id<CYLIMMessageProtocol> oldTypedMessage = nil;
-    for (int i = 0; i < self.avimTypedMessage.count; i++) {
-        id<CYLIMMessageProtocol> item = self.avimTypedMessage[i];
+    for (int i = 0; i < self.cylimTypedMessage.count; i++) {
+        id<CYLIMMessageProtocol> item = self.cylimTypedMessage[i];
         if ([oldMessage.serverMessageId isEqualToString:item.messageId]) {
             oldTypedMessageIndex = i;
             oldTypedMessage = item;
             break;
         }
     }
-    if (oldTypedMessage && oldTypedMessageIndex >= 0 && oldTypedMessageIndex < self.avimTypedMessage.count) {
+    if (oldTypedMessage && oldTypedMessageIndex >= 0 && oldTypedMessageIndex < self.cylimTypedMessage.count) {
         [self.IMProvider recallMessage:oldTypedMessage
                           conversation:CYLConversationService.sharedInstance.currentConversation
                               callback:^(BOOL succeeded, NSError * _Nullable error, id<CYLIMMessageProtocol> _Nullable recalledMessage) {
             if (succeeded) {
                 [self.dataArray removeObjectAtIndex:indexPath.row];
                 if (recalledMessage) {
-                    self.avimTypedMessage[oldTypedMessageIndex] = recalledMessage;
+                    self.cylimTypedMessage[oldTypedMessageIndex] = recalledMessage;
                 }
                 [self.parentConversationViewController.tableView reloadData];
             }
@@ -774,7 +774,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
  * 自定义消息暂不支持失败缓存，不支持重发
  */
 - (void)resendMessageAtIndexPath:(NSIndexPath *)indexPath {
-    CYLMessage *lcckMessage = self.dataArray[indexPath.row];
+    CYLMessage *cylMessage = self.dataArray[indexPath.row];
     NSUInteger row = indexPath.row;
     CYLMessage *message;
     @try {
@@ -783,16 +783,16 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     @try {
         if (message.mediaType == CYLMessageMediaTypeSystem && !message.isLocalMessage) {
             [self.dataArray cyl_removeMessageAtIndex:row - 1];
-            [self.avimTypedMessage cyl_removeMessageAtIndex:row - 1];
+            [self.cylimTypedMessage cyl_removeMessageAtIndex:row - 1];
             row -= 1;
         }
     } @catch (NSException *exception) {}
     [self.dataArray cyl_removeMessageAtIndex:row];
-    [self.avimTypedMessage cyl_removeMessageAtIndex:row];
-    NSString *oldFailedMessageId = lcckMessage.localMessageId;
+    [self.cylimTypedMessage cyl_removeMessageAtIndex:row];
+    NSString *oldFailedMessageId = cylMessage.localMessageId;
     [self.parentConversationViewController.tableView reloadData];
     self.parentConversationViewController.allowScrollToBottom = YES;
-    [self sendMessage:lcckMessage];
+    [self sendMessage:cylMessage];
     [[CYLConversationService sharedInstance] deleteFailedMessageByRecordId:oldFailedMessageId];
 }
 
@@ -848,30 +848,30 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
 - (void)loadMessagesFirstTimeWithCallback:(CYLIdBoolResultBlock)callback {
     [self queryAndCacheMessagesWithTimestamp:0
                                    messageId:nil
-                                       block:^(NSArray *avimTypedMessages, NSError *error)
+                                       block:^(NSArray *cylimTypedMessages, NSError *error)
      {
          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-             BOOL succeed = [self.parentConversationViewController filterAVIMError:error];
+             BOOL succeed = [self.parentConversationViewController filterCYLIMError:error];
              if (succeed) {
                  if ([CYLConversationService.sharedInstance.currentConversationId isEqualToString:self.currentConversationId] && [CYLConversationService.sharedInstance isChatting]) {
                      [self.IMProvider markConversationAsRead:[self currentConversation]];
                  }
-                 NSMutableArray *lcckSucceedMessags = [NSMutableArray cyl_messagesWithAVIMMessages:avimTypedMessages];
-                 [self addMessagesFirstTime:lcckSucceedMessags];
-                 NSMutableArray *allMessages = [NSMutableArray arrayWithArray:avimTypedMessages];
-                 self.avimTypedMessage = allMessages;
+                 NSMutableArray *cylSucceedMessags = [NSMutableArray cyl_messagesWithCYLIMMessages:cylimTypedMessages];
+                 [self addMessagesFirstTime:cylSucceedMessags];
+                 NSMutableArray *allMessages = [NSMutableArray arrayWithArray:cylimTypedMessages];
+                 self.cylimTypedMessage = allMessages;
                  dispatch_async(dispatch_get_main_queue(),^{
                      [self.parentConversationViewController.tableView reloadData];
                      [self.parentConversationViewController scrollToBottomAnimated:NO];
                      self.parentConversationViewController.loadingMoreMessage = NO;
                  });
-                 if (self.avimTypedMessage.count > 0) {
-                     [[CYLConversationService sharedInstance] updateConversationAsReadWithLastMessage:avimTypedMessages.lastObject];
+                 if (self.cylimTypedMessage.count > 0) {
+                     [[CYLConversationService sharedInstance] updateConversationAsReadWithLastMessage:cylimTypedMessages.lastObject];
                  }
              } else {
                  self.parentConversationViewController.loadingMoreMessage = NO;
              }
-             !callback ?: callback(succeed, self.avimTypedMessage, error);
+             !callback ?: callback(succeed, self.cylimTypedMessage, error);
          });
      }];
 }
@@ -891,38 +891,38 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
                                                                        messageId:messageId
                                                                        timestamp:timestamp
                                                                            limit:kCYLOnePageSize
-                                                                           block:^(NSArray *avimTypedMessages, NSError *error)
+                                                                           block:^(NSArray *cylimTypedMessages, NSError *error)
      {
          self.parentConversationViewController.shouldLoadMoreMessagesScrollToTop = YES;
-         if (avimTypedMessages.count == 0) {
+         if (cylimTypedMessages.count == 0) {
              self.parentConversationViewController.loadingMoreMessage = NO;
              self.parentConversationViewController.shouldLoadMoreMessagesScrollToTop = NO;
-             !block ?: block(avimTypedMessages, error);
+             !block ?: block(cylimTypedMessages, error);
              return;
          }
          dispatch_async(dispatch_get_main_queue(),^{
-             if (avimTypedMessages.count < kCYLOnePageSize) {
+             if (cylimTypedMessages.count < kCYLOnePageSize) {
                  self.parentConversationViewController.shouldLoadMoreMessagesScrollToTop = NO;
              }
-             !block ?: block(avimTypedMessages, error);
+             !block ?: block(cylimTypedMessages, error);
          });
      }];
 }
 
 - (void)loadOldMessages {
-    id<CYLIMMessageProtocol> msg = [self.avimTypedMessage cyl_messageAtIndex:0];
+    id<CYLIMMessageProtocol> msg = [self.cylimTypedMessage cyl_messageAtIndex:0];
     int64_t timestamp = [msg cyl_sendTimestamp];
     [self queryAndCacheMessagesWithTimestamp:timestamp
                                    messageId:msg.messageId
-                                       block:^(NSArray *avimTypedMessages, NSError *error)
+                                       block:^(NSArray *cylimTypedMessages, NSError *error)
      {
          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-             if ([self.parentConversationViewController filterAVIMError:error]) {
-                 NSMutableArray *lcckMessages = [[NSMutableArray cyl_messagesWithAVIMMessages:avimTypedMessages] mutableCopy];
-                 NSMutableArray *newMessages = [NSMutableArray arrayWithArray:avimTypedMessages];
-                 [newMessages addObjectsFromArray:self.avimTypedMessage];
-                 self.avimTypedMessage = newMessages;
-                 [self insertOldMessages:[self messagesWithLocalMessages:lcckMessages freshTimestamp:timestamp] completion: ^{
+             if ([self.parentConversationViewController filterCYLIMError:error]) {
+                 NSMutableArray *cylMessages = [[NSMutableArray cyl_messagesWithCYLIMMessages:cylimTypedMessages] mutableCopy];
+                 NSMutableArray *newMessages = [NSMutableArray arrayWithArray:cylimTypedMessages];
+                 [newMessages addObjectsFromArray:self.cylimTypedMessage];
+                 self.cylimTypedMessage = newMessages;
+                 [self insertOldMessages:[self messagesWithLocalMessages:cylMessages freshTimestamp:timestamp] completion: ^{
                      self.parentConversationViewController.loadingMoreMessage = NO;
                  }];
              } else {
@@ -976,7 +976,6 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
     NSUInteger idx = 0;
     for (NSObject<CYLMessageDelegate> *message_ in self.dataArray) {
         if ([message_ cyl_isCustomMessage]) {
-////            AVIMTypedMessage *typedMessage = (AVIMTypedMessage *)message_;
 //            NSString *imageLocalPath = message_.photoPath;
 //            BOOL isImageLocal;
 //            if ( (imageLocalPath.length >0 ) && ([NSData dataWithContentsOfFile:imageLocalPath])) {

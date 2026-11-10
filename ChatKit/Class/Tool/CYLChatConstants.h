@@ -17,7 +17,7 @@
 
 /*!
  * Media type of a message, owned by ChatKit so the UI layer does not depend on any IM SDK.
- * The underlying type is `int8_t` and the raw values match the LeanCloud `AVIMMessageMediaType`
+ * The underlying type is `int8_t` and the raw values match LeanCloud's message media type
  * values, so an IM provider can cast between the two types directly.
  * Positive values are reserved for custom messages.
  */
@@ -35,7 +35,7 @@ typedef NS_ENUM(int8_t, CYLMessageMediaType) {
 
 /*!
  * Error codes ChatKit recognizes from an IM provider.
- * `CYLIMErrorCodeConnectionLost` matches LeanCloud's `AVIMErrorCodeConnectionLost`.
+ * `CYLIMErrorCodeConnectionLost` matches LeanCloud's "connection lost" error code.
  */
 typedef NS_ENUM(NSInteger, CYLIMErrorCode) {
     CYLIMErrorCodeConnectionLost = 9001,
@@ -219,7 +219,7 @@ typedef NS_ENUM(NSUInteger, CYLMessageOwnerType){
 };
 
 /// Kept for source compatibility. Use `CYLMessageMediaTypeSystem` in new code.
-static CYLMessageMediaType const kAVIMMessageMediaTypeSystem = CYLMessageMediaTypeSystem;
+static CYLMessageMediaType const kCYLIMMessageMediaTypeSystem = CYLMessageMediaTypeSystem;
 
 /**
  *  消息发送状态,自己发送的消息时有

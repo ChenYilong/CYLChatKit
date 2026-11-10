@@ -109,7 +109,7 @@
     !showNotificationBlock ?: showNotificationBlock(self, message, nil, CYLMessageNotificationTypeError);
 }
 
-- (BOOL)alertAVIMError:(NSError *)error {
+- (BOOL)alertCYLIMError:(NSError *)error {
     if (error) {
         if (error.code == CYLIMErrorCodeConnectionLost) {
             [self alert:@"未能连接聊天服务"];
@@ -123,8 +123,8 @@
     return NO;
 }
 
-- (BOOL)filterAVIMError:(NSError *)error {
-    return [self alertAVIMError:error] == NO;
+- (BOOL)filterCYLIMError:(NSError *)error {
+    return [self alertCYLIMError:error] == NO;
 }
 
 @end

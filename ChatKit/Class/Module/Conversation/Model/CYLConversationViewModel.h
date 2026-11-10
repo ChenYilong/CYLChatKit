@@ -42,7 +42,7 @@ typedef void (^CYLSendMessageSuccessFailedBlock)(NSString *messageUUID, NSError 
  * The IM SDK messages loaded from the server, used for paging, editing, and recalling.
  * The historical name is kept for compatibility.
  */
-@property (nonatomic, strong, readonly) NSMutableArray<id<CYLIMMessageProtocol>> *avimTypedMessage;
+@property (nonatomic, strong, readonly) NSMutableArray<id<CYLIMMessageProtocol>> *cylimTypedMessage;
 
 /**
  *  发送一条消息,消息已经通过addMessage添加到CYLConversationViewModel数组中了,此方法主要为了CYLChatServer发送消息过程

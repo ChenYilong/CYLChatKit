@@ -25,9 +25,15 @@ Core (`ChatKit/`) uses the `CYL` prefix, following the CYLTabBarController namin
 ### Prefix rename (LCCK → CYL)
 
 All of core was renamed mechanically: `LCCK` → `CYL`, `lcck_` → `cyl_`, `Lcck_` → `Cyl_` (setters of
-`lcck_` properties, so they still match their getters), and `AVOS` → `CYL`. File, folder, resource bundle,
+`lcck_` properties, so they still match their getters), `AVOS` → `CYL`, and `AVIM` → `CYLIM` (lower-case `avim` → `cylim`). File, folder, resource bundle,
 image, and xib names were renamed the same way, so string lookups (bundle names, image names, nib names)
-still match. No `LCCK`, `lcck_`, `Lcck_`, or `AVOS` is left under `ChatKit/`.
+still match. No `LCCK`, `lcck_`, `Lcck_`, `AVOS`, or `AVIM` (in any letter case) is left under `ChatKit/`.
+
+`AVIM` → `CYLIM` renamed four compatibility names: `-alertAVIMError:` → `-alertCYLIMError:`,
+`-filterAVIMError:` → `-filterCYLIMError:`, `+cyl_messagesWithAVIMMessages:` → `+cyl_messagesWithCYLIMMessages:`,
+and `kAVIMMessageMediaTypeSystem` → `kCYLIMMessageMediaTypeSystem`; the view model property `avimTypedMessage` became
+`cylimTypedMessage`. Comments that named LeanCloud SDK types (client, typed message, signature, member role) now
+describe them in words, because `CYLIMClient` and similar names do not exist.
 
 A purely mechanical rename would not build, because core links `CYLDeallocBlockExecutor` and the demo links
 `CYLTabBarController`, which already define some of the resulting names. These were resolved first:
@@ -156,8 +162,8 @@ Source-breaking changes for apps that used LeanCloud types through ChatKit:
   `int8_t` typedef, so the type-safe `NS_ENUM` was chosen.)
 - `ChatKitHeaders.h` no longer imports `AVOSCloud`/`AVOSCloudIM`; app files using LeanCloud must import them.
 
-Kept for compatibility: `kAVIMMessageMediaTypeSystem`, `alertAVIMError:`/`filterAVIMError:`,
-`cyl_messagesWithAVIMMessages:`, and `CYLConversationViewModel.avimTypedMessage` (now provider messages).
+Renamed from compatibility names (see Prefix rename): `kCYLIMMessageMediaTypeSystem`, `alertCYLIMError:`/`filterCYLIMError:`,
+`cyl_messagesWithCYLIMMessages:`, and `CYLConversationViewModel.cylimTypedMessage` (provider messages).
 
 ## Behavior notes
 
@@ -174,7 +180,7 @@ Kept for compatibility: `kAVIMMessageMediaTypeSystem`, `alertAVIMError:`/`filter
 
 Done in a Linux container without Xcode or an iOS SDK:
 
-- `grep` finds no `AVIM*`/`AVOSCloud`/`AVFile` code references in `ChatKit/Class` (only comments and the compatibility constant).
+- `grep -i` finds no `LCCK`, `lcck_`, `AVOS`, `AVIM`, or `AVFile` anywhere under `ChatKit/` (code, comments, or paths).
 - clang `-fsyntax-only` on the protocol headers with stub Foundation/UIKit: no errors with `-Wall -Wnullability-completeness`.
 - clang conformance check of `AVIMConversation`/`AVIMTypedMessage` (exact SDK 11.5.2 declarations) plus the demo categories: no warnings.
 - clang with auto-generated UIKit stubs on the rewritten core files: no errors in provider or protocol code. This found three files that had relied on `LCChatKit.h` arriving through the removed `AVIMConversation+CYLExtension.h` import; they now import it directly.

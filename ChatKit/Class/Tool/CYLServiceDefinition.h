@@ -36,7 +36,7 @@ typedef void (^CYLForceReconnectSessionBlock)(NSError *error, BOOL granted, __ki
 @property (nonatomic, copy, readonly) NSString *clientId;
 /*!
  * The underlying SDK client of the current `CYLIMProvider`, if it exposes one.
- * For the LeanCloud provider in the demo this is an `AVIMClient`.
+ * For the LeanCloud provider in the demo this is the SDK client.
  */
 @property (nonatomic, strong, readonly) id client;
 @property (nonatomic, assign) BOOL disableSingleSignOn;
@@ -64,7 +64,7 @@ typedef void (^CYLForceReconnectSessionBlock)(NSError *error, BOOL granted, __ki
 - (void)setForceReconnectSessionBlock:(CYLForceReconnectSessionBlock)forceReconnectSessionBlock;
 
 /*!
- * @param role The member role reported by the IM provider. For LeanCloud it is an `AVIMConversationMemberRole` value.
+ * @param role The member role reported by the IM provider. For LeanCloud it is the SDK member role value.
  */
 - (void)setMemberInfoChangedBlock:(void (^)(id<CYLConversationProtocol> conversation, NSString *byClientId, NSString *clientId, NSUInteger role))block;
 
@@ -135,7 +135,7 @@ typedef void(^CYLFetchProfilesBlock)(NSArray<NSString *> *userIds, CYLFetchProfi
 /*!
  *  @brief The block to execute with the signature information for session. Always execute this block at some point when fetching signature information completes on main thread. Specify signature information how you want ChatKit pin to these actions: open, start(create conversation), kick, invite.
  *  @attention If you fetch the signature fails, you should reture nil, meanwhile, give the error reason.
- *  @param signature The signature object your IM provider expects. For LeanCloud it is an `AVIMSignature`.
+ *  @param signature The signature object your IM provider expects. For LeanCloud it is the SDK signature object.
  */
 typedef void(^CYLGenerateSignatureCompletionHandler)(id signature, NSError *error);
 

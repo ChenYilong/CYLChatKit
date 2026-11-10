@@ -15,7 +15,7 @@
 
 /*!
  * The underlying IM SDK message this model was converted from, if any.
- * Its type depends on the `CYLIMProvider`; for LeanCloud it is an `AVIMTypedMessage`.
+ * Its type depends on the `CYLIMProvider`; for LeanCloud it is the SDK typed-message object.
  */
 @property (nonatomic, strong) id message;
 
@@ -160,7 +160,7 @@
                                  timestamp:(NSTimeInterval)timestamp
                            serverMessageId:(NSString *)serverMessageId;
 
-// `+messageWithAVIMTypedMessage:` depends on LeanCloud and moved to the demo category
+// The LeanCloud conversion constructor depends on LeanCloud and moved to the demo category
 // `CYLMessage+CYLExtension`. ChatKit converts SDK messages with
 // `-[CYLIMProvider displayMessageFromIMMessage:]`.
 

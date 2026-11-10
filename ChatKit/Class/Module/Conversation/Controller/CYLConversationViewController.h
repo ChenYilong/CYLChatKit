@@ -114,7 +114,7 @@ FOUNDATION_EXTERN NSString *const CYLConversationViewControllerErrorDomain;
 
 /*!
  * 自定义消息位置发送
- * @param customMessage An IM SDK custom message conforming to `CYLIMMessageProtocol`, such as an `AVIMTypedMessage` subclass for LeanCloud.
+ * @param customMessage An IM SDK custom message conforming to `CYLIMMessageProtocol`, such as a LeanCloud typed-message subclass.
  * @attention Remember to check if `isAvailable` is ture, making sure sending message after conversation has been fetched
  *            发送前必须检查 `isAvailable` 属性是否为YES, 确保发送行为是在 conversation 被 fetch 之后进行的。
  */

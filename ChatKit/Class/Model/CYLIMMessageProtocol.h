@@ -10,7 +10,7 @@
 //  Built-in messages are converted to `CYLMessage` for display; a message whose
 //  `mediaType` is greater than 0 is a custom message and is passed to its registered
 //  custom cell as-is. For example, the LeanCloud provider in the demo makes
-//  `AVIMTypedMessage` conform through a category.
+//  the LeanCloud SDK typed-message class conform through a category.
 
 #import <Foundation/Foundation.h>
 #import "CYLChatConstants.h"

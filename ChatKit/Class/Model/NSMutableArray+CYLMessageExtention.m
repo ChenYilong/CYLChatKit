@@ -15,15 +15,15 @@
 
 @implementation NSMutableArray (CYLMessageExtention)
 
-+ (NSMutableArray *)cyl_messagesWithAVIMMessages:(NSArray *)avimTypedMessages {
++ (NSMutableArray *)cyl_messagesWithCYLIMMessages:(NSArray *)cylimTypedMessages {
    __block NSMutableArray *messages = @[].mutableCopy;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_group_t group = dispatch_group_create();
     dispatch_group_async(group, queue, ^{
         
-        void(^filteredMessageCallback)(NSArray *_avimTypedMessages) = ^(NSArray *_avimTypedMessages) {
+        void(^filteredMessageCallback)(NSArray *_cylimTypedMessages) = ^(NSArray *_cylimTypedMessages) {
             id<CYLIMProvider> IMProvider = [LCChatKit sharedInstance].IMProvider;
-            for (id<CYLIMMessageProtocol> typedMessage in _avimTypedMessages) {
+            for (id<CYLIMMessageProtocol> typedMessage in _cylimTypedMessages) {
                 id message = [IMProvider displayMessageFromIMMessage:typedMessage];
                 if (message) {
                     [messages addObject:message];
@@ -38,9 +38,9 @@
                     !filteredMessageCallback ?: filteredMessageCallback([filterMessages copy]);
                 }
             };
-            filterMessagesBlock([CYLConversationService sharedInstance].currentConversation, avimTypedMessages, filterMessagesCompletionHandler);
+            filterMessagesBlock([CYLConversationService sharedInstance].currentConversation, cylimTypedMessages, filterMessagesCompletionHandler);
         } else {
-            !filteredMessageCallback ?: filteredMessageCallback(avimTypedMessages);
+            !filteredMessageCallback ?: filteredMessageCallback(cylimTypedMessages);
         }
     });
     dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
@@ -58,8 +58,8 @@
     if (valid) {
         return self[index];
     }
-    NSLog(@" `self.avimTypedMessage` in `-loadOldMessages` has no object");
-    //    NSAssert(valid, @" `self.avimTypedMessage` in `-loadOldMessages` has no object");
+    NSLog(@" `self.cylimTypedMessage` in `-loadOldMessages` has no object");
+    //    NSAssert(valid, @" `self.cylimTypedMessage` in `-loadOldMessages` has no object");
     return nil;
 }
 
