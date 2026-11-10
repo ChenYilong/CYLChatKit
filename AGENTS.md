@@ -30,7 +30,7 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
 - Preserve explicit file references and target membership. Do not add `PBXFileSystemSynchronizedRootGroup` or `PBXFileSystemSynchronizedBuildFileExceptionSet`, `preferredProjectObjectVersion`, or top-level `validationLevel`.
 - Preserve the existing scheme, target, bundle identifier, signing, and source membership unless the task specifically requires changing them.
 - When changing a project file, validate both project parsing and the effective deployment targets. Do not let Xcode rewrite unrelated project sections.
-- If dependency declarations change, update the corresponding lockfile with CocoaPods; do not make unrelated dependency upgrades.
+- Lockfiles (`Podfile.lock` and other `*.lock` files) are not committed, as in CYLTabBarController; `.gitignore` ignores them. Declare every dependency the demo or library needs with an explicit version (or a `:git`/`:commit` pin) in the Podfile or podspec, so `pod install` resolves the same versions without a lockfile. Do not make unrelated dependency upgrades.
 - Before committing Xcode project changes, verify both `.pbxproj` files retain the required format, parse them with `xcodeproj`, and run `xcodebuild -list` for both projects. Report any build failure separately from project parsing.
 
 ## Internationalization and localization

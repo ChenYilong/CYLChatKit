@@ -10,7 +10,7 @@ because this repository has no test target and no Carthage support.
 | ShellCheck | Lints `scripts/*.sh` | — |
 | Localization tables | Parses `.strings` files and compares key sets across languages | `scripts/check-localizations.py` |
 | Xcode projects | `objectVersion = 46`, `compatibilityVersion = "Xcode 3.2"`, no synchronized folders, every `IPHONEOS_DEPLOYMENT_TARGET` is 15.0, parsing with `xcodeproj`, `xcodebuild -list` for both projects | inline |
-| pod lib lint | Compiles `CYLChatKit.podspec` with its dependencies (`--allow-warnings --skip-tests`); CYLTableViewPlaceHolder comes from the commit pinned in `ChatKit-OC/Podfile.lock` | `scripts/pod-lint.sh` |
+| pod lib lint | Compiles `CYLChatKit.podspec` with its dependencies (`--allow-warnings --skip-tests`); CYLTableViewPlaceHolder comes from the commit pinned in `ChatKit-OC/Podfile` | `scripts/pod-lint.sh` |
 | Build demo | `pod install` and an unsigned iOS Simulator build of `ChatKit-OC` | `scripts/ci-build-example.sh` |
 | Simulator screenshots | Builds, installs, and launches the demo on an iPhone simulator and takes screenshots | `scripts/demo-screenshots.sh` |
 
@@ -51,7 +51,9 @@ scripts/demo-screenshots.sh build/screenshots
 
 ## TODO
 
-- TODO: `.gitignore` now follows CYLTabBarController and ignores `*.lock` and `*.xcworkspace`, but `ChatKit/Podfile.lock`, `ChatKit-OC/Podfile.lock`, and the existing workspace files are still tracked (`.gitignore` does not untrack files). CI depends on `ChatKit-OC/Podfile.lock`: `scripts/pod-lint.sh` reads the pinned CYLTableViewPlaceHolder commit from it, and `AGENTS.md` asks for lockfile updates when dependencies change. Decide whether to untrack them (then move the pinned commit into `scripts/pod-lint.sh` or read it from the Podfile, and update `AGENTS.md`) or to keep them tracked as an intended difference from CYLTabBarController.
+- TODO: Lockfiles are no longer committed, so `pod install` on CI resolves dependencies fresh within the version
+  requirements of `CYLChatKit.podspec` and the Podfiles. Unpinned requirements (for example `MJRefresh`,
+  `UITableView+FDTemplateLayoutCell`) can move to a newer release between runs; pin them if a run breaks for that reason.
 
 - TODO: Without a LeanCloud session, the conversation list and chat screens show empty states only. Add a stub
   `CYLIMProvider` for screenshots if populated screens are needed.

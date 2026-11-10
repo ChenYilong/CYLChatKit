@@ -5,13 +5,14 @@
 # The legacy sources still produce many warnings, so --allow-warnings is passed; errors fail the lint.
 #
 # CYLTableViewPlaceHolder is used from a git commit (see ChatKit-OC/Podfile), not from trunk. The lint takes the
-# same commit: it checks that commit out and passes its podspec with --include-podspecs, so the sources resolve
+# same commit: it checks out the commit pinned in ChatKit-OC/Podfile and passes its podspec with --include-podspecs, so the sources resolve
 # from the checkout.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 export XCODE_XCCONFIG_FILE="$PWD/scripts/pod-lint.xcconfig"
 
-COMMIT=$(awk '/^CHECKOUT OPTIONS:/{f=1} f && /CYLTableViewPlaceHolder:/{g=1} g && /:commit:/{print $2; exit}' ChatKit-OC/Podfile.lock)
+# Lockfiles are not committed (AGENTS.md), so the pinned commit is read from the demo Podfile.
+COMMIT=$(sed -nE "s/^[[:space:]]*pod 'CYLTableViewPlaceHolder'.*:commit => '([0-9a-f]+)'.*/\1/p" ChatKit-OC/Podfile | head -n 1)
 EXTRA=()
 if [[ -n "$COMMIT" ]]; then
     WORK="$PWD/build/lint-podspecs"

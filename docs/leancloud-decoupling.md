@@ -55,8 +55,8 @@ Pre-existing build blocker fixed: core calls `-cyl_willDeallocWithSelfCallback:`
 `-cyl_executeAtDealloc:`. Under ARC that is a compile error. The dependency is now `~> 1.2.0` (the first version
 with that method; `cyl_executeAtDealloc:` still exists there but is deprecated), and the former vendored-copy user
 now calls `-cyl_willDeallocWithSelfCallback:` with its `owner` argument. The old block captured `self` inside an
-object retained by `self`, a retain cycle; the new block does not. The demo lockfile pins 1.2.0 with the checksum of
-the published spec (`1f8e904d…`, from `CocoaPods/Specs`; the same method reproduces the old 1.1.2 checksum).
+object retained by `self`, a retain cycle; the new block does not. The podspec requirement `~> 1.2.0` resolves to the
+published 1.2.0 spec (lockfiles are no longer committed).
 
 Runtime string values that contained `LCCK` changed too, because the rename covers string literals:
 
@@ -189,7 +189,7 @@ Done in a Linux container without Xcode or an iOS SDK:
 - clang with auto-generated UIKit stubs on the rewritten core files: no errors in provider or protocol code. This found three files that had relied on `LCChatKit.h` arriving through the removed `AVIMConversation+CYLExtension.h` import; they now import it directly.
 - A selector-level script confirmed every provider call in core is declared, `LCCKLeanCloudIMProvider` implements all 36 required selectors, every forwarded selector exists in the demo services, and the SDK classes plus categories satisfy both model protocols.
 - Both `.pbxproj` files parse with `xcodeproj` 1.28.1, keep `objectVersion = 46` and `compatibilityVersion = "Xcode 3.2"`, and contain no synchronized groups or newer keys.
-- Lockfiles: checksums computed with `cocoapods-core` 1.17.0 (the lockfiles' version); `Lockfile#detect_changes_with_podfile` reports no drift for either project.
+- Lockfiles were checked with `cocoapods-core` 1.17.0 at the time; they are no longer committed (see `AGENTS.md`).
 
 ## CI results
 
@@ -247,7 +247,7 @@ Fixed in the demo; the `Build demo` and `Simulator screenshots` jobs pass since 
   download progress (SDWebImage 3.8 API), the empty-list placeholder (CYLTableViewPlaceHolder commit), outgoing
   image messages with a remote URL, and the not-joined path (`conversationInvalidedHandler` nil check).
 - TODO: Run the demo end to end with the LeanCloud provider: log in, conversation list (unread badge, mention, draft, mute, last-message preview for every media type), send and receive text, image, voice, and location, edit, recall, failed-message resend, auto-join, removed-from-group handling, single sign-on prompt, reconnect, push registration, and badge sync. Compare the UI with the previous release. Needs LeanCloud credentials, which CI does not have.
-- TODO: `ChatKit/ChatKit.xcodeproj` is out of sync with disk (83 missing references, 14 unreferenced files) and `ChatKit/Podfile` does not declare several podspec dependencies (for example `CYLDeallocBlockExecutor`, `CYLTableViewPlaceHolder`), so that project cannot build core; CI only parses and lists it. The podspec glob is the effective source list. Aligning both needs `pod install` on macOS to regenerate `ChatKit/Podfile.lock`, which this environment cannot reach (CocoaPods CDN blocked).
+- TODO: `ChatKit/ChatKit.xcodeproj` is out of sync with disk (83 missing references, 14 unreferenced files) and `ChatKit/Podfile` does not declare several podspec dependencies (for example `CYLDeallocBlockExecutor`, `CYLTableViewPlaceHolder`), so that project cannot build core; CI only parses and lists it. The podspec glob is the effective source list. Aligning both needs `pod install` on macOS to verify, which this environment cannot reach (CocoaPods CDN blocked).
 - TODO: `lame.framework` should be replaced by an XCFramework (or built from source) so the arm64 simulator exclusion can be removed; `user_target_xcconfig` affects every app target that uses CYLChatKit, and simulator apps run as x86_64 under Rosetta on Apple silicon.
 - TODO: Remove the AVOSCloud `post_install` patch, and switch CYLTableViewPlaceHolder back to a version requirement, once those projects publish fixed releases.
 - TODO: Product decision: `mentionList` is never sent; the view model passes nil to keep existing behavior. The provider API supports it, but enabling it makes recipients see mention flags.
