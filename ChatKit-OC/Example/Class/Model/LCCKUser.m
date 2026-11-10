@@ -2,8 +2,8 @@
 //  LCCKUser.m
 //  LeanCloudChatKit-iOS
 //
-//  Created by 陈宜龙 on 16/3/9.
-//  Copyright © 2016年 ElonChan. All rights reserved.
+//  v0.8.5 Created by ElonChan on 16/3/9.
+//  Copyright © 2016年 LeanCloud. All rights reserved.
 //
 
 #import "LCCKUser.h"
@@ -11,28 +11,46 @@
 
 @interface LCCKUser ()
 
-@property (nonatomic, copy, readwrite) NSString *userId;
-@property (nonatomic, copy, readwrite) NSString *name;
-@property (nonatomic, copy, readwrite) NSURL *avatorURL;
-
 @end
 
 @implementation LCCKUser
 
-- (instancetype)initWithUserId:(NSString *)userId name:(NSString *)name avatorURL:(NSURL *)avatorURL {
+@synthesize userId = _userId;
+@synthesize name = _name;
+@synthesize avatarURL = _avatarURL;
+@synthesize clientId = _clientId;
+
+- (instancetype)initWithUserId:(NSString *)userId name:(NSString *)name avatarURL:(NSURL *)avatarURL clientId:(NSString *)clientId {
     self = [super init];
     if (!self) {
         return nil;
     }
     _userId = userId;
     _name = name;
-    _avatorURL = avatorURL;
+    _avatarURL = avatarURL;
+    _clientId = clientId;
     return self;
 }
 
-+ (instancetype)initWithUserId:(NSString *)userId name:(NSString *)name avatorURL:(NSURL *)avatorURL {
-    LCCKUser *user = [[LCCKUser alloc] initWithUserId:userId name:name avatorURL:avatorURL];
++ (instancetype)userWithUserId:(NSString *)userId name:(NSString *)name avatarURL:(NSURL *)avatarURL clientId:(NSString *)clientId{
+    LCCKUser *user = [[LCCKUser alloc] initWithUserId:userId name:name avatarURL:avatarURL clientId:clientId];
     return user;
+}
+
+- (instancetype)initWithUserId:(NSString *)userId name:(NSString *)name avatarURL:(NSURL *)avatarURL {
+    return [self initWithUserId:userId name:name avatarURL:avatarURL clientId:userId];
+}
+
++ (instancetype)userWithUserId:(NSString *)userId name:(NSString *)name avatarURL:(NSURL *)avatarURL {
+    return [self userWithUserId:userId name:name avatarURL:avatarURL clientId:userId];
+}
+
+- (instancetype)initWithClientId:(NSString *)clientId {
+    return [self initWithUserId:nil name:nil avatarURL:nil clientId:clientId];
+}
+
++ (instancetype)userWithClientId:(NSString *)clientId {
+    return [self userWithUserId:nil name:nil avatarURL:nil clientId:clientId];
 }
 
 - (BOOL)isEqualToUer:(LCCKUser *)user {
@@ -42,48 +60,27 @@
 - (id)copyWithZone:(NSZone *)zone {
     return [[LCCKUser alloc] initWithUserId:self.userId
                                        name:self.name
-                                  avatorURL:self.avatorURL
+                                  avatarURL:self.avatarURL
+                                   clientId:self.clientId
             ];
 }
 
-/*解档*/
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    self = [super init];
-    if (self) {
-        
-        unsigned int pCounter = 0;
-        //获取类中所有成员变量名
-        objc_property_t *properties = class_copyPropertyList([self class], &pCounter);
-        
-        for (unsigned int i = 0; i < pCounter; i++)
-        {
-            objc_property_t prop = properties[i];
-            const char *propName = property_getName(prop);
-            NSString *pUTF8 = [NSString stringWithUTF8String:propName];
-            //进行解档取值，并利用KVC对属性赋值
-            [self setValue:[aDecoder decodeObjectForKey:pUTF8] forKey:pUTF8];
-        }
-        
-        free(properties);
-    }
-    return self;
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:self.userId forKey:@"userId"];
+    [aCoder encodeObject:self.name forKey:@"name"];
+    [aCoder encodeObject:self.avatarURL forKey:@"avatarURL"];
+    [aCoder encodeObject:self.clientId forKey:@"clientId"];
 }
 
-/*归档*/
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-    unsigned int pCounter = 0;
-    objc_property_t *properties = class_copyPropertyList([self class], &pCounter);
-    
-    for (unsigned int i = 0; i < pCounter; i++)
-    {
-        objc_property_t prop = properties[i];
-        const char *propName = property_getName(prop);
-        NSString *pUTF8 = [NSString stringWithUTF8String:propName];
-        //利用KVC取值
-        [aCoder encodeObject:[self valueForKey:pUTF8] forKey:pUTF8];
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    if(self = [super init]){
+        _userId = [aDecoder decodeObjectForKey:@"userId"];
+        _name = [aDecoder decodeObjectForKey:@"name"];
+        _avatarURL = [aDecoder decodeObjectForKey:@"avatarURL"];
+        _clientId = [aDecoder decodeObjectForKey:@"clientId"];
     }
-    
-    free(properties);
+    return self;
 }
 
 - (void)saveToDiskWithKey:(NSString *)key {
@@ -96,6 +93,10 @@
     NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:key];
     id result = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     return result;
+}
+
+- (instancetype)initWithUserId:(NSString *)userId name:(NSString *)name avatorURL:(NSURL *)avatorURL {
+    return [self initWithUserId:userId name:name avatarURL:avatorURL];
 }
 
 @end

@@ -227,6 +227,9 @@ Fixed in the demo (compilation is confirmed only when the `Build demo` job passe
 - AVOSCloud 11.5.2's direct `<netinet6/in6.h>` imports (three files), rejected by the iOS 26 SDK, are removed from the installed pod
   by the demo Podfile's `post_install`.
 - `FMDB` moved from the podspec to the demo Podfile (`2.6.2`); core does not use it.
+- `LCCKUser` came from the 2019 snapshot as an `AVUser` subclass whose API matched none of its callers. It is restored
+  from `d110789^` as `NSObject <CYLUserDelegate>` (what `fetchProfilesBlock` returns), with an
+  `-initWithUserId:name:avatorURL:` alias for the demo code that uses the misspelled name.
 - The demo project did not reference the contact list module (`LCCKContactListController`, `LCCKContactCell` and its
   xib, used by the tab bar) or two group-detail controllers (`LCCKGroupConversationManagementViewController`,
   `LCCKGroupConversationMemberInfoViewController`). They are now explicit file references in the app target. The

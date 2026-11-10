@@ -137,7 +137,7 @@ static NSString *const LCCKContactListControllerIdentifier = @"LCCKContactListCo
     cell.identifier = peerId;
     __block NSString *displayName = nil;
     __block NSURL *avatorURL = nil;
-    [[LCChatKit sharedInstance] getCachedProfileIfExists:peerId name:&displayName avatorURL:&avatorURL error:&error];
+    [[LCChatKit sharedInstance] getCachedProfileIfExists:peerId name:&displayName avatarURL:&avatorURL error:&error];
     if (error) {
 //        NSLog(@"%@", error);
     }
