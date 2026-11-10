@@ -125,7 +125,7 @@ caption = _caption, loadingInProgress = _loadingInProgress, placeholderFrame = _
 
 #pragma mark - Public methods
 - (BOOL)underlyingImageExisted {
-    return _underlyingImage != nil || [[NSFileManager defaultManager] fileExistsAtPath:_photoPath] || [[SDImageCache sharedImageCache] diskImageDataExistsWithKey:_photoURL.absoluteString];
+    return _underlyingImage != nil || [[NSFileManager defaultManager] fileExistsAtPath:_photoPath] || [[SDImageCache sharedImageCache] diskImageExistsWithKey:_photoURL.absoluteString];
 }
 
 #pragma mark - Private methods
@@ -175,7 +175,7 @@ caption = _caption, loadingInProgress = _loadingInProgress, placeholderFrame = _
     if ([[NSFileManager defaultManager] fileExistsAtPath:_photoPath]) {
         return [UIImage imageWithContentsOfFile:_photoPath];
     }
-    if ([[SDImageCache sharedImageCache] diskImageDataExistsWithKey:_photoURL.absoluteString]) {
+    if ([[SDImageCache sharedImageCache] diskImageExistsWithKey:_photoURL.absoluteString]) {
         return [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:_photoURL.absoluteString];
     }
     return _underlyingImage;
@@ -199,7 +199,7 @@ caption = _caption, loadingInProgress = _loadingInProgress, placeholderFrame = _
             
             [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:_photoURL
                                                                   options:0
-                                                                 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+                                                                 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
                                                                      
                 CGFloat progress = ((CGFloat)receivedSize)/((CGFloat)expectedSize);
                 if (self.progressUpdateBlock) {
