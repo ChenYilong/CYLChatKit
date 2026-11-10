@@ -49,6 +49,27 @@ jobs:
       - uses: actions/checkout@v4
       - run: shellcheck scripts/*.sh
 
+  tabbar-commit:
+    name: Resolve CYLTabBarController commit
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.resolve.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: resolve
+        name: Newest commit on any branch, by commit time
+        run: |
+          scripts/update-cyltabbarcontroller-commit.sh --print | tee -a "$GITHUB_OUTPUT" > resolved.txt
+          {
+            echo "### CYLTabBarController"
+            echo
+            echo "Every job of this run builds the demo against the newest commit of CYLTabBarController on any branch:"
+            echo
+            echo '```'
+            cat resolved.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
   localization:
     name: Localization tables
     runs-on: ubuntu-latest
@@ -105,9 +126,11 @@ jobs:
 
   examples:
     name: Build demo (${{ matrix.demo }})
-    needs: changes
+    needs: [changes, tabbar-commit]
     if: needs.changes.outputs.code == 'true'
     runs-on: ${{ vars.MACOS_RUNNER || 'macos-26' }}
+    env:
+      CYLTABBARCONTROLLER_COMMIT: ${{ needs.tabbar-commit.outputs.sha }}
     strategy:
       fail-fast: false
       matrix:
@@ -130,9 +153,11 @@ jobs:
 
   screenshots:
     name: Simulator screenshots
-    needs: changes
+    needs: [changes, tabbar-commit]
     if: needs.changes.outputs.code == 'true'
     runs-on: ${{ vars.MACOS_RUNNER || 'macos-26' }}
+    env:
+      CYLTABBARCONTROLLER_COMMIT: ${{ needs.tabbar-commit.outputs.sha }}
     steps:
       - uses: actions/checkout@v4
       - run: scripts/demo-screenshots.sh build/screenshots

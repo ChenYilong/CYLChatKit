@@ -43,7 +43,9 @@ if [[ "$(uname -m)" == "arm64" ]] && ! /usr/bin/pgrep -q oahd; then
 fi
 
 cd ChatKit-OC
-# Pods/ is partly committed, so always install (the Podfile is not changed).
+# CYLTabBarController is always the newest commit of its repository (AGENTS.md): pin it before installing.
+"$ROOT/scripts/update-cyltabbarcontroller-commit.sh" --podfile "$PWD/Podfile" > /dev/null
+# Pods/ is partly committed, so always install.
 pod install --repo-update
 xcodebuild build \
     -workspace ChatKit-OC.xcworkspace \

@@ -3,7 +3,8 @@
 #
 # CI helper (docs/ci.md), adapted from CYLTabBarController's scripts/ci-build-example.sh: builds one demo for the
 # iOS Simulator, without code signing.
-# - Runs `pod install` when the folder has a Podfile (the Podfile is not changed).
+# - Runs `pod install` when the folder has a Podfile. First it pins CYLTabBarController in that Podfile to the newest
+#   commit on any branch (scripts/update-cyltabbarcontroller-commit.sh; CYLTABBARCONTROLLER_COMMIT overrides the lookup).
 # - Uses the folder's .xcworkspace when there is one, else its .xcodeproj.
 # - Picks the app scheme from `xcodebuild -list -json`: the first scheme named after an application target of the
 #   demo's own .xcodeproj (not Pods), so the app's own sources are compiled, not only the library.
@@ -17,6 +18,10 @@ mkdir -p "$ROOT/build"
 cd "$DEMO_DIR"
 
 if [[ -f Podfile ]]; then
+    # CYLTabBarController is always the newest commit of its repository (AGENTS.md): pin it before installing.
+    if grep -qE "^[[:space:]]*pod 'CYLTabBarController'" Podfile; then
+        "$ROOT/scripts/update-cyltabbarcontroller-commit.sh" --podfile "$PWD/Podfile" > /dev/null
+    fi
     pod install --repo-update
 fi
 

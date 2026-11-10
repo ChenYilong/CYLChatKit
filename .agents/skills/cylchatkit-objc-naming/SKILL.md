@@ -11,7 +11,7 @@ Follow the existing public API style; do not rename released symbols as a cleanu
 
 - Prefix core (`ChatKit/`) classes, protocols, typedefs, enums, exported constants, and C functions with `CYL` (for example, `CYLMessage` and `CYLConversationViewController`), following the CYLTabBarController naming rules. Enum cases are the type name plus the case, without a `k` prefix (`CYLMessageMediaTypeText`).
 - Core must not contain `LCCK`, `lcck_`, `AVOS`, or `AVIM` (in any letter case); `AVIM` in a name becomes `CYLIM`. If an identifier is copied or adapted from another project, rename it and its file to the `CYL` convention.
-- Avoid clashes with `CYLTabBarController` and `CYLDeallocBlockExecutor`: if a class, header, macro, constant, or category selector already exists there, use a `CYLChat` prefix instead (`CYLChatBaseViewController`, `CYLChatConstants.h`).
+- Avoid clashes with `CYLTabBarController` (the newest commit pinned in `ChatKit-OC/Podfile`, see `cylchatkit-xcode-compat`) and `CYLDeallocBlockExecutor`: if a class, header, macro, constant, or category selector (same class and selector) already exists there, use a `CYLChat` prefix instead (`CYLChatBaseViewController`, `CYLChatConstants.h`). The pinned commit moves, so repeat the comparison when you add or touch a name that could clash.
 - Use `Delegate` only for delegates; model protocols end in `Protocol` (`CYLConversationProtocol`).
 - The demo (`ChatKit-OC/`) keeps `LCCK` for its own symbols.
 - Use UpperCamelCase for types and enum cases, and lowerCamelCase for properties, parameters, and selector components.

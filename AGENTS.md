@@ -17,7 +17,7 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
 
 - Core (`ChatKit/`) uses the `CYL` prefix for classes, protocols, typedefs, enums, constants, and C functions, following the CYLTabBarController naming rules. Category methods and properties use `cyl_` (setter `setCyl_name:`). Core contains no `LCCK`, `lcck_`, `AVOS`, or `AVIM` (in any letter case); keep it that way. Comments describe LeanCloud types in words instead of naming them. Keep vendor code and third-party APIs unchanged.
 - Each header/implementation filename must match its primary type. Name new category files `Type+CYLExtension.h` / `.m`.
-- Before adding a `CYL` name to core, check that `CYLTabBarController` (linked by the demo) and `CYLDeallocBlockExecutor` (a core dependency) do not already define the same class, header, macro, constant, or category selector. Use a `CYLChat` prefix for core names that would collide (for example `CYLChatBaseViewController`, `CYLChatConstants.h`).
+- Before adding a `CYL` name to core, check that `CYLTabBarController` (the commit pinned in `ChatKit-OC/Podfile`, see "CYLTabBarController dependency") and `CYLDeallocBlockExecutor` (a core dependency) do not already define the same class, header, macro, constant, or category selector. The pinned commit moves, so repeat the check when you work on a name that could clash. Use a `CYLChat` prefix for core names that would collide (for example `CYLChatBaseViewController`, `CYLChatConstants.h`).
 - The demo (`ChatKit-OC/`) keeps the `LCCK` prefix for its own symbols and uses the core `CYL` API.
 - `LCChatKit` and `ChatKitHeaders.h` keep their names. Do not rename released symbols to normalize naming beyond this repository-wide change.
 - Write repository instructions, skills, comments, and user-facing documentation in English.
@@ -33,6 +33,33 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
 - When changing a project file, validate both project parsing and the effective deployment targets. Do not let Xcode rewrite unrelated project sections.
 - Lockfiles (`Podfile.lock` and other `*.lock` files) are not committed, as in CYLTabBarController; `.gitignore` ignores them. Declare every dependency the demo or library needs with an explicit version (or a `:git`/`:commit` pin) in the Podfile or podspec, so `pod install` resolves the same versions without a lockfile. Do not make unrelated dependency upgrades.
 - Before committing Xcode project changes, verify both `.pbxproj` files retain the required format, parse them with `xcodeproj`, and run `xcodebuild -list` for both projects. Report any build failure separately from project parsing.
+
+## CYLTabBarController dependency
+
+This project always integrates CYLTabBarController (https://github.com/ChenYilong/CYLTabBarController) through
+CocoaPods, never by copying its sources, and never by a released version number.
+
+- **The version is the newest commit, on any branch.** The newest commit may sit on a branch other than `master` or
+  `main` (a feature or fix branch). Decide by the commit (committer) timestamp across the tip of every branch of the
+  repository, not by tag, release, or default branch. Pin it as a commit:
+  `pod 'CYLTabBarController', :git => 'https://github.com/ChenYilong/CYLTabBarController.git', :commit => '<40-character sha>'`.
+  The Podfile line is rewritten, never edited by hand.
+- **Find it before every build.** Run `scripts/update-cyltabbarcontroller-commit.sh` before each build, local or CI. It
+  fetches the tip of every branch, picks the newest commit by timestamp, checks that the commit has
+  `CYLTabBarController.podspec` in its root, rewrites the `pod 'CYLTabBarController'` line in `ChatKit-OC/Podfile`, and
+  prints the commit, its branch, and its UTC time. `scripts/ci-build-example.sh` and `scripts/demo-screenshots.sh`
+  call it themselves. In CI the job `Resolve CYLTabBarController commit` resolves it once per run and passes it to the
+  build jobs in `CYLTABBARCONTROLLER_COMMIT`, so all jobs of a run build the same commit, and prints it in the job
+  summary. Also run the script before committing a change that touches the Podfile, and commit the line it writes.
+- **Only if this project is itself named CYLTabBarController** (it is not: this project is CYLChatKit), depend on it
+  locally instead: `pod 'CYLTabBarController', :path => '<relative path to the folder that contains CYLTabBarController.podspec>'`,
+  with no commit lookup. Every other project, this one included, uses the commit form.
+- **Report breakage by commit.** The newest commit can be work in progress. If it breaks the build, report the commit,
+  its branch, and the error, and fix what this project can fix. Do not pin an older commit to get green unless the user
+  asks for it.
+- **Name clashes are checked against that commit.** Compare headers, types, macros, constants, and category selectors
+  (same class and selector) of core with the pinned commit's `CYLTabBarController/` folder. Record open clashes as `TODO`
+  in `docs/ci.md`.
 
 ## Swift examples and Swift compatibility of core
 

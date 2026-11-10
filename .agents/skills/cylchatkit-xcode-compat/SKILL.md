@@ -1,6 +1,6 @@
 ---
 name: cylchatkit-xcode-compat
-description: "CYLChatKit Xcode and CocoaPods compatibility rules. Use when editing either Xcode project, changing deployment targets, or reviewing project build settings."
+description: "CYLChatKit Xcode and CocoaPods compatibility rules, including how CYLTabBarController is pinned to its newest commit. Use when editing either Xcode project, a Podfile or podspec, changing deployment targets, or reviewing project build settings."
 ---
 
 # CYLChatKit Xcode compatibility
@@ -36,6 +36,32 @@ iOS 15.0 is the project minimum. Set and verify every project-level and target-l
 - `ChatKit-OC/Podfile`.
 
 When changing the minimum, inspect affected APIs and dependencies, update every configuration surface, and explain any intentional compatibility change. Do not silently lower the minimum or leave a target below the podspec requirement.
+
+## CYLTabBarController dependency
+
+The demo integrates CYLTabBarController through CocoaPods as a commit, never as a version number (`AGENTS.md`,
+"CYLTabBarController dependency"). The commit is the newest one on any branch of
+https://github.com/ChenYilong/CYLTabBarController, chosen by commit timestamp, so it can be on a feature branch rather
+than `master` or `main`.
+
+1. Before every build, run `scripts/update-cyltabbarcontroller-commit.sh`. It fetches the tip of every branch, takes the
+   newest committer timestamp, checks that the commit has `CYLTabBarController.podspec` in its root, and rewrites the
+   `pod 'CYLTabBarController'` line of `ChatKit-OC/Podfile` to
+   `:git => 'https://github.com/ChenYilong/CYLTabBarController.git', :commit => '<sha>'`. Use `--print` to look
+   without rewriting. Never edit that line by hand.
+2. Run it again before committing a change that touches the Podfile, and commit the line it wrote.
+3. In CI, the job `Resolve CYLTabBarController commit` resolves the commit once and passes it to the build jobs in
+   `CYLTABBARCONTROLLER_COMMIT`; the job summary shows the commit, branch, and time. A build script run on its own
+   (without that variable) resolves the newest commit itself.
+4. If this project were named CYLTabBarController, the dependency would be local instead:
+   `pod 'CYLTabBarController', :path => '<relative path to the folder that holds CYLTabBarController.podspec>'`. This
+   project is CYLChatKit, so it always uses the commit form.
+5. If the newest commit breaks the build, report the commit, its branch, and the error. Do not pin an older commit to get
+   green unless the user asks.
+6. Check name clashes between core and the pinned commit (headers, types, macros, constants, and category selectors of
+   the same class); see `cylchatkit-objc-naming`. Record open clashes as `TODO` in `docs/ci.md`.
+
+Lockfiles (`Podfile.lock`) are not committed, so every dependency needs an explicit version or a `:git`/`:commit` pin.
 
 ## Project structure
 

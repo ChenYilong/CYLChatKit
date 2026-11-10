@@ -21,7 +21,10 @@ target 'ChatKit-OC' do
   # SQLite caches of the LeanCloud provider (LCCKLeanCloudConversationService). ChatKit itself does not use FMDB.
   pod 'FMDB', '2.6.2'
 
-  pod 'CYLTabBarController', '1.99.72'
+  # CYLTabBarController is always the newest commit of its repository on any branch, by commit time, not a version
+  # (AGENTS.md, "CYLTabBarController dependency"). scripts/update-cyltabbarcontroller-commit.sh rewrites the next
+  # line before every build.
+  pod 'CYLTabBarController', :git => 'https://github.com/ChenYilong/CYLTabBarController.git', :commit => '0f9b56e7ac92c6a3a3c98bd8c4df1e4964cb00b3'
   pod 'TWMessageBarManager', '1.8.1'
   pod 'MLPAutoCompleteTextField', '1.5'
   pod 'FTPopOverMenu', '2.1.4'

@@ -99,16 +99,6 @@
     return image;
 }
 
-+ (UIImage *)cyl_imageNamed:(NSString *)imageName {
-    CYLImageManager *manager = [CYLImageManager defaultManager];
-    UIImage *image = [manager getImageWithName:imageName];
-    if (!image) {
-        //`-getImageWithName` not work for image in Access Asset Catalog
-        image = [UIImage imageNamed:imageName];
-    }
-    return image;
-}
-
 #pragma mark -
 #pragma mark - Private Methods
 

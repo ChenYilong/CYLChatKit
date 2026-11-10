@@ -28,7 +28,7 @@ Every API that needed renaming counts toward the score; the score is 100 when al
 | Legacy tokens in core file and folder names | 0 paths | ✅ |
 | Public declarations that still reference a legacy name | 0 of 1196 | ✅ |
 | Original public names not accounted for | 0 of 1528 | ✅ |
-| Symbol collisions with CYLTabBarController 1.99.72 and CYLDeallocBlockExecutor 1.2.0 | 0 (the identical `CYL_DEPRECATED` macro is a legal redefinition) | ✅ |
+| Symbol collisions with CYLTabBarController (newest commit, checked at `0f9b56e`) and CYLDeallocBlockExecutor 1.2.0 | 1 open: the header name `CYLBadgeView.h` (see `docs/ci.md`); the identical `CYL_DEPRECATED` macro is a legal redefinition, and the duplicate `+[UIImage cyl_imageNamed:]` was removed | ⚠️ |
 | Demo references to core names that do not exist | 0 | ✅ |
 | Required `CYLIMProvider` methods implemented by the demo provider | all 36 | ✅ |
 | Stale API names in README and the customization guides | 0 | ✅ |
@@ -41,7 +41,7 @@ exists in the current headers, or when it was moved to the demo or removed for a
 
 Compile status: the checks above are static (selector coverage, clang syntax checks with stub SDK headers,
 conformance against the LeanCloud SDK 11.5.2 declarations, and a symbol collision scan against
-`CYLTabBarController` 1.99.72 and `CYLDeallocBlockExecutor` 1.2.0). An Xcode build of the library and the demo
+`CYLTabBarController` (the newest commit at the time) and `CYLDeallocBlockExecutor` 1.2.0). An Xcode build of the library and the demo
 has not been run; it is tracked as a TODO in [leancloud-decoupling.md](leancloud-decoupling.md#todo).
 
 ## Entry points

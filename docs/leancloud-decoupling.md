@@ -227,7 +227,8 @@ Fixed in the demo; the `Build demo` and `Simulator screenshots` jobs pass since 
 - AVOSCloud 11.5.2's direct `<netinet6/in6.h>` imports (three files), rejected by the iOS 26 SDK, are removed from the installed pod
   by the demo Podfile's `post_install`.
 - The tab bar crashed before the first login (`@[ currentClientID ]` with no saved client ID); it now uses an empty list.
-- `CYLChatKit` and `CYLTabBarController` 1.99.72 link together in the demo.
+- `CYLChatKit` and `CYLTabBarController` link together in the demo. The demo now pins the newest CYLTabBarController
+  commit on any branch instead of release 1.99.72 (see `docs/ci.md`); the symbol clash scan was repeated against it.
 - The demo had no `UILaunchStoryboardName` and only a deprecated `LaunchImage` set, so iOS ran it letterboxed
   (legacy screen size, black bars in the CI screenshots), and its app icon set had no 1024 pt icon. As in
   CYLTabBarController's `Example`, `Info.plist` now names `LaunchScreen`, `Base.lproj/LaunchScreen.storyboard`

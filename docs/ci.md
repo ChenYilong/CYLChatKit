@@ -8,10 +8,11 @@ because this repository has no test target and no Carthage support.
 |:---|:---|:---|
 | Detect changes | Skips the macOS jobs for pull requests that only touch Markdown, `docs/`, or `.agents/` | inline |
 | ShellCheck | Lints `scripts/*.sh` | — |
+| Resolve CYLTabBarController commit | Finds the newest commit of CYLTabBarController on any branch (by commit time) once per run, passes it to the build jobs in `CYLTABBARCONTROLLER_COMMIT`, and lists it in the job summary | `scripts/update-cyltabbarcontroller-commit.sh` |
 | Localization tables | Parses `.strings` files, compares key sets across languages, and checks that core and the example each define their own localization macro (at least two different macros) | `scripts/check-localizations.py` |
 | Xcode projects | `objectVersion = 46`, `compatibilityVersion = "Xcode 3.2"`, no synchronized folders, every `IPHONEOS_DEPLOYMENT_TARGET` is 15.0, parsing with `xcodeproj`, `xcodebuild -list` for both projects | inline |
 | pod lib lint | Compiles `CYLChatKit.podspec` with its dependencies (`--allow-warnings --skip-tests`); CYLTableViewPlaceHolder comes from the commit pinned in `ChatKit-OC/Podfile` | `scripts/pod-lint.sh` |
-| Build demo | `pod install` and an unsigned iOS Simulator build of `ChatKit-OC` | `scripts/ci-build-example.sh` |
+| Build demo | Pins CYLTabBarController, runs `pod install`, and builds `ChatKit-OC` unsigned for the iOS Simulator | `scripts/ci-build-example.sh` |
 | Simulator screenshots | Builds, installs, and launches the demo on an iPhone simulator and takes screenshots | `scripts/demo-screenshots.sh` |
 
 The macOS runner is `macos-26` unless the repository variable `MACOS_RUNNER` names another one.
@@ -49,7 +50,32 @@ scripts/ci-build-example.sh ChatKit-OC
 scripts/demo-screenshots.sh build/screenshots
 ```
 
+## CYLTabBarController
+
+The demo depends on CYLTabBarController as a commit: the newest commit on any branch of its repository, chosen by commit
+timestamp (`AGENTS.md`, "CYLTabBarController dependency"). `scripts/update-cyltabbarcontroller-commit.sh` finds it and
+rewrites the `pod 'CYLTabBarController'` line of `ChatKit-OC/Podfile`. Both build scripts call it, and CI resolves it
+once per run so that all jobs build the same commit. The commit, its branch, and its time are in the summary of the job
+`Resolve CYLTabBarController commit`. When the newest commit breaks the build, the failure is reported with that commit;
+no older commit is pinned to hide it.
+
+When this was set up (commit `0f9b56e`, branch `feat/cross-platform-components`, version 1.100.0, default subspec
+`Core`), every CYLTabBarController symbol the demo uses was present in its headers.
+
 ## TODO
+
+- TODO: Name clashes between core and the pinned CYLTabBarController commit, checked for `0f9b56e` (headers, types,
+  macros, constants, and category selectors of the same class): (1) the header basename `CYLBadgeView.h` exists in both
+  (core: `ChatKit/Class/View/CYLBadgeView.h`, a class `CYLBadgeView`; CYLTabBarController: the umbrella header of its
+  `CYLBadgeView` subspec); it has no CI symptom yet, so verify the demo and `pod lib lint` and, if the build or the module
+  maps break, rename the core class and file with the `CYLChat` prefix (`CYLChatBadgeView`), which is a public API
+  change; (2) the macro `CYL_DEPRECATED` is defined identically in both, which is legal. The category method
+  `+[UIImage cyl_imageNamed:]` was defined by both and is fixed: core's copy was dead code and is removed. Because the
+  pinned commit moves, add a CI step that fails on new clashes (compare the headers in `ChatKit-OC/Pods/CYLTabBarController`
+  with core).
+- TODO: Visible in the screenshots after the launch screen fix (run for `1c8a9aa`): the status bar text (time and battery)
+  is white on the white navigation bar of the conversation list and chat screens, so only part of the battery shows. Check
+  the status bar style the demo's navigation controllers return, and set it for iOS 15 and later.
 
 - TODO: Lockfiles are no longer committed, so `pod install` on CI resolves dependencies fresh within the version
   requirements of `CYLChatKit.podspec` and the Podfiles. Unpinned requirements (for example `MJRefresh`,
