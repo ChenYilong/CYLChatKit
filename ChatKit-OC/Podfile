@@ -29,17 +29,17 @@ target 'ChatKit-OC' do
 end
 
 post_install do |installer|
-  # AVOSCloud 11.5.2 imports <netinet6/in6.h> directly, which current iOS SDKs reject ("do not include
-  # netinet6/in6.h directly, include netinet/in.h"). The file already imports <netinet/in.h>, which includes it, so
-  # drop that one line from the installed pod. Remove this when the LeanCloud SDK is upgraded.
-  reachability = File.join(installer.sandbox.root, 'AVOSCloud/AVOS/AVOSCloud/ThirdParty/LCNetworking/LCNetworkReachabilityManager.m')
-  if File.exist?(reachability)
-    source = File.read(reachability)
-    patched = source.sub(/^#import <netinet6\/in6\.h>\n/, '')
-    if patched != source
-      File.chmod(0644, reachability)
-      File.write(reachability, patched)
-    end
+  # AVOSCloud 11.5.2 imports <netinet6/in6.h> directly (LCNetworkReachabilityManager.m, LCHTTPSessionManager.m,
+  # AVReachability.h), which current iOS SDKs reject ("do not include netinet6/in6.h directly, include
+  # netinet/in.h"). Each of those files already imports <netinet/in.h>, which includes it, so drop that line from
+  # the installed pod. Remove this when the LeanCloud SDK is upgraded.
+  Dir.glob(File.join(installer.sandbox.root, 'AVOSCloud', '**', '*.{h,m}')).each do |path|
+    source = File.read(path)
+    next unless source.include?('<netinet/in.h>')
+    patched = source.gsub(/^#import <netinet6\/in6\.h>\n/, '')
+    next if patched == source
+    File.chmod(0644, path)
+    File.write(path, patched)
   end
 
   installer.pods_project.targets.each do |target|

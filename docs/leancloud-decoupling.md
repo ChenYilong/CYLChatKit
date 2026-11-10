@@ -221,7 +221,7 @@ Fixed in the demo (compilation is confirmed only when the `Build demo` job passe
 
 - `+[AVIMTypedMessage lcck_messageWithLCCKMessage:]` reads `originPhotoURL.absoluteString` instead of treating
   the `NSURL` as a string (crash on outgoing images with a remote URL).
-- AVOSCloud 11.5.2's direct `<netinet6/in6.h>` import, rejected by the iOS 26 SDK, is removed from the installed pod
+- AVOSCloud 11.5.2's direct `<netinet6/in6.h>` imports (three files), rejected by the iOS 26 SDK, are removed from the installed pod
   by the demo Podfile's `post_install`.
 - `FMDB` moved from the podspec to the demo Podfile (`2.6.2`); core does not use it.
 - The demo project's restored files and cleaned references (78 files from `d110789^`, 31 dangling references,
