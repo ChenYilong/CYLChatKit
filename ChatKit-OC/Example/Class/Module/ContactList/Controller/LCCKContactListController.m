@@ -146,7 +146,7 @@ static NSString *const LCCKContactListControllerIdentifier = @"LCCKContactListCo
         displayName = peerId;
         __weak __typeof(self) weakSelf = self;
         __weak __typeof(cell) weakCell = cell;
-        [[LCChatKit sharedInstance] getProfileInBackgroundForUserId:peerId callback:^(id<CYLUserModelDelegate> user, NSError *error) {
+        [[LCChatKit sharedInstance] getProfileInBackgroundForUserId:peerId callback:^(id<CYLUserDelegate> user, NSError *error) {
             if (!error && [weakCell.identifier isEqualToString:user.userId]) {
                 NSIndexPath *indexPath_ = [weakSelf.tableView indexPathForCell:weakCell];
                 if (!indexPath_) {
