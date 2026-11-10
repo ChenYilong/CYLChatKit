@@ -17,6 +17,9 @@ Pod::Spec.new do |s|
   s.subspec 'Core' do |core|
     core.source_files = 'ChatKit', 'ChatKit/**/*.{h,m}'
     core.public_header_files = 'ChatKit/**/*.h'
+    # iOS 7 backport of UITableViewRowAction. It refuses to compile when the minimum deployment target is iOS 8 or
+    # later (#error), and UIKit provides the class on every supported iOS version.
+    core.exclude_files = 'ChatKit/Class/Tool/Vendor/CYLTableViewRowAction/UITableViewRowAction.m'
     core.vendored_frameworks = 'ChatKit/Class/Tool/Vendor/VoiceLib/lame.framework'
     core.resources = 'ChatKit/Class/Resources/*', 'ChatKit/**/*.xib'
     core.frameworks = 'Foundation', 'CoreGraphics', 'UIKit', 'MobileCoreServices', 'AVFoundation', 'CoreLocation', 'MediaPlayer', 'CoreMedia', 'CoreText', 'AudioToolbox', 'MapKit', 'ImageIO', 'SystemConfiguration', 'CFNetwork', 'QuartzCore', 'Security', 'CoreTelephony'
