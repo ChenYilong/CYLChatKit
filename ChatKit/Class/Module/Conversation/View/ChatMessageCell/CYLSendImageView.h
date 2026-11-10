@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import "CYLChatUntiles.h"
+#import "CYLChatConstants.h"
 
 @interface CYLSendImageView : UIImageView
 
