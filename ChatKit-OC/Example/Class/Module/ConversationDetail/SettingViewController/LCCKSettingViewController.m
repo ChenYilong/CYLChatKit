@@ -8,6 +8,8 @@
 
 
 #import "LCCKSettingViewController.h"
+#import <AVOSCloudIM/AVOSCloudIM.h>
+#import "AVIMConversation+LCCKExtension.h"
 #import "LCCKSettingHeaderTitleView.h"
 #import "LCCKSettingFooterTitleView.h"
 #import "LCCKSettingButtonCell.h"
@@ -172,7 +174,7 @@
     NSMutableArray *mutableArray = [excludedUserIds ?: @[] mutableCopy] ;
     [mutableArray  addObject:currentClientID];
     NSArray *excludedUserIds_ = [mutableArray copy];
-    CYLContactListViewController *contactListViewController = [[CYLContactListViewController alloc] initWithContacts:[NSSet setWithArray:users] userIds:[NSSet setWithArray:memeberIds] excludedUserIds:[NSSet setWithArray:excludedUserIds_] mode:LCCKContactListModeMultipleSelection];
+    CYLContactListViewController *contactListViewController = [[CYLContactListViewController alloc] initWithContacts:[NSSet setWithArray:users] userIds:[NSSet setWithArray:memeberIds] excludedUserIds:[NSSet setWithArray:excludedUserIds_] mode:CYLContactListModeMultipleSelection];
     [contactListViewController setSelectedContactsCallback:^(UIViewController * _Nonnull viewController, NSArray<NSString *> * _Nonnull peerIds) {
         if (!peerIds || peerIds.count == 0) { return; }
         [[self class] showHUD];
