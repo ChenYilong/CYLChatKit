@@ -725,45 +725,13 @@ Path: `ChatKit/Class/Module/Conversation/Tool/CYLSoundManager.h`
 - (void)vibrateIfNeed;
 ```
 
-#### `NSBundle+CYLExtension.h`
+#### `UIImageView+CYLCornerRadius.h`
 
-Path: `ChatKit/Class/Module/Conversation/Tool/Categories/NSBundle+CYLExtension.h`
+Path: `ChatKit/Class/Module/Conversation/Tool/Categories/UIImageView+CYLCornerRadius.h`
 
-**Category `NSBundle (CYLExtension)`**
+Renamed from a second `UIImageView+CYLExtension.h`; selectors unchanged. Import `UIImageView+CYLCornerRadius.h` (or `ChatKitHeaders.h`).
 
-```objc
-+ (NSString *)cyl_bundlePathForbundleName:(NSString *)bundleName class:(Class)aClass;
-+ (NSBundle *)cyl_bundleForbundleName:(NSString *)bundleName class:(Class)aClass;
-```
-
-#### `NSString+CYLMD5.h`
-
-Path: `ChatKit/Class/Module/Conversation/Tool/Categories/NSString+CYLMD5.h`
-
-**Category `NSString (CYLMD5)`**
-
-```objc
-- (NSString *)cyl_MD5String;
-```
-
-#### `UIImage+CYLExtension.h`
-
-Path: `ChatKit/Class/Module/Conversation/Tool/Categories/UIImage+CYLExtension.h`
-
-**Category `UIImage (CYLExtension)`**
-
-```objc
-- (UIImage *)cyl_imageByScalingAspectFill;
-- (UIImage *)cyl_imageByScalingAspectFillWithOriginSize:(CGSize)originSize;
-- (UIImage *)cyl_imageByScalingAspectFillWithOriginSize:(CGSize)originSize limitSize:(CGSize)limitSize;
-+ (UIImage *)cyl_imageNamed:(NSString *)imageName bundleName:(NSString *)bundleName bundleForClass:(Class)aClass;
-```
-
-#### `UIImageView+CYLExtension.h`
-
-Path: `ChatKit/Class/Module/Conversation/Tool/Categories/UIImageView+CYLExtension.h`
-
-**Category `UIImageView (CYLExtension)`**
+**Category `UIImageView (CYLCornerRadius)`**
 
 ```objc
 - (instancetype)initWithCornerRadiusAdvance:(CGFloat)cornerRadius rectCornerType:(UIRectCorner)rectCornerType;
@@ -1604,6 +1572,8 @@ Path: `ChatKit/Class/Tool/Categories/NSBundle+CYLExtension.h`
 
 ```objc
 + (NSBundle *)cyl_bundleForName:(NSString *)bundleName class:(Class)aClass;
++ (NSString *)cyl_bundlePathForbundleName:(NSString *)bundleName class:(Class)aClass;
++ (NSBundle *)cyl_bundleForbundleName:(NSString *)bundleName class:(Class)aClass;
 ```
 
 #### `NSFileManager+CYLExtension.h`

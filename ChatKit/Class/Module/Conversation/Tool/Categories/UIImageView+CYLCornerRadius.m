@@ -1,12 +1,12 @@
 //
-//  UIImageView+CYLExtension.m
+//  UIImageView+CYLCornerRadius.m
 //  LeanCloudChatKit-iOS
 //
 //  Created by 陈宜龙 on 16/5/16.
 //  Copyright © 2016年 ElonChan. All rights reserved.
 //
 
-#import "UIImageView+CYLExtension.h"
+#import "UIImageView+CYLCornerRadius.h"
 #import <objc/runtime.h>
 #if __has_include(<CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>)
 #import <CYLDeallocBlockExecutor/CYLDeallocBlockExecutor.h>
@@ -23,7 +23,7 @@ const char kProcessedImage;
 const char kBorderWidth;
 const char kBorderColor;
 
-@implementation UIImageView (CYLExtension)
+@implementation UIImageView (CYLCornerRadius)
 /**
  * @brief init the Rounding UIImageView, no off-screen-rendered
  */

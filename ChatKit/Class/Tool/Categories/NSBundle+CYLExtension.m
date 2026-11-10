@@ -33,4 +33,13 @@
     return bundle;
 }
 
++ (NSString *)cyl_bundlePathForbundleName:(NSString *)bundleName class:(Class)aClass {
+    NSString *pathComponent = [NSString stringWithFormat:@"%@.bundle", bundleName];
+    return [[[NSBundle bundleForClass:aClass] resourcePath] stringByAppendingPathComponent:pathComponent];
+}
+
++ (NSBundle *)cyl_bundleForbundleName:(NSString *)bundleName class:(Class)aClass {
+    return [NSBundle bundleWithPath:[NSBundle cyl_bundlePathForbundleName:bundleName class:aClass]];
+}
+
 @end

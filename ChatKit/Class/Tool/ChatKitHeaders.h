@@ -26,6 +26,7 @@
     #import <CYLChatKit/CYLIMMessageProtocol.h>
     #import <CYLChatKit/CYLIMProvider.h>
     #import <CYLChatKit/UIImageView+CYLExtension.h>
+    #import <CYLChatKit/UIImageView+CYLCornerRadius.h>
     #import <CYLChatKit/CYLChatBaseTableViewController.h>
     #import <CYLChatKit/CYLChatBaseNavigationController.h>
     #import <CYLChatKit/CYLMenuItem.h>
@@ -64,6 +65,7 @@
     #import "CYLIMMessageProtocol.h"
     #import "CYLIMProvider.h"
     #import "UIImageView+CYLExtension.h"
+    #import "UIImageView+CYLCornerRadius.h"
     #import "CYLChatBaseTableViewController.h"
     #import "CYLChatBaseNavigationController.h"
     #import "CYLMenuItem.h"

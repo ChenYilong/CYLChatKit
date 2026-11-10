@@ -1,5 +1,5 @@
 //
-//  UIImageView+CYLExtension.h
+//  UIImageView+CYLCornerRadius.h
 //  LeanCloudChatKit-iOS
 //
 //  Created by 陈宜龙 on 16/5/16.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIImageView (CYLExtension)
+@interface UIImageView (CYLCornerRadius)
 
 - (instancetype)initWithCornerRadiusAdvance:(CGFloat)cornerRadius rectCornerType:(UIRectCorner)rectCornerType;
 

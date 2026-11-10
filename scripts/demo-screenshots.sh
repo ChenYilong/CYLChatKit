@@ -37,7 +37,8 @@ if [[ -z "$DEVICE_ID" ]]; then
 fi
 
 cd ChatKit-OC
-[[ -d Pods ]] || pod install --repo-update
+# Pods/ is partly committed, so always install (the Podfile is not changed).
+pod install --repo-update
 xcodebuild build \
     -workspace ChatKit-OC.xcworkspace \
     -scheme ChatKit-OC \
