@@ -37,6 +37,7 @@ Pod::Spec.new do |s|
     core.dependency "MLLabel", "~> 1.10.5"
     core.dependency "MWPhotoBrowser", "~> 2.1.2"
     core.dependency "CYLDeallocBlockExecutor", "~> 1.2.0"
+    core.dependency "CYLTableViewPlaceHolder", "~> 1.1.0"
   end
 
   s.pod_target_xcconfig = {

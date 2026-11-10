@@ -295,6 +295,14 @@ NSString *const CYLConversationViewControllerErrorDomain = @"CYLConversationView
     }
 }
 
+// Declared in the public header since the first release but never implemented, so calling it crashed.
+- (void)sendMessage:(id)message mentionList:(NSArray<NSString *> *)mentionList {
+    if ([message isKindOfClass:[CYLMessage class]]) {
+        [self makeSureSendValidMessage:message afterFetchedConversationShouldWithAssert:NO];
+    }
+    [self.chatViewModel sendMessage:message mentionList:mentionList];
+}
+
 - (void)sendImages:(NSArray<UIImage *> *)pictures {
     for (UIImage *image in pictures) {
         [self sendImageMessage:image];
