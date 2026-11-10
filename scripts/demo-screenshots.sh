@@ -113,6 +113,19 @@ PY
     echo "::endgroup::"
 }
 
+# Succeeds when the image is (almost) all black: the mean byte value of its uncompressed pixels is below 6.
+is_black() {
+    local bmp="${1%.jpg}.bmp"
+    sips -s format bmp "$1" --out "$bmp" > /dev/null
+    /usr/bin/python3 - "$bmp" <<'PY'
+import sys
+data = open(sys.argv[1], "rb").read()
+pixels = data[int.from_bytes(data[10:14], "little"):]
+sample = pixels[::max(1, len(pixels) // 20000)]
+sys.exit(0 if sum(sample) / len(sample) < 6 else 1)
+PY
+}
+
 shoot() {
     local name="$1"; shift
     local started
@@ -124,14 +137,30 @@ shoot() {
         print_crash "$started"
         CRASHED="$CRASHED $name"
     fi
-    xcrun simctl io "$DEVICE_ID" screenshot "$OUT/$name.png"
-    sips -s format jpeg -s formatOptions 60 --resampleWidth 390 "$OUT/$name.png" --out "$OUT/$name.jpg" >/dev/null
+    # The first launch after installing can take long (the app runs translated under Rosetta), and a screenshot taken
+    # before the first frame is black. Retake it while the screen is black, and fail if it never gets content.
+    local attempt=0
+    while :; do
+        xcrun simctl io "$DEVICE_ID" screenshot "$OUT/$name.png"
+        sips -s format jpeg -s formatOptions 60 --resampleWidth 390 "$OUT/$name.png" --out "$OUT/$name.jpg" >/dev/null
+        is_black "$OUT/$name.jpg" || break
+        attempt=$((attempt + 1))
+        if [[ "$attempt" -ge 8 ]]; then
+            echo "::error::the $name screenshot is still black after $attempt retries"
+            BLACK="$BLACK $name"
+            break
+        fi
+        echo "$name: the screen is still black, waiting (retry $attempt)"
+        sleep 4
+    done
+    echo "$name: screenshot taken after $attempt retries"
     echo "===BEGIN SCREENSHOT $name.jpg==="
     base64 -i "$OUT/$name.jpg" | fold -w 120
     echo "===END SCREENSHOT $name.jpg==="
 }
 
 CRASHED=""
+BLACK=""
 shoot login
 shoot conversations -LCCKDemoScreen conversations
 shoot chat -LCCKDemoScreen chat
@@ -141,5 +170,9 @@ xcrun simctl spawn "$DEVICE_ID" log show --last 2m --style compact \
 ls -la "$OUT"
 if [[ -n "$CRASHED" ]]; then
     echo "error: the demo crashed on:$CRASHED" >&2
+    exit 1
+fi
+if [[ -n "$BLACK" ]]; then
+    echo "error: these screenshots stayed black:$BLACK" >&2
     exit 1
 fi

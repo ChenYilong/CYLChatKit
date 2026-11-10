@@ -29,6 +29,10 @@ launch argument `-LCCKDemoScreen` (an `NSUserDefaults` key):
 Every launch also passes `-LCCKDemoScreenshots YES`, which skips the notification permission request and keeps the
 login field from opening the keyboard, so no system overlay covers the app. When a launch crashes, the script prints
 the crash report's exception and backtrace in a `Crash details` log group and the job fails.
+A screenshot taken before the app drew its first frame is black (the first launch runs under Rosetta and can be
+slow), so the script retakes each screenshot while the screen is black, up to eight times four seconds apart, and fails
+the job if a screenshot never gets content. The log line `<name>: screenshot taken after N retries` shows how long the
+app needed.
 
 First green run: `560d28c` (all seven jobs passed; Xcode 26.6, iPhone Air simulator, iOS 26.5). The conversation list
 is empty and the chat screen shows the offline banner, because CI has no LeanCloud session.
