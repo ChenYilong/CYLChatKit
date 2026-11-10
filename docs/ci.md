@@ -32,7 +32,8 @@ the crash report's exception and backtrace in a `Crash details` log group and th
 A screenshot taken before the app drew its first frame is black (the first launch runs under Rosetta and can be
 slow), so the script retakes each screenshot while the screen is black, up to eight times four seconds apart, and fails
 the job if a screenshot never gets content. The log line `<name>: screenshot taken after N retries` shows how long the
-app needed.
+app needed. In run `26d0cef` the login and conversations screenshots needed no retries and the chat screenshot needed
+four (about 16 seconds more), so the black login frame seen in run `1c8a9aa` was a slow first frame, not a layout bug.
 
 First green run: `560d28c` (all seven jobs passed; Xcode 26.6, iPhone Air simulator, iOS 26.5). The conversation list
 is empty and the chat screen shows the offline banner, because CI has no LeanCloud session.
@@ -71,9 +72,9 @@ When this was set up (commit `0f9b56e`, branch `feat/cross-platform-components`,
 - TODO: Name clashes between core and the pinned CYLTabBarController commit, checked for `0f9b56e` (headers, types,
   macros, constants, and category selectors of the same class): (1) the header basename `CYLBadgeView.h` exists in both
   (core: `ChatKit/Class/View/CYLBadgeView.h`, a class `CYLBadgeView`; CYLTabBarController: the umbrella header of its
-  `CYLBadgeView` subspec); it has no CI symptom yet, so verify the demo and `pod lib lint` and, if the build or the module
-  maps break, rename the core class and file with the `CYLChat` prefix (`CYLChatBadgeView`), which is a public API
-  change; (2) the macro `CYL_DEPRECATED` is defined identically in both, which is legal. The category method
+  `CYLBadgeView` subspec); run `26d0cef` built, linked, and ran the demo against `0f9b56e` with both headers present, so there is no
+  symptom yet; if a later commit breaks the build or the module maps, rename the core class and file with the `CYLChat`
+  prefix (`CYLChatBadgeView`), which is a public API change; (2) the macro `CYL_DEPRECATED` is defined identically in both, which is legal. The category method
   `+[UIImage cyl_imageNamed:]` was defined by both and is fixed: core's copy was dead code and is removed. Because the
   pinned commit moves, add a CI step that fails on new clashes (compare the headers in `ChatKit-OC/Pods/CYLTabBarController`
   with core).
