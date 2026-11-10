@@ -7,6 +7,7 @@
 //
 
 #import "LCCKTabBarControllerConfig.h"
+#import "LCCKExampleConstants.h"
 #import <AVOSCloud/AVOSCloud.h>
 #if __has_include(<ChatKit/LCChatKit.h>)
 #import <ChatKit/LCChatKit.h>

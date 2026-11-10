@@ -8,6 +8,7 @@
 
 
 #import "LCCKChatDetailHelper.h"
+#import "AVIMConversation+LCCKExtension.h"
 #import "LCCKUser.h"
 #import <AVOSCloudIM/AVOSCloudIM.h>
 

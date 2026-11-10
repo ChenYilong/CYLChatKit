@@ -7,6 +7,8 @@
 //
 
 #import "LCCKSingleConversationDetailViewController.h"
+#import <AVOSCloudIM/AVOSCloudIM.h>
+#import "AVIMConversation+LCCKExtension.h"
 #import "LCCKChatDetailHelper.h"
 #import "LCCKUserGroupCell.h"
 #import "LCCKUser.h"

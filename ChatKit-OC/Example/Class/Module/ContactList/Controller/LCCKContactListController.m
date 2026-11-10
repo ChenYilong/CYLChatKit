@@ -7,6 +7,7 @@
 //
 
 #import "LCCKContactListController.h"
+#import "LCCKExampleConstants.h"
 #import "LCCKContactCell.h"
 #import "LCCKUser.h"
 #import "LCCKContactManager.h"

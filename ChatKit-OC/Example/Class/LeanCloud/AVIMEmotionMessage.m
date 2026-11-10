@@ -7,6 +7,7 @@
 //
 
 #import "AVIMEmotionMessage.h"
+#import <AVOSCloudIM/AVOSCloudIM.h>
 
 static NSString *kAVIMEmotionPath = @"emotionPath";
 

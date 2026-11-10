@@ -7,6 +7,7 @@
 //
 
 #import "LCCKLoginViewController.h"
+#import "LCCKExampleConstants.h"
 #import "MLPAutoCompleteTextField.h"
 #import <QuartzCore/QuartzCore.h>
 #import <SDWebImage/UIImageView+WebCache.h>

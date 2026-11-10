@@ -7,6 +7,7 @@
 //
 
 #import "CYLCommonUtils+LCCKExtension.h"
+#import <AVOSCloudIM/AVOSCloudIM.h>
 
 @implementation CYLCommonUtils (LCCKExtension)
 
