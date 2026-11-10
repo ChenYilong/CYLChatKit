@@ -10,7 +10,11 @@
 #import "LCCKUserGroupCell.h"
 #import "LCCKUserGroupItemCell.h"
 #import "LCCKUser.h"
+#if __has_include(<ChatKit/LCChatKit.h>)
 #import <ChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 
 #define     USER_CELL_WIDTH         57
 #define     USER_CELL_HEIGHT        75
