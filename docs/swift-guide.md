@@ -33,3 +33,5 @@ Swift, in the same change.
 - TODO: Find `cyl_` protocol methods that Swift classes must implement (for example in `CYLIMProvider` and the model
   protocols `CYLConversationProtocol` and `CYLIMMessageProtocol`) and add underscore-free twins with `NS_SWIFT_NAME`
   as CYLTabBarController does; core must call the twin when it is implemented.
+- TODO: Localization from Swift: core needs a function form of `CYLLocalizedStrings` (function-like macros are not
+  imported into Swift), and the Swift example needs its own accessor for `LCCKExample.bundle`. See `docs/localization.md`.

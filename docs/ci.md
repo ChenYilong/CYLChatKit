@@ -8,7 +8,7 @@ because this repository has no test target and no Carthage support.
 |:---|:---|:---|
 | Detect changes | Skips the macOS jobs for pull requests that only touch Markdown, `docs/`, or `.agents/` | inline |
 | ShellCheck | Lints `scripts/*.sh` | — |
-| Localization tables | Parses `.strings` files and compares key sets across languages | `scripts/check-localizations.py` |
+| Localization tables | Parses `.strings` files, compares key sets across languages, and checks that core and the example each define their own localization macro (at least two different macros) | `scripts/check-localizations.py` |
 | Xcode projects | `objectVersion = 46`, `compatibilityVersion = "Xcode 3.2"`, no synchronized folders, every `IPHONEOS_DEPLOYMENT_TARGET` is 15.0, parsing with `xcodeproj`, `xcodebuild -list` for both projects | inline |
 | pod lib lint | Compiles `CYLChatKit.podspec` with its dependencies (`--allow-warnings --skip-tests`); CYLTableViewPlaceHolder comes from the commit pinned in `ChatKit-OC/Podfile` | `scripts/pod-lint.sh` |
 | Build demo | `pod install` and an unsigned iOS Simulator build of `ChatKit-OC` | `scripts/ci-build-example.sh` |

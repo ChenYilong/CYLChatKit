@@ -8,9 +8,10 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
 - `ChatKit-OC/` contains the demo, its Xcode project, and demo Podfile.
 - `CYLChatKit.podspec` defines the published library target.
 - For behavior, code is authoritative; keep related project configuration and documentation consistent with it.
-- Read the applicable project skill before changing Xcode settings or introducing public Objective-C symbols:
+- Read the applicable project skill before changing Xcode settings, introducing public Objective-C symbols, or touching localized strings:
   - `.agents/skills/cylchatkit-xcode-compat/SKILL.md`
   - `.agents/skills/cylchatkit-objc-naming/SKILL.md`
+  - `.agents/skills/cylchatkit-localization/SKILL.md` (before adding or changing localized strings, tables, or bundles)
 
 ## Objective-C and API rules
 
@@ -67,15 +68,45 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
 
 ## Internationalization and localization
 
-Localized resources are always several files (one per language and table), so they must be organized in a bundle
-structure. Never add loose localization files.
+Localized resources are always several files (one per language and table), so they must be organized in a folder
+package, never as loose files. On iOS that package is a `.bundle`; other platforms use their own folder form (see
+below). Read `.agents/skills/cylchatkit-localization/SKILL.md` before adding or changing any user-visible string, table,
+or bundle.
+
+### Acceptance criteria
+
+These follow CYLTabBarController's localization rules (a single accessor for library strings, no hard-coded display
+text, complete tables). A localization change is accepted only when all of them hold:
+
+1. **At least two different localization macros exist, one per layer.** Core (`ChatKit/`) defines a macro that reads a
+   string from a core bundle (`CYLLocalizedStrings(key)` in `CYLChatConstants.h`), and the example (`ChatKit-OC/`)
+   defines its own macro that reads a string from an example bundle (`LCCKExampleLocalizedString(key, defaultValue)` in
+   `LCCKExampleConstants.h`). Vendored macros (such as `DateToolsLocalizedStrings`) do not count. Where a platform has
+   no macros, a single function or helper per layer is the equivalent, with the same rules.
+   `scripts/check-localizations.py` (CI job `Localization tables`) fails when a layer has no such macro, when both
+   layers use the same name, or when a macro reads a bundle that belongs to the other layer.
+2. **A macro names its bundle and table in exactly one place, its own body.** Feature code passes only a key. A new
+   bundle gets a new macro (`CYL<Domain>LocalizedString` in core, `LCCK<Domain>LocalizedString` in the example); never
+   point one macro at several bundles and never call `NSLocalizedString` or `NSLocalizedStringFromTableInBundle`
+   directly in feature code.
+3. **No hard-coded display text in new or changed code.** Every string literal that is shown to a user, or written to a
+   log, assert, or debug message, and that contains non-English text goes through the layer's macro, with
+   `[NSString stringWithFormat:]` for values. Resource identifiers (image names) and documented localization keys are
+   exempt. Existing literals are tracked in `docs/localization.md`.
+4. **Tables are complete.** Add every new key to every language of its table in the same commit, with the same `%@` /
+   `%1$@` specifiers, so every language of a table has the same key set. Keys are stable ASCII identifiers (this
+   repository's tables already use them). Check `.strings` files with `plutil -lint` and
+   `scripts/check-localizations.py`.
+5. **The two layers stay isolated.** Core never reads an example bundle, the example never puts its strings in a core
+   bundle, and the example's macros never read a core bundle. Apps can override core strings with
+   `CustomizedChatKit.<Name>.bundle` (see `+[NSBundle cyl_bundleForName:class:]`).
+
+### Structure and bundles
 
 - **iOS structure:** put every localization table in a `.bundle`: `<Name>.bundle/<lang>.lproj/<Table>.strings` (and `.stringsdict` for plurals). Several bundles are allowed, one per feature or vendor domain (for example `Other.bundle`, `DateTools.bundle`, `CYLPBLocalizations.bundle`). Do not add `.lproj` folders outside a bundle. The only exception is what the system reads from the app's main bundle (localized storyboards such as `LaunchScreen`, and `InfoPlist.strings`), which stays in app-level `.lproj` folders.
-- **Core bundles (`ChatKit/Class/Resources/*.bundle`) are always kept.** Never delete or rename a core bundle, table, or key: clients depend on them and can override them with `CustomizedChatKit.<Name>.bundle` (see `+[NSBundle cyl_bundleForName:class:]`). Update them cautiously: add keys or languages, keep existing keys stable, change existing values only when the task requires it, and add every new key to every language of that table in the same commit.
-- **Example (`ChatKit-OC/`) strings live in example-level bundles**, for example `ChatKit-OC/Example/Resources/LCCKExample.bundle`, added to the app target with explicit file references. Keep the two levels isolated: never put example strings in a core bundle, and core never reads an example bundle.
-- **Always access strings through a macro** that maps a key to its bundle and table, so the mapping lives in one place. Core uses `CYLLocalizedStrings(key)` (`CYLChatConstants.h`); a new core bundle gets its own `CYL...LocalizedString(key)` macro. The example defines `LCCK...LocalizedString(key)` macros for its own bundles in `LCCKExampleConstants.h`. Do not call `NSLocalizedString` or `NSLocalizedStringFromTableInBundle` directly in feature code.
-- **Keys** are stable ASCII identifiers. Every language file of a table has the same key set. Check `.strings` files with `plutil -lint` and compare key sets across languages before committing.
-- **Other platforms** follow the same rules: group localization files per package in that platform's resource structure (Android `res/values-<lang>/` in the library or app module, web `locales/<lang>/<namespace>.json`, Flutter `.arb` files per package), keep the core resources and keys stable, keep example resources in the example, and access strings through one mapping helper per resource set.
+- **Core bundles (`ChatKit/Class/Resources/*.bundle`) are always kept.** Never delete or rename a core bundle, table, or key: clients depend on them. Update them cautiously: add keys or languages, keep existing keys stable, change existing values only when the task requires it. The podspec copies `ChatKit/Class/Resources/*`, so a new core bundle placed there ships without podspec changes.
+- **Example (`ChatKit-OC/`) strings live in example-level bundles**, for example `ChatKit-OC/Example/Class/Module/Other/LCCKExample.bundle`, added to the app target with explicit file references. Never put example strings in a core bundle, and core never reads an example bundle.
+- **Other platforms** follow the same rules with their own folder package: Android `res/values-<lang>/` in the library or app module, web `locales/<lang>/<namespace>.json`, Flutter `.arb` files per package. Keep one accessor per layer (a function where the platform has no macros), keep the core resources and keys stable, and keep example resources in the example. Swift cannot import function-like macros, so a Swift example defines its own accessor function for its bundle, and core exposes a function form of its macro for Swift callers.
 - Record existing deviations and unfinished localization work as `TODO` in `docs/localization.md`.
 
 ## CI and demo screenshots

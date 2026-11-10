@@ -20,4 +20,18 @@ source: 自动生成（.claude/hooks/folder_assets.py）
 
 ## 本文件夹补充规则
 
-- （待补充）
+- Core localization bundles live here (`Other.bundle`, `DateTools.bundle`, `CYLPBLocalizations.bundle`, and the other
+  `*.bundle` folders). Rule 3 above is about notes; resource bundles are the exception, and the podspec ships every
+  entry of this folder to clients.
+- Every localization table is a file inside a bundle: `<Name>.bundle/<lang>.lproj/<Table>.strings`. Do not add loose
+  `.lproj` folders here. The existing loose ones (`en.lproj`, `ar.lproj`, `zh-Hans.lproj`, `zh-Hant.lproj`, and
+  `localization/`) stay as they are until their lookups are checked; see `docs/localization.md`.
+- Core bundles are always kept: never delete or rename a bundle, table, or key. Add keys and languages only, add each
+  new key to every language of its table in the same commit, and keep `%@` / `%1$@` specifiers identical.
+- Core code reads these bundles only through the core localization macro, `CYLLocalizedStrings(key)`
+  (`ChatKit/Class/Tool/CYLChatConstants.h`), or the macro of another core bundle. A new core bundle gets its own
+  `CYL<Domain>LocalizedString(key)` macro.
+- Example strings never go in this folder. The example has its own bundle and its own macro,
+  `LCCKExampleLocalizedString(key, defaultValue)`, so a project always has at least two different localization macros.
+- Before changing anything here, read `.agents/skills/cylchatkit-localization/SKILL.md` and the "Internationalization
+  and localization" section of the root `AGENTS.md`.
