@@ -80,23 +80,30 @@
 /// @name UI opera
 ///=============================================================================
 
-#define localize(key, default) CYLLocalizedStrings(key)
+/// Reads a demo string from `LCCKExample.bundle` (table `LCCKExample`) and returns `defaultValue` when the key is
+/// missing. Demo strings never come from the core bundles (AGENTS.md, "Internationalization and localization").
+#define LCCKExampleLocalizedString(key, defaultValue) \
+    ([[NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"LCCKExample" ofType:@"bundle"]] \
+        localizedStringForKey:(key) value:(defaultValue) table:@"LCCKExample"] ?: (defaultValue))
+
+/// Historical name, kept for existing callers. It used to read the core table and ignore `default`.
+#define localize(key, default) LCCKExampleLocalizedString(key, default)
 
 #pragma mark - Message Bars
 
-#define kStringMessageBarErrorTitle localize(@"message.bar.error.title")
-#define kStringMessageBarErrorMessage localize(@"message.bar.error.message")
-#define kStringMessageBarSuccessTitle localize(@"message.bar.success.title")
-#define kStringMessageBarSuccessMessage localize(@"message.bar.success.message")
-#define kStringMessageBarInfoTitle localize(@"message.bar.info.title")
-#define kStringMessageBarInfoMessage localize(@"message.bar.info.message")
+#define kStringMessageBarErrorTitle LCCKExampleLocalizedString(@"message.bar.error.title", nil)
+#define kStringMessageBarErrorMessage LCCKExampleLocalizedString(@"message.bar.error.message", nil)
+#define kStringMessageBarSuccessTitle LCCKExampleLocalizedString(@"message.bar.success.title", nil)
+#define kStringMessageBarSuccessMessage LCCKExampleLocalizedString(@"message.bar.success.message", nil)
+#define kStringMessageBarInfoTitle LCCKExampleLocalizedString(@"message.bar.info.title", nil)
+#define kStringMessageBarInfoMessage LCCKExampleLocalizedString(@"message.bar.info.message", nil)
 
 #pragma mark - Buttons
 
-#define kStringButtonLabelSuccessMessage localize(@"button.label.success.message")
-#define kStringButtonLabelErrorMessage localize(@"button.label.error.message")
-#define kStringButtonLabelInfoMessage localize(@"button.label.info.message")
-#define kStringButtonLabelHideAll localize(@"button.label.hide.all")
+#define kStringButtonLabelSuccessMessage LCCKExampleLocalizedString(@"button.label.success.message", nil)
+#define kStringButtonLabelErrorMessage LCCKExampleLocalizedString(@"button.label.error.message", nil)
+#define kStringButtonLabelInfoMessage LCCKExampleLocalizedString(@"button.label.info.message", nil)
+#define kStringButtonLabelHideAll LCCKExampleLocalizedString(@"button.label.hide.all", nil)
 
 #pragma mark - Dict or UserDefaults Key
 ///=============================================================================

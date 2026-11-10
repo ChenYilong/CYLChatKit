@@ -33,7 +33,6 @@ Pod::Spec.new do |s|
     core.dependency "MJRefresh"
     core.dependency "Masonry", "~> 1.0.1"
     core.dependency "SDWebImage", "~> 3.8.0"
-    core.dependency "FMDB", "~> 2.6.2"
     core.dependency "pop", "~> 1.0.9"
     core.dependency "UITableView+FDTemplateLayoutCell"
     core.dependency "FDStackView", "~> 1.0"

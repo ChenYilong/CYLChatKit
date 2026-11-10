@@ -166,6 +166,16 @@
     [self.userSystemService getCachedProfileIfExists:userId name:name avatarURL:avatarURL error:error];
 }
 
+// The two members below are required by CYLUserSystemService but were never forwarded, so calling them on
+// LCChatKit raised "unrecognized selector".
+- (CYLFetchProfilesBlock)fetchProfilesBlock {
+    return self.userSystemService.fetchProfilesBlock;
+}
+
+- (void)getCachedProfileIfExists:(NSString *)userId name:(NSString **)name avatarURL:(NSURL **)avatarURL userTye:(NSInteger *)userType error:(NSError * __autoreleasing *)error {
+    [self.userSystemService getCachedProfileIfExists:userId name:name avatarURL:avatarURL userTye:userType error:error];
+}
+
 - (NSArray<id<CYLUserDelegate>> *)getCachedProfilesIfExists:(NSArray<NSString *> *)userIds error:(NSError * __autoreleasing *)error {
    return [self.userSystemService getCachedProfilesIfExists:userIds error:error];
 }

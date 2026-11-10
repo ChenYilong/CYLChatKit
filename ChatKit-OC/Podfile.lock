@@ -16,7 +16,6 @@ PODS:
     - CYLTableViewPlaceHolder (~> 1.1.0)
     - DACircularProgress (~> 2.3.1)
     - FDStackView (~> 1.0)
-    - FMDB (~> 2.6.2)
     - Masonry (~> 1.0.1)
     - MJRefresh
     - MLLabel (~> 1.10.5)
@@ -60,6 +59,7 @@ DEPENDENCIES:
   - CYLChatKit (from `../`)
   - CYLTabBarController (= 1.99.72)
   - CYLTableViewPlaceHolder (from `https://github.com/ChenYilong/CYLTableViewPlaceHolder.git`, commit `9d1b8e77a99b2146608b22d4aef8f760313f0d64`)
+  - FMDB (= 2.6.2)
   - FTPopOverMenu (= 2.1.4)
   - FXForms (= 1.2.14)
   - MLPAutoCompleteTextField (= 1.5)
@@ -102,7 +102,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   AVOSCloud: b3cb1ed20d46c0d55083363522cb2ea593d51ac7
   AVOSCloudIM: ede93dc6155c3e73524469f5098a1ec2422915ae
-  CYLChatKit: 18d693a2680fb37d4942d1ad06420358b425f71b
+  CYLChatKit: 453e61ef29f108a113c4a02ff1316ef70252686a
   CYLDeallocBlockExecutor: 1f8e904d846b8dadff88b2e5c2817df974cb63a9
   CYLTabBarController: 234ad57e11f7de17848ec78450c3b741781a0bb1
   CYLTableViewPlaceHolder: 1b38326531501ef6f52a526f05877919d33e0c76
@@ -122,6 +122,6 @@ SPEC CHECKSUMS:
   TWMessageBarManager: fd84e7948ba7968a2b5d9454859135761214ec56
   "UITableView+FDTemplateLayoutCell": 5c949b4a5059c404b442926c0e80f81d10a2d66f
 
-PODFILE CHECKSUM: d476a976a63077186c82fcb06ac8e7adbaa7b248
+PODFILE CHECKSUM: 02ba00cd2d4bed26deddfa11753c440b06c34de7
 
 COCOAPODS: 1.17.0

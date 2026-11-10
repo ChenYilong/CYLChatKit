@@ -191,29 +191,55 @@ Done in a Linux container without Xcode or an iOS SDK:
 - Both `.pbxproj` files parse with `xcodeproj` 1.28.1, keep `objectVersion = 46` and `compatibilityVersion = "Xcode 3.2"`, and contain no synchronized groups or newer keys.
 - Lockfiles: checksums computed with `cocoapods-core` 1.17.0 (the lockfiles' version); `Lockfile#detect_changes_with_podfile` reports no drift for either project.
 
+## CI results
+
+CI (`docs/ci.md`, Xcode 26.6, iOS 26.5 simulator SDK) is the first real macOS build. Fixed and confirmed by
+`pod lib lint` passing on the macOS runner (run for `6a077ce`):
+
+- The iOS 7 `UITableViewRowAction` backport (`#error` for iOS 8 or later) is excluded from the pod.
+- Duplicate header basenames ("Multiple commands produce ... Headers/NSBundle+CYLExtension.h"): the identical or
+  subset copies of `NSString+CYLMD5`, `UIImage+CYLExtension`, and `NSBundle+CYLExtension` under
+  `Module/Conversation/Tool/Categories` were removed (the two extra `NSBundle` selectors moved into
+  `Tool/Categories`), and the corner-radius category became `UIImageView+CYLCornerRadius`. The `Tool/Categories`
+  `UIImage` methods (with customized-bundle lookup) now always apply; before, the runtime winner was undefined.
+- `CYLSendImageView.h` imports `CYLChatConstants.h` for `CYLMessageSendState`.
+- `CYLPhoto.m` uses the SDWebImage 3.8 API that the podspec pins.
+- `CYLTableViewPlaceHolder` is declared (`~> 1.1.0`); the demo pins its latest commit `9d1b8e7` (branch
+  `claude/docs-todo-completion-xoef38`) and `scripts/pod-lint.sh` lints against the same commit. Its
+  `UIView+CYLExtension.h` and `CYLScrollDirection` clashed with core, so core now uses `UIView+CYLChatExtension` and
+  `CYLChatScrollDirection` (selectors unchanged; the enum was unused).
+- `-[CYLConversationViewController sendMessage:mentionList:]`, declared but never implemented, forwards to the view
+  model.
+- `CYLConversationNavigationTitleView` casts the `id<CYLConversationProtocol>` to `NSObject *` for KVO.
+- `CYLAlertController (Convenience)` no longer implements the broken, undeclared `+actionWithTitle:handler:`.
+- `lame.framework` has no arm64 simulator slice, so the podspec excludes arm64 from simulator builds.
+- `LCChatKit` forwards the two `CYLUserSystemService` members it lacked (`fetchProfilesBlock`,
+  `-getCachedProfileIfExists:name:avatarURL:userTye:error:`). Added after that run; the next lint confirms the
+  `-Wprotocol` warning is gone.
+
+Fixed in the demo (compilation is confirmed only when the `Build demo` job passes; see TODO):
+
+- `+[AVIMTypedMessage lcck_messageWithLCCKMessage:]` reads `originPhotoURL.absoluteString` instead of treating
+  the `NSURL` as a string (crash on outgoing images with a remote URL).
+- AVOSCloud 11.5.2's direct `<netinet6/in6.h>` import, rejected by the iOS 26 SDK, is removed from the installed pod
+  by the demo Podfile's `post_install`.
+- `FMDB` moved from the podspec to the demo Podfile (`2.6.2`); core does not use it.
+- The demo project's restored files and cleaned references (78 files from `d110789^`, 31 dangling references,
+  14 empty groups) parse with `xcodeproj` and `xcodebuild -list`.
+
 ## TODO
 
-- TODO: Build `ChatKit/ChatKit.xcodeproj` and the CocoaPods library target on macOS with Xcode. No compiler with an iOS SDK was available, and the stub-based clang checks cannot catch UIKit typing errors.
-- TODO: Run `pod install` in `ChatKit/` and `ChatKit-OC/` on macOS. The CocoaPods CDN redirects to `cdn.jsdelivr.net`, which this environment blocks, so the lockfiles were edited by hand with CocoaPods-computed checksums. `pod install` regenerates `Pods/` and the `[CP]` build phases; review that it changes nothing else.
-- TODO: Run the demo end to end with the LeanCloud provider: log in, conversation list (unread badge, mention, draft, mute, last-message preview for every media type), send and receive text, image, voice, and location, edit, recall, failed-message resend, auto-join, removed-from-group handling, single sign-on prompt, reconnect, push registration, and badge sync. Compare the UI with the previous release.
-- TODO: Pre-existing demo project damage was repaired statically: 78 files deleted in `d110789` were restored (ConversationDetail, Utilities, `LCCKContactManager`, `LCCKExampleConstants.h`, the shared scheme, entitlements, assets), 31 dangling references (Redpacket, VCard, docs) and 14 empty groups were removed from `ChatKit-OC.xcodeproj`, and non-source files left the Sources phase. Confirm with the CI demo build (docs/ci.md) that the demo compiles and links.
-- TODO: CI (docs/ci.md) is the first real macOS build of the library and the demo. Record its result here, and fix every compile error it reports before calling the rename verified.
-- TODO: First CI run (Xcode 26.6): the only compile error was the pre-existing iOS 7 `UITableViewRowAction` backport (`#error` for deployment targets of iOS 8 or later). The podspec now excludes it; confirm that swipe actions in the conversation list still work with the system class.
-- TODO: CI found `CYLPhoto.m` (photo browser) written against the SDWebImage 4 API while the podspec pins `~> 3.8.0`. It now uses the 3.8 API (`diskImageExistsWithKey:`, two-argument progress block). Verify full-screen image preview and download progress in the demo; upgrading SDWebImage is a separate dependency change.
-- TODO: CI warns that `LCChatKit` does not implement every `CYLUserSystemService` requirement (-Wprotocol). Identify the missing selectors and forward them, since calling one would crash.
-- TODO: CI found two pre-existing gaps: core imports `CYLTableViewPlaceHolder` but the podspec never declared it (now `~> 1.1.0` in the podspec; the demo Podfile pins the latest commit `9d1b8e7` of branch `claude/docs-todo-completion-xoef38` with `:git`/`:commit`, and `scripts/pod-lint.sh` lints against the same commit), and `-[CYLConversationViewController sendMessage:mentionList:]` was declared but never implemented (now forwards to the view model). Both pods shipped a `UIView+CYLExtension.h`, so the placeholder pod compiled against the core header and failed; core renamed its file and category to `UIView+CYLChatExtension` (selectors unchanged). Verify the empty-list placeholder in the demo. When CYLTableViewPlaceHolder publishes a release that contains this commit, switch the Podfile back to a version requirement.
-- TODO: The CYLTableViewPlaceHolder commit also defines `CYLScrollDirection` (in its `UIScrollView+CYLExtension.h`), which clashed with the unused core enum of the same name in `CYLChatConstants.h`. The core enum and its cases are now `CYLChatScrollDirection*`. `CYLConversationNavigationTitleView` now casts the `id<CYLConversationProtocol>` to `NSObject *` for KVO; providers must return `NSObject` subclasses that are KVO compliant for `muted`, `name`, and `members`.
-- TODO: Pre-existing: `CYLAlertController (Convenience)` implemented an undeclared `+actionWithTitle:handler:` that called the `CYLAlertAction` initializer on the controller class and no longer compiles. It was removed; `+[CYLAlertAction actionWithTitle:handler:]` (declared in the header) is unchanged.
-- TODO: `lame.framework` (voice messages) is a fat binary without an arm64 simulator slice, so the podspec now excludes arm64 from simulator builds (`pod_target_xcconfig` and `user_target_xcconfig`). Apps then run in the simulator as x86_64 under Rosetta on Apple silicon. Replace lame with an XCFramework (or build it from source) and remove the exclusion; `user_target_xcconfig` affects every app target that uses CYLChatKit.
-- TODO: AVOSCloud 11.5.2 imports `<netinet6/in6.h>` directly, which the iOS 26 SDK rejects. The demo Podfile's `post_install` removes that one import from the installed pod (`<netinet/in.h>` already includes it). Remove the patch when the LeanCloud SDK is upgraded.
-- TODO: Fixed while preparing CI: `CYLConversationViewController` called the optional `conversationInvalidedHandler` block without a nil check. Verify the not-joined path in the demo.
-- TODO: Pre-existing: `ChatKit.xcodeproj` is out of sync with disk (83 missing references, 14 unreferenced files). The podspec glob is the effective source list.
-- TODO: Pre-existing: `mentionList` is never sent; the view model passes nil to keep existing behavior. The provider API now supports it. Decide whether to enable it, because recipients would start seeing mention flags.
-- TODO: Pre-existing: `+[AVIMTypedMessage lcck_messageWithLCCKMessage:]` assigns `originPhotoURL` (an `NSURL`) to an `NSString` and calls `hasPrefix:` on it, which crashes when an outgoing image message has a remote URL.
-- TODO: Duplicate header basenames broke the CI build ("Multiple commands produce ... Headers/NSBundle+CYLExtension.h"). Fixed: the identical or subset copies of `NSString+CYLMD5`, `UIImage+CYLExtension`, and `NSBundle+CYLExtension` under `Module/Conversation/Tool/Categories` were removed (the two extra `NSBundle` selectors moved into `Tool/Categories`), and the corner-radius `UIImageView` category became `UIImageView+CYLCornerRadius`. Previously the runtime winner between duplicate `UIImage` category methods was undefined; now the `Tool/Categories` versions (with customized-bundle lookup) always apply. Verify image loading and avatar corners in the demo. Apps importing the old corner-radius header by name must import `UIImageView+CYLCornerRadius.h`.
-- TODO: `FMDB` is no longer used by ChatKit itself, only by the demo provider's SQLite caches through the pod's transitive dependency. Moving it to the demo Podfile is a separate dependency change.
-- TODO: `docs/api-reference.md` was generated from the public headers by a script that is not in the repository. When a public header changes, update the affected section by hand in the same commit, or add a generator under `scripts/` in a separate change. Its rename score (100/100) covers names only; the Xcode build below is still required before calling the rename verified.
-- TODO: Prefix rename: every public core name changed (`LCCK*` → `CYL*`, `lcck_*` → `cyl_*`), so every app using ChatKit must update. Ship it as a major version with a migration table (old → new), and call out the `CYLChat*` exceptions and the changed notification and persisted-key strings.
-- TODO: Verify on macOS that `CYLChatKit` and `CYLTabBarController` 1.99.72 link together in the demo (no duplicate classes; static checks found none, apart from the identical `CYL_DEPRECATED` macro) and that the `CYLDeallocBlockExecutor` 1.2.0 upgrade builds.
-- TODO: Pre-existing: `ChatKit/Podfile` (library Xcode project) does not declare several podspec dependencies such as `CYLDeallocBlockExecutor`, so `ChatKit.xcodeproj` alone cannot build core. Align it with the podspec in a separate change.
-- TODO: API risk: apps that subclass or extend the facade services, or call the moved LeanCloud categories, must copy `ChatKit-OC/Example/Class/LeanCloud` and add `AVOSCloud`/`AVOSCloudIM`. Consider a major version bump and a migration note in the release.
+- TODO: Get the demo build (`Build demo` job) and simulator screenshots green; record the run here. After the
+  AVOSCloud header patch the demo has not completed a build yet.
+- TODO: Runtime checks in the demo that CI cannot do: swipe actions in the conversation list (system
+  `UITableViewRowAction`), image loading and avatar corners (merged categories), full-screen image preview and
+  download progress (SDWebImage 3.8 API), the empty-list placeholder (CYLTableViewPlaceHolder commit), outgoing
+  image messages with a remote URL, and the not-joined path (`conversationInvalidedHandler` nil check).
+- TODO: Run the demo end to end with the LeanCloud provider: log in, conversation list (unread badge, mention, draft, mute, last-message preview for every media type), send and receive text, image, voice, and location, edit, recall, failed-message resend, auto-join, removed-from-group handling, single sign-on prompt, reconnect, push registration, and badge sync. Compare the UI with the previous release. Needs LeanCloud credentials, which CI does not have.
+- TODO: `ChatKit/ChatKit.xcodeproj` is out of sync with disk (83 missing references, 14 unreferenced files) and `ChatKit/Podfile` does not declare several podspec dependencies (for example `CYLDeallocBlockExecutor`, `CYLTableViewPlaceHolder`), so that project cannot build core; CI only parses and lists it. The podspec glob is the effective source list. Aligning both needs `pod install` on macOS to regenerate `ChatKit/Podfile.lock`, which this environment cannot reach (CocoaPods CDN blocked).
+- TODO: `lame.framework` should be replaced by an XCFramework (or built from source) so the arm64 simulator exclusion can be removed; `user_target_xcconfig` affects every app target that uses CYLChatKit, and simulator apps run as x86_64 under Rosetta on Apple silicon.
+- TODO: Remove the AVOSCloud `post_install` patch, and switch CYLTableViewPlaceHolder back to a version requirement, once those projects publish fixed releases.
+- TODO: Product decision: `mentionList` is never sent; the view model passes nil to keep existing behavior. The provider API supports it, but enabling it makes recipients see mention flags.
+- TODO: `docs/api-reference.md` was generated from the public headers by a script that is not in the repository. When a public header changes, update the affected section by hand in the same commit, or add a generator under `scripts/` in a separate change.
+- TODO: Release: every public core name changed (`LCCK*` → `CYL*`, `lcck_*` → `cyl_*`, plus `CYLChat*` exceptions including `UIView+CYLChatExtension`, `UIImageView+CYLCornerRadius`, `CYLChatScrollDirection`), and apps that extend the facade services or call the moved LeanCloud categories must copy `ChatKit-OC/Example/Class/LeanCloud` and add `AVOSCloud`, `AVOSCloudIM`, and `FMDB`. Ship it as a major version with the migration table from `docs/api-reference.md`.
+- TODO: Verify that `CYLChatKit` and `CYLTabBarController` 1.99.72 link together in the demo (static checks found no duplicate classes, apart from the identical `CYL_DEPRECATED` macro). The `Build demo` job will confirm it.

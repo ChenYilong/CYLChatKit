@@ -62,7 +62,8 @@ FOUNDATION_EXTERN NSMutableDictionary const *_typeDict;
         case CYLMessageMediaTypeImage: {
             
             NSString *localPhotoPath = message.photoPath;
-            NSString *remotePhotoPath = message.originPhotoURL;
+            // `originPhotoURL` is an NSURL; reading it as an NSString crashed on `-hasPrefix:`.
+            NSString *remotePhotoPath = message.originPhotoURL.absoluteString;
 
             if ([remotePhotoPath hasPrefix:@"http"]) {
                 AVFile *file = [AVFile fileWithRemoteURL:[NSURL URLWithString:remotePhotoPath]];

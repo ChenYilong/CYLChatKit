@@ -489,11 +489,12 @@ typedef NS_ENUM(NSInteger, CYLBarButtonItemStyle) {
 添加 ChatKit 依赖的第三方库以及对应版本：
 
 - An `CYLIMProvider` implementation. ChatKit no longer bundles LeanCloud; to use LeanCloud, add
-  [AVOSCloud and AVOSCloudIM](https://github.com/leancloud/objc-sdk) and the demo's `ChatKit-OC/Example/Class/LeanCloud` folder.
+  [AVOSCloud and AVOSCloudIM](https://github.com/leancloud/objc-sdk), [FMDB](https://github.com/ccgus/fmdb) 2.6.2 (used by the
+  provider's caches), and the demo's `ChatKit-OC/Example/Class/LeanCloud` folder.
 - [MJRefresh](https://github.com/CoderMJLee/MJRefresh) 3.1.9
 - [Masonry](https://github.com/SnapKit/Masonry) v1.0.1 
 - [SDWebImage](https://github.com/rs/SDWebImage) v3.8.0
-- [FMDB](https://github.com/ccgus/fmdb) 2.6.2 
+- [CYLTableViewPlaceHolder](https://github.com/ChenYilong/CYLTableViewPlaceHolder) 1.1.0
 - [UITableView+FDTemplateLayoutCell](https://github.com/forkingdog/UITableView-FDTemplateLayoutCell) 1.5.beta
 
 具体以  [这里](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit.podspec) 为准。

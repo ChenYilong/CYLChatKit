@@ -18,6 +18,8 @@ target 'ChatKit-OC' do
   # The LeanCloud IM backend (LCCKLeanCloudIMProvider) lives in the demo, not in ChatKit.
   pod 'AVOSCloud', '11.5.2'
   pod 'AVOSCloudIM', '11.5.2'
+  # SQLite caches of the LeanCloud provider (LCCKLeanCloudConversationService). ChatKit itself does not use FMDB.
+  pod 'FMDB', '2.6.2'
 
   pod 'CYLTabBarController', '1.99.72'
   pod 'TWMessageBarManager', '1.8.1'
