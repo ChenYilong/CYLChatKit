@@ -39,7 +39,8 @@
         // 从系统偏好读取用户已经保存的信息
         NSUserDefaults *defaultsGet = [NSUserDefaults standardUserDefaults];
         NSString *currentClientID = [defaultsGet stringForKey:LCCK_KEY_USERID];
-        secondViewController.excludedPersonIDs = @[ currentClientID ];
+        // No client ID is saved before the first login (and in CI screenshots); @[ nil ] would crash.
+        secondViewController.excludedPersonIDs = currentClientID.length > 0 ? @[ currentClientID ] : @[];
         UINavigationController *secondNavigationController = [[CYLChatBaseNavigationController alloc]
                                                         initWithRootViewController:secondViewController];
         

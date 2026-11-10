@@ -25,6 +25,10 @@ launch argument `-LCCKDemoScreen` (an `NSUserDefaults` key):
 - `-LCCKDemoScreen conversations`: the tab bar UI without logging in (`conversations.png`)
 - `-LCCKDemoScreen chat`: a conversation view with peer `Jerry` pushed on the first tab (`chat.png`)
 
+Every launch also passes `-LCCKDemoScreenshots YES`, which skips the notification permission request, and the script
+turns off the keyboard's swipe-typing introduction, so no system overlay covers the app. When a launch crashes, the
+script prints the crash report's exception and backtrace in a `Crash details` log group.
+
 The screenshots are uploaded as the `demo-screenshots` artifact. Each one is also printed in the job log as base64
 JPEG between `===BEGIN SCREENSHOT <name>===` and `===END SCREENSHOT <name>===`.
 

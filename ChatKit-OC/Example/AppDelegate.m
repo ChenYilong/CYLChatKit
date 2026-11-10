@@ -161,6 +161,11 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
  * 初始化UNUserNotificationCenter
  */
 - (void)registerForRemoteNotification {
+    // CI screenshots (scripts/demo-screenshots.sh) pass -LCCKDemoScreenshots YES so the permission alert does not cover
+    // the screen.
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LCCKDemoScreenshots"]) {
+        return;
+    }
     // iOS 10 兼容
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
         

@@ -67,14 +67,61 @@ xcrun simctl boot "$DEVICE_ID" 2>/dev/null || true
 xcrun simctl bootstatus "$DEVICE_ID" -b
 xcrun simctl status_bar "$DEVICE_ID" override --time 9:41 --batteryState charged --batteryLevel 100 \
     --cellularBars 4 --wifiBars 3 || true
+# Keep system overlays out of the screenshots: the keyboard's swipe-typing introduction (the login field becomes
+# first responder) and, through the demo's -LCCKDemoScreenshots flag, the notification permission alert.
+xcrun simctl spawn "$DEVICE_ID" defaults write com.apple.Preferences DidShowContinuousPathIntroduction -bool true || true
+xcrun simctl spawn "$DEVICE_ID" defaults write com.apple.Preferences KeyboardContinuousPathEnabled -bool false || true
 xcrun simctl install "$DEVICE_ID" "$APP"
+PROCESS_NAME=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$APP/Info.plist")
+
+# Prints the newest crash report newer than the given marker file, plus exception lines from the app's log, so a crash
+# can be diagnosed from the job log alone (artifacts are not always reachable).
+print_crash() {
+    local marker="$1" report
+    report=$(find "$HOME/Library/Logs/DiagnosticReports" -name "${PROCESS_NAME}*" -newer "$marker" 2>/dev/null \
+        | head -n 1)
+    echo "::group::Crash details"
+    if [[ -n "$report" ]]; then
+        echo "Crash report: $report"
+        /usr/bin/python3 - "$report" <<'PY' || head -n 120 "$report"
+import json, sys
+text = open(sys.argv[1], encoding="utf-8", errors="replace").read()
+header, _, body = text.partition("\n")
+data = json.loads(body)
+exc = data.get("exception", {})
+print("exception:", exc.get("type"), exc.get("signal"), data.get("asi") or "")
+info = data.get("lastExceptionBacktrace") and "lastExceptionBacktrace present" or ""
+print(info)
+images = data.get("usedImages", [])
+for key in ("lastExceptionBacktrace",):
+    frames = data.get(key) or []
+    for f in frames[:25]:
+        img = images[f.get("imageIndex", 0)].get("name", "?") if images else "?"
+        print("  ", img, f.get("symbol", ""), "+", f.get("symbolLocation", ""))
+threads = data.get("threads", [])
+crashed = next((t for t in threads if t.get("triggered")), threads[0] if threads else {})
+for f in crashed.get("frames", [])[:25]:
+    img = images[f.get("imageIndex", 0)].get("name", "?") if images else "?"
+    print("  ", img, f.get("symbol", ""), "+", f.get("symbolLocation", ""))
+PY
+    else
+        echo "No crash report found for $PROCESS_NAME."
+    fi
+    xcrun simctl spawn "$DEVICE_ID" log show --last 1m --style compact \
+        --predicate "process == \"$PROCESS_NAME\"" 2>/dev/null \
+        | grep -iE "exception|terminating|assert|fault|error" | tail -n 40 || true
+    echo "::endgroup::"
+}
 
 shoot() {
     local name="$1"; shift
-    xcrun simctl launch --terminate-running-process "$DEVICE_ID" "$BUNDLE_ID" "$@"
+    local started
+    started=$(mktemp)
+    xcrun simctl launch --terminate-running-process "$DEVICE_ID" "$BUNDLE_ID" -LCCKDemoScreenshots YES "$@"
     sleep 8
     if ! xcrun simctl spawn "$DEVICE_ID" launchctl list | grep -q "$BUNDLE_ID"; then
         echo "warning: $BUNDLE_ID is not running after launch ($name); it may have crashed" >&2
+        print_crash "$started"
     fi
     xcrun simctl io "$DEVICE_ID" screenshot "$OUT/$name.png"
     sips -s format jpeg -s formatOptions 60 --resampleWidth 390 "$OUT/$name.png" --out "$OUT/$name.jpg" >/dev/null
@@ -88,5 +135,5 @@ shoot conversations -LCCKDemoScreen conversations
 shoot chat -LCCKDemoScreen chat
 
 xcrun simctl spawn "$DEVICE_ID" log show --last 2m --style compact \
-    --predicate "process == \"$(basename "$APP" .app)\"" > "$OUT/app.log" 2>/dev/null || true
+    --predicate "process == \"$PROCESS_NAME\"" > "$OUT/app.log" 2>/dev/null || true
 ls -la "$OUT"
