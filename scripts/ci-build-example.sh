@@ -73,6 +73,7 @@ xcodebuild build \
     -destination 'generic/platform=iOS Simulator' \
     -derivedDataPath "$ROOT/build/DerivedData/$DEMO_DIR" \
     CODE_SIGNING_ALLOWED=NO \
+    ONLY_ACTIVE_ARCH=NO \
     COMPILER_INDEX_STORE_ENABLE=NO 2>&1 | tee "$ROOT/build/$DEMO_DIR.log"
 STATUS=${PIPESTATUS[0]}
 set -e

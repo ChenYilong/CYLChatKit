@@ -36,6 +36,12 @@ if [[ -z "$DEVICE_ID" ]]; then
     exit 1
 fi
 
+# The vendored lame.framework has no arm64 simulator slice, so the app is built for x86_64 and runs under Rosetta on
+# Apple silicon runners (CYLChatKit.podspec excludes arm64 for simulator builds).
+if [[ "$(uname -m)" == "arm64" ]] && ! /usr/bin/pgrep -q oahd; then
+    sudo softwareupdate --install-rosetta --agree-to-license || true
+fi
+
 cd ChatKit-OC
 # Pods/ is partly committed, so always install (the Podfile is not changed).
 pod install --repo-update
@@ -43,7 +49,8 @@ xcodebuild build \
     -workspace ChatKit-OC.xcworkspace \
     -scheme ChatKit-OC \
     -sdk iphonesimulator \
-    -destination "id=$DEVICE_ID" \
+    -destination "id=$DEVICE_ID,arch=x86_64" \
+    ONLY_ACTIVE_ARCH=NO \
     -derivedDataPath "$DERIVED" \
     CODE_SIGNING_ALLOWED=NO \
     COMPILER_INDEX_STORE_ENABLE=NO > "$ROOT/build/screenshots-build.log" 2>&1 || {

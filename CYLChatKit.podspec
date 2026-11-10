@@ -21,6 +21,10 @@ Pod::Spec.new do |s|
     # later (#error), and UIKit provides the class on every supported iOS version.
     core.exclude_files = 'ChatKit/Class/Tool/Vendor/CYLTableViewRowAction/UITableViewRowAction.m'
     core.vendored_frameworks = 'ChatKit/Class/Tool/Vendor/VoiceLib/lame.framework'
+    # lame.framework has device slices (armv7, armv7s, arm64) and Intel simulator slices (i386, x86_64), but no arm64
+    # simulator slice, so simulator builds link x86_64 only. Remove this once lame ships as an XCFramework.
+    core.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+    core.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
     core.resources = 'ChatKit/Class/Resources/*', 'ChatKit/**/*.xib'
     core.frameworks = 'Foundation', 'CoreGraphics', 'UIKit', 'MobileCoreServices', 'AVFoundation', 'CoreLocation', 'MediaPlayer', 'CoreMedia', 'CoreText', 'AudioToolbox', 'MapKit', 'ImageIO', 'SystemConfiguration', 'CFNetwork', 'QuartzCore', 'Security', 'CoreTelephony'
 

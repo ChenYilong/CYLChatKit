@@ -30,6 +30,11 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
+      # AVOSCloud 11.5.2 imports <netinet6/in6.h>, which current SDKs mark as private to its module (an error by
+      # default since Xcode 26). Keep it a warning for this third-party pod only.
+      if target.name == 'AVOSCloud'
+        config.build_settings['OTHER_CFLAGS'] = '$(inherited) -Wno-error=private-header'
+      end
     end
   end
 end
