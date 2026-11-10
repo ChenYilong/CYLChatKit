@@ -33,6 +33,38 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
 - Lockfiles (`Podfile.lock` and other `*.lock` files) are not committed, as in CYLTabBarController; `.gitignore` ignores them. Declare every dependency the demo or library needs with an explicit version (or a `:git`/`:commit` pin) in the Podfile or podspec, so `pod install` resolves the same versions without a lockfile. Do not make unrelated dependency upgrades.
 - Before committing Xcode project changes, verify both `.pbxproj` files retain the required format, parse them with `xcodeproj`, and run `xcodebuild -list` for both projects. Report any build failure separately from project parsing.
 
+## Swift examples and Swift compatibility of core
+
+- **Every iOS example is written in Swift.** New example code is Swift only. The existing Objective-C demo
+  (`ChatKit-OC/`) is migrated to Swift; until that is done, do not add Objective-C files to it, and record the
+  remaining work as `TODO` in `docs/swift-guide.md`. Examples import only the library module (`import CYLChatKit`)
+  and follow CYLTabBarController's Swift demos (CocoaPods with `use_frameworks!`, Swift 5).
+- **Fix Objective-C interop problems in core, not in the example.** When Swift example code meets an Objective-C API
+  that imports badly (implicitly unwrapped optionals, `Any` collections, awkward names, prefixed enum cases, untyped
+  string constants), change the core header so it imports cleanly, following the Swift API Design Guidelines:
+  - nullability: `NS_ASSUME_NONNULL_BEGIN`/`END` with explicit `nullable` (block parameters included);
+  - lightweight generics on collections (`NSArray<NSString *> *`, `NSDictionary<NSString *, id> *`);
+  - `NS_ENUM` / `NS_OPTIONS` for enums and `NS_TYPED_ENUM` / `NS_TYPED_EXTENSIBLE_ENUM` for string constants, so cases
+    import without their type prefix (`CYLMessageMediaTypeText` → `.text`);
+  - `NS_DESIGNATED_INITIALIZER`, `NS_SWIFT_NAME` for a better Swift name, `NS_REFINED_FOR_SWIFT` or
+    `NS_SWIFT_UNAVAILABLE` where a Swift-only shape is needed.
+  Do not add Swift wrapper extensions in an example to hide a core API problem.
+- **`cyl_` methods follow CYLTabBarController's Swift rules.** Read its
+  [Swift guide](https://github.com/ChenYilong/CYLTabBarController/blob/master/docs/Swift-Guide.md) (section 15,
+  "Objective-C → Swift name map") and the "Swift-friendly names for underscored protocol methods" rule in its
+  [AGENTS.md](https://github.com/ChenYilong/CYLTabBarController/blob/master/AGENTS.md):
+  - Category methods keep the `cyl_` prefix in Swift; Objective-C prepositions (`With`, `For`, `At`, `Of`) become
+    argument labels (`-cyl_selectTabBarItemWithIdentifier:` → `cyl_selectTabBarItem(withIdentifier:)`). Use
+    `NS_SWIFT_NAME` only when the automatic name is wrong.
+  - Swift method names must not contain underscores, and a Swift class implementing an Objective-C protocol method
+    must use its imported name. So for a `cyl_` **protocol** method that Swift code implements, add a new method with
+    the same name minus the underscore, keeping the `cyl` prefix (`-cyl_fooWithBar:` → `-cylFooWithBar:`), give only
+    the new method an `NS_SWIFT_NAME`, make the old one `@optional`, and have core call the new one when it is
+    implemented, otherwise the old one. Never add `NS_SWIFT_NAME` to an already released method: that changes a
+    released Swift API.
+- Every adapted API gets a row in the Objective-C → Swift name map in `docs/swift-guide.md`, in the same change.
+- CI must build the Swift example and produce its screenshots (see "CI and demo screenshots").
+
 ## Internationalization and localization
 
 Localized resources are always several files (one per language and table), so they must be organized in a bundle

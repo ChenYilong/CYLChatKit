@@ -25,6 +25,19 @@ Follow the existing public API style; do not rename released symbols as a cleanu
 - Prefix every category method and property with `cyl_`; a category property's setter is `setCyl_name:`.
 - Place new files in the existing `Model`, `Controller`, `View`, `Tool`, or `Service` hierarchy that matches their responsibility.
 
+## Swift compatibility
+
+- Examples are Swift (`AGENTS.md`, "Swift examples and Swift compatibility of core"). Make every new or touched core
+  header import cleanly into Swift: nullability, lightweight generics, `NS_ENUM`/`NS_OPTIONS`, typed string constants,
+  designated initializers, and `NS_SWIFT_NAME` only where the automatic name is wrong.
+- `cyl_` category methods keep the prefix in Swift, with prepositions turned into labels
+  (`-cyl_selectTabBarItemWithIdentifier:` → `cyl_selectTabBarItem(withIdentifier:)`), as in CYLTabBarController's
+  `docs/Swift-Guide.md` section 15.
+- A `cyl_` protocol method that Swift classes implement gets an underscore-free twin (`-cylFooWithBar:`) carrying the
+  `NS_SWIFT_NAME`; the old method becomes `@optional` and core calls the twin first. Never add `NS_SWIFT_NAME` to a
+  released method.
+- Record each adapted API in the name map in `docs/swift-guide.md`.
+
 ## API compatibility
 
 - Do not rename or remove existing public symbols, even when a historical spelling or acronym looks inconsistent.
