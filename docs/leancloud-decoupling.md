@@ -8,6 +8,9 @@ class, category, and call moved to the demo app (`ChatKit-OC/Example/Class/LeanC
 The UI layer now talks to the IM backend only through protocols, so another IM SDK can be
 plugged in without changing ChatKit. The UI is meant to look and behave exactly as before.
 
+The full public API, the old → new migration tables, and the rename assessment are in
+[api-reference.md](api-reference.md).
+
 ## Naming
 
 Core (`ChatKit/`) uses the `CYL` prefix, following the CYLTabBarController naming rules
@@ -199,6 +202,7 @@ Done in a Linux container without Xcode or an iOS SDK:
 - TODO: Pre-existing: `+[AVIMTypedMessage lcck_messageWithLCCKMessage:]` assigns `originPhotoURL` (an `NSURL`) to an `NSString` and calls `hasPrefix:` on it, which crashes when an outgoing image message has a remote URL.
 - TODO: Pre-existing: header basenames are duplicated (for example two `NSBundle+CYLExtension.h` with different methods), so the header CocoaPods picks depends on search order.
 - TODO: `FMDB` is no longer used by ChatKit itself, only by the demo provider's SQLite caches through the pod's transitive dependency. Moving it to the demo Podfile is a separate dependency change.
+- TODO: `docs/api-reference.md` was generated from the public headers by a script that is not in the repository. When a public header changes, update the affected section by hand in the same commit, or add a generator under `scripts/` in a separate change. Its rename score (100/100) covers names only; the Xcode build below is still required before calling the rename verified.
 - TODO: Prefix rename: every public core name changed (`LCCK*` → `CYL*`, `lcck_*` → `cyl_*`), so every app using ChatKit must update. Ship it as a major version with a migration table (old → new), and call out the `CYLChat*` exceptions and the changed notification and persisted-key strings.
 - TODO: Verify on macOS that `CYLChatKit` and `CYLTabBarController` 1.99.72 link together in the demo (no duplicate classes; static checks found none, apart from the identical `CYL_DEPRECATED` macro) and that the `CYLDeallocBlockExecutor` 1.2.0 upgrade builds.
 - TODO: Pre-existing: `ChatKit/Podfile` (library Xcode project) does not declare several podspec dependencies such as `CYLDeallocBlockExecutor`, so `ChatKit.xcodeproj` alone cannot build core. Align it with the podspec in a separate change.

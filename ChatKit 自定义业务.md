@@ -198,13 +198,13 @@
 /*!
  * 自定义消息位置发送
  */
-- (void)sendCustomMessage:(AVIMTypedMessage *)customMessage;
+- (void)sendCustomMessage:(id<CYLIMMessageProtocol>)customMessage;
 
 /*!
  * 自定义消息位置发送
  */
-- (void)sendCustomMessage:(AVIMTypedMessage *)customMessage
-            progressBlock:(AVProgressBlock)progressBlock
+- (void)sendCustomMessage:(id<CYLIMMessageProtocol>)customMessage
+            progressBlock:(CYLProgressBlock)progressBlock
                   success:(CYLBooleanResultBlock)success
                    failed:(CYLBooleanResultBlock)failed;
  ```
@@ -255,7 +255,7 @@ degrade | 用来定义如何展示老版本未支持的自定义消息类型  | 
 typeTitle | 最近对话列表中最近一条消息的title，</p>比如：最近一条消息是图片，可设置该字段内容为：`@"图片"`，相应会展示：`[图片]`） | 添加到自定义消息的 attributes 字典属性下
 summary | 用来显示在push提示中  | 添加到自定义消息的 attributes 字典属性下，</p>另外，这个字段是为了方便自定义推送内容，这需要借助云引擎实现。
 conversationType | 用来显示在push提示中 |  添加到自定义消息的 attributes 字典属性下,</p>对话类型，用来展示在推送提示中，以达到这样的效果： [群消息]Tom：hello gays!</p> 以枚举 CYLConversationType 定义为准，0为单聊，1为群聊
-以上三个字段需要添加到自定义消息的 attributes 字典属性下，ChatKit 给出了一个方法来方便添加 `-lcck_setObject:forKey:` ，用法如下：
+以上三个字段需要添加到自定义消息的 attributes 字典属性下。The demo's LeanCloud category `AVIMTypedMessage (LCCKExtension)` (`ChatKit-OC/Example/Class/LeanCloud/AVIMTypedMessage+LCCKExtension.h`) provides `-lcck_setObject:forKey:` for this; ChatKit itself no longer contains LeanCloud code, so copy that category into your app. 用法如下：
 
 
  ```Objective-C
@@ -296,7 +296,8 @@ conversationType | 用来显示在push提示中 |  添加到自定义消息的 a
     [self registerCustomMessageCell];
 }
 
-+ (AVIMMessageMediaType)classMediaType {
+// The cell returns ChatKit's CYLMessageMediaType (same raw values as the LeanCloud media type).
++ (CYLMessageMediaType)classMediaType {
     return kAVIMMessageMediaTypeVCard;
 }
  ```
@@ -336,7 +337,8 @@ Demo 中的用法如下：
 
 - (void)setup {
     [self.vCardView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.contentView).with.insets(UIEdgeInsetsMake(LCCK_MSG_SPACE_TOP, LCCK_MSG_SPACE_LEFT, LCCK_MSG_SPACE_BTM, LCCK_MSG_SPACE_RIGHT));
+        // Use the spacing your design needs.
+        make.edges.equalTo(self.contentView).with.insets(UIEdgeInsetsMake(8, 10, 8, 10));
     }];
     [self updateConstraintsIfNeeded];
     [super setup];
@@ -507,8 +509,8 @@ UI自定义，需要实现 `CYLInputViewPluginDelegate` 方法：
  ```Objective-C
  //见LCChatKitExample+Setting.m
 - (void)lcck_setupSendMessageHook {
-    [[LCChatKit sharedInstance] setSendMessageHookBlock:^(CYLConversationViewController *conversationController, __kindof AVIMTypedMessage *message, CYLSendMessageHookCompletionHandler completionHandler) {
-        if ([message.clientId isEqualToString:@"Jerry"]) {
+    [[LCChatKit sharedInstance] setSendMessageHookBlock:^(CYLConversationViewController *conversationController, id<CYLIMMessageProtocol> message, CYLSendMessageHookCompletionHandler completionHandler) {
+        if ([[message cyl_senderId] isEqualToString:@"Jerry"]) {
             NSInteger code = 0;
             NSString *errorReasonText = @"不允许Jerry发送消息";
             NSDictionary *errorInfo = @{
@@ -556,14 +558,15 @@ LCCKVCardMessage类：
 LCChatKitExample 类:
 
  ```Objective-C
-    [[LCChatKit sharedInstance] setFilterMessagesBlock:^(AVIMConversation *conversation, NSArray<AVIMTypedMessage *> *messages, CYLFilterMessagesCompletionHandler completionHandler) {
+    [[LCChatKit sharedInstance] setFilterMessagesBlock:^(id<CYLConversationProtocol> conversation, NSArray<id<CYLIMMessageProtocol>> *messages, CYLFilterMessagesCompletionHandler completionHandler) {
         if (conversation.cyl_type == CYLConversationTypeSingle) {
             completionHandler(messages ,nil);
             return;
         }
         //群聊
         NSMutableArray *filterMessages = [NSMutableArray arrayWithCapacity:messages.count];
-        for (AVIMTypedMessage *typedMessage in messages) {
+        // With the LeanCloud provider the messages are LeanCloud SDK typed messages.
+        for (AVIMTypedMessage *typedMessage in (NSArray<AVIMTypedMessage *> *)messages) {
             if ([typedMessage.clientId isEqualToString:[LCChatKit sharedInstance].clientId]) {
                 [filterMessages addObject:typedMessage];
                 continue;
@@ -576,9 +579,9 @@ LCChatKitExample 类:
                 if (visiableForCurrentClientId) {
                     [filterMessages addObject:typedMessage];
                 } else {
-                    typedMessage.text = @"这是群定向消息，仅部分群成员可见";
-                    typedMessage.mediaType = kAVIMMessageMediaTypeText;
-                    [filterMessages addObject:typedMessage];
+                    // mediaType is read-only, so replace the message with a text message.
+                    AVIMTextMessage *otherMessage = [AVIMTextMessage messageWithText:@"这是群定向消息，仅部分群成员可见" attributes:typedMessage.attributes];
+                    [filterMessages addObject:otherMessage];
                 }
             }
         }

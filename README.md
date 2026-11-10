@@ -352,8 +352,9 @@ CYLConversationListViewController *firstViewController = [[CYLConversationListVi
 
 ### 聊天界面
 
-<div class="callout callout-info">ChatKit 中的对话是一个 `AVIMConversation` 对象， LeanMessage
-用它来管理对话成员，发送消息，不区分群聊、单聊。Demo 中采用了判断对话人数的方式来区分群聊、单聊。</div>
+<div class="callout callout-info">ChatKit 中的对话是一个遵循 `CYLConversationProtocol` 的对象（conversation objects conform to `CYLConversationProtocol`）。
+With the demo's LeanCloud provider it is the LeanCloud SDK conversation object, which manages members and messages for both one-to-one and group chats.
+Demo 中采用了判断对话人数的方式来区分群聊、单聊。</div>
 
 聊天界面有两种初始化方式：
 
@@ -374,7 +375,7 @@ CYLConversationViewController *conversationViewController = [[CYLConversationVie
 按照上面的步骤，我们可以非常方便地打开最近联系人页面。但是我们会发现，点击其中的某个联系人／聊天群组，我们并不能直接进入聊天界面。要做到这一点，我们需要给 LCChatKit 设置上事件响应函数，示例代码如下：
 
 ```objective-c
-[[LCChatKit sharedInstance] setDidSelectConversationsListCellBlock:^(NSIndexPath *indexPath, AVIMConversation *conversation, CYLConversationListViewController *controller) {
+[[LCChatKit sharedInstance] setDidSelectConversationsListCellBlock:^(NSIndexPath *indexPath, id<CYLConversationProtocol> conversation, CYLConversationListViewController *controller) {
     NSLog(@"conversation selected");
     CYLConversationViewController *conversationVC = [[CYLConversationViewController alloc] initWithConversationId:conversation.conversationId];
     [controller.navigationController pushViewController:conversationVC animated:YES];
@@ -389,21 +390,22 @@ CYLConversationViewController *conversationViewController = [[CYLConversationVie
  *  选中某个对话后的回调 (比较常见的需求)
  *  @param conversation 被选中的对话
  */
-typedef void(^CYLConversationsListDidSelectItemBlock)(NSIndexPath *indexPath, AVIMConversation *conversation, CYLConversationListViewController *controller);
+typedef void(^CYLDidSelectConversationsListCellBlock)(NSIndexPath *indexPath, id<CYLConversationProtocol> conversation, CYLConversationListViewController *controller);
 /*!
  *  设置选中某个对话后的回调
+ *  Deprecated: prefer `<CYLConversationListViewControllerDelegate>`.
  */
-- (void)setDidSelectConversationsListCellBlock:(CYLConversationsListDidSelectItemBlock)didSelectItemBlock;
+- (void)setDidSelectConversationsListCellBlock:(CYLDidSelectConversationsListCellBlock)didSelectConversationsListCellBlock;
 
 /*!
  *  删除某个对话后的回调 (一般不需要做处理)
- *  @param conversation 被选中的对话
+ *  @param conversation 被删除的对话
  */
-typedef void(^CYLConversationsListDidDeleteItemBlock)(NSIndexPath *indexPath, AVIMConversation *conversation, CYLConversationListViewController *controller);
+typedef void(^CYLDidDeleteConversationsListCellBlock)(NSIndexPath *indexPath, id<CYLConversationProtocol> conversation, CYLConversationListViewController *controller);
 /*!
  *  设置删除某个对话后的回调
  */
-- (void)setDidDeleteConversationsListCellBlock:(CYLConversationsListDidDeleteItemBlock)didDeleteItemBlock;
+- (void)setDidDeleteConversationsListCellBlock:(CYLDidDeleteConversationsListCellBlock)didDeleteConversationsListCellBlock;
 
 /*!
  *  对话左滑菜单设置block (最近联系人页面有复杂的手势操作时，可以通过这里扩展实现)
@@ -411,12 +413,14 @@ typedef void(^CYLConversationsListDidDeleteItemBlock)(NSIndexPath *indexPath, AV
  *  @param conversation, 对话
  *  @param editActions, 默认的菜单数组，成员为 UITableViewRowAction 类型
  */
-typedef NSArray *(^CYLConversationEditActionsBlock)(NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions, AVIMConversation *conversation, CYLConversationListViewController *controller);
+typedef NSArray *(^CYLConversationEditActionsBlock)(NSIndexPath *indexPath, NSArray<UITableViewRowAction *> *editActions, id<CYLConversationProtocol> conversation, CYLConversationListViewController *controller);
 /*!
  *  可以通过这个block设置对话列表中每个对话的左滑菜单，这个是同步调用的，需要尽快返回，否则会卡住UI
  */
 - (void)setConversationEditActionBlock:(CYLConversationEditActionsBlock)conversationEditActionBlock;
 ```
+
+The full list of public declarations is in [docs/api-reference.md](docs/api-reference.md).
 
 ### 响应聊天界面的几类操作
 
@@ -428,11 +432,11 @@ typedef NSArray *(^CYLConversationEditActionsBlock)(NSIndexPath *indexPath, NSAr
 
 ```objective-c
  [[LCChatKit sharedInstance] setFetchConversationHandler:^(
-                                                              AVIMConversation *conversation,
+                                                              id<CYLConversationProtocol> conversation,
                                                               CYLConversationViewController *aConversationController) {
     if (!conversation) {
         // 显示错误提示信息
-        [conversationController alert:@"failed to create/load conversation."];
+        [aConversationController alert:@"failed to create/load conversation."];
     } else {
         // 正常处理
     }

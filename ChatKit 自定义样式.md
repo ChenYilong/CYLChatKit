@@ -33,7 +33,7 @@
 全局	| 事件处理 |	点击头像	| `-[LCChatKit setOpenProfileBlock:]`
 全局	| 事件处理 | 	提示信息 |	`-[LCChatKit setShowNotificationBlock:`
 会话列表 |	未读数	| 文字颜色，背景色|【plist】</p>ConversationList-UnreadText、ConversationList-UnreadBackground
-聊天页面	| 聊天背景	| 替换资源包图片 |如果想修改默认的图片，需要替换 Other.bundle</p> `conversationViewController_default_backgroundImage.png` ，</p>如果要修改特定对话，需要调用下面的方法： `-[LCChatKit setCurrentConversationBackgroundImage:scaledToSize:`或</p>`-[LCChatKit setBackgroundImage:forConversationId:scaledToSize:]`
+聊天页面	| 聊天背景	| 替换资源包图片 |如果想修改默认的图片，需要替换 Other.bundle</p> `conversationViewController_default_backgroundImage.png` ，</p>如果要修改特定对话，需要调用下面的方法： `-[LCChatKit setBackgroundImage:forConversationId:scaledToSize:]`
 聊天页面	| 输入区域	| 主题色	|【plist】 </p>MessageInputView-Tint-Color
 聊天页面	| 输入区域 |	输入区域背景色|	【plist】</p> MessageInputView-BackgroundColor
 聊天页面	| 输入区域 |	输入框 |	【plist】</p> MessageInputView-TextField-TextColor、MessageInputView-TextField-BackgroundColor
@@ -138,7 +138,7 @@ ConversationList-UnreadBackground | 会话列表未读数背景色
 
 ### 聊天背景
 
-如果想修改默认的图片，需要替换 Other.bundle `conversationViewController_default_backgroundImage.png` ，如果要修改特定对话，需要调用下面的方法：`-[LCChatKit setCurrentConversationBackgroundImage:scaledToSize:`或`-[LCChatKit setBackgroundImage:forConversationId:scaledToSize:]`
+如果想修改默认的图片，需要替换 Other.bundle `conversationViewController_default_backgroundImage.png` ，如果要修改特定对话，需要调用下面的方法：`-[LCChatKit setBackgroundImage:forConversationId:scaledToSize:]`
 
 
 默认背景图 | 修改bundle文件，将修改全部的默认背景图 |代码动态修改可针对特定对话 
