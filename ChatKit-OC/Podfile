@@ -7,6 +7,9 @@ target 'ChatKit-OC' do
   #======================== Lib Dependency =================
   #=========================================================
   pod 'CYLChatKit', :path => '../'
+  # Latest CYLTableViewPlaceHolder commit (branch claude/docs-todo-completion-xoef38, version 1.1.0 plus 20 commits).
+  # Pinned to the commit, not the branch, so installs are reproducible. Update the hash deliberately.
+  pod 'CYLTableViewPlaceHolder', :git => 'https://github.com/ChenYilong/CYLTableViewPlaceHolder.git', :commit => '9d1b8e77a99b2146608b22d4aef8f760313f0d64'
 
   #=========================================================
   #======================== Demo Dependency ================

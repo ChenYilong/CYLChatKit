@@ -9,7 +9,7 @@ because this repository has no test target and no Carthage support.
 | Detect changes | Skips the macOS jobs for pull requests that only touch Markdown, `docs/`, or `.agents/` | inline |
 | ShellCheck | Lints `scripts/*.sh` | — |
 | Xcode projects | `objectVersion = 46`, `compatibilityVersion = "Xcode 3.2"`, no synchronized folders, every `IPHONEOS_DEPLOYMENT_TARGET` is 15.0, parsing with `xcodeproj`, `xcodebuild -list` for both projects | inline |
-| pod lib lint | Compiles `CYLChatKit.podspec` with its dependencies (`--allow-warnings --skip-tests`) | `scripts/pod-lint.sh` |
+| pod lib lint | Compiles `CYLChatKit.podspec` with its dependencies (`--allow-warnings --skip-tests`); CYLTableViewPlaceHolder comes from the commit pinned in `ChatKit-OC/Podfile.lock` | `scripts/pod-lint.sh` |
 | Build demo | `pod install` and an unsigned iOS Simulator build of `ChatKit-OC` | `scripts/ci-build-example.sh` |
 | Simulator screenshots | Builds, installs, and launches the demo on an iPhone simulator and takes screenshots | `scripts/demo-screenshots.sh` |
 

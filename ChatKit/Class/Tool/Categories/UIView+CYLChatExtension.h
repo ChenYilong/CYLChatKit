@@ -1,5 +1,5 @@
 //
-//  UIView+CYLExtension.h
+//  UIView+CYLChatExtension.h
 //  ChatKit
 //
 //  v2.1.1 Created by ElonChan on 16/6/2.
@@ -10,7 +10,7 @@
 
 typedef void (^CYLViewActionBlock)(UIView *subview);
 
-@interface UIView (CYLExtension)
+@interface UIView (CYLChatExtension)
 
 - (NSMutableArray*)cyl_allSubViews;
 

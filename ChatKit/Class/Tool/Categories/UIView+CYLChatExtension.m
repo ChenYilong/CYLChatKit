@@ -1,14 +1,14 @@
 //
-//  UIView+CYLExtension.m
+//  UIView+CYLChatExtension.m
 //  ChatKit
 //
 //  v2.1.1 Created by ElonChan on 16/6/2.
 //  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 
-#import "UIView+CYLExtension.h"
+#import "UIView+CYLChatExtension.h"
 
-@implementation UIView (CYLExtension)
+@implementation UIView (CYLChatExtension)
 
 - (NSMutableArray*)cyl_allSubViews {
     NSMutableArray *allSubViews = [[NSMutableArray alloc] init];

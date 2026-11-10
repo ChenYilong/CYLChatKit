@@ -1667,11 +1667,11 @@ Path: `ChatKit/Class/Tool/Categories/UIImageView+CYLExtension.h`
 @property (nonatomic, assign) CGFloat cyl_cornerRadius;
 ```
 
-#### `UIView+CYLExtension.h`
+#### `UIView+CYLChatExtension.h`
 
-Path: `ChatKit/Class/Tool/Categories/UIView+CYLExtension.h`
+Path: `ChatKit/Class/Tool/Categories/UIView+CYLChatExtension.h`
 
-**Category `UIView (CYLExtension)`**
+**Category `UIView (CYLChatExtension)`**
 
 ```objc
 - (NSMutableArray*)cyl_allSubViews;
