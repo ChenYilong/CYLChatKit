@@ -44,6 +44,8 @@ scripts/demo-screenshots.sh build/screenshots
 
 ## TODO
 
+- TODO: `.gitignore` now follows CYLTabBarController and ignores `*.lock` and `*.xcworkspace`, but `ChatKit/Podfile.lock`, `ChatKit-OC/Podfile.lock`, and the existing workspace files are still tracked (`.gitignore` does not untrack files). CI depends on `ChatKit-OC/Podfile.lock`: `scripts/pod-lint.sh` reads the pinned CYLTableViewPlaceHolder commit from it, and `AGENTS.md` asks for lockfile updates when dependencies change. Decide whether to untrack them (then move the pinned commit into `scripts/pod-lint.sh` or read it from the Podfile, and update `AGENTS.md`) or to keep them tracked as an intended difference from CYLTabBarController.
+
 - TODO: Without a LeanCloud session, the conversation list and chat screens show empty states only. Add a stub
   `CYLIMProvider` for screenshots if populated screens are needed.
 - TODO: `ChatKit/ChatKit.xcodeproj` is only parsed and listed, not built, because it is out of sync with disk
