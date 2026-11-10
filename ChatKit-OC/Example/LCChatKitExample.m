@@ -130,15 +130,15 @@
         if (!peerIds || peerIds.count == 0) {
             return;
         }
-        [self lcck_showMessage:@"创建群聊..." toView:fromViewController.view];
+        [self showMessage:@"创建群聊..." toView:fromViewController.view];
         [[LCChatKit sharedInstance]
          createConversationWithMembers:peerIds
          type:CYLConversationTypeGroup
          unique:YES
          callback:^(id<CYLConversationProtocol> conversation, NSError *error) {
-             [self lcck_hideHUDForView:fromViewController.view];
+             [self hideHUDForView:fromViewController.view];
              if (conversation) {
-                 [self lcck_showSuccess:@"创建成功"
+                 [self showSuccess:@"创建成功"
                                  toView:fromViewController.view];
                  [self
                   exampleOpenConversationViewControllerWithConversaionId:
@@ -147,7 +147,7 @@
                   viewController
                   .navigationController];
              } else {
-                 [self lcck_showError:@"创建失败"
+                 [self showError:@"创建失败"
                                toView:fromViewController.view];
              }
          }];
@@ -167,7 +167,7 @@
     [[CYLConversationViewController alloc] initWithPeerId:peerId];
     [conversationViewController
      setViewWillDisappearBlock:^(CYLChatBaseViewController *viewController, BOOL aAnimated) {
-         [self lcck_hideHUDForView:viewController.view];
+         [self hideHUDForView:viewController.view];
      }];
     [self lcck_pushToViewController:conversationViewController];
 }
@@ -180,7 +180,7 @@
     conversationViewController.enableAutoJoin = YES;
     [conversationViewController
      setViewWillDisappearBlock:^(CYLChatBaseViewController *viewController, BOOL aAnimated) {
-         [self lcck_hideHUDForView:viewController.view];
+         [self hideHUDForView:viewController.view];
      }];
     [conversationViewController
      setViewWillAppearBlock:^(CYLChatBaseViewController *viewController, BOOL aAnimated) {

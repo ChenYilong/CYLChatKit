@@ -146,16 +146,16 @@
 
 - (void)settingSwitchCellForItem:(LCCKSettingItem *)settingItem didChangeStatus:(BOOL)on completionHandler:(LCCKSettingSwitchCellCompletionhandler)completionHandler {
     if ([settingItem.title isEqualToString:@"消息免打扰"]) {
-        [[self class] lcck_showHUD];
+        [[self class] showHUD];
         __weak __typeof(self) weakSelf = self;
         [self.conversation cyl_setConversationWithMute:on callback:^(BOOL succeeded, NSError *error) {
             completionHandler(succeeded, error);
-            [[weakSelf class] lcck_hideHUD];
+            [[weakSelf class] hideHUD];
             if (succeeded) {
                 [[CYLConversationService sharedInstance] removeCacheForConversationId:weakSelf.conversation.conversationId];
-                [[weakSelf class] lcck_showSuccess:on ? @"已设为静音" : @"已设为提醒"];
+                [[weakSelf class] showSuccess:on ? @"已设为静音" : @"已设为提醒"];
             } else {
-                [[weakSelf class] lcck_showSuccess:@"设置失败"];
+                [[weakSelf class] showSuccess:@"设置失败"];
             }
         }];
     } else {
@@ -195,15 +195,15 @@
             [self presentSelectMemberViewControllerMemberIds:allPersonIds excludedUserIds:self.conversation.members callback:^(NSArray *peerIds, NSError *error) {
                 __weak __typeof(self) weakSelf = self;
                 [self addAndCacheMembersWithClientIds:peerIds callback:^(BOOL succeeded, NSError * _Nullable error) {
-                    [[weakSelf class] lcck_hideHUD];
+                    [[weakSelf class] hideHUD];
                     if (succeeded) {
                         _data = nil;
-                        [[weakSelf class] lcck_showSuccess:@"添加成功"];
+                        [[weakSelf class] showSuccess:@"添加成功"];
                         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
                         NSArray *indexPaths = [[NSArray alloc] initWithObjects:indexPath, nil];
                         [weakSelf.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
                     } else {
-                        [[weakSelf class] lcck_showError:@"添加失败"];
+                        [[weakSelf class] showError:@"添加失败"];
                     }
                 }];
             }];
@@ -212,15 +212,15 @@
         case LCCKConversationOperationTypeRemove: {
             [self presentSelectMemberViewControllerMemberIds:self.conversation.members excludedUserIds:nil callback:^(NSArray *peerIds, NSError *error) {
                 [self.conversation removeMembersWithClientIds:peerIds callback:^(BOOL succeeded, NSError * _Nullable error) {
-                    [[self class] lcck_hideHUD];
+                    [[self class] hideHUD];
                     if (succeeded) {
-                        [[self class] lcck_showSuccess:@"移除成功"];
+                        [[self class] showSuccess:@"移除成功"];
                         self.data = nil;
                         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
                         NSArray *indexPaths = [[NSArray alloc] initWithObjects:indexPath, nil];
                         [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
                     } else {
-                        [[self class] lcck_showError:@"移除失败"];
+                        [[self class] showError:@"移除失败"];
                     }
                 }];
             }];
@@ -245,18 +245,18 @@
 }
 
 - (void)profileNameDidChanged:(NSString *)name {
-    [[self class] lcck_showHUD];
+    [[self class] showHUD];
     //FIXME:
 //    [self.conversation setObject:name forKey:@"name"];
 //    [self.conversation updateWithCallback:^(BOOL succeeded, NSError * _Nullable error) {
-//        [[self class] lcck_hideHUD];
+//        [[self class] hideHUD];
 //        if (succeeded) {
-//            [[self class] lcck_showSuccess:@"修改成功"];
+//            [[self class] showSuccess:@"修改成功"];
 //            self.data = nil;
 //            [self.tableView reloadData];
 //            [[CYLConversationService sharedInstance] removeCacheForConversationId:self.conversation.conversationId];
 //        } else {
-//            [[self class] lcck_showError:@"修改失败"];
+//            [[self class] showError:@"修改失败"];
 //        }
 //    }];
     

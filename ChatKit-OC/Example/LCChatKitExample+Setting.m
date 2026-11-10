@@ -214,7 +214,7 @@
         if (!conversation.createAt) { //如果没有创建时间，直接return
             return;
         }
-        [[self class] lcck_showMessage:@"加载历史记录..." toView:aConversationController.view];
+        [[self class] showMessage:@"加载历史记录..." toView:aConversationController.view];
         //判断会话的成员是否超过两个(即是否为群聊)
         if (conversation.members.count > 2) { //设置点击rightButton为群聊Style,和对应事件
             [aConversationController configureBarButtonItemStyle:CYLBarButtonItemStyleGroupProfile
@@ -289,7 +289,7 @@
     [[LCChatKit sharedInstance]
 setLoadLatestMessagesHandler:^(CYLConversationViewController *conversationController,
                                     BOOL succeeded, NSError *error) {
-         [[self class] lcck_hideHUDForView:conversationController.view];
+         [[self class] hideHUDForView:conversationController.view];
          NSString *title;
          CYLMessageNotificationType type;
          if (succeeded) {
@@ -423,12 +423,12 @@ setLoadLatestMessagesHandler:^(CYLConversationViewController *conversationContro
                  NSUserDefaults *defaultsGet = [NSUserDefaults standardUserDefaults];
                  NSString *clientId = [defaultsGet stringForKey:LCCK_KEY_USERID];
                  
-                 [[self class] lcck_showMessage:title toView:viewController.view];
+                 [[self class] showMessage:title toView:viewController.view];
                  [[LCChatKit sharedInstance] openWithClientId:clientId
                                                         force:granted
                                                      callback:
                   ^(BOOL succeeded, NSError *error) {
-                      [[self class] lcck_hideHUDForView:viewController.view];
+                      [[self class] hideHUDForView:viewController.view];
                       //completionHandler用来提示重连成功的HUD
                       !completionHandler ?: completionHandler(succeeded, error);
                   }];
@@ -471,19 +471,19 @@ setLoadLatestMessagesHandler:^(CYLConversationViewController *conversationContro
                          CYLMessageHUDActionType type) {
          switch (type) {
              case CYLMessageHUDActionTypeShow:
-                 [[self class] lcck_showMessage:title toView:view];
+                 [[self class] showMessage:title toView:view];
                  break;
                  
              case CYLMessageHUDActionTypeHide:
-                 [[self class] lcck_hideHUDForView:view];
+                 [[self class] hideHUDForView:view];
                  break;
                  
              case CYLMessageHUDActionTypeError:
-                 [[self class] lcck_showError:title toView:view];
+                 [[self class] showError:title toView:view];
                  break;
                  
              case CYLMessageHUDActionTypeSuccess:
-                 [[self class] lcck_showSuccess:title toView:view];
+                 [[self class] showSuccess:title toView:view];
                  break;
          }
      }];

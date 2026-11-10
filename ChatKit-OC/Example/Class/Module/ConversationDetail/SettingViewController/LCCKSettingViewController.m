@@ -175,7 +175,7 @@
     CYLContactListViewController *contactListViewController = [[CYLContactListViewController alloc] initWithContacts:[NSSet setWithArray:users] userIds:[NSSet setWithArray:memeberIds] excludedUserIds:[NSSet setWithArray:excludedUserIds_] mode:LCCKContactListModeMultipleSelection];
     [contactListViewController setSelectedContactsCallback:^(UIViewController * _Nonnull viewController, NSArray<NSString *> * _Nonnull peerIds) {
         if (!peerIds || peerIds.count == 0) { return; }
-        [[self class] lcck_showHUD];
+        [[self class] showHUD];
         !callback ?: callback(peerIds, nil);
     }];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:contactListViewController];

@@ -95,16 +95,16 @@
 
 - (void)settingSwitchCellForItem:(LCCKSettingItem *)settingItem didChangeStatus:(BOOL)on completionHandler:(LCCKSettingSwitchCellCompletionhandler)completionHandler {
     if ([settingItem.title isEqualToString:@"消息免打扰"]) {
-        [[self class] lcck_showHUD];
+        [[self class] showHUD];
         __weak __typeof(self) weakSelf = self;
         [self.conversation cyl_setConversationWithMute:on callback:^(BOOL succeeded, NSError *error) {
             completionHandler(succeeded, error);
-            [[weakSelf class] lcck_hideHUD];
+            [[weakSelf class] hideHUD];
             if (succeeded) {
                 [[CYLConversationService sharedInstance] removeCacheForConversationId:weakSelf.conversation.conversationId];
-                [[weakSelf class] lcck_showSuccess:on ? @"已设为静音" : @"已设为提醒"];
+                [[weakSelf class] showSuccess:on ? @"已设为静音" : @"已设为提醒"];
             } else {
-                [[weakSelf class] lcck_showSuccess:@"设置失败"];
+                [[weakSelf class] showSuccess:@"设置失败"];
             }
         }];
     } else {
@@ -171,15 +171,15 @@
                 [mutableArray addObjectsFromArray:peerIds];
                 NSArray *members = [mutableArray copy];
                 [[LCChatKit sharedInstance] createConversationWithMembers:members type:CYLConversationTypeGroup unique:YES callback:^(AVIMConversation * _Nullable conversation, NSError * _Nullable error) {
-                    [[self class] lcck_hideHUD];
+                    [[self class] hideHUD];
                     if (conversation) {
-                        [[self class] lcck_showSuccess:@"创建对话成功"];
+                        [[self class] showSuccess:@"创建对话成功"];
                         [self cyl_popSelectTabBarChildViewControllerAtIndex:0 completion:^(__kindof UIViewController *selectedTabBarChildViewController) {
                             CYLConversationViewController *conversationViewController = [[CYLConversationViewController alloc] initWithConversationId:conversation.conversationId];
                             [selectedTabBarChildViewController.navigationController pushViewController:conversationViewController animated:YES];
                         }];
                     } else {
-                        [[self class] lcck_showError:@"创建对话失败"];
+                        [[self class] showError:@"创建对话失败"];
                     }
                 }];
             }];

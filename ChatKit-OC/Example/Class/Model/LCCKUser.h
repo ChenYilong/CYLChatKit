@@ -13,7 +13,13 @@
 #else
 #import "LCChatKit.h"
 #endif
-@interface LCCKUser : AVUser <CYLUserModelDelegate, CYLUserModelDelegate, NSCoding, NSCopying>
+#if __has_include(<CYLChatKit/CYLUserModelDelegate.h>)
+#import <CYLChatKit/CYLUserModelDelegate.h>
+#else
+#import "CYLUserModelDelegate.h"
+#endif
+
+@interface LCCKUser : AVUser <CYLUserModelDelegate, NSCoding, NSCopying>
 
 /*!
  * @brief The user's id
