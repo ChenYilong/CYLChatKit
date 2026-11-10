@@ -220,12 +220,14 @@ CI (`docs/ci.md`, Xcode 26.6, iOS 26.5 simulator SDK) is the first real macOS bu
   `-getCachedProfileIfExists:name:avatarURL:userTye:error:`). Added after that run; the next lint confirms the
   `-Wprotocol` warning is gone.
 
-Fixed in the demo (compilation is confirmed only when the `Build demo` job passes; see TODO):
+Fixed in the demo; the `Build demo` and `Simulator screenshots` jobs pass since `560d28c` (see `docs/ci.md`):
 
 - `+[AVIMTypedMessage lcck_messageWithLCCKMessage:]` reads `originPhotoURL.absoluteString` instead of treating
   the `NSURL` as a string (crash on outgoing images with a remote URL).
 - AVOSCloud 11.5.2's direct `<netinet6/in6.h>` imports (three files), rejected by the iOS 26 SDK, are removed from the installed pod
   by the demo Podfile's `post_install`.
+- The tab bar crashed before the first login (`@[ currentClientID ]` with no saved client ID); it now uses an empty list.
+- `CYLChatKit` and `CYLTabBarController` 1.99.72 link together in the demo.
 - `FMDB` moved from the podspec to the demo Podfile (`2.6.2`); core does not use it.
 - `LCCKUser` came from the 2019 snapshot as an `AVUser` subclass whose API matched none of its callers. It is restored
   from `d110789^` as `NSObject <CYLUserDelegate>` (what `fetchProfilesBlock` returns), with an
@@ -240,8 +242,6 @@ Fixed in the demo (compilation is confirmed only when the `Build demo` job passe
 
 ## TODO
 
-- TODO: Get the demo build (`Build demo` job) and simulator screenshots green; record the run here. After the
-  AVOSCloud header patch the demo has not completed a build yet.
 - TODO: Runtime checks in the demo that CI cannot do: swipe actions in the conversation list (system
   `UITableViewRowAction`), image loading and avatar corners (merged categories), full-screen image preview and
   download progress (SDWebImage 3.8 API), the empty-list placeholder (CYLTableViewPlaceHolder commit), outgoing
@@ -253,4 +253,3 @@ Fixed in the demo (compilation is confirmed only when the `Build demo` job passe
 - TODO: Product decision: `mentionList` is never sent; the view model passes nil to keep existing behavior. The provider API supports it, but enabling it makes recipients see mention flags.
 - TODO: `docs/api-reference.md` was generated from the public headers by a script that is not in the repository. When a public header changes, update the affected section by hand in the same commit, or add a generator under `scripts/` in a separate change.
 - TODO: Release: every public core name changed (`LCCK*` → `CYL*`, `lcck_*` → `cyl_*`, plus `CYLChat*` exceptions including `UIView+CYLChatExtension`, `UIImageView+CYLCornerRadius`, `CYLChatScrollDirection`), and apps that extend the facade services or call the moved LeanCloud categories must copy `ChatKit-OC/Example/Class/LeanCloud` and add `AVOSCloud`, `AVOSCloudIM`, and `FMDB`. Ship it as a major version with the migration table from `docs/api-reference.md`.
-- TODO: Verify that `CYLChatKit` and `CYLTabBarController` 1.99.72 link together in the demo (static checks found no duplicate classes, apart from the identical `CYL_DEPRECATED` macro). The `Build demo` job will confirm it.

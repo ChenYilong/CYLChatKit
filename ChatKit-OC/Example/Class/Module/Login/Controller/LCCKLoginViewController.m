@@ -41,7 +41,10 @@
     NSString *clientId = [[NSUserDefaults standardUserDefaults] stringForKey:LCCK_KEY_USERID];
     self.autocompleteTextField.text = clientId;
     [self.autocompleteTextField setBorderStyle:UITextBorderStyleRoundedRect];
-    [self.autocompleteTextField becomeFirstResponder];
+    // CI screenshots keep the keyboard (and its first-run swipe-typing introduction) off the screen.
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"LCCKDemoScreenshots"]) {
+        [self.autocompleteTextField becomeFirstResponder];
+    }
     [[NSNotificationCenter defaultCenter] postNotificationName:UITextFieldTextDidChangeNotification object:self.autocompleteTextField];
     self.autocompleteTextField.autoCompleteTableViewHidden = NO;
     if (self.autoLogin && clientId.length > 0) {

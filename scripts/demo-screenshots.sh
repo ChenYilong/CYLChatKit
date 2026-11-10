@@ -67,10 +67,8 @@ xcrun simctl boot "$DEVICE_ID" 2>/dev/null || true
 xcrun simctl bootstatus "$DEVICE_ID" -b
 xcrun simctl status_bar "$DEVICE_ID" override --time 9:41 --batteryState charged --batteryLevel 100 \
     --cellularBars 4 --wifiBars 3 || true
-# Keep system overlays out of the screenshots: the keyboard's swipe-typing introduction (the login field becomes
-# first responder) and, through the demo's -LCCKDemoScreenshots flag, the notification permission alert.
-xcrun simctl spawn "$DEVICE_ID" defaults write com.apple.Preferences DidShowContinuousPathIntroduction -bool true || true
-xcrun simctl spawn "$DEVICE_ID" defaults write com.apple.Preferences KeyboardContinuousPathEnabled -bool false || true
+# The demo's -LCCKDemoScreenshots flag keeps system overlays out of the screenshots: it skips the notification
+# permission request and does not open the keyboard (whose first-run swipe-typing introduction covers the screen).
 xcrun simctl install "$DEVICE_ID" "$APP"
 PROCESS_NAME=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$APP/Info.plist")
 
@@ -120,8 +118,9 @@ shoot() {
     xcrun simctl launch --terminate-running-process "$DEVICE_ID" "$BUNDLE_ID" -LCCKDemoScreenshots YES "$@"
     sleep 8
     if ! xcrun simctl spawn "$DEVICE_ID" launchctl list | grep -q "$BUNDLE_ID"; then
-        echo "warning: $BUNDLE_ID is not running after launch ($name); it may have crashed" >&2
+        echo "::error::$BUNDLE_ID is not running after launch ($name); it crashed"
         print_crash "$started"
+        CRASHED="$CRASHED $name"
     fi
     xcrun simctl io "$DEVICE_ID" screenshot "$OUT/$name.png"
     sips -s format jpeg -s formatOptions 60 --resampleWidth 390 "$OUT/$name.png" --out "$OUT/$name.jpg" >/dev/null
@@ -130,6 +129,7 @@ shoot() {
     echo "===END SCREENSHOT $name.jpg==="
 }
 
+CRASHED=""
 shoot login
 shoot conversations -LCCKDemoScreen conversations
 shoot chat -LCCKDemoScreen chat
@@ -137,3 +137,7 @@ shoot chat -LCCKDemoScreen chat
 xcrun simctl spawn "$DEVICE_ID" log show --last 2m --style compact \
     --predicate "process == \"$PROCESS_NAME\"" > "$OUT/app.log" 2>/dev/null || true
 ls -la "$OUT"
+if [[ -n "$CRASHED" ]]; then
+    echo "error: the demo crashed on:$CRASHED" >&2
+    exit 1
+fi
