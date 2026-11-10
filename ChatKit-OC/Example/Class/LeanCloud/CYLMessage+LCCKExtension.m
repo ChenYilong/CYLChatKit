@@ -9,8 +9,8 @@
 #import "CYLMessage+LCCKExtension.h"
 #import "AVIMTypedMessage+LCCKExtension.h"
 #import "CYLCommonUtils+LCCKExtension.h"
-#import "UIImage+LCCKExtension.h"
-#import "NSObject+LCCKExtension.h"
+#import "UIImage+CYLExtension.h"
+#import "NSObject+CYLExtension.h"
 
 @implementation CYLMessage (LCCKExtension)
 

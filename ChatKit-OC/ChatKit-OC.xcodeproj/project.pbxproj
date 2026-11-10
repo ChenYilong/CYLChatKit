@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1EC742A9A64D35D2B5B383CA /* AVIMConversation+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 0669560418FDF8FF4487F8ED /* AVIMConversation+LCCKExtension.m */; };
-		317AC316A0573F974B44268D /* LCCKMessage+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = A166CE33749D0D81CDBF99D9 /* LCCKMessage+LCCKExtension.m */; };
+		317AC316A0573F974B44268D /* CYLMessage+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = A166CE33749D0D81CDBF99D9 /* CYLMessage+LCCKExtension.m */; };
 		3AFB59942977C9AA3976C547 /* AVIMMessage+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = F93EE382B6E649274F68DFBB /* AVIMMessage+LCCKExtension.m */; };
 		3E9EB52CA58B5999E1FB7686 /* LCCKLeanCloudConversationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 17855C4993EC373D7E6D5B2F /* LCCKLeanCloudConversationService.m */; };
 		4F5E34B61FA069300067EB95 /* EmojisList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F5E34B51FA069300067EB95 /* EmojisList.plist */; };
@@ -16,13 +16,6 @@
 		560FCA8CFA42C345A0BC9B31 /* AVIMTypedMessage+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 022F1E093BCB469ABEBD73A1 /* AVIMTypedMessage+LCCKExtension.m */; };
 		5A64B08CF04651B31F361271 /* AVIMEmotionMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 17B83CD24B84E995F26462DE /* AVIMEmotionMessage.m */; };
 		6FA5969799D8B0A04A1FE7AF /* LCCKLeanCloudIMProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 951BD5C139229E7A457A608C /* LCCKLeanCloudIMProvider.m */; };
-		9A2669C81D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2669B81D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.m */; };
-		9A2669C91D6DA89100B66545 /* LCCKVCardMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2669BD1D6DA89100B66545 /* LCCKVCardMessage.m */; };
-		9A2669CA1D6DA89100B66545 /* calling_card_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A2669BF1D6DA89100B66545 /* calling_card_bg@2x.png */; };
-		9A2669CB1D6DA89100B66545 /* LCCKInputViewPluginVCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2669C21D6DA89100B66545 /* LCCKInputViewPluginVCard.m */; };
-		9A2669CC1D6DA89100B66545 /* LCCKVCardMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2669C41D6DA89100B66545 /* LCCKVCardMessageCell.m */; };
-		9A2669CD1D6DA89100B66545 /* LCCKVCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2669C61D6DA89100B66545 /* LCCKVCardView.m */; };
-		9A2669CE1D6DA89100B66545 /* LCCKVCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A2669C71D6DA89100B66545 /* LCCKVCardView.xib */; };
 		9A4730621CECAEC500AEB86F /* LCCKUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47302E1CECAEC500AEB86F /* LCCKUser.m */; };
 		9A4730671CECAEC500AEB86F /* LCCKLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47303E1CECAEC500AEB86F /* LCCKLoginViewController.m */; };
 		9A4730681CECAEC500AEB86F /* LCCKLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A47303F1CECAEC500AEB86F /* LCCKLoginViewController.xib */; };
@@ -36,15 +29,6 @@
 		9A4730711CECAEC500AEB86F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A4730561CECAEC500AEB86F /* LaunchScreen.storyboard */; };
 		9A4730731CECAEC500AEB86F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730591CECAEC500AEB86F /* main.m */; };
 		9A4730751CECAEC500AEB86F /* NSObject+LCCKHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47305E1CECAEC500AEB86F /* NSObject+LCCKHUD.m */; };
-		9A53BE2B1D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE0A1D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.m */; };
-		9A53BE2C1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE0C1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.m */; };
-		9A53BE2D1D8BB13E00AAB118 /* RedpacketCellResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9A53BE0E1D8BB13E00AAB118 /* RedpacketCellResource.bundle */; };
-		9A53BE2E1D8BB13E00AAB118 /* AppDelegate+RedPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE111D8BB13E00AAB118 /* AppDelegate+RedPacket.m */; };
-		9A53BE2F1D8BB13E00AAB118 /* RedpacketConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE131D8BB13E00AAB118 /* RedpacketConfig.m */; };
-		9A53BE341D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE241D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.m */; };
-		9A53BE351D8BB13E00AAB118 /* RedPacketInputViewPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE261D8BB13E00AAB118 /* RedPacketInputViewPlugin.m */; };
-		9A53BE361D8BB13E00AAB118 /* RedpacketMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE281D8BB13E00AAB118 /* RedpacketMessageCell.m */; };
-		9A53BE371D8BB13E00AAB118 /* RedpacketTakenMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE2A1D8BB13E00AAB118 /* RedpacketTakenMessageCell.m */; };
 		9A53BE401D8BB19C00AAB118 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE391D8BB19C00AAB118 /* AppDelegate.m */; };
 		9A53BE411D8BB19C00AAB118 /* LCChatKitExample.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE3B1D8BB19C00AAB118 /* LCChatKitExample.m */; };
 		9A53BE421D8BB19C00AAB118 /* LCChatKitExample+Setting.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE3D1D8BB19C00AAB118 /* LCChatKitExample+Setting.m */; };
@@ -59,13 +43,6 @@
 		9A562A3C1E03D52F00BB23DD /* LCCKSettingFooterTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A331E03D52F00BB23DD /* LCCKSettingFooterTitleView.m */; };
 		9A562A3D1E03D52F00BB23DD /* LCCKSettingHeaderTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A351E03D52F00BB23DD /* LCCKSettingHeaderTitleView.m */; };
 		9A7E2DE91D5F1040003A7312 /* LCCKContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7E2DE81D5F1040003A7312 /* LCCKContactManager.m */; };
-		9AB37B2A1DC86A60000782F2 /* ChatKit 自定义样式.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B251DC86A60000782F2 /* ChatKit 自定义样式.md */; };
-		9AB37B2B1DC86A60000782F2 /* ChatKit 自定义业务.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B261DC86A60000782F2 /* ChatKit 自定义业务.md */; };
-		9AB37B2C1DC86A60000782F2 /* ChatKit.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 9AB37B271DC86A60000782F2 /* ChatKit.podspec */; };
-		9AB37B2D1DC86A60000782F2 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B281DC86A60000782F2 /* README.md */; };
-		9AB37B2E1DC86A60000782F2 /* REDPACKET.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B291DC86A60000782F2 /* REDPACKET.md */; };
-		9AB37B311DC86A6E000782F2 /* issue_template.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B2F1DC86A6E000782F2 /* issue_template.md */; };
-		9AB37B321DC86A6E000782F2 /* pull_request_template.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B301DC86A6E000782F2 /* pull_request_template.md */; };
 		9AC3A4901DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A48F1DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.m */; };
 		9AC3A4931DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4921DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.m */; };
 		9AC3A4B81DF9BEE600F3405F /* LCCKUIUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4B31DF9BEE600F3405F /* LCCKUIUtility.m */; };
@@ -83,7 +60,7 @@
 		9AD665CD1D22778B0040A4E3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */; };
 		9AD665CE1D2277920040A4E3 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721F1CED6644004FDACC /* CoreTelephony.framework */; };
 		9AD665CF1D22779A0040A4E3 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B72211CED664D004FDACC /* CoreLocation.framework */; };
-		C5C92F6F6C4B7B0667812ED3 /* LCCKCommonUtils+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = C0D281FD3CC22B2AD4F50E6D /* LCCKCommonUtils+LCCKExtension.m */; };
+		C5C92F6F6C4B7B0667812ED3 /* CYLCommonUtils+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = C0D281FD3CC22B2AD4F50E6D /* CYLCommonUtils+LCCKExtension.m */; };
 		D6B21DCFEA88FFA0694238EC /* libPods-ChatKit-OC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D62193C0ECACB72DC928AD70 /* libPods-ChatKit-OC.a */; };
 		DC69C37A7861B08FC4799F3D /* LCCKLeanCloudSessionService.m in Sources */ = {isa = PBXBuildFile; fileRef = 0233781E958C082D597A4D8F /* LCCKLeanCloudSessionService.m */; };
 		E7586C4F1D630681000C18B4 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7586C4E1D630681000C18B4 /* CoreMotion.framework */; };
@@ -109,29 +86,17 @@
 		17855C4993EC373D7E6D5B2F /* LCCKLeanCloudConversationService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LCCKLeanCloudConversationService.m; sourceTree = "<group>"; };
 		17B83CD24B84E995F26462DE /* AVIMEmotionMessage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = AVIMEmotionMessage.m; sourceTree = "<group>"; };
 		2380FFF0825E84C711209800 /* AVIMEmotionMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = AVIMEmotionMessage.h; sourceTree = "<group>"; };
-		3D36EEFDD9498F40B768B63B /* LCCKMessage+LCCKExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "LCCKMessage+LCCKExtension.h"; sourceTree = "<group>"; };
+		3D36EEFDD9498F40B768B63B /* CYLMessage+LCCKExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CYLMessage+LCCKExtension.h"; sourceTree = "<group>"; };
 		4F5E34B51FA069300067EB95 /* EmojisList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = EmojisList.plist; sourceTree = "<group>"; };
 		4F5E34B71FA069540067EB95 /* [删除]@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "[删除]@2x.png"; sourceTree = "<group>"; };
 		7404AB0E0935F68A63803D6D /* Pods-ChatKit-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.release.xcconfig"; sourceTree = "<group>"; };
 		78932A7FCE2FEB02F2BCBE30 /* AVIMMessage+LCCKExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AVIMMessage+LCCKExtension.h"; sourceTree = "<group>"; };
-		88476BB114A869E434648F8D /* LCCKCommonUtils+LCCKExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "LCCKCommonUtils+LCCKExtension.h"; sourceTree = "<group>"; };
+		88476BB114A869E434648F8D /* CYLCommonUtils+LCCKExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CYLCommonUtils+LCCKExtension.h"; sourceTree = "<group>"; };
 		951BD5C139229E7A457A608C /* LCCKLeanCloudIMProvider.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LCCKLeanCloudIMProvider.m; sourceTree = "<group>"; };
 		9A0B721B1CED662D004FDACC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		9A0B721F1CED6644004FDACC /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		9A0B72211CED664D004FDACC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		9A2669B71D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKInputViewPluginConversationBackground.h; sourceTree = "<group>"; };
-		9A2669B81D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKInputViewPluginConversationBackground.m; sourceTree = "<group>"; };
-		9A2669BC1D6DA89100B66545 /* LCCKVCardMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKVCardMessage.h; sourceTree = "<group>"; };
-		9A2669BD1D6DA89100B66545 /* LCCKVCardMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKVCardMessage.m; sourceTree = "<group>"; };
-		9A2669BF1D6DA89100B66545 /* calling_card_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "calling_card_bg@2x.png"; sourceTree = "<group>"; };
-		9A2669C11D6DA89100B66545 /* LCCKInputViewPluginVCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKInputViewPluginVCard.h; sourceTree = "<group>"; };
-		9A2669C21D6DA89100B66545 /* LCCKInputViewPluginVCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKInputViewPluginVCard.m; sourceTree = "<group>"; };
-		9A2669C31D6DA89100B66545 /* LCCKVCardMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKVCardMessageCell.h; sourceTree = "<group>"; };
-		9A2669C41D6DA89100B66545 /* LCCKVCardMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKVCardMessageCell.m; sourceTree = "<group>"; };
-		9A2669C51D6DA89100B66545 /* LCCKVCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKVCardView.h; sourceTree = "<group>"; };
-		9A2669C61D6DA89100B66545 /* LCCKVCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKVCardView.m; sourceTree = "<group>"; };
-		9A2669C71D6DA89100B66545 /* LCCKVCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LCCKVCardView.xib; sourceTree = "<group>"; };
 		9A47302D1CECAEC500AEB86F /* LCCKUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKUser.h; sourceTree = "<group>"; };
 		9A47302E1CECAEC500AEB86F /* LCCKUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKUser.m; sourceTree = "<group>"; };
 		9A47303D1CECAEC500AEB86F /* LCCKLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKLoginViewController.h; sourceTree = "<group>"; };
@@ -157,23 +122,6 @@
 		9A47305D1CECAEC500AEB86F /* NSObject+LCCKHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+LCCKHUD.h"; sourceTree = "<group>"; };
 		9A47305E1CECAEC500AEB86F /* NSObject+LCCKHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+LCCKHUD.m"; sourceTree = "<group>"; };
 		9A4CBADB1DB87F2000E61C92 /* ChatKit-OC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ChatKit-OC.entitlements"; sourceTree = "<group>"; };
-		9A53BE091D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMTypedMessageRedPacket.h; sourceTree = "<group>"; };
-		9A53BE0A1D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMTypedMessageRedPacket.m; sourceTree = "<group>"; };
-		9A53BE0B1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMTypedMessageRedPacketTaken.h; sourceTree = "<group>"; };
-		9A53BE0C1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMTypedMessageRedPacketTaken.m; sourceTree = "<group>"; };
-		9A53BE0E1D8BB13E00AAB118 /* RedpacketCellResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = RedpacketCellResource.bundle; sourceTree = "<group>"; };
-		9A53BE101D8BB13E00AAB118 /* AppDelegate+RedPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+RedPacket.h"; sourceTree = "<group>"; };
-		9A53BE111D8BB13E00AAB118 /* AppDelegate+RedPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+RedPacket.m"; sourceTree = "<group>"; };
-		9A53BE121D8BB13E00AAB118 /* RedpacketConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketConfig.h; sourceTree = "<group>"; };
-		9A53BE131D8BB13E00AAB118 /* RedpacketConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedpacketConfig.m; sourceTree = "<group>"; };
-		9A53BE231D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedPacketChangeInputViewPlugin.h; sourceTree = "<group>"; };
-		9A53BE241D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedPacketChangeInputViewPlugin.m; sourceTree = "<group>"; };
-		9A53BE251D8BB13E00AAB118 /* RedPacketInputViewPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedPacketInputViewPlugin.h; sourceTree = "<group>"; };
-		9A53BE261D8BB13E00AAB118 /* RedPacketInputViewPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedPacketInputViewPlugin.m; sourceTree = "<group>"; };
-		9A53BE271D8BB13E00AAB118 /* RedpacketMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketMessageCell.h; sourceTree = "<group>"; };
-		9A53BE281D8BB13E00AAB118 /* RedpacketMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedpacketMessageCell.m; sourceTree = "<group>"; };
-		9A53BE291D8BB13E00AAB118 /* RedpacketTakenMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketTakenMessageCell.h; sourceTree = "<group>"; };
-		9A53BE2A1D8BB13E00AAB118 /* RedpacketTakenMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedpacketTakenMessageCell.m; sourceTree = "<group>"; };
 		9A53BE381D8BB19C00AAB118 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9A53BE391D8BB19C00AAB118 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		9A53BE3A1D8BB19C00AAB118 /* LCChatKitExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCChatKitExample.h; sourceTree = "<group>"; };
@@ -208,9 +156,7 @@
 		9AAFE6571D48C863004A0309 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		9AB37B251DC86A60000782F2 /* ChatKit 自定义样式.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = "ChatKit 自定义样式.md"; path = "../../../../../ChatKit 自定义样式.md"; sourceTree = "<group>"; };
 		9AB37B261DC86A60000782F2 /* ChatKit 自定义业务.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = "ChatKit 自定义业务.md"; path = "../../../../../ChatKit 自定义业务.md"; sourceTree = "<group>"; };
-		9AB37B271DC86A60000782F2 /* ChatKit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ChatKit.podspec; path = ../../../../../ChatKit.podspec; sourceTree = "<group>"; };
 		9AB37B281DC86A60000782F2 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../../../../README.md; sourceTree = "<group>"; };
-		9AB37B291DC86A60000782F2 /* REDPACKET.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = REDPACKET.md; path = ../../../../../REDPACKET.md; sourceTree = "<group>"; };
 		9AB37B2F1DC86A6E000782F2 /* issue_template.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = issue_template.md; path = ../../../../../.github/issue_template.md; sourceTree = "<group>"; };
 		9AB37B301DC86A6E000782F2 /* pull_request_template.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = pull_request_template.md; path = ../../../../../.github/pull_request_template.md; sourceTree = "<group>"; };
 		9AC3A48E1DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSingleConversationDetailViewController.h; sourceTree = "<group>"; };
@@ -240,9 +186,9 @@
 		9AC3A4E01DF9CE0300F3405F /* LCCKChatDetailHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKChatDetailHelper.h; sourceTree = "<group>"; };
 		9AC3A4E11DF9CE0300F3405F /* LCCKChatDetailHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKChatDetailHelper.m; sourceTree = "<group>"; };
 		9C41FB302EA3AF9C9EFA71D0 /* AVIMTypedMessage+LCCKExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AVIMTypedMessage+LCCKExtension.h"; sourceTree = "<group>"; };
-		A166CE33749D0D81CDBF99D9 /* LCCKMessage+LCCKExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "LCCKMessage+LCCKExtension.m"; sourceTree = "<group>"; };
+		A166CE33749D0D81CDBF99D9 /* CYLMessage+LCCKExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CYLMessage+LCCKExtension.m"; sourceTree = "<group>"; };
 		A81A200C5F6DA6E5CF65376C /* LCCKLeanCloudIMProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = LCCKLeanCloudIMProvider.h; sourceTree = "<group>"; };
-		C0D281FD3CC22B2AD4F50E6D /* LCCKCommonUtils+LCCKExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "LCCKCommonUtils+LCCKExtension.m"; sourceTree = "<group>"; };
+		C0D281FD3CC22B2AD4F50E6D /* CYLCommonUtils+LCCKExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CYLCommonUtils+LCCKExtension.m"; sourceTree = "<group>"; };
 		D62193C0ECACB72DC928AD70 /* libPods-ChatKit-OC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChatKit-OC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E55D34EC8F162DB5443587B0 /* Pods-ChatKit-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.debug.xcconfig"; sourceTree = "<group>"; };
 		E68479705B82BD57C9D47CDF /* LCCKLeanCloudConversationService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = LCCKLeanCloudConversationService.h; sourceTree = "<group>"; };
@@ -280,16 +226,16 @@
 				F93EE382B6E649274F68DFBB /* AVIMMessage+LCCKExtension.m */,
 				9C41FB302EA3AF9C9EFA71D0 /* AVIMTypedMessage+LCCKExtension.h */,
 				022F1E093BCB469ABEBD73A1 /* AVIMTypedMessage+LCCKExtension.m */,
-				88476BB114A869E434648F8D /* LCCKCommonUtils+LCCKExtension.h */,
-				C0D281FD3CC22B2AD4F50E6D /* LCCKCommonUtils+LCCKExtension.m */,
+				88476BB114A869E434648F8D /* CYLCommonUtils+LCCKExtension.h */,
+				C0D281FD3CC22B2AD4F50E6D /* CYLCommonUtils+LCCKExtension.m */,
 				E68479705B82BD57C9D47CDF /* LCCKLeanCloudConversationService.h */,
 				17855C4993EC373D7E6D5B2F /* LCCKLeanCloudConversationService.m */,
 				A81A200C5F6DA6E5CF65376C /* LCCKLeanCloudIMProvider.h */,
 				951BD5C139229E7A457A608C /* LCCKLeanCloudIMProvider.m */,
 				F34AC56EDFEBB45BC0F4BBF1 /* LCCKLeanCloudSessionService.h */,
 				0233781E958C082D597A4D8F /* LCCKLeanCloudSessionService.m */,
-				3D36EEFDD9498F40B768B63B /* LCCKMessage+LCCKExtension.h */,
-				A166CE33749D0D81CDBF99D9 /* LCCKMessage+LCCKExtension.m */,
+				3D36EEFDD9498F40B768B63B /* CYLMessage+LCCKExtension.h */,
+				A166CE33749D0D81CDBF99D9 /* CYLMessage+LCCKExtension.m */,
 			);
 			name = LeanCloud;
 			path = LeanCloud;
@@ -306,73 +252,6 @@
 				D62193C0ECACB72DC928AD70 /* libPods-ChatKit-OC.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		9A2669B51D6DA89100B66545 /* Customize */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669B61D6DA89100B66545 /* CustomizedConversationBackground */,
-				9A2669B91D6DA89100B66545 /* CustomizedMessage */,
-			);
-			path = Customize;
-			sourceTree = "<group>";
-		};
-		9A2669B61D6DA89100B66545 /* CustomizedConversationBackground */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669B71D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.h */,
-				9A2669B81D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.m */,
-			);
-			path = CustomizedConversationBackground;
-			sourceTree = "<group>";
-		};
-		9A2669B91D6DA89100B66545 /* CustomizedMessage */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669BA1D6DA89100B66545 /* VCardMessage */,
-			);
-			path = CustomizedMessage;
-			sourceTree = "<group>";
-		};
-		9A2669BA1D6DA89100B66545 /* VCardMessage */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669BB1D6DA89100B66545 /* Model */,
-				9A2669BE1D6DA89100B66545 /* Resources */,
-				9A2669C01D6DA89100B66545 /* View */,
-			);
-			path = VCardMessage;
-			sourceTree = "<group>";
-		};
-		9A2669BB1D6DA89100B66545 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669BC1D6DA89100B66545 /* LCCKVCardMessage.h */,
-				9A2669BD1D6DA89100B66545 /* LCCKVCardMessage.m */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		9A2669BE1D6DA89100B66545 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669BF1D6DA89100B66545 /* calling_card_bg@2x.png */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		9A2669C01D6DA89100B66545 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669C11D6DA89100B66545 /* LCCKInputViewPluginVCard.h */,
-				9A2669C21D6DA89100B66545 /* LCCKInputViewPluginVCard.m */,
-				9A2669C31D6DA89100B66545 /* LCCKVCardMessageCell.h */,
-				9A2669C41D6DA89100B66545 /* LCCKVCardMessageCell.m */,
-				9A2669C51D6DA89100B66545 /* LCCKVCardView.h */,
-				9A2669C61D6DA89100B66545 /* LCCKVCardView.m */,
-				9A2669C71D6DA89100B66545 /* LCCKVCardView.xib */,
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		9A4730281CECAEC500AEB86F /* Example */ = {
@@ -416,8 +295,6 @@
 			children = (
 				9AC3A4B01DF9BEE600F3405F /* Utilities */,
 				9AC3A4891DF9B72B00F3405F /* ConversationDetail */,
-				9A53BE071D8BB13E00AAB118 /* Redpacket */,
-				9A2669B51D6DA89100B66545 /* Customize */,
 				9A47303B1CECAEC500AEB86F /* Login */,
 				9A4730481CECAEC500AEB86F /* Main */,
 				9A4730541CECAEC500AEB86F /* Other */,
@@ -430,7 +307,6 @@
 			children = (
 				9A47303C1CECAEC500AEB86F /* Controller */,
 				9A4730401CECAEC500AEB86F /* Model */,
-				9A4730471CECAEC500AEB86F /* View */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -456,13 +332,6 @@
 				9A4730461CECAEC500AEB86F /* LCCKLoginDataSource.m */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		9A4730471CECAEC500AEB86F /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		9A4730481CECAEC500AEB86F /* Main */ = {
@@ -508,9 +377,7 @@
 				9AB37B301DC86A6E000782F2 /* pull_request_template.md */,
 				9AB37B251DC86A60000782F2 /* ChatKit 自定义样式.md */,
 				9AB37B261DC86A60000782F2 /* ChatKit 自定义业务.md */,
-				9AB37B271DC86A60000782F2 /* ChatKit.podspec */,
 				9AB37B281DC86A60000782F2 /* README.md */,
-				9AB37B291DC86A60000782F2 /* REDPACKET.md */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -533,62 +400,6 @@
 				9A47305E1CECAEC500AEB86F /* NSObject+LCCKHUD.m */,
 			);
 			path = MBProgressHUD;
-			sourceTree = "<group>";
-		};
-		9A53BE071D8BB13E00AAB118 /* Redpacket */ = {
-			isa = PBXGroup;
-			children = (
-				9A53BE081D8BB13E00AAB118 /* Model */,
-				9A53BE0D1D8BB13E00AAB118 /* Resources */,
-				9A53BE0F1D8BB13E00AAB118 /* Tool */,
-				9A53BE221D8BB13E00AAB118 /* View */,
-			);
-			path = Redpacket;
-			sourceTree = "<group>";
-		};
-		9A53BE081D8BB13E00AAB118 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				9A53BE091D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.h */,
-				9A53BE0A1D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.m */,
-				9A53BE0B1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.h */,
-				9A53BE0C1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.m */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		9A53BE0D1D8BB13E00AAB118 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				9A53BE0E1D8BB13E00AAB118 /* RedpacketCellResource.bundle */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		9A53BE0F1D8BB13E00AAB118 /* Tool */ = {
-			isa = PBXGroup;
-			children = (
-				9A53BE101D8BB13E00AAB118 /* AppDelegate+RedPacket.h */,
-				9A53BE111D8BB13E00AAB118 /* AppDelegate+RedPacket.m */,
-				9A53BE121D8BB13E00AAB118 /* RedpacketConfig.h */,
-				9A53BE131D8BB13E00AAB118 /* RedpacketConfig.m */,
-			);
-			path = Tool;
-			sourceTree = "<group>";
-		};
-		9A53BE221D8BB13E00AAB118 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				9A53BE231D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.h */,
-				9A53BE241D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.m */,
-				9A53BE251D8BB13E00AAB118 /* RedPacketInputViewPlugin.h */,
-				9A53BE261D8BB13E00AAB118 /* RedPacketInputViewPlugin.m */,
-				9A53BE271D8BB13E00AAB118 /* RedpacketMessageCell.h */,
-				9A53BE281D8BB13E00AAB118 /* RedpacketMessageCell.m */,
-				9A53BE291D8BB13E00AAB118 /* RedpacketTakenMessageCell.h */,
-				9A53BE2A1D8BB13E00AAB118 /* RedpacketTakenMessageCell.m */,
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		9A562A241E03D52F00BB23DD /* SettingCells */ = {
@@ -652,7 +463,6 @@
 			children = (
 				9AC3A4941DF9BB6700F3405F /* SettingViewController */,
 				9AC3A48A1DF9B72B00F3405F /* Controller */,
-				9AC3A48B1DF9B72B00F3405F /* Model */,
 				9AC3A48C1DF9B72B00F3405F /* Other */,
 				9AC3A48D1DF9B72B00F3405F /* View */,
 			);
@@ -670,13 +480,6 @@
 				9A55EB341E00FC5A0079EB65 /* LCCKProfileNameEditViewController.m */,
 			);
 			path = Controller;
-			sourceTree = "<group>";
-		};
-		9AC3A48B1DF9B72B00F3405F /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		9AC3A48C1DF9B72B00F3405F /* Other */ = {
@@ -856,13 +659,9 @@
 			files = (
 				9A4730711CECAEC500AEB86F /* LaunchScreen.storyboard in Resources */,
 				9A4730701CECAEC500AEB86F /* Assets.xcassets in Resources */,
-				9AB37B2C1DC86A60000782F2 /* ChatKit.podspec in Resources */,
-				9A2669CE1D6DA89100B66545 /* LCCKVCardView.xib in Resources */,
 				4F5E34B81FA069540067EB95 /* [删除]@2x.png in Resources */,
-				9A2669CA1D6DA89100B66545 /* calling_card_bg@2x.png in Resources */,
 				4F5E34B61FA069300067EB95 /* EmojisList.plist in Resources */,
 				9A4730681CECAEC500AEB86F /* LCCKLoginViewController.xib in Resources */,
-				9A53BE2D1D8BB13E00AAB118 /* RedpacketCellResource.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1033,34 +832,19 @@
 				9A53BE411D8BB19C00AAB118 /* LCChatKitExample.m in Sources */,
 				9A55EB351E00FC5A0079EB65 /* LCCKProfileNameEditViewController.m in Sources */,
 				9A562A381E03D52F00BB23DD /* LCCKSettingCell.m in Sources */,
-				9AB37B2D1DC86A60000782F2 /* README.md in Sources */,
 				9A562A371E03D52F00BB23DD /* LCCKSettingButtonCell.m in Sources */,
 				9AC3A4D41DF9C16A00F3405F /* NSDate+Utilities.m in Sources */,
 				9AC3A4CD1DF9C14500F3405F /* NSFileManager+LCCKExtension.m in Sources */,
 				9AC3A4931DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.m in Sources */,
-				9A2669C81D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.m in Sources */,
-				9A53BE371D8BB13E00AAB118 /* RedpacketTakenMessageCell.m in Sources */,
-				9A2669CC1D6DA89100B66545 /* LCCKVCardMessageCell.m in Sources */,
-				9A53BE2E1D8BB13E00AAB118 /* AppDelegate+RedPacket.m in Sources */,
-				9A2669CD1D6DA89100B66545 /* LCCKVCardView.m in Sources */,
 				9A47306A1CECAEC500AEB86F /* DEMODataSource.m in Sources */,
 				9A562A3B1E03D52F00BB23DD /* LCCKSettingItem.m in Sources */,
-				9AB37B321DC86A6E000782F2 /* pull_request_template.md in Sources */,
 				9A562A391E03D52F00BB23DD /* LCCKSettingSwitchCell.m in Sources */,
-				9A2669CB1D6DA89100B66545 /* LCCKInputViewPluginVCard.m in Sources */,
 				9A47306C1CECAEC500AEB86F /* LCCKMapViewController.m in Sources */,
-				9AB37B2A1DC86A60000782F2 /* ChatKit 自定义样式.md in Sources */,
-				9AB37B2B1DC86A60000782F2 /* ChatKit 自定义业务.md in Sources */,
 				9A4730621CECAEC500AEB86F /* LCCKUser.m in Sources */,
 				9A47306E1CECAEC500AEB86F /* LCCKUtil.m in Sources */,
-				9A53BE2F1D8BB13E00AAB118 /* RedpacketConfig.m in Sources */,
 				9A562A3C1E03D52F00BB23DD /* LCCKSettingFooterTitleView.m in Sources */,
-				9AB37B311DC86A6E000782F2 /* issue_template.md in Sources */,
 				9AC3A4E21DF9CE0300F3405F /* LCCKChatDetailHelper.m in Sources */,
-				9A53BE2C1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.m in Sources */,
-				9A53BE2B1D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.m in Sources */,
 				9A562A3A1E03D52F00BB23DD /* LCCKSettingGroup.m in Sources */,
-				9A53BE361D8BB13E00AAB118 /* RedpacketMessageCell.m in Sources */,
 				9A4730691CECAEC500AEB86F /* DEMOCustomAutoCompleteObject.m in Sources */,
 				9AC3A4B91DF9BEE600F3405F /* UIColor+LCCKExtension.m in Sources */,
 				9AC3A4901DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.m in Sources */,
@@ -1070,7 +854,6 @@
 				9AC3A4BA1DF9BEE600F3405F /* UIFont+LCCKExtension.m in Sources */,
 				9A53BE431D8BB19C00AAB118 /* LCCKTabBarControllerConfig.m in Sources */,
 				9A562A361E03D52F00BB23DD /* LCCKSettingViewController.m in Sources */,
-				9A53BE341D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.m in Sources */,
 				9AC3A4CC1DF9C14500F3405F /* NSDate+LCCKExtension.m in Sources */,
 				9A47306B1CECAEC500AEB86F /* LCCKLoginDataSource.m in Sources */,
 				9AC3A4B81DF9BEE600F3405F /* LCCKUIUtility.m in Sources */,
@@ -1079,18 +862,15 @@
 				9AC3A4D31DF9C16A00F3405F /* NSDate+Extension.m in Sources */,
 				9AC3A4D71DF9C25200F3405F /* NSFileManager+Paths.m in Sources */,
 				9AC3A4DE1DF9C8BD00F3405F /* LCCKUserGroupItemCell.m in Sources */,
-				9A53BE351D8BB13E00AAB118 /* RedPacketInputViewPlugin.m in Sources */,
-				9AB37B2E1DC86A60000782F2 /* REDPACKET.md in Sources */,
-				9A2669C91D6DA89100B66545 /* LCCKVCardMessage.m in Sources */,
 				1EC742A9A64D35D2B5B383CA /* AVIMConversation+LCCKExtension.m in Sources */,
 				5A64B08CF04651B31F361271 /* AVIMEmotionMessage.m in Sources */,
 				3AFB59942977C9AA3976C547 /* AVIMMessage+LCCKExtension.m in Sources */,
 				560FCA8CFA42C345A0BC9B31 /* AVIMTypedMessage+LCCKExtension.m in Sources */,
-				C5C92F6F6C4B7B0667812ED3 /* LCCKCommonUtils+LCCKExtension.m in Sources */,
+				C5C92F6F6C4B7B0667812ED3 /* CYLCommonUtils+LCCKExtension.m in Sources */,
 				3E9EB52CA58B5999E1FB7686 /* LCCKLeanCloudConversationService.m in Sources */,
 				6FA5969799D8B0A04A1FE7AF /* LCCKLeanCloudIMProvider.m in Sources */,
 				DC69C37A7861B08FC4799F3D /* LCCKLeanCloudSessionService.m in Sources */,
-				317AC316A0573F974B44268D /* LCCKMessage+LCCKExtension.m in Sources */,
+				317AC316A0573F974B44268D /* CYLMessage+LCCKExtension.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

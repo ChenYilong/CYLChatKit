@@ -7,7 +7,7 @@
 //
 
 #import "AVIMMessage+LCCKExtension.h"
-#import "NSObject+LCCKExtension.h"
+#import "NSObject+CYLExtension.h"
 #if __has_include(<CYLChatKit/LCChatKit.h>)
 #import <CYLChatKit/LCChatKit.h>
 #else

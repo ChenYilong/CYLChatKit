@@ -1,0 +1,139 @@
+# CI for CYLChatKit, modeled on CYLTabBarController's .github/workflows/ios.yml. See docs/ci.md.
+name: iOS
+
+on:
+  push:
+    branches: [master, 'claude/**']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  LANG: en_US.UTF-8
+  LC_ALL: en_US.UTF-8
+
+jobs:
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    outputs:
+      code: ${{ steps.filter.outputs.code }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: filter
+        name: Skip macOS jobs for documentation-only pull requests
+        run: |
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            echo "code=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          CHANGED=$(git diff --name-only "${{ github.event.pull_request.base.sha }}" "${{ github.sha }}")
+          echo "$CHANGED"
+          if echo "$CHANGED" | grep -vqE '\.md$|^docs/|^LICENSE|^\.agents/'; then
+            echo "code=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "code=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  shellcheck:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: shellcheck scripts/*.sh
+
+  projects:
+    name: Xcode projects
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ${{ vars.MACOS_RUNNER || 'macos-26' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check project format
+        run: |
+          for p in ChatKit/ChatKit.xcodeproj ChatKit-OC/ChatKit-OC.xcodeproj; do
+            f="$p/project.pbxproj"
+            grep -q 'objectVersion = 46;' "$f"
+            grep -q 'compatibilityVersion = "Xcode 3.2";' "$f"
+            if grep -qE 'PBXFileSystemSynchronized|preferredProjectObjectVersion' "$f"; then
+              echo "::error file=$f::newer project-format keys found"; exit 1
+            fi
+            if grep -E 'IPHONEOS_DEPLOYMENT_TARGET = ' "$f" | grep -v '15.0;'; then
+              echo "::error file=$f::deployment target is not iOS 15.0"; exit 1
+            fi
+          done
+      - name: Parse with xcodeproj
+        run: |
+          gem list -i xcodeproj >/dev/null || gem install xcodeproj --no-document
+          ruby -rxcodeproj -e 'ARGV.each { |p| Xcodeproj::Project.open(p); puts "parsed #{p}" }' \
+            ChatKit/ChatKit.xcodeproj ChatKit-OC/ChatKit-OC.xcodeproj
+      - name: xcodebuild -list
+        run: |
+          xcodebuild -list -project ChatKit/ChatKit.xcodeproj
+          xcodebuild -list -project ChatKit-OC/ChatKit-OC.xcodeproj
+
+  pod-lint:
+    name: pod lib lint
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ${{ vars.MACOS_RUNNER || 'macos-26' }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: pod --version
+      - run: scripts/pod-lint.sh --verbose 2>&1 | tee pod-lint.log | grep -vE '^\s+(CompileC|Ld|ProcessInfoPlistFile|CpHeader|-> )' ; exit "${PIPESTATUS[0]}"
+        shell: bash
+      - if: always()
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: pod-lint-log
+          path: pod-lint.log
+
+  examples:
+    name: Build demo (${{ matrix.demo }})
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ${{ vars.MACOS_RUNNER || 'macos-26' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        demo: [ChatKit-OC]
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "| Demo | Scheme | Result | Warnings |" > build-summary-header.md
+      - name: Build
+        run: scripts/ci-build-example.sh "${{ matrix.demo }}"
+      - name: Summary
+        if: always()
+        run: |
+          { echo "### Demo build"; echo; cat build-summary-header.md; echo "|:---|:---|:---|---:|"; cat build/summary.md 2>/dev/null; } >> "$GITHUB_STEP_SUMMARY"
+      - if: always()
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: build-log-${{ matrix.demo }}
+          path: build/*.log
+
+  screenshots:
+    name: Simulator screenshots
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ${{ vars.MACOS_RUNNER || 'macos-26' }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: scripts/demo-screenshots.sh build/screenshots
+      - if: always()
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: demo-screenshots
+          path: |
+            build/screenshots
+            build/screenshots-build.log

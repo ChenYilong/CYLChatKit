@@ -532,7 +532,8 @@ NSString *const CYLConversationViewControllerErrorDomain = @"CYLConversationView
             //如果被管理员踢出群之后，再进入该会话，本地可能有缓存，要清除掉，防止下次再次进入。
             [[CYLConversationService sharedInstance] deleteRecentConversationWithConversationId:conversationId];
         }
-        conversationInvalidedHandler(conversationId, self, user, error);
+        // The handler is optional; calling a nil block crashes.
+        !conversationInvalidedHandler ?: conversationInvalidedHandler(conversationId, self, user, error);
     };
     
     if (conversation && (conversation.creator.length > 0)) {

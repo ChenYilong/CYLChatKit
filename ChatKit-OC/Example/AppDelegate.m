@@ -71,9 +71,34 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
     [CYLInputViewPluginLocation registerSubclass];
 
     self.window.rootViewController = loginViewController;
+    [self showScreenForScreenshotIfRequested];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;
+}
+
+/*!
+ * CI screenshots (scripts/demo-screenshots.sh) launch the app with `-LCCKDemoScreen <name>` to show ChatKit's UI
+ * without logging in to the IM service, which a CI runner cannot rely on:
+ * - `conversations`: the tab bar with the conversation list.
+ * - `chat`: a conversation screen with the chat input bar.
+ * Without the argument the app starts at the login screen as usual.
+ */
+- (void)showScreenForScreenshotIfRequested {
+    NSString *screen = [[NSUserDefaults standardUserDefaults] stringForKey:@"LCCKDemoScreen"];
+    if (screen.length == 0) {
+        return;
+    }
+    LCCKTabBarControllerConfig *tabBarControllerConfig = [[LCCKTabBarControllerConfig alloc] init];
+    CYLTabBarController *tabBarController = tabBarControllerConfig.tabBarController;
+    self.window.rootViewController = tabBarController;
+    if ([screen isEqualToString:@"chat"]) {
+        UIViewController *firstViewController = tabBarController.viewControllers.firstObject;
+        if ([firstViewController isKindOfClass:[UINavigationController class]]) {
+            CYLConversationViewController *conversationViewController = [[CYLConversationViewController alloc] initWithPeerId:@"Jerry"];
+            [(UINavigationController *)firstViewController pushViewController:conversationViewController animated:NO];
+        }
+    }
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
