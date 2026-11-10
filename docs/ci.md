@@ -27,6 +27,12 @@ launch argument `-LCCKDemoScreen` (an `NSUserDefaults` key):
 The screenshots are uploaded as the `demo-screenshots` artifact. Each one is also printed in the job log as base64
 JPEG between `===BEGIN SCREENSHOT <name>===` and `===END SCREENSHOT <name>===`.
 
+## Screenshot requirement
+
+Every CI run that builds code must deliver demo screenshots (see `AGENTS.md`, "CI and demo screenshots"). If a
+run has none, fix CI so that it produces them and rerun; only when that is not possible, record the reason here as a
+`TODO` with the failing job, step, and log excerpt.
+
 ## Running locally
 
 ```sh

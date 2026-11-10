@@ -33,6 +33,13 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
 - If dependency declarations change, update the corresponding lockfile with CocoaPods; do not make unrelated dependency upgrades.
 - Before committing Xcode project changes, verify both `.pbxproj` files retain the required format, parse them with `xcodeproj`, and run `xcodebuild -list` for both projects. Report any build failure separately from project parsing.
 
+## CI and demo screenshots
+
+- `.github/workflows/ios.yml` and `docs/ci.md` define CI. Keep the workflow, its scripts under `scripts/`, and `docs/ci.md` consistent.
+- Every CI run that builds code (library, demo, project, podspec, dependency, or workflow changes) must produce screenshots of the running demo (`ChatKit-OC`) from the `Simulator screenshots` job. When you report the result of such a run, show the screenshots: download the `demo-screenshots` artifact, or decode the base64 blocks the job prints between `===BEGIN SCREENSHOT <name>===` and `===END SCREENSHOT <name>===`, and send the images to the user.
+- If a run produces no screenshots, first find out why and change CI (workflow, `scripts/demo-screenshots.sh`, or the demo's `-LCCKDemoScreen` launch hook) so that later runs do produce them, then run CI again. Only if that still fails, state the exact reason (failing job, step, and log excerpt) and record it as a `TODO` in `docs/ci.md`.
+- Never report a build as verified from compilation alone when the screenshots are missing.
+
 ## Git changes
 
 - Keep changes scoped to the requested work and do not stage AppleDouble (`._*`) or other generated files.
