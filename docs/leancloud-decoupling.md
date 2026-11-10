@@ -228,6 +228,12 @@ Fixed in the demo; the `Build demo` and `Simulator screenshots` jobs pass since 
   by the demo Podfile's `post_install`.
 - The tab bar crashed before the first login (`@[ currentClientID ]` with no saved client ID); it now uses an empty list.
 - `CYLChatKit` and `CYLTabBarController` 1.99.72 link together in the demo.
+- The demo had no `UILaunchStoryboardName` and only a deprecated `LaunchImage` set, so iOS ran it letterboxed
+  (legacy screen size, black bars in the CI screenshots), and its app icon set had no 1024 pt icon. As in
+  CYLTabBarController's `Example`, `Info.plist` now names `LaunchScreen`, `Base.lproj/LaunchScreen.storyboard`
+  and the `AppIcon` set (with `Icon-1024.png`) and `CYLTabBar` image are copied from it, and the `LaunchImage` set
+  and its build setting are removed. `zh-Hans-CN.lproj/LaunchScreen.strings` still targets the old storyboard's
+  object IDs and has no effect.
 - `FMDB` moved from the podspec to the demo Podfile (`2.6.2`); core does not use it.
 - `LCCKUser` came from the 2019 snapshot as an `AVUser` subclass whose API matched none of its callers. It is restored
   from `d110789^` as `NSObject <CYLUserDelegate>` (what `fetchProfilesBlock` returns), with an
