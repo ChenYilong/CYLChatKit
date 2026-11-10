@@ -526,10 +526,6 @@ static NSUInteger CYLVisibleAlertsCount = 0;
 
 @implementation CYLAlertController (Convenience)
 
-+ (instancetype)actionWithTitle:(NSString *)title handler:(void (^)(CYLAlertAction *action))handler {
-    return [[self alloc] initWithTitle:title style:CYLAlertActionStyleDefault handler:handler];
-}
-
 + (instancetype)alertWithTitle:(NSString *)title message:(NSString *)message {
     return [[self alloc] initWithTitle:title message:message preferredStyle:CYLAlertControllerStyleAlert];
 }
