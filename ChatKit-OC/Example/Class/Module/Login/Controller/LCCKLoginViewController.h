@@ -20,6 +20,8 @@ typedef void (^LCCKClientIDHandler)(NSString *clientID);
 @property (weak) IBOutlet MLPAutoCompleteTextField *autocompleteTextField;
 @property (strong, nonatomic) IBOutlet UILabel *demoTitle;
 @property (strong, nonatomic) IBOutlet UILabel *author;
+/// When YES, logs in with the last saved client ID on launch (restored; AppDelegate sets it).
+@property (nonatomic, assign, getter=isAutoLogin) BOOL autoLogin;
 
 - (void)setClientIDHandler:(LCCKClientIDHandler)clientIDHandler;
 

@@ -37,10 +37,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // Fill in the client ID saved by the last login.
+    NSString *clientId = [[NSUserDefaults standardUserDefaults] stringForKey:LCCK_KEY_USERID];
+    self.autocompleteTextField.text = clientId;
     [self.autocompleteTextField setBorderStyle:UITextBorderStyleRoundedRect];
     [self.autocompleteTextField becomeFirstResponder];
     [[NSNotificationCenter defaultCenter] postNotificationName:UITextFieldTextDidChangeNotification object:self.autocompleteTextField];
     self.autocompleteTextField.autoCompleteTableViewHidden = NO;
+    if (self.autoLogin && clientId.length > 0) {
+        !_clientIDHandler ?: _clientIDHandler(clientId);
+    }
 }
 
 - (void)setClientIDHandler:(LCCKClientIDHandler)clientIDHandler {
