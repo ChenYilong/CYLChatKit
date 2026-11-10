@@ -1307,7 +1307,7 @@ Path: `ChatKit/Class/Tool/CYLChatConstants.h`
 - `CYLBubbleMessageMenuSelectedType` (`NSInteger`): `CYLBubbleMessageMenuSelectedTypeTextCopy`, `CYLBubbleMessageMenuSelectedTypeTextTranspond`, `CYLBubbleMessageMenuSelectedTypeTextFavorites`, `CYLBubbleMessageMenuSelectedTypeTextMore`, `CYLBubbleMessageMenuSelectedTypePhotoCopy`, `CYLBubbleMessageMenuSelectedTypePhotoTranspond`, `CYLBubbleMessageMenuSelectedTypePhotoFavorites`, `CYLBubbleMessageMenuSelectedTypePhotoMore`, `CYLBubbleMessageMenuSelectedTypeVideoTranspond`, `CYLBubbleMessageMenuSelectedTypeVideoFavorites`, `CYLBubbleMessageMenuSelectedTypeVideoMore`, `CYLBubbleMessageMenuSelectedTypeVoicePlay`, `CYLBubbleMessageMenuSelectedTypeVoiceFavorites`, `CYLBubbleMessageMenuSelectedTypeVoiceTurnToText`, `CYLBubbleMessageMenuSelectedTypeVoiceMore`
 - `CYLMessageNotificationType` (`enum`): `CYLMessageNotificationTypeMessage`, `CYLMessageNotificationTypeWarning`, `CYLMessageNotificationTypeError`, `CYLMessageNotificationTypeSuccess`
 - `CYLMessageHUDActionType` (`enum`): `CYLMessageHUDActionTypeShow`, `CYLMessageHUDActionTypeHide`, `CYLMessageHUDActionTypeError`, `CYLMessageHUDActionTypeSuccess`
-- `CYLScrollDirection` (`enum`): `CYLScrollDirectionNone`, `CYLScrollDirectionRight`, `CYLScrollDirectionLeft`, `CYLScrollDirectionUp`, `CYLScrollDirectionDown`, `CYLScrollDirectionCrazy`
+- `CYLChatScrollDirection` (`enum`): `CYLChatScrollDirectionNone`, `CYLChatScrollDirectionRight`, `CYLChatScrollDirectionLeft`, `CYLChatScrollDirectionUp`, `CYLChatScrollDirectionDown`, `CYLChatScrollDirectionCrazy`
 
 **Typedefs**
 
@@ -2882,12 +2882,12 @@ Types, constants, and macros. Members of a renamed type keep their selectors unl
 | case | `LCCKRecoderResultStateSuccess` | `CYLRecoderResultStateSuccess` |
 | case | `LCCKRecordProgressStateInSide` | `CYLRecordProgressStateInSide` |
 | case | `LCCKRecordProgressStateOutSide` | `CYLRecordProgressStateOutSide` |
-| case | `LCCKScrollDirectionCrazy` | `CYLScrollDirectionCrazy` |
-| case | `LCCKScrollDirectionDown` | `CYLScrollDirectionDown` |
-| case | `LCCKScrollDirectionLeft` | `CYLScrollDirectionLeft` |
-| case | `LCCKScrollDirectionNone` | `CYLScrollDirectionNone` |
-| case | `LCCKScrollDirectionRight` | `CYLScrollDirectionRight` |
-| case | `LCCKScrollDirectionUp` | `CYLScrollDirectionUp` |
+| case | `LCCKScrollDirectionCrazy` | `CYLChatScrollDirectionCrazy` |
+| case | `LCCKScrollDirectionDown` | `CYLChatScrollDirectionDown` |
+| case | `LCCKScrollDirectionLeft` | `CYLChatScrollDirectionLeft` |
+| case | `LCCKScrollDirectionNone` | `CYLChatScrollDirectionNone` |
+| case | `LCCKScrollDirectionRight` | `CYLChatScrollDirectionRight` |
+| case | `LCCKScrollDirectionUp` | `CYLChatScrollDirectionUp` |
 | case | `LCCKShowEmojiFace` | `CYLShowEmojiFace` |
 | case | `LCCKShowGifFace` | `CYLShowGifFace` |
 | case | `LCCKShowRecentFace` | `CYLShowRecentFace` |
@@ -3104,7 +3104,7 @@ Types, constants, and macros. Members of a renamed type keep their selectors unl
 | enum | `LCCKProgressState` | `CYLProgressState` |
 | enum | `LCCKRecordProgressState` | `CYLRecordProgressState` |
 | enum | `LCCKRecordResultState` | `CYLRecordResultState` |
-| enum | `LCCKScrollDirection` | `CYLScrollDirection` |
+| enum | `LCCKScrollDirection` | `CYLChatScrollDirection` |
 | enum | `LCCKShowFaceViewType` | `CYLShowFaceViewType` |
 | enum | `LCCKSwipeViewAlignment` | `CYLSwipeViewAlignment` |
 | enum | `LCCKViewControllerStyle` | `CYLViewControllerStyle` |

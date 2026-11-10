@@ -79,13 +79,13 @@ static void * const CYLConversationViewControllerMembersCountContext = (void*)&C
 
 - (instancetype)sharedInitWithConversation:(id<CYLConversationProtocol>)conversation {
     [self addSubview:self.containerView];
-    [conversation addObserver:self forKeyPath:@"muted" options:NSKeyValueObservingOptionNew context:CYLConversationViewControllerMutedContext];
-    [conversation addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:CYLConversationViewControllerNameContext];
-    [conversation addObserver:self forKeyPath:@"members.@count" options:NSKeyValueObservingOptionNew context:CYLConversationViewControllerMembersCountContext];
+    [(NSObject *)conversation addObserver:self forKeyPath:@"muted" options:NSKeyValueObservingOptionNew context:CYLConversationViewControllerMutedContext];
+    [(NSObject *)conversation addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:CYLConversationViewControllerNameContext];
+    [(NSObject *)conversation addObserver:self forKeyPath:@"members.@count" options:NSKeyValueObservingOptionNew context:CYLConversationViewControllerMembersCountContext];
     [self cyl_willDeallocWithSelfCallback:^(__unsafe_unretained id owner, NSUInteger identifier) {
-        [conversation removeObserver:owner forKeyPath:@"muted"];
-        [conversation removeObserver:owner forKeyPath:@"name"];
-        [conversation removeObserver:owner forKeyPath:@"members.@count"];
+        [(NSObject *)conversation removeObserver:owner forKeyPath:@"muted"];
+        [(NSObject *)conversation removeObserver:owner forKeyPath:@"name"];
+        [(NSObject *)conversation removeObserver:owner forKeyPath:@"members.@count"];
     }];
     
     [self.containerView layoutIfNeeded];//fix member count view won't display when conversationNameView is too long

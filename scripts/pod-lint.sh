@@ -5,8 +5,8 @@
 # The legacy sources still produce many warnings, so --allow-warnings is passed; errors fail the lint.
 #
 # CYLTableViewPlaceHolder is used from a git commit (see ChatKit-OC/Podfile), not from trunk. The lint takes the
-# same commit: it fetches that commit's podspec, points its source at the commit, and passes it with
-# --include-podspecs.
+# same commit: it checks that commit out and passes its podspec with --include-podspecs, so the sources resolve
+# from the checkout.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 export XCODE_XCCONFIG_FILE="$PWD/scripts/pod-lint.xcconfig"
@@ -16,12 +16,10 @@ EXTRA=()
 if [[ -n "$COMMIT" ]]; then
     WORK="$PWD/build/lint-podspecs"
     rm -rf "$WORK" && mkdir -p "$WORK"
-    git clone --quiet --filter=blob:none --no-checkout https://github.com/ChenYilong/CYLTableViewPlaceHolder.git "$WORK/src"
-    git -C "$WORK/src" show "$COMMIT:CYLTableViewPlaceHolder.podspec" \
-        | sed -E "s/:tag *=> *s\.version\.to_s/:commit => \"$COMMIT\"/" > "$WORK/CYLTableViewPlaceHolder.podspec"
-    grep -q ":commit => \"$COMMIT\"" "$WORK/CYLTableViewPlaceHolder.podspec"
+    git clone --quiet --filter=blob:none https://github.com/ChenYilong/CYLTableViewPlaceHolder.git "$WORK/CYLTableViewPlaceHolder"
+    git -C "$WORK/CYLTableViewPlaceHolder" checkout --quiet "$COMMIT"
     echo "Linting with CYLTableViewPlaceHolder at $COMMIT"
-    EXTRA+=(--include-podspecs="$WORK/CYLTableViewPlaceHolder.podspec")
+    EXTRA+=(--include-podspecs="$WORK/CYLTableViewPlaceHolder/CYLTableViewPlaceHolder.podspec")
 fi
 
 pod lib lint CYLChatKit.podspec --allow-warnings --skip-tests ${EXTRA[@]+"${EXTRA[@]}"} "$@"

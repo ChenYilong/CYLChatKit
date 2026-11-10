@@ -395,13 +395,13 @@ typedef enum : NSUInteger {
 } CYLMessageHUDActionType;
 
 typedef enum : NSUInteger {
-    CYLScrollDirectionNone,
-    CYLScrollDirectionRight,
-    CYLScrollDirectionLeft,
-    CYLScrollDirectionUp,
-    CYLScrollDirectionDown,
-    CYLScrollDirectionCrazy,
-} CYLScrollDirection;
+    CYLChatScrollDirectionNone,
+    CYLChatScrollDirectionRight,
+    CYLChatScrollDirectionLeft,
+    CYLChatScrollDirectionUp,
+    CYLChatScrollDirectionDown,
+    CYLChatScrollDirectionCrazy,
+} CYLChatScrollDirection;
 
 //TODO: to Delete
 typedef NS_ENUM(NSInteger, CYLBubbleMessageMenuSelectedType) {
