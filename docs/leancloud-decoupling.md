@@ -212,6 +212,9 @@ CI (`docs/ci.md`, Xcode 26.6, iOS 26.5 simulator SDK) is the first real macOS bu
   model.
 - `CYLConversationNavigationTitleView` casts the `id<CYLConversationProtocol>` to `NSObject *` for KVO.
 - `CYLAlertController (Convenience)` no longer implements the broken, undeclared `+actionWithTitle:handler:`.
+- The podspec's `ChatKit/**/*.h` glob also matched `lame.framework/Headers/lame.h`, which put `lame.h` into the
+  CYLChatKit umbrella header and broke the module build in the demo app; the framework's files are now excluded from
+  the pod's sources (the framework itself is still vendored).
 - `lame.framework` has no arm64 simulator slice, so the podspec excludes arm64 from simulator builds.
 - `LCChatKit` forwards the two `CYLUserSystemService` members it lacked (`fetchProfilesBlock`,
   `-getCachedProfileIfExists:name:avatarURL:userTye:error:`). Added after that run; the next lint confirms the
