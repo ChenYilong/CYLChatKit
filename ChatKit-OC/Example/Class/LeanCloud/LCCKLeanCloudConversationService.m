@@ -11,6 +11,7 @@
 //  CYLConversationService and calls this class through `LCCKLeanCloudIMProvider`.
 
 #import "LCCKLeanCloudConversationService.h"
+#import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCCKLeanCloudSessionService.h"
 #import "AVIMConversation+LCCKExtension.h"
 #import "AVIMTypedMessage+LCCKExtension.h"

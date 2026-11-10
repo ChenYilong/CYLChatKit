@@ -10,6 +10,7 @@
 //  stays in ChatKit's CYLSessionService.
 
 #import "LCCKLeanCloudSessionService.h"
+#import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCCKLeanCloudConversationService.h"
 #import "AVIMConversation+LCCKExtension.h"
 #import "AVIMMessage+LCCKExtension.h"

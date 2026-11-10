@@ -18,6 +18,7 @@
 #import "LCCKExampleConstants.h"
 #import "LCCKLoginViewController.h"
 #import "LCChatKitExample+Setting.h"
+#import <AVOSCloudIM/AVOSCloudIM.h>
 #import "AVIMConversation+LCCKExtension.h"
 #import "AVIMTypedMessage+LCCKExtension.h"
 //#import "MWPhotoBrowser.h"

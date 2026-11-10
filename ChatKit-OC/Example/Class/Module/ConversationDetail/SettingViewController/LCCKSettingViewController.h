@@ -18,7 +18,8 @@
 #import "LCChatKit.h"
 #endif
 
-@class AVIMConversation;
+#import <AVOSCloudIM/AVOSCloudIM.h>
+#import "AVIMConversation+LCCKExtension.h"
 
 #define     HEIGHT_SETTING_CELL             44.0f
 #define     HEIGHT_SETTING_TOP_SPACE        15.0f
