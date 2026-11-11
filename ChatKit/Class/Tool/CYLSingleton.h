@@ -10,7 +10,7 @@
 
 FOUNDATION_EXTERN NSMutableDictionary const *_sharedInstances;
 
-/**
+/*!
  `CYLSingleton` is a generic class for Mac OSX and iOS that implements all the required methods to implement a singleton object. It's designed for subclassing.
  
  ### Subclassing Notes
@@ -22,9 +22,11 @@ FOUNDATION_EXTERN NSMutableDictionary const *_sharedInstances;
 
 @interface CYLSingleton : NSObject
 
-/// @name Obtaining the Shared Instance
+/*!
+ * @name Obtaining the Shared Instance
+ */
 
-/**
+/*!
  Returns the shared instance of the receiver class, creating it if necessary.
 
  You shoudn't override this method in your subclasses.
@@ -33,27 +35,31 @@ FOUNDATION_EXTERN NSMutableDictionary const *_sharedInstances;
 */
 + (instancetype)sharedInstance;
 
-/**
+/*!
  `sharedInstance` alias.
  
  @return Shared instance of the receiver class.
  */
 + (instancetype)instance;
 
-/// @name Destroy Singleton Instance
+/*!
+ * @name Destroy Singleton Instance
+ */
 
-/**
+/*!
  Destroys shared instance of singleton class (if there are no other references to that instance).
  
  @warning *Note:* calling `+sharedInstance` after calling this method will create new singleton instance.
  */
 + (void)destroyInstance;
 
-/// @name Testing Singleton Initialization
+/*!
+ * @name Testing Singleton Initialization
+ */
 
 + (void)destroyAllInstance;
 
-/**
+/*!
  A Boolean value that indicates whether the receiver has been initialized.
 
  This property is usefull if you make you own initializer or override `-init` method.

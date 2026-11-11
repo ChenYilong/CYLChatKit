@@ -11,7 +11,7 @@
 @class CYLChatBaseViewController;
 @protocol CYLViewControllerEventProtocol <NSObject>
 
-/**
+/*!
  *  页面需要透出的通用事件，例如viewDidLoad，viewWillAppear，viewDidAppear等
  */
 typedef void(^CYLViewDidLoadBlock)(__kindof CYLChatBaseViewController *viewController);
@@ -32,7 +32,7 @@ typedef void(^CYLViewDidReceiveMemoryWarningBlock)(__kindof CYLChatBaseViewContr
 @property (nonatomic, copy) CYLViewControllerWillDeallocBlock viewControllerWillDeallocBlock;
 @property (nonatomic, copy) CYLViewDidReceiveMemoryWarningBlock didReceiveMemoryWarningBlock;
 
-/**
+/*!
  *  View的相关事件调出
  */
 - (void)setViewDidLoadBlock:(CYLViewDidLoadBlock)viewDidLoadBlock;

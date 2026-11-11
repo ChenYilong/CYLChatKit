@@ -15,9 +15,13 @@
 
 @property (nonatomic, strong, readwrite) UIImage *photo;
 @property (nonatomic, strong, readwrite) UIImage *thumbnailPhoto;
-/// Width of the image in pixels.
+/*!
+ * Width of the image in pixels.
+ */
 @property(nonatomic, assign, readonly) int photoWidth;
-/// Height of the image in pixels.
+/*!
+ * Height of the image in pixels.
+ */
 @property(nonatomic, assign, readonly) int photoHeight;
 @property (nonatomic, copy, readonly) NSString *photoPath;
 @property (nonatomic, strong, readonly) NSURL *originPhotoURL;
@@ -32,7 +36,7 @@
  */
 @property (nonatomic, copy, readonly) NSString *messageId;
 
-/**
+/*!
  * 发送者
  */
 @property (nonatomic, strong) id<CYLUserDelegate> sender;

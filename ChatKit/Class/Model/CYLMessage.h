@@ -67,7 +67,7 @@
 - (instancetype)initWithLocalFeedbackText:(NSString *)localFeedbackText;
 + (instancetype)localFeedbackText:(NSString *)localFeedbackText;
 
-/**
+/*!
  *  初始化图片类型的消息
  *
  *  @param photo          目标图片
@@ -93,7 +93,7 @@
                     timestamp:(NSTimeInterval)timestamp
               serverMessageId:(NSString *)serverMessageId;
 
-/**
+/*!
  *  初始化视频类型的消息
  *
  *  @param videoConverPhoto 目标视频的封面图
@@ -112,7 +112,7 @@
                                timestamp:(NSTimeInterval)timestamp
                          serverMessageId:(NSString *)serverMessageId;
 
-/**
+/*!
  *  初始化语音类型的消息
  *
  *  @param voicePath        目标语音的本地路径
@@ -131,7 +131,7 @@
                         timestamp:(NSTimeInterval)timestamp
                   serverMessageId:(NSString *)serverMessageId;
 
-/**
+/*!
  *  初始化语音类型的消息。增加已读未读标记
  *
  *  @param voicePath        目标语音的本地路径

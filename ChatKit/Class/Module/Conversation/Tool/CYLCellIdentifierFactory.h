@@ -10,7 +10,7 @@
 
 @interface CYLCellIdentifierFactory : NSObject
 
-/**
+/*!
  *  用来获取cellIdentifier
  */
 

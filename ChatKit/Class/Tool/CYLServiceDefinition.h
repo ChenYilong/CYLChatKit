@@ -19,9 +19,9 @@
 @class CYLMessage;
 
 #pragma mark - CYLSessionService
-///=============================================================================
-/// @name CYLSessionService
-///=============================================================================
+/*!
+ * @name CYLSessionService
+ */
 
 @protocol CYLSessionService <NSObject>
 
@@ -71,9 +71,9 @@ typedef void (^CYLForceReconnectSessionBlock)(NSError *error, BOOL granted, __ki
 @end
 
 #pragma mark - CYLUserSystemService
-///=============================================================================
-/// @name CYLUserSystemService
-///=============================================================================
+/*!
+ * @name CYLUserSystemService
+ */
 
 @protocol CYLUserSystemService <NSObject>
 
@@ -104,7 +104,7 @@ typedef void(^CYLFetchProfilesBlock)(NSArray<NSString *> *userIds, CYLFetchProfi
  */
 - (void)removeAllCachedProfiles;
 
-/**
+/*!
  *  remove person profile cache
  *
  *  @param person id
@@ -126,9 +126,9 @@ typedef void(^CYLFetchProfilesBlock)(NSArray<NSString *> *userIds, CYLFetchProfi
 @end
 
 #pragma mark - CYLSignatureService
-///=============================================================================
-/// @name CYLSignatureService
-///=============================================================================
+/*!
+ * @name CYLSignatureService
+ */
 
 @protocol CYLSignatureService <NSObject>
 
@@ -164,19 +164,27 @@ typedef void(^CYLGenerateSignatureBlock)(NSString *clientId, NSString *conversat
 @end
 
 #pragma mark - CYLUIService
-///=============================================================================
-/// @name CYLUIService
-///=============================================================================
+/*!
+ * @name CYLUIService
+ */
 
 #import "CYLServiceDefinition.h"
 
 @protocol CYLUIService <NSObject>
 
-/// 传递触发的UIViewController对象
+/*!
+
+ * 传递触发的UIViewController对象
+
+ */
 #define CYLPreviewImageMessageUserInfoKeyFromController    @"CYLPreviewImageMessageUserInfoKeyFromController"
-/// 传递触发的UIView对象
+/*!
+ * 传递触发的UIView对象
+ */
 #define CYLPreviewImageMessageUserInfoKeyFromView          @"CYLPreviewImageMessageUserInfoKeyFromView"
-/// 传递触发的UIView对象
+/*!
+ * 传递触发的UIView对象
+ */
 #define CYLPreviewImageMessageUserInfoKeyFromPlaceholderView          @"CYLPreviewImageMessageUserInfoKeyFromPlaceholderView"
 
 /*!
@@ -205,11 +213,19 @@ typedef void(^CYLPreviewImageMessageBlock)(NSUInteger index, NSArray *allVisible
 
 @property (nonatomic, copy) CYLPreviewImageMessageBlock previewImageMessageBlock;
 
-/// 传递触发的UIViewController对象
+/*!
+
+ * 传递触发的UIViewController对象
+
+ */
 #define CYLPreviewImageMessageUserInfoKeyFromController    @"CYLPreviewImageMessageUserInfoKeyFromController"
-/// 传递触发的UIView对象
+/*!
+ * 传递触发的UIView对象
+ */
 #define CYLPreviewImageMessageUserInfoKeyFromView          @"CYLPreviewImageMessageUserInfoKeyFromView"
-/// 传递触发的UIView对象
+/*!
+ * 传递触发的UIView对象
+ */
 #define CYLPreviewImageMessageUserInfoKeyFromPlaceholderView          @"CYLPreviewImageMessageUserInfoKeyFromPlaceholderView"
 
 /*!
@@ -228,9 +244,15 @@ typedef void(^CYLPreviewLocationMessageBlock)(CLLocation *location, NSString *ge
 
 @property (nonatomic, copy) CYLPreviewLocationMessageBlock previewLocationMessageBlock;
 
-/// 传递触发的UIViewController对象
+/*!
+
+ * 传递触发的UIViewController对象
+
+ */
 #define CYLPreviewLocationMessageUserInfoKeyFromController    @"CYLPreviewLocationMessageUserInfoKeyFromController"
-/// 传递触发的UIView对象
+/*!
+ * 传递触发的UIView对象
+ */
 #define CYLPreviewLocationMessageUserInfoKeyFromView          @"CYLPreviewLocationMessageUserInfoKeyFromView"
 
 /*!
@@ -249,13 +271,23 @@ typedef NSArray<CYLMenuItem *> *(^CYLLongPressMessageBlock)(CYLMessage *message,
 
 @property (nonatomic, copy) CYLLongPressMessageBlock longPressMessageBlock;
 
-/// 传递触发的UIViewController对象
+/*!
+
+ * 传递触发的UIViewController对象
+
+ */
 #define CYLLongPressMessageUserInfoKeyFromController    @"CYLLongPressMessageUserInfoKeyFromController"
-/// 传递触发的UIView对象
+/*!
+ * 传递触发的UIView对象
+ */
 #define CYLLongPressMessageUserInfoKeyFromView          @"CYLLongPressMessageUserInfoKeyFromView"
-/// message owner
+/*!
+ * message owner
+ */
 #define CYLLongPressMessageUserInfoKeyMessageOwner @"CYLLongPressMessageUserInfoKeyMessageOwner"
-/// message cell
+/*!
+ * message cell
+ */
 #define CYLLongPressMessageUserInfoKeyMessageCell @"CYLLongPressMessageUserInfoKeyMessageCell"
 /*!
  *  ChatKit会在长按消息时，调用这个block
@@ -263,7 +295,7 @@ typedef NSArray<CYLMenuItem *> *(^CYLLongPressMessageBlock)(CYLMessage *message,
  */
 - (void)setLongPressMessageBlock:(CYLLongPressMessageBlock)longPressMessageBlock;
 
-/**
+/*!
  *  当ChatKit需要显示通知时，会调用这个block。
  *  开发者需要实现并设置这个block，以便给用户提示。
  *  @param viewController 当前的controller
@@ -275,7 +307,7 @@ typedef void(^CYLShowNotificationBlock)(__kindof UIViewController *viewControlle
 
 @property (nonatomic, copy) CYLShowNotificationBlock showNotificationBlock;
 
-/**
+/*!
  *  当ChatKit需要显示通知时，会调用这个block。
  *  开发者需要实现并设置这个block，以便给用户提示。
  *  @param viewController 当前的controller
@@ -285,7 +317,7 @@ typedef void(^CYLShowNotificationBlock)(__kindof UIViewController *viewControlle
  */
 - (void)setShowNotificationBlock:(CYLShowNotificationBlock)showNotificationBlock;
 
-/**
+/*!
  *  当ChatKit需要显示通知时，会调用这个block。
  *  开发者需要实现并设置这个block，以便给用户提示。
  *  @param viewController 当前的controller
@@ -297,7 +329,7 @@ typedef void(^CYLHUDActionBlock)(__kindof UIViewController *viewController, UIVi
 
 @property (nonatomic, copy) CYLHUDActionBlock HUDActionBlock;
 
-/**
+/*!
  *  当ChatKit需要显示通知时，会调用这个block。
  *  开发者需要实现并设置这个block，以便给用户提示。
  *  @param viewController 当前的controller
@@ -320,9 +352,9 @@ typedef CGFloat (^CYLAvatarImageViewCornerRadiusBlock)(CGSize avatarImageViewSiz
 @end
 
 #pragma mark - CYLSettingService
-///=============================================================================
-/// @name CYLSettingService
-///=============================================================================
+/*!
+ * @name CYLSettingService
+ */
 
 @protocol CYLSettingService <NSObject>
 
@@ -357,9 +389,9 @@ typedef CGFloat (^CYLAvatarImageViewCornerRadiusBlock)(CGSize avatarImageViewSiz
 @end
 
 #pragma mark - CYLConversationService
-///=============================================================================
-/// @name CYLConversationService
-///=============================================================================
+/*!
+ * @name CYLConversationService
+ */
 
 typedef void (^CYLConversationResultBlock)(id<CYLConversationProtocol> conversation, NSError *error);
 typedef void (^CYLFetchConversationHandler) (id<CYLConversationProtocol> conversation, CYLConversationViewController *conversationController);
@@ -414,7 +446,11 @@ typedef void (^CYLSendMessageHookBlock)(CYLConversationViewController *conversat
 
 @property (nonatomic, copy) CYLSendMessageHookBlock sendMessageHookBlock;
 
-//TODO:未实现
+/*!
+
+ * TODO:未实现
+
+ */
 typedef void (^CYLLoadLatestMessagesHandler)(CYLConversationViewController *conversationController, BOOL succeeded, NSError *error);
 
 @property (nonatomic, copy) CYLLoadLatestMessagesHandler loadLatestMessagesHandler;
@@ -429,31 +465,31 @@ typedef void (^CYLLoadLatestMessagesHandler)(CYLConversationViewController *conv
 
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo;
 
-/**
+/*!
  *  插入一条最近对话
  *  @param conversation 会话
  */
 - (void)insertRecentConversation:(id<CYLConversationProtocol>)conversation;
 
-/**
+/*!
  *  增加未读数
  *  @param conversationId 相应对话
  */
 - (void)increaseUnreadCountWithConversationId:(NSString *)conversationId;
 
-/**
+/*!
  *  最近对话列表左滑删除本地数据库的对话，将不显示在列表
  *  @param conversationId 相应的对话
  */
 - (void)deleteRecentConversationWithConversationId:(NSString *)conversationId;
 
-/**
+/*!
  *  清空未读数
  *  @param conversationId 相应的对话
  */
 - (void)updateUnreadCountToZeroWithConversationId:(NSString *)conversationId;
 
-/**
+/*!
  *  删除全部缓存，比如当切换用户时，如果同一个人显示的名称和头像需要变更
  */
 - (BOOL)removeAllCachedRecentConversations;
@@ -464,9 +500,9 @@ typedef void (^CYLLoadLatestMessagesHandler)(CYLConversationViewController *conv
 @end
 
 #pragma mark - CYLConversationsListService
-///=============================================================================
-/// @name CYLConversationsListService
-///=============================================================================
+/*!
+ * @name CYLConversationsListService
+ */
 
 @protocol CYLConversationsListService <NSObject>
 

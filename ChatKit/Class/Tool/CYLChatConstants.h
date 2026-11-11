@@ -11,9 +11,9 @@
 #import "CYLUserDelegate.h"
 
 #pragma mark - Message Media Type
-///=============================================================================
-/// @name Message Media Type
-///=============================================================================
+/*!
+ * @name Message Media Type
+ */
 
 /*!
  * Media type of a message, owned by ChatKit so the UI layer does not depend on any IM SDK.
@@ -42,14 +42,20 @@ typedef NS_ENUM(NSInteger, CYLIMErrorCode) {
 };
 
 #pragma mark - Base ViewController Life Time Block
-///=============================================================================
-/// @name Base ViewController Life Time Block
-///=============================================================================
+/*!
+ * @name Base ViewController Life Time Block
+ */
 
-//Callback with Custom type
+/*!
+
+ * Callback with Custom type
+
+ */
 typedef void (^CYLUserResultsCallBack)(NSArray<id<CYLUserDelegate>> *users, NSError *error);
 typedef void (^CYLUserResultCallBack)(id<CYLUserDelegate> user, NSError *error);
-//Callback with Foundation type
+/*!
+ * Callback with Foundation type
+ */
 typedef void (^CYLBooleanResultBlock)(BOOL succeeded, NSError *error);
 typedef void (^CYLViewControllerBooleanResultBlock)(__kindof UIViewController *viewController, BOOL succeeded, NSError *error);
 
@@ -63,25 +69,33 @@ typedef void (^CYLIdResultBlock)(id object, NSError *error);
 typedef void (^CYLIdBoolResultBlock)(BOOL succeeded, id object, NSError *error);
 typedef void (^CYLRequestAuthorizationBoolResultBlock)(BOOL granted, NSError *error);
 
-//Callback with Function object
+/*!
+
+ * Callback with Function object
+
+ */
 typedef void (^CYLVoidBlock)(void);
 typedef void (^CYLErrorBlock)(NSError *error);
 typedef void (^CYLImageResultBlock)(UIImage * image, NSError *error);
 typedef void (^CYLProgressBlock)(NSInteger percentDone);
 
 #pragma mark - Common Define
-///=============================================================================
-/// @name Common Define
-///=============================================================================
+/*!
+ * =============================================================================
+ * @name Common Define
+ * =============================================================================
+ */
 static CGFloat const CYLAvatarToMessageContent = 5.f;
 static CGFloat const CYLAvatarBottomToMessageContentTop = -1.f;
 static CGFloat const CYL_MSG_CELL_EDGES_OFFSET = 16;
 
 #define CYL_STATUSBAR_HEIGHT ([UIApplication sharedApplication].statusBarFrame.size.height)
 
-/// Whether the device has a bottom safe area (the home indicator): iPhone X and later. The check is the bottom safe
-/// area of the key window, not the status bar height: the old check (`status bar == 44`) was NO on iPhones with a
-/// Dynamic Island, whose status bar is taller.
+/*!
+ * Whether the device has a bottom safe area (the home indicator): iPhone X and later. The check is the bottom safe
+ * area of the key window, not the status bar height: the old check (`status bar == 44`) was NO on iPhones with a
+ * Dynamic Island, whose status bar is taller.
+ */
 static inline BOOL CYLChatDeviceHasBottomSafeArea(void) {
     UIWindow *window = nil;
     for (UIScene *scene in [UIApplication sharedApplication].connectedScenes) {
@@ -116,8 +130,10 @@ static NSString *const CYLBadgeTextForNumberGreaterThanLimit = @"···";
     NSLocalizedStringFromTableInBundle(key, @"LCChatKitString", [NSBundle cyl_bundleForName:@"Other" class:[CYLChatKit class]], nil)
 #endif
 
-/// Function form of `CYLLocalizedStrings` for Swift callers (Swift cannot import function-like macros). Same bundle and
-/// table: `Other.bundle`, `LCChatKitString`.
+/*!
+ * Function form of `CYLLocalizedStrings` for Swift callers (Swift cannot import function-like macros). Same bundle and
+ * table: `Other.bundle`, `LCChatKitString`.
+ */
 FOUNDATION_EXTERN NSString *CYLLocalizedStringForKey(NSString *key);
 
 
@@ -137,60 +153,60 @@ FOUNDATION_EXTERN NSString *CYLLocalizedStringForKey(NSString *key);
 static NSString * const CYLNotificationSessionResumed = @"CYLNotificationSessionResumed";
 
 #pragma mark - Notification Name
-///=============================================================================
-/// @name Notification Name
-///=============================================================================
+/*!
+ * @name Notification Name
+ */
 
-/**
+/*!
  *  未读数改变了。通知去服务器同步 installation 的badge
  */
 static NSString *const CYLNotificationUnreadsUpdated = @"CYLNotificationUnreadsUpdated";
 
-/**
+/*!
  *  消息到来了，通知聊天页面和最近对话页面刷新
  */
 static NSString *const CYLNotificationMessageReceived = @"CYLNotificationMessageReceived";
 
-/**
+/*!
  *  消息被修改了，通知聊天页面和最近对话页面刷新
  */
 static NSString *const CYLNotificationMessageUpdated = @"CYLNotificationMessageUpdated";
 
 static NSString *const CYLNotificationMessageSent = @"CYLNotificationMessageSent";
 
-/**
+/*!
  *  消息到来了，通知聊天页面和最近对话页面刷新
  */
 static NSString *const CYLNotificationCustomMessageReceived = @"CYLNotificationCustomMessageReceived";
 
 static NSString *const CYLNotificationCustomTransientMessageReceived = @"CYLNotificationCustomTransientMessageReceived";
 
-/**
+/*!
  *  消息到达对方了，通知聊天页面更改消息状态
  */
 static NSString *const CYLNotificationMessageDelivered = @"CYLNotificationMessageDelivered";
 
-/**
+/*!
  *  消息对方已读，通知聊天页面更改消息状态
  */
 static NSString *const CYLNotificationMessageRead = @"CYLNotificationMessageRead";
 
-/**
+/*!
  *  对话的元数据变化了，通知页面刷新
  */
 static NSString *const CYLNotificationConversationUpdated = @"CYLNotificationConversationUpdated";
 
-/**
+/*!
  *  聊天服务器连接状态更改了，通知最近对话和聊天页面是否显示红色警告条
  */
 static NSString *const CYLNotificationConnectivityUpdated = @"CYLNotificationConnectivityUpdated";
 
-/**
+/*!
  * 会话失效，如当群被解散或当前用户不再属于该会话时，对应会话会失效应当被删除并且关闭聊天窗口
  */
 static NSString *const CYLNotificationCurrentConversationInvalided = @"CYLNotificationCurrentConversationInvalided";
 
-/**
+/*!
  * 对话聊天背景切换
  */
 static NSString *const CYLNotificationConversationViewControllerBackgroundImageDidChanged = @"CYLNotificationConversationViewControllerBackgroundImageDidChanged";
@@ -210,27 +226,27 @@ static NSString *const CYLNotificationContactListDataSourceUpdatedUserInfoDataSo
 static NSString *const CYLNotificationConversionImageMessageDidDownloaded = @"CYLNotificationConversionImageMessageDidDownloaded";
 
 
-/**
+/*!
    *  发送语音消息没有权限。通知界面提醒用户
    */
 static NSString *const CYLNotificationRecordNoPower = @"CYLChatBarRecordVoiceNoPower";
 
-/**
+/*!
    *  发送文本消息过长。通知界面提醒用户
    */
 static NSString *const CYLNotificationTextLengthOut = @"CYLChatBarTextLengthOut";
 
-/**
+/*!
    *  发送语音消息倒计时结束。通知UI停止动效
    */
 static NSString *const CYLNotificationRecordTimeOut = @"CYLChatBarRecordVoiceTimeOut";
 static NSInteger const CYLNotificationTextLengthOutLength = 1000;
 #pragma mark - Conversation Enum : Message Type and operation
-///=============================================================================
-/// @name Conversation Enum : Message Type and operation
-///=============================================================================
+/*!
+ * @name Conversation Enum : Message Type and operation
+ */
 
-/**
+/*!
  *  消息聊天类型
  */
 typedef NS_ENUM(NSUInteger, CYLConversationType){
@@ -238,7 +254,7 @@ typedef NS_ENUM(NSUInteger, CYLConversationType){
     CYLConversationTypeGroup /**< 群组聊天,显示nickname */,
 };
 
-/**
+/*!
  *  消息拥有者类型
  */
 typedef NS_ENUM(NSUInteger, CYLMessageOwnerType){
@@ -248,10 +264,14 @@ typedef NS_ENUM(NSUInteger, CYLMessageOwnerType){
     CYLMessageOwnerTypeOther /**< 接收到的他人消息 */,
 };
 
-/// Kept for source compatibility. Use `CYLMessageMediaTypeSystem` in new code.
+/*!
+
+ * Kept for source compatibility. Use `CYLMessageMediaTypeSystem` in new code.
+
+ */
 static CYLMessageMediaType const kCYLIMMessageMediaTypeSystem = CYLMessageMediaTypeSystem;
 
-/**
+/*!
  *  消息发送状态,自己发送的消息时有
  */
 typedef NS_ENUM(NSUInteger, CYLMessageSendState){
@@ -263,7 +283,7 @@ typedef NS_ENUM(NSUInteger, CYLMessageSendState){
     CYLMessageSendStateRead  /**< 消息已读 */
 };
 
-/**
+/*!
  *  消息读取状态,接收的消息时有
  */
 typedef NS_ENUM(NSUInteger, CYLMessageReadState) {
@@ -272,7 +292,7 @@ typedef NS_ENUM(NSUInteger, CYLMessageReadState) {
     CYLMessageReaded /**< 消息已读 */,
 };
 
-/**
+/*!
  *  录音消息的状态
  */
 typedef NS_ENUM(NSUInteger, CYLVoiceMessageState){
@@ -282,7 +302,7 @@ typedef NS_ENUM(NSUInteger, CYLVoiceMessageState){
     CYLVoiceMessageStateCancel,/**< 播放被取消 */
 };
 
-/**
+/*!
  *  CYLChatMessageCell menu对应action类型
  */
 typedef NS_ENUM(NSUInteger, CYLChatMessageCellMenuActionType) {
@@ -301,13 +321,15 @@ static NSString *const CYLMessageNotifacationUserInfoMessageKey = @"message";
 
 #define CYL_CURRENT_TIMESTAMP ([[NSDate date] timeIntervalSince1970] * 1000)
 #define CYL_FUTURE_TIMESTAMP ([[NSDate distantFuture] timeIntervalSince1970] * 1000)
-//整数或小数
+/*!
+ * 整数或小数
+ */
 #define CYL_TIMESTAMP_REGEX @"^[0-9]*(.)?[0-9]*$"
 
 #pragma mark - Custom Message
-///=============================================================================
-/// @name Custom Message
-///=============================================================================
+/*!
+ * @name Custom Message
+ */
 
 /*!
  * 用来定义如何展示老版本未支持的自定义消息类型
@@ -337,9 +359,9 @@ static NSString *const CYLCustomMessageConversationTypeKey = @"conversationType"
 #define CYLConversationGroupAvatarURLKey (CYLLocalizedStrings(@"ConversationAvatarURLKey") ?: @"avatarURL")
 
 #pragma mark - Custom Message Cell
-///=============================================================================
-/// @name Custom Message Cell
-///=============================================================================
+/*!
+ * @name Custom Message Cell
+ */
 
 FOUNDATION_EXTERN NSMutableDictionary const * CYLChatMessageCellMediaTypeDict;
 
@@ -352,16 +374,16 @@ static NSString *const CYLCellIdentifierOwnerOther = @"CYLCellIdentifierOwnerOth
 static NSString *const CYLCellIdentifierOwnerSystem = @"CYLCellIdentifierOwnerSystem";
 
 #pragma mark - 聊天输入框默认插件类型定义
-///=============================================================================
-/// @name 聊天输入框默认插件类型定义
-///=============================================================================
+/*!
+ * @name 聊天输入框默认插件类型定义
+ */
 
 FOUNDATION_EXTERN NSMutableDictionary const * CYLInputViewPluginDict;
 FOUNDATION_EXTERN NSMutableArray const * CYLInputViewPluginArray;
 static NSString *const CYLInputViewPluginTypeKey = @"CYLInputViewPluginTypeKey";
 static NSString *const CYLInputViewPluginClassKey = @"CYLInputViewPluginClassKey";
 
-/**
+/*!
  *  默认插件的类型定义
  */
 typedef NS_ENUM(NSUInteger, CYLInputViewPluginType) {
@@ -383,9 +405,11 @@ typedef NS_ENUM(NSUInteger, CYLInputViewPluginType) {
 }) 
 
 #pragma mark - 自定义UI行为
-///=============================================================================
-/// @name 自定义UI行为
-///=============================================================================
+/*!
+ * =============================================================================
+ * @name 自定义UI行为
+ * =============================================================================
+ */
 static NSString *const CYLCustomConversationViewControllerBackgroundImageNamePrefix = @"CONVERSATION_BACKGROUND_";
 static NSString *const CYLDefaultConversationViewControllerBackgroundImageName = @"CONVERSATION_BACKGROUND_ALL";
     
@@ -393,20 +417,32 @@ static CGFloat const CYLAnimateDuration = .25f;
 
 #define CYLMessageCellLimit ([UIApplication sharedApplication].keyWindow.frame.size.width/5*3)
 
-// image STRETCH
+/*!
+
+ * image STRETCH
+
+ */
 #define CYL_STRETCH_IMAGE(image, edgeInsets) [image resizableImageWithCapInsets:edgeInsets resizingMode:UIImageResizingModeStretch]
 #define CYL_CONVERSATIONVIEWCONTROLLER_BACKGROUNDCOLOR [UIColor colorWithRed:234.0f/255.0f green:234/255.0f blue:234/255.f alpha:1.0f]
 /*!
  *  提示信息的类型定义
  */
 typedef NS_ENUM(NSUInteger, CYLMessageNotificationType) {
-    /// 普通消息
+    /*!
+     * 普通消息
+     */
     CYLMessageNotificationTypeMessage = 0,
-    /// 警告
+    /*!
+     * 警告
+     */
     CYLMessageNotificationTypeWarning,
-    /// 错误
+    /*!
+     * 错误
+     */
     CYLMessageNotificationTypeError,
-    /// 成功
+    /*!
+     * 成功
+     */
     CYLMessageNotificationTypeSuccess
 };
 
@@ -414,13 +450,21 @@ typedef NS_ENUM(NSUInteger, CYLMessageNotificationType) {
  * HUD的行为
  */
 typedef NS_ENUM(NSUInteger, CYLMessageHUDActionType) {
-    /// 展示
+    /*!
+     * 展示
+     */
     CYLMessageHUDActionTypeShow,
-    /// 隐藏
+    /*!
+     * 隐藏
+     */
     CYLMessageHUDActionTypeHide,
-    /// 错误
+    /*!
+     * 错误
+     */
     CYLMessageHUDActionTypeError,
-    /// 成功
+    /*!
+     * 成功
+     */
     CYLMessageHUDActionTypeSuccess
 };
 
@@ -433,7 +477,11 @@ typedef enum : NSUInteger {
     CYLChatScrollDirectionCrazy,
 } CYLChatScrollDirection;
 
-//TODO: to Delete
+/*!
+
+ * TODO: to Delete
+
+ */
 typedef NS_ENUM(NSInteger, CYLBubbleMessageMenuSelectedType) {
     CYLBubbleMessageMenuSelectedTypeTextCopy = 0,
     CYLBubbleMessageMenuSelectedTypeTextTranspond = 1,
@@ -456,9 +504,9 @@ typedef NS_ENUM(NSInteger, CYLBubbleMessageMenuSelectedType) {
 };
 
 #pragma mark - Succeed Message Store
-///=============================================================================
-/// @name Succeed Message Store
-///=============================================================================
+/*!
+ * @name Succeed Message Store
+ */
 
 #define CYLConversationTableName           @"conversations"
 #define CYLConversationTableKeyId          @"id"
@@ -541,9 +589,9 @@ typedef NS_ENUM(NSInteger, CYLBubbleMessageMenuSelectedType) {
     CYLConversationTableWhereClause                             \
 
 #pragma mark - Failed Message Store
-///=============================================================================
-/// @name Failed Message Store
-///=============================================================================
+/*!
+ * @name Failed Message Store
+ */
 
 #define CYLFaildMessageTable   @"failed_messages"
 #define CYLKeyId               @"id"
@@ -567,7 +615,11 @@ typedef NS_ENUM(NSInteger, CYLBubbleMessageMenuSelectedType) {
 #define CYLWhereKeyId \
     @" WHERE " CYLKeyId @" IN ('%@') "
 
-//SELECT * FROM failed_messages WHERE id IN ('%@')
+/*!
+
+ * SELECT * FROM failed_messages WHERE id IN ('%@')
+
+ */
 #define CYLSelectMessagesByIDSQL                        \
     @"SELECT * FROM " CYLFaildMessageTable              \
     CYLWhereKeyId

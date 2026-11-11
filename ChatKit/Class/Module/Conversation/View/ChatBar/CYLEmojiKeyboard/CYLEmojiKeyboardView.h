@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, CYLEmojiKeyboardViewCategoryImage) {
 @protocol CYLEmojiKeyboardViewDelegate;
 @protocol CYLEmojiKeyboardViewDataSource;
 
-/**
+/*!
  Keyboard class to present as an alternate.
  This keyboard presents the emojis supported by iOS.
 
@@ -33,17 +33,17 @@ typedef NS_ENUM(NSInteger, CYLEmojiKeyboardViewCategoryImage) {
  */
 @interface CYLEmojiKeyboardView : UIView
 
-/**
+/*!
  Segment control displays the categories.
  */
 @property (nonatomic, readonly) UISegmentedControl *segmentsBar;
 
-/**
+/*!
  Pagecontrol displays the current page and number of pages on an emoji page.
  */
 @property (nonatomic, readonly) UIPageControl *pageControl;
 
-/**
+/*!
  Scroll view displays all the emoji pages.
  */
 @property (nonatomic, readonly) UIScrollView *emojiPagesScrollView;
@@ -51,7 +51,7 @@ typedef NS_ENUM(NSInteger, CYLEmojiKeyboardViewCategoryImage) {
 @property (nonatomic, weak) id<CYLEmojiKeyboardViewDelegate> delegate;
 @property (nonatomic, weak) id<CYLEmojiKeyboardViewDataSource> dataSource;
 
-/**
+/*!
  @param frame Frame of the view to be initialised with.
 
  @param dataSource dataSource is required during the initialization to
@@ -63,12 +63,12 @@ typedef NS_ENUM(NSInteger, CYLEmojiKeyboardViewCategoryImage) {
 @end
 
 
-/**
+/*!
  Protocol to be followed by the dataSource of `CYLEmojiKeyboardView`.
  */
 @protocol CYLEmojiKeyboardViewDataSource <NSObject>
 
-/**
+/*!
  Method called on dataSource to get the category image when selected.
 
  @param emojiKeyboardView EmojiKeyBoardView object on which user has tapped.
@@ -78,7 +78,7 @@ typedef NS_ENUM(NSInteger, CYLEmojiKeyboardViewCategoryImage) {
 - (UIImage *)emojiKeyboardView:(CYLEmojiKeyboardView *)emojiKeyboardView
       imageForSelectedCategory:(CYLEmojiKeyboardViewCategoryImage)category;
 
-/**
+/*!
  Method called on dataSource to get the category image when not-selected.
 
  @param emojiKeyboardView EmojiKeyBoardView object on which user has tapped.
@@ -88,7 +88,7 @@ typedef NS_ENUM(NSInteger, CYLEmojiKeyboardViewCategoryImage) {
 - (UIImage *)emojiKeyboardView:(CYLEmojiKeyboardView *)emojiKeyboardView
    imageForNonSelectedCategory:(CYLEmojiKeyboardViewCategoryImage)category;
 
-/**
+/*!
  Method called on dataSource to get the back button image to be shown in the view.
 
  @param emojiKeyboardView EmojiKeyBoardView object on which user has tapped.
@@ -97,7 +97,7 @@ typedef NS_ENUM(NSInteger, CYLEmojiKeyboardViewCategoryImage) {
 
 @optional
 
-/**
+/*!
  Method called on dataSource to get category that should be shown by
  default i.e. when the keyboard is just presented.
 
@@ -107,7 +107,7 @@ typedef NS_ENUM(NSInteger, CYLEmojiKeyboardViewCategoryImage) {
  */
 - (CYLEmojiKeyboardViewCategoryImage)defaultCategoryForEmojiKeyboardView:(CYLEmojiKeyboardView *)emojiKeyboardView;
 
-/**
+/*!
  Method called on dataSource to get number of emojis to be maintained in
  recent category.
 
@@ -120,12 +120,12 @@ typedef NS_ENUM(NSInteger, CYLEmojiKeyboardViewCategoryImage) {
 @end
 
 
-/**
+/*!
  Protocol to be followed by the delegate of `CYLEmojiKeyboardView`.
  */
 @protocol CYLEmojiKeyboardViewDelegate <NSObject>
 
-/**
+/*!
  Delegate method called when user taps an emoji button
 
  @param emojiKeyBoardView EmojiKeyBoardView object on which user has tapped.
@@ -135,7 +135,7 @@ typedef NS_ENUM(NSInteger, CYLEmojiKeyboardViewCategoryImage) {
 - (void)emojiKeyBoardView:(CYLEmojiKeyboardView *)emojiKeyBoardView
               didUseEmoji:(NSString *)emoji;
 
-/**
+/*!
  Delegate method called when user taps on the backspace button
 
  @param emojiKeyBoardView EmojiKeyBoardView object on which user has tapped.

@@ -25,7 +25,7 @@ FOUNDATION_EXTERN NSString *const CYLSessionServiceErrorDemain;
  */
 @property (nonatomic, strong, readonly) id client;
 
-/**
+/*!
  *  是否和聊天服务器连通
  */
 @property (nonatomic, assign, readonly) BOOL connect;

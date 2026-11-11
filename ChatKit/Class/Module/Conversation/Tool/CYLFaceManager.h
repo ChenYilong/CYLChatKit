@@ -16,7 +16,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-/**
+/*!
  *  表情管理类,可以获取所有的表情名称
  *  TODO 直接获取所有的表情Dict,添加排序功能,对表情进行排序,常用表情排在前面
  */
@@ -26,7 +26,7 @@
 
 #pragma mark - emoji表情相关
 
-/**
+/*!
  *  获取所有的表情图片名称
  *
  *  @return 所有的表情图片名称
@@ -36,7 +36,7 @@
 
 + (UIImage *)faceImageWithFaceID:(NSUInteger)faceID;
 + (NSString *)faceNameWithFaceID:(NSUInteger)faceID;
-/**
+/*!
  *  将文字中带表情的字符处理换成图片显示
  *
  *  @param text 未处理的文字
@@ -47,14 +47,14 @@
 + (void)configEmotionWithMutableAttributedString:(NSMutableAttributedString *)attributeString;
 #pragma mark - 最近表情相关处理
 
-/**
+/*!
  *  获取最近使用的表情图片
  *
  *  @return
  */
 + (NSArray *)recentFaces;
 
-/**
+/*!
  *  存储一个最近使用的face
  *
  *  @param dict 包含以下key-value键值对

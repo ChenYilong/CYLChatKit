@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-/**
+/*!
  *  更多列表展示cell
  */
 @interface CYLChatMoreItem : UIControl

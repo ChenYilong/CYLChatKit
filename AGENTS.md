@@ -14,6 +14,7 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
   - `.agents/skills/cylchatkit-localization/SKILL.md` (before adding or changing localized strings, tables, or bundles)
   - `.agents/skills/cylchatkit-accessibility/SKILL.md` (before adding or changing any control, text, cell, or screen)
   - `.agents/skills/cylchatkit-commit/SKILL.md` (before every commit)
+  - `.agents/skills/cylchatkit-comments/SKILL.md` (before writing or changing a public declaration or its comment)
 
 ## Objective-C and API rules
 
@@ -38,6 +39,32 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
 - Vendored libraries keep their upstream identifiers only when they are pre-built binaries or C libraries that cannot be
   renamed (the `lame` framework) and third-party APIs used by name (LeanCloud `AVIM*` types, CYLTabBarController); every vendored Objective-C source file in core or the demo follows the copied-code rule.
 - Do not rename released symbols just to normalize naming beyond the changes listed in `docs/naming.md`.
+- **Code comments.** Read `.agents/skills/cylchatkit-comments/SKILL.md` before writing or changing a public declaration.
+  - A public API comment is a documentation comment that callers see in Quick Help, DocC, and the generated interface,
+    so it is written for Objective-C and Swift callers at once. In iOS code (Objective-C headers) use this block, never
+    stacked `//` or `///` lines:
+
+    ```objc
+    /*!
+     * One-sentence summary.
+     *
+     * @param name What the parameter means, including nil behavior.
+     * @return What is returned, including when it is nil.
+     */
+    ```
+
+    One block per declaration, placed directly above it. Do not use `/** */` (one style only), and do not stack
+    `//` or `///` lines to build a multi-line comment. A short trailing `///<` after a declaration is allowed.
+  - Swift: a one-line summary uses `///`; anything longer uses a `/** ... */` block with Markup (`- Parameter`,
+    `- Returns`, `- Note`), not stacked `///` lines.
+  - Other platforms follow their official documentation tools, with the same rule of one block per declaration:
+    Kotlin and Java `/** ... */` (KDoc, Javadoc: `@param`, `@return`), TypeScript and JavaScript `/** ... */` (TSDoc, JSDoc),
+    Dart and Flutter `///` doc comments (Effective Dart: a one-sentence summary first), Python docstrings (PEP 257),
+    Go doc comments directly above the declaration, C# XML documentation (`<summary>`), Rust `///` or `/** */`.
+  - Comments are English. Describe LeanCloud types in words in core. Do not document commented-out code, and delete it
+    instead of keeping it.
+  - `scripts/check-comments.py` (CI job `Naming and comment rules`) fails on `///`, stacked `//`, and `/** */` doc comments
+    in core headers. Record undocumented public declarations as `TODO` in `docs/api-comments.md`.
 - Write repository instructions, skills, comments, and user-facing documentation in English.
 - Preserve existing public names, including historical spellings, to avoid breaking clients. New identifiers should follow the naming skill.
 - Use full HTTPS GitHub issue URLs in code comments that explain issue-specific fixes.

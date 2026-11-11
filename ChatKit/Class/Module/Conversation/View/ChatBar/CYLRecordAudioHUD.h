@@ -10,7 +10,7 @@
 
 #define kCYLRecordAudioTooLong @"kCYLRecordAudioTooLong"
 
-/**
+/*!
  音频记录结果
 
  - CYLRecoderResultStateSuccess: 成功
@@ -28,7 +28,7 @@ typedef NS_ENUM(NSUInteger, CYLRecordResultState) {
 };
 
 
-/**
+/*!
  音频记录状态
 
  - CYLRecordProgressStateOutSide: 手指松开，取消发送
@@ -40,21 +40,23 @@ typedef NS_ENUM(NSUInteger, CYLRecordProgressState) {
 };
 
 @interface CYLRecordAudioHUD : UIView
-/** 是否正在显示 */
+/*!
+ * 是否正在显示
+ */
 @property (nonatomic, assign, readonly, getter=isShowing) BOOL showing;
-/**
+/*!
  HUD 单例
 
  @return 单例
  */
 + (CYLRecordAudioHUD *)instance;
 
-/**
+/*!
  显示录音指示器
  */
 + (void)show;
 
-/**
+/*!
  隐藏录音指示器，根据结果
 
  @param recderState 结果
@@ -62,7 +64,7 @@ typedef NS_ENUM(NSUInteger, CYLRecordProgressState) {
 + (void)dismissWithState:(CYLRecordResultState)resultState;
 
 
-/**
+/*!
  修改录音指示器，根据状态
 
  @param progressState 状态
@@ -70,7 +72,7 @@ typedef NS_ENUM(NSUInteger, CYLRecordProgressState) {
 + (void)changeProgressState:(CYLRecordProgressState)progressState;
 
 
-/**
+/*!
  修改音量
 
  @param level 音量
@@ -78,7 +80,7 @@ typedef NS_ENUM(NSUInteger, CYLRecordProgressState) {
 + (void)changeVolume:(NSInteger)level;
 
 
-/**
+/*!
  录音总时间
 
  @return 录音总时间

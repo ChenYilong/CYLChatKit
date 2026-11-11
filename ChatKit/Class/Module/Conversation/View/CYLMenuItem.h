@@ -23,7 +23,7 @@
 
 #import <UIKit/UIKit.h>
 
-/**
+/*!
     This subclass adds support for a block-based action on UIMenuItem.
     If you are as annoyed about the missing target/action pattern, you will love this.
  
@@ -32,17 +32,29 @@
  */
 @interface CYLMenuItem : UIMenuItem
 
-// Initialize CYLMenuItem with a block.
+/*!
+
+ * Initialize CYLMenuItem with a block.
+
+ */
 - (id)initWithTitle:(NSString *)title block:(void(^)())block;
 
-// Menu Item can be enabled/disabled. (disable simply hides it from the UIMenuController)
+/*!
+
+ * Menu Item can be enabled/disabled. (disable simply hides it from the UIMenuController)
+
+ */
 @property(nonatomic, assign, getter=isEnabled) BOOL enabled;
 
-// Action block.
+/*!
+
+ * Action block.
+
+ */
 @property(nonatomic, copy) void(^block)();
 
 
-/**
+/*!
     Installs the menu handler. Needs to be called once per class.
     (A good place is the +load method)
 

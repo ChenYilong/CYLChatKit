@@ -16,7 +16,7 @@
 
 @end
 
-/**
+/*!
  *  选择地理位置
  */
 @interface CYLLocationController : UIViewController

@@ -10,7 +10,7 @@
 
 @interface CYLChatImageMessageCell : CYLChatMessageCell<CYLChatMessageCellSubclassing>
 
-/**
+/*!
  *  用来显示image的UIImageView
  */
 @property (nonatomic, strong, readonly) UIImageView *messageImageView;

@@ -29,13 +29,13 @@ FOUNDATION_EXTERN NSString *const CYLSettingServiceErrorDomain;
  * 4. Others
  */
 
-/**
+/*!
  *  图片消息，临时的压缩图片路径
  *  @return
  */
 - (NSString *)tmpPath;
 
-/**
+/*!
  *  根据消息的 id 获取声音文件的路径
  *  @param objectId 消息的 id
  *  @return 文件路径
@@ -57,19 +57,31 @@ FOUNDATION_EXTERN NSString *const CYLSettingServiceErrorDomain;
 - (void)registerForRemoteNotification;
 - (void)saveInstallationWithDeviceToken:(NSData *)deviceToken userId:(NSString *)userId;
 
-// push message
+/*!
+
+ * push message
+
+ */
 - (void)pushMessage:(NSString *)message userIds:(NSArray *)userIds block:(CYLBooleanResultBlock)block;
 
-// please call in applicationDidBecomeActive:application
+/*!
+
+ * please call in applicationDidBecomeActive:application
+
+ */
 - (void)cleanBadge;
 
-//save the local applicationIconBadgeNumber to the server
+/*!
+
+ * save the local applicationIconBadgeNumber to the server
+
+ */
 - (void)syncBadge;
 
 - (UIColor *)defaultThemeColorForKey:(NSString *)key;
 - (UIFont *)defaultThemeTextMessageFont;
 
-/**
+/*!
  * @param capOrEdge 分为：cap_insets和edge_insets
  * @param position 主要分为：CommonLeft、CommonRight等
  */

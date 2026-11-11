@@ -49,18 +49,34 @@ typedef void (^CYLIMRecentConversationsResultBlock)(NSArray<id<CYLConversationPr
 
 #pragma mark - Session
 
-/// Opening and closing the IM session of the current user.
+/*!
+
+ * Opening and closing the IM session of the current user.
+
+ */
 @protocol CYLIMSessionProvider <NSObject>
 
 @required
 
-/// The client id of the current user, or nil before a session is opened.
+/*!
+
+ * The client id of the current user, or nil before a session is opened.
+
+ */
 - (nullable NSString *)clientId;
 
-/// Whether the client is connected to the IM server. Drives the connection status bar.
+/*!
+
+ * Whether the client is connected to the IM server. Drives the connection status bar.
+
+ */
 - (BOOL)isConnected;
 
-/// Whether the session is opened. ChatKit asks the app to reconnect when it is not.
+/*!
+
+ * Whether the session is opened. ChatKit asks the app to reconnect when it is not.
+
+ */
 - (BOOL)isClientOpened;
 
 /*!
@@ -71,35 +87,59 @@ typedef void (^CYLIMRecentConversationsResultBlock)(NSArray<id<CYLConversationPr
  */
 - (void)openWithClientId:(NSString *)clientId force:(BOOL)force callback:(nullable CYLBooleanResultBlock)callback;
 
-/// Closes the session. ChatKit resets its services after a successful close.
+/*!
+
+ * Closes the session. ChatKit resets its services after a successful close.
+
+ */
 - (void)closeWithCallback:(nullable CYLBooleanResultBlock)callback;
 
 @optional
 
-/// The underlying SDK client object, exposed for app code that needs SDK-specific features.
+/*!
+
+ * The underlying SDK client object, exposed for app code that needs SDK-specific features.
+
+ */
 - (nullable id)client;
 
-/// Called by `+[CYLChatKit setAppId:appKey:]` so the provider can initialize its SDK.
+/*!
+ * Called by `+[CYLChatKit setAppId:appKey:]` so the provider can initialize its SDK.
+ */
 - (void)setAppId:(NSString *)appId appKey:(NSString *)appKey;
 
-/// Called by `+[CYLChatKit setAllLogsEnabled:]`.
+/*!
+ * Called by `+[CYLChatKit setAllLogsEnabled:]`.
+ */
 - (void)setAllLogsEnabled:(BOOL)enabled;
 
 @end
 
 #pragma mark - Conversation
 
-/// Fetching, creating, and joining conversations.
+/*!
+
+ * Fetching, creating, and joining conversations.
+
+ */
 @protocol CYLIMConversationProvider <NSObject>
 
 @required
 
 - (void)fetchConversationWithConversationId:(NSString *)conversationId callback:(nullable CYLIMConversationResultBlock)callback;
 
-/// The callback array contains objects conforming to `CYLConversationProtocol`.
+/*!
+
+ * The callback array contains objects conforming to `CYLConversationProtocol`.
+
+ */
 - (void)fetchConversationsWithConversationIds:(NSSet<NSString *> *)conversationIds callback:(nullable CYLArrayResultBlock)callback;
 
-/// Fetches, or creates if needed, the one-to-one conversation with `peerId`.
+/*!
+
+ * Fetches, or creates if needed, the one-to-one conversation with `peerId`.
+
+ */
 - (void)fetchConversationWithPeerId:(NSString *)peerId callback:(nullable CYLIMConversationResultBlock)callback;
 
 /*!
@@ -110,22 +150,38 @@ typedef void (^CYLIMRecentConversationsResultBlock)(NSArray<id<CYLConversationPr
                                unique:(BOOL)unique
                              callback:(nullable CYLIMConversationResultBlock)callback;
 
-/// Adds the current user to the conversation. Used when `enableAutoJoin` is YES.
+/*!
+
+ * Adds the current user to the conversation. Used when `enableAutoJoin` is YES.
+
+ */
 - (void)joinConversation:(id<CYLConversationProtocol>)conversation callback:(nullable CYLBooleanResultBlock)callback;
 
-/// Marks all messages of the conversation as read on the server and clears its mention flag.
+/*!
+
+ * Marks all messages of the conversation as read on the server and clears its mention flag.
+
+ */
 - (void)markConversationAsRead:(id<CYLConversationProtocol>)conversation;
 
 @optional
 
-/// Called before ChatKit uses a conversation, for example to attach it to the current SDK client.
+/*!
+
+ * Called before ChatKit uses a conversation, for example to attach it to the current SDK client.
+
+ */
 - (void)prepareConversation:(id<CYLConversationProtocol>)conversation;
 
 @end
 
 #pragma mark - Message
 
-/// Converting, sending, loading, editing, and recalling messages.
+/*!
+
+ * Converting, sending, loading, editing, and recalling messages.
+
+ */
 @protocol CYLIMMessageProvider <NSObject>
 
 @required
@@ -165,13 +221,21 @@ typedef void (^CYLIMRecentConversationsResultBlock)(NSArray<id<CYLConversationPr
                                 limit:(NSInteger)limit
                              callback:(nullable CYLArrayResultBlock)callback;
 
-/// Replaces the text of a sent message. The callback returns the new SDK message.
+/*!
+
+ * Replaces the text of a sent message. The callback returns the new SDK message.
+
+ */
 - (void)updateMessage:(id<CYLIMMessageProtocol>)oldMessage
              withText:(NSString *)text
          conversation:(id<CYLConversationProtocol>)conversation
              callback:(nullable CYLIMMessageResultBlock)callback;
 
-/// Recalls a sent message. The callback returns the recalled SDK message.
+/*!
+
+ * Recalls a sent message. The callback returns the recalled SDK message.
+
+ */
 - (void)recallMessage:(id<CYLIMMessageProtocol>)message
          conversation:(id<CYLConversationProtocol>)conversation
              callback:(nullable CYLIMMessageResultBlock)callback;
@@ -216,19 +280,31 @@ typedef void (^CYLIMRecentConversationsResultBlock)(NSArray<id<CYLConversationPr
  */
 - (void)findRecentConversationsWithBlock:(nullable CYLIMRecentConversationsResultBlock)block;
 
-/// Fetches the current user's conversations from the server.
+/*!
+
+ * Fetches the current user's conversations from the server.
+
+ */
 - (void)fetchRelationConversationsFromServerCallback:(nullable CYLArrayResultBlock)block;
 
 @optional
 
-/// Prepares the local store for a user. Providers usually do this when opening the session.
+/*!
+
+ * Prepares the local store for a user. Providers usually do this when opening the session.
+
+ */
 - (void)setupDatabaseWithUserId:(NSString *)userId;
 
 @end
 
 #pragma mark - Failed messages
 
-/// The local store of messages that failed to send, so they can be shown and resent later.
+/*!
+
+ * The local store of messages that failed to send, so they can be shown and resent later.
+
+ */
 @protocol CYLIMFailedMessageProvider <NSObject>
 
 @required
@@ -244,7 +320,11 @@ typedef void (^CYLIMRecentConversationsResultBlock)(NSArray<id<CYLConversationPr
 
 #pragma mark - Push
 
-/// Optional remote notification support.
+/*!
+
+ * Optional remote notification support.
+
+ */
 @protocol CYLIMPushProvider <NSObject>
 
 @optional
@@ -260,7 +340,11 @@ typedef void (^CYLIMRecentConversationsResultBlock)(NSArray<id<CYLConversationPr
 
 #pragma mark - Provider
 
-/// Everything ChatKit needs from an IM backend.
+/*!
+
+ * Everything ChatKit needs from an IM backend.
+
+ */
 @protocol CYLIMProvider <CYLIMSessionProvider,
                           CYLIMConversationProvider,
                           CYLIMMessageProvider,

@@ -12,9 +12,15 @@
 
 + (NSBundle *)cyl_bundleForName:(NSString *)bundleName class:(Class)aClass;
 
-/// Path of `<bundleName>.bundle` inside the bundle that contains `aClass`, ignoring customized bundles.
+/*!
+
+ * Path of `<bundleName>.bundle` inside the bundle that contains `aClass`, ignoring customized bundles.
+
+ */
 + (NSString *)cyl_bundlePathForbundleName:(NSString *)bundleName class:(Class)aClass;
-/// `<bundleName>.bundle` inside the bundle that contains `aClass`, ignoring customized bundles.
+/*!
+ * `<bundleName>.bundle` inside the bundle that contains `aClass`, ignoring customized bundles.
+ */
 + (NSBundle *)cyl_bundleForbundleName:(NSString *)bundleName class:(Class)aClass;
 
 @end

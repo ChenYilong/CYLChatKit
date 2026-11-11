@@ -10,7 +10,7 @@
 #import "CYLServiceDefinition.h"
 #import "CYLUserDelegate.h"
 
-/**
+/*!
  *  You must implement `-setFetchProfilesBlock:` to allow LeanCloudChatKit to get user information by user clientId.
  *   The following example shows how to use AVUser as the user system:
 

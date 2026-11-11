@@ -20,12 +20,12 @@
 
 @property (nonatomic, copy) NSString *URLString;
 
-/**
+/*!
  *  identifier -> 主要作用是提供记录,用来控制对应的tableViewCell的状态
  */
 @property (nonatomic, copy) NSString *identifier;
 
-/**
+/*!
  *  当前播放器播放的状态,当tableView滚动时,匹配index来设置对应的audioPlayerState
  */
 @property (nonatomic, assign) CYLVoiceMessageState audioPlayerState;

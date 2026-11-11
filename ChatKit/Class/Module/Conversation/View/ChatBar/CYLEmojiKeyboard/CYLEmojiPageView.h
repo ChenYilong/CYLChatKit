@@ -16,7 +16,7 @@
 
 @property (nonatomic, assign) id<CYLEmojiPageViewDelegate> delegate;
 
-/**
+/*!
  Creates and returns an EmojiPageView
 
  @param backSpaceButtonImage Imge to be used to present the back space button.
@@ -32,7 +32,7 @@ backSpaceButtonImage:(UIImage *)backSpaceButtonImage
                rows:(NSUInteger)rows
             columns:(NSUInteger)columns;
 
-/**
+/*!
  Sets texts on buttons in the EmojiPageView.
 
  @param buttonTexts An array of texts to be set on buttons in EmojiPageView
@@ -43,14 +43,14 @@ backSpaceButtonImage:(UIImage *)backSpaceButtonImage
 
 @protocol CYLEmojiPageViewDelegate <NSObject>
 
-/**
+/*!
  Delegate method called when user taps an emoji button
  @param emojiPageView EmojiPageView object on which user has tapped.
  @param emoji Emoji pressed by user
  */
 - (void)emojiPageView:(CYLEmojiPageView *)emojiPageView didUseEmoji:(NSString *)emoji;
 
-/**
+/*!
  Delegate method called when user taps on the backspace button
  @param emojiPageView EmojiPageView object on which user has tapped.
  */

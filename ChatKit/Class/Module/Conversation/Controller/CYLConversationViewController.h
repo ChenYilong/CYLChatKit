@@ -29,9 +29,9 @@ FOUNDATION_EXTERN NSString *const CYLConversationViewControllerErrorDomain;
 @property (nonatomic, copy, readonly) NSString *peerId;
 
 #pragma mark - Initialize a unique single chat type object of CYLConversationViewController
-///=============================================================================
-/// @name Initialize a unique single chat type object of CYLConversationViewController
-///=============================================================================
+/*!
+ * @name Initialize a unique single chat type object of CYLConversationViewController
+ */
 
 /*!
  * @param PeerId id of the peer, a unique single conversation should be initialized with this property.
@@ -44,9 +44,9 @@ FOUNDATION_EXTERN NSString *const CYLConversationViewControllerErrorDomain;
 - (instancetype)initWithPeerId:(NSString *)peerId;
 
 #pragma mark - Initialize a single or group chat type object of CYLConversationViewController
-///=============================================================================
-/// @name Initialize a single or group chat type object of CYLConversationViewController
-///=============================================================================
+/*!
+ * @name Initialize a single or group chat type object of CYLConversationViewController
+ */
 
 /*!
  * @param conversationId Id of the conversation, group conversation should be initialized with this property.
@@ -71,9 +71,9 @@ FOUNDATION_EXTERN NSString *const CYLConversationViewControllerErrorDomain;
 - (id<CYLConversationProtocol>)getConversationIfExists;
 
 #pragma mark - send Message
-///=============================================================================
-/// @name send Message
-///=============================================================================
+/*!
+ * @name send Message
+ */
 
 /*!
  *  文本发送
@@ -151,9 +151,9 @@ FOUNDATION_EXTERN NSString *const CYLConversationViewControllerErrorDomain;
 @property (nonatomic, assign, getter=isDisableTitleAutoConfig) BOOL disableTitleAutoConfig;
 
 #pragma mark - Handler
-///=============================================================================
-/// @name Handler
-///=============================================================================
+/*!
+ * @name Handler
+ */
 
 /*!
  * 设置获取 conversation 对象结束后的 Handler。 这里可以做异常处理，比如获取失败等操作。

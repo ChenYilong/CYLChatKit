@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface UIColor (CYLExtension)
-/**
+/*!
  *  转16进制颜色 不需要转“#”号
  */
 + (UIColor *)CJ_16_Color:(NSString *)code;

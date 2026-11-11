@@ -19,7 +19,7 @@ static CGFloat const kCYLChatBarMinHeight = kCYLChatBarTextViewFrameMinHeight + 
 FOUNDATION_EXTERN NSString *const kCYLBatchDeleteTextPrefix;
 FOUNDATION_EXTERN NSString *const kCYLBatchDeleteTextSuffix;
 
-/**
+/*!
  *  functionView 类型
  */
 typedef NS_ENUM(NSUInteger, CYLFunctionViewShowType){
@@ -32,7 +32,7 @@ typedef NS_ENUM(NSUInteger, CYLFunctionViewShowType){
 
 @protocol CYLChatBarDelegate;
 
-/**
+/*!
  *  信息输入框,支持语音,文字,表情,选择照片,拍照
  */
 @interface CYLChatBar : UIView
@@ -65,19 +65,19 @@ typedef NS_ENUM(NSUInteger, CYLFunctionViewShowType){
 - (void)appendString:(NSString *)string beginInputing:(BOOL)beginInputing;
 - (void)appendString:(NSString *)string mentionList:(NSArray<NSString *> *)mentionList;
 
-/**
+/*!
  *  结束输入状态
  */
 - (void)endInputing;
 
-/**
+/*!
  *  进入输入状态
  */
 - (void)beginInputing;
 
 @end
 
-/**
+/*!
  *  CYLChatBar代理事件,发送图片,地理位置,文字,语音信息等
  */
 @protocol CYLChatBarDelegate <NSObject>

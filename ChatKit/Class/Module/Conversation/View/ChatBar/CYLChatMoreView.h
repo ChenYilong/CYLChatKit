@@ -11,7 +11,7 @@
 
 static CGFloat const kFunctionViewHeight = 210.0f;
 @class CYLChatBar;
-/**
+/*!
  *  更多view
  */
 @interface CYLChatMoreView : UIView

@@ -29,12 +29,12 @@ FOUNDATION_EXTERN NSString *const CYLConversationServiceErrorDomain;
  */
 @interface CYLConversationService : CYLSingleton <CYLConversationService>
 
-/**
+/*!
  *  当前正在聊天的 conversationId，当前不在聊天界面则为nil。如果想判断当前是否在对话页面，请判断该值是否为nil。
  */
 @property (nonatomic, strong) NSString *currentConversationId;
 
-/**
+/*!
  *  推送弹框点击时记录的 convid
  */
 @property (nonatomic, strong) NSString *remoteNotificationConversationId;
@@ -86,7 +86,7 @@ FOUNDATION_EXTERN NSString *const CYLConversationServiceErrorDomain;
                                      limit:(NSInteger)limit
                                      block:(CYLArrayResultBlock)block;
 
-/**
+/*!
  *  删除对话对应的UIProfile缓存，比如当用户信息发生变化时
  *  @param  conversationID 对话，可以是单聊，也可是群聊
  */
@@ -94,11 +94,11 @@ FOUNDATION_EXTERN NSString *const CYLConversationServiceErrorDomain;
 - (void)updateConversationAsReadWithLastMessage:(id)lastMessage;
 
 #pragma mark - 最近对话的本地缓存，最近对话将保存在本地数据库中
-///=============================================================================
-/// @name 最近对话的本地缓存，最近对话将保存在本地数据库中
-///=============================================================================
+/*!
+ * @name 最近对话的本地缓存，最近对话将保存在本地数据库中
+ */
 
-/**
+/*!
  *  会在 openClient 时调用
  */
 - (void)setupDatabaseWithUserId:(NSString *)userId;
@@ -107,14 +107,14 @@ FOUNDATION_EXTERN NSString *const CYLConversationServiceErrorDomain;
 - (void)insertRecentConversations:(NSArray<id<CYLConversationProtocol>> *)conversations;
 - (void)insertRecentConversations:(NSArray<id<CYLConversationProtocol>> *)conversations shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 - (void)increaseUnreadCount:(NSUInteger)increaseUnreadCount withConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
-/**
+/*!
  *  更新 mentioned 值，当接收到消息发现 @了我的时候，设为 YES，进入聊天页面，设为 NO
  *  @param mentioned  要更新的值
  *  @param conversationId 相应对话
  */
 - (void)updateMentioned:(BOOL)mentioned conversationId:(NSString *)conversationId;
 - (void)updateMentioned:(BOOL)mentioned conversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
-/**
+/*!
  *  更新 draft 值
  *  @param draft  要更新的值
  *  @param conversationId 相应对话
@@ -122,7 +122,7 @@ FOUNDATION_EXTERN NSString *const CYLConversationServiceErrorDomain;
 - (void)updateDraft:(NSString *)draft conversationId:(NSString *)conversationId;
 - (void)updateDraft:(NSString *)draft conversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 
-/**
+/*!
  *  更新每条最近对话记录里的 conversation 值，也即某对话的名字、成员可能变了，需要更新应用打开时，第一次加载最近对话列表时，会去向服务器要对话的最新数据，然后更新
  *  @param conversations 要更新的对话
  */
@@ -133,13 +133,13 @@ FOUNDATION_EXTERN NSString *const CYLConversationServiceErrorDomain;
 - (void)deleteRecentConversationWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
 - (void)updateUnreadCountToZeroWithConversationId:(NSString *)conversationId shouldRefreshWhenFinished:(BOOL)shouldRefreshWhenFinished;
  
-/**
+/*!
  *  从数据库查找所有的对话，即所有的最近对话
  *  @return 对话数据
  */
 - (NSArray *)allRecentConversations;
 
-/**
+/*!
  *  判断某对话是否存在于本地数据库。接收到消息的时候用，sdk 传过来的对话的members 等数据可能是空的，如果本地数据库存在该对话，则不去服务器请求对话了。如果不存在，则向服务器请求对话的元数据。使得在最近对话列表，取出对话的时候，对话都有元数据。
  *  @param conversationId 某对话
  *  @return 是否存在
@@ -149,9 +149,9 @@ FOUNDATION_EXTERN NSString *const CYLConversationServiceErrorDomain;
 - (NSString *)draftWithConversationId:(NSString *)conversationId;
 
 #pragma mark - FailedMessageStore
-///=============================================================================
-/// @name FailedMessageStore
-///=============================================================================
+/*!
+ * @name FailedMessageStore
+ */
 
 /*!
  *  失败消息的管理类，职责：
@@ -173,20 +173,20 @@ FOUNDATION_EXTERN NSString *const CYLConversationServiceErrorDomain;
  
  */
 
-/**
+/*!
  *  发送消息失败时调用
  *  @param message 相应的消息
  */
 - (void)insertFailedMessage:(id<CYLIMMessageProtocol>)message;
 - (void)insertFailedCYLMessage:(CYLMessage *)message;
-/**
+/*!
  *  重发成功的时候调用
  *  @param recordId 记录的 id
  *  @return
  */
 - (BOOL)deleteFailedMessageByRecordId:(NSString *)recordId;
 
-/**
+/*!
  *  查找失败的消息。进入聊天页面时调用，若聊天服务连通，则把失败的消息重发，否则，加在列表尾部。
  *  @param conversationId 对话的 id
  *  @return 消息数组

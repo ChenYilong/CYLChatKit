@@ -36,6 +36,6 @@ Claude-Session: https://claude.ai/code/session_...
 
 1. `touch .git/hooks/NO_AUTO_SYNC`, then install the `commit-msg` hook from `AGENTS.md`.
 2. Update `.gitignore` against CYLTabBarController's and run `git status --short --ignored`.
-3. Run `python3 scripts/check-localizations.py`, `python3 scripts/check-naming.py`, and `shellcheck scripts/*.sh`.
+3. Run `python3 scripts/check-localizations.py`, `python3 scripts/check-naming.py`, `python3 scripts/check-comments.py`, and `shellcheck scripts/*.sh`.
 4. Record every unfinished or unverified item as `TODO` in the matching `docs/` file.
 5. On a branch other than `master` or `main`, commit and push without asking; on `master` or `main`, ask first.

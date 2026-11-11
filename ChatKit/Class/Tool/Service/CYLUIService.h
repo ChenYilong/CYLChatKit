@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CYLServiceDefinition.h"
 
-/**
+/*!
  *  UIService Error Domain
  */
 FOUNDATION_EXTERN NSString *const CYLUIServiceErrorDomain;
@@ -24,7 +24,7 @@ typedef void(^CYLUnreadCountChangedBlock)(NSInteger count);
 @property (nonatomic, copy, readonly) CYLUnreadCountChangedBlock unreadCountChangedBlock;
 - (void)setUnreadCountChangedBlock:(CYLUnreadCountChangedBlock)unreadCountChangedBlock;
 //TODO:
-/**
+/*!
  *  新消息通知
  */
 typedef void(^CYLOnNewMessageBlock)(NSString *senderId, NSString *content, NSInteger type, NSDate *time);
