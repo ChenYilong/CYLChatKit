@@ -75,12 +75,12 @@
 - (void)setUpTabBarItemsAttributesForController:(CYLTabBarController *)tabBarController {
     
     NSDictionary *dict1 = @{
-                            CYLTabBarItemTitle : @"消息",
+                            CYLTabBarItemTitle : LCCKExampleLocalizedString(@"tab.messages", @"Messages"),
                             CYLTabBarItemImage : @"tabbar_chat_normal",
                             CYLTabBarItemSelectedImage : @"tabbar_chat_active",
                             };
     NSDictionary *dict2 = @{
-                            CYLTabBarItemTitle : @"联系人",
+                            CYLTabBarItemTitle : LCCKExampleLocalizedString(@"tab.contacts", @"Contacts"),
                             CYLTabBarItemImage : @"tabbar_contacts_normal",
                             CYLTabBarItemSelectedImage : @"tabbar_contacts_active",
                             };

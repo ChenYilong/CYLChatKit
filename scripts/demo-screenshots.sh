@@ -140,7 +140,14 @@ shoot() {
     local name="$1"; shift
     local started
     started=$(mktemp)
-    xcrun simctl launch --terminate-running-process "$DEVICE_ID" "$BUNDLE_ID" -LCCKDemoScreenshots YES "$@"
+    local data
+    # The data container exists only after the first launch, so look it up again after launching below.
+    data=$(xcrun simctl get_app_container "$DEVICE_ID" "$BUNDLE_ID" data 2>/dev/null || true)
+    if [[ -n "$data" ]]; then
+        rm -f "$data/Documents/accessibility.txt"
+    fi
+    xcrun simctl launch --terminate-running-process "$DEVICE_ID" "$BUNDLE_ID" -LCCKDemoScreenshots YES \
+        -LCCKDemoAccessibilityDump YES "$@"
     sleep 8
     if ! xcrun simctl spawn "$DEVICE_ID" launchctl list | grep -q "$BUNDLE_ID"; then
         echo "::error::$BUNDLE_ID is not running after launch ($name); it crashed"
@@ -167,15 +174,60 @@ shoot() {
     echo "===BEGIN SCREENSHOT $name.jpg==="
     base64 -i "$OUT/$name.jpg" | fold -w 120
     echo "===END SCREENSHOT $name.jpg==="
+    # What VoiceOver would find on this screen (the app writes it; see AppDelegate -dumpAccessibilityIfRequested).
+    data=$(xcrun simctl get_app_container "$DEVICE_ID" "$BUNDLE_ID" data 2>/dev/null || true)
+    DUMP="$data/Documents/accessibility.txt"
+    # The app writes it a few seconds after it starts, which can be after the screenshot on a slow first launch.
+    local wait=0
+    while [[ -n "$data" && ! -f "$DUMP" && "$wait" -lt 10 ]]; do
+        sleep 2
+        wait=$((wait + 1))
+    done
+    if [[ -n "$data" && -f "$DUMP" ]]; then
+        cp "$DUMP" "$OUT/$name.accessibility.txt"
+        echo "===BEGIN ACCESSIBILITY $name==="
+        cat "$DUMP"
+        echo "===END ACCESSIBILITY $name==="
+    else
+        echo "::warning::no accessibility dump for $name"
+    fi
+}
+
+# Accessibility acceptance (AGENTS.md, "Accessibility"): the screen's dump must contain an element with this stable
+# identifier and this label. Drives the check through accessibility, as a UI test would.
+expect_accessibility() {
+    local name="$1" identifier="$2" label="$3"
+    if ! grep "id=\"$identifier\"" "$OUT/$name.accessibility.txt" 2>/dev/null | grep -q "label=\"$label\""; then
+        echo "::error::$name: no accessibility element with id \"$identifier\" and label \"$label\""
+        A11Y="$A11Y $name:$identifier"
+    fi
 }
 
 CRASHED=""
 BLACK=""
+A11Y=""
 shoot login
+expect_accessibility login LCCKLoginClientIdTextField "Client ID"
 shoot conversations -LCCKDemoScreen conversations
 shoot chat -LCCKDemoScreen chat
+expect_accessibility chat CYLChatBarSendButton "Send"
+expect_accessibility chat CYLChatBarTextView "Message"
 # The chat with the keyboard up: the app focuses the input field next to the 发送 button, as a tap would.
 shoot chat-keyboard -LCCKDemoScreen chat -LCCKDemoKeyboard YES
+
+# Visual accessibility: the largest of the usual Dynamic Type sizes (Larger Text, accessibility size 3), with a sample
+# message typed in, so the scaled text view and send button show.
+xcrun simctl ui "$DEVICE_ID" content_size accessibility-extra-large || echo "::warning::could not set the text size"
+shoot chat-large-text -LCCKDemoScreen chat -LCCKDemoText "Hello Jerry, this is a longer sample message that wraps"
+xcrun simctl ui "$DEVICE_ID" content_size large || true
+
+# Localization: the same screens in Simplified Chinese. The strings come from the core bundle (Other.bundle) and the
+# example bundle (LCCKExample.bundle) through their two macros.
+shoot login-zh -AppleLanguages "(zh-Hans)" -AppleLocale zh_CN
+expect_accessibility login-zh LCCKLoginClientIdTextField "客户端 ID"
+shoot chat-zh -LCCKDemoScreen chat -AppleLanguages "(zh-Hans)" -AppleLocale zh_CN
+expect_accessibility chat-zh CYLChatBarSendButton "发送"
+expect_accessibility chat-zh CYLChatBarTextView "消息"
 
 xcrun simctl spawn "$DEVICE_ID" log show --last 2m --style compact \
     --predicate "process == \"$PROCESS_NAME\"" > "$OUT/app.log" 2>/dev/null || true
@@ -186,5 +238,9 @@ if [[ -n "$CRASHED" ]]; then
 fi
 if [[ -n "$BLACK" ]]; then
     echo "error: these screenshots stayed black:$BLACK" >&2
+    exit 1
+fi
+if [[ -n "$A11Y" ]]; then
+    echo "error: missing accessibility elements:$A11Y" >&2
     exit 1
 fi

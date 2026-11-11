@@ -75,7 +75,51 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
     [self showScreenForScreenshotIfRequested];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    [self dumpAccessibilityIfRequested];
     return YES;
+}
+
+/*!
+ * `-LCCKDemoAccessibilityDump YES` writes what VoiceOver would find on the screen, element by element, to
+ * Documents/accessibility.txt a few seconds after launch. CI (scripts/demo-screenshots.sh) prints that file next to each
+ * screenshot, so a run shows the accessibility labels, hints, and identifiers and not only the pixels.
+ */
+- (void)dumpAccessibilityIfRequested {
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"LCCKDemoAccessibilityDump"]) {
+        return;
+    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSMutableString *dump = [NSMutableString string];
+        [self appendAccessibilityOfObject:self.window depth:0 to:dump];
+        NSString *directory = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+        [dump writeToFile:[directory stringByAppendingPathComponent:@"accessibility.txt"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    });
+}
+
+/// Walks like VoiceOver: an accessibility element ends the walk; a container lists its `accessibilityElements`, any
+/// other view its visible subviews.
+- (void)appendAccessibilityOfObject:(id)object depth:(NSInteger)depth to:(NSMutableString *)dump {
+    if ([object isKindOfClass:[UIView class]]) {
+        UIView *view = object;
+        if (view.isHidden || view.alpha < 0.01 || view.accessibilityElementsHidden) {
+            return;
+        }
+    }
+    NSString *indent = [@"" stringByPaddingToLength:(NSUInteger)depth * 2 withString:@" " startingAtIndex:0];
+    if ([object isAccessibilityElement]) {
+        [dump appendFormat:@"%@%@ label=\"%@\" value=\"%@\" hint=\"%@\" id=\"%@\" traits=0x%llx\n",
+         indent, NSStringFromClass([object class]),
+         [object accessibilityLabel] ?: @"", [object accessibilityValue] ?: @"", [object accessibilityHint] ?: @"",
+         [object accessibilityIdentifier] ?: @"", (unsigned long long)[object accessibilityTraits]];
+        return;
+    }
+    NSArray *children = [object accessibilityElements];
+    if (children.count == 0 && [object isKindOfClass:[UIView class]]) {
+        children = [(UIView *)object subviews];
+    }
+    for (id child in children) {
+        [self appendAccessibilityOfObject:child depth:depth + 1 to:dump];
+    }
 }
 
 /*!
@@ -83,6 +127,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
  * without logging in to the IM service, which a CI runner cannot rely on:
  * - `conversations`: the tab bar with the conversation list.
  * - `chat`: a conversation screen with the chat input bar.
+ * `-LCCKDemoText <text>` (with `chat`) types that text into the input field without opening the keyboard.
  * `-LCCKDemoKeyboard YES` (with `chat`) then focuses the input field next to the 发送 (send) button, the same as
  * tapping it, so the keyboard comes up and the screenshot shows the chat bar sitting on it.
  * Without the argument the app starts at the login screen as usual.
@@ -100,6 +145,12 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
         if ([firstViewController isKindOfClass:[UINavigationController class]]) {
             CYLConversationViewController *conversationViewController = [[CYLConversationViewController alloc] initWithPeerId:@"Jerry"];
             [(UINavigationController *)firstViewController pushViewController:conversationViewController animated:NO];
+            NSString *demoText = [[NSUserDefaults standardUserDefaults] stringForKey:@"LCCKDemoText"];
+            if (demoText.length > 0) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [conversationViewController.chatBar appendString:demoText beginInputing:NO];
+                });
+            }
             if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LCCKDemoKeyboard"]) {
                 // The chat bar is opened in -viewDidAppear:, so wait until the screen is up.
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

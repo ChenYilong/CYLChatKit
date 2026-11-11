@@ -25,6 +25,13 @@ launch argument `-LCCKDemoScreen` (an `NSUserDefaults` key):
 - no argument: the normal login screen (`login.png`)
 - `-LCCKDemoScreen conversations`: the tab bar UI without logging in (`conversations.png`)
 - `-LCCKDemoScreen chat`: a conversation view with peer `Jerry` pushed on the first tab (`chat.png`)
+- `-LCCKDemoScreen chat -LCCKDemoText <text>`: the same chat with that text typed into the input field and no keyboard; with the
+  text size set to accessibility size 3 it is the `chat-large-text.png` screenshot (Dynamic Type).
+- `-AppleLanguages "(zh-Hans)" -AppleLocale zh_CN` on the login screen and on the chat: `login-zh.png` and `chat-zh.png`, the
+  same screens in Simplified Chinese (core strings from `Other.bundle`, example strings from `LCCKExample.bundle`).
+- `-LCCKDemoAccessibilityDump YES` (every launch): the app writes the screen's accessibility tree and the script prints it
+  after each screenshot (`===BEGIN ACCESSIBILITY <name>===`), then fails the job when `expect_accessibility` finds no
+  element with an expected identifier and label (`docs/accessibility.md`).
 - `-LCCKDemoScreen chat -LCCKDemoKeyboard YES`: the same chat with the input field focused, as a tap on the field next to
   the 发送 (send) button would do, so the keyboard is up (`chat-keyboard.png`; see `docs/chat-bar-keyboard.md`). Before the
   simulator boots, the script writes the keyboard's "Slide to Type" introduction as already shown, so that sheet does not

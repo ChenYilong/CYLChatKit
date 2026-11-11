@@ -40,6 +40,11 @@
     // Fill in the client ID saved by the last login.
     NSString *clientId = [[NSUserDefaults standardUserDefaults] stringForKey:LCCK_KEY_USERID];
     self.autocompleteTextField.text = clientId;
+    // Localized text (the nib holds only a Chinese placeholder) and the VoiceOver label for the field.
+    self.demoTitle.text = LCCKExampleLocalizedString(@"login.title", @"Enter any ClientID to start chatting");
+    self.autocompleteTextField.accessibilityLabel = LCCKExampleLocalizedString(@"login.clientid", @"Client ID");
+    self.autocompleteTextField.accessibilityHint = LCCKExampleLocalizedString(@"login.clientid.hint", nil);
+    self.autocompleteTextField.accessibilityIdentifier = @"LCCKLoginClientIdTextField";
     [self.autocompleteTextField setBorderStyle:UITextBorderStyleRoundedRect];
     // CI screenshots keep the keyboard (and its first-run swipe-typing introduction) off the screen.
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"LCCKDemoScreenshots"]) {

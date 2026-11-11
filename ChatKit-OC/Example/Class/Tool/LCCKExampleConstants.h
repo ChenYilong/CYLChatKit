@@ -95,8 +95,6 @@
 #define kStringMessageBarErrorMessage LCCKExampleLocalizedString(@"message.bar.error.message", nil)
 #define kStringMessageBarSuccessTitle LCCKExampleLocalizedString(@"message.bar.success.title", nil)
 #define kStringMessageBarSuccessMessage LCCKExampleLocalizedString(@"message.bar.success.message", nil)
-#define kStringMessageBarInfoTitle LCCKExampleLocalizedString(@"message.bar.info.title", nil)
-#define kStringMessageBarInfoMessage LCCKExampleLocalizedString(@"message.bar.info.message", nil)
 
 #pragma mark - Buttons
 
