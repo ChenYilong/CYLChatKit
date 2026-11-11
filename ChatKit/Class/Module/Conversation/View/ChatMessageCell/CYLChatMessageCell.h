@@ -127,8 +127,14 @@
  */
 @property (nonatomic, assign) CYLMessageReadState messageReadState;
 
-@property (nonatomic, strong) UIColor *conversationViewMessageLeftTextColor; /**< 左侧文本消息文字颜色 */
-@property (nonatomic, strong) UIColor *conversationViewMessageRightTextColor; /**< 右侧文本消息文字颜色 */
+/*!
+ * 左侧文本消息文字颜色
+ */
+@property (nonatomic, strong) UIColor *conversationViewMessageLeftTextColor;
+/*!
+ * 右侧文本消息文字颜色
+ */
+@property (nonatomic, strong) UIColor *conversationViewMessageRightTextColor;
 
 #pragma mark - Public Methods
 

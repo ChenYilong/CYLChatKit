@@ -13,11 +13,26 @@
  *  状态指示器对应状态
  */
 typedef NS_ENUM(NSUInteger, CYLProgressState){
-    CYLProgressSuccess /**< 成功 */,
-    CYLProgressError /**< 出错,失败 */,
-    CYLProgressShort /**< 时间太短失败 */,
-    CYLProgressOverTime /**< 超时 */,
-    CYLProgressMessage /**< 自定义失败提示 */,
+    /*!
+     * 成功
+     */
+    CYLProgressSuccess,
+    /*!
+     * 出错,失败
+     */
+    CYLProgressError,
+    /*!
+     * 时间太短失败
+     */
+    CYLProgressShort,
+    /*!
+     * 超时
+     */
+    CYLProgressOverTime,
+    /*!
+     * 自定义失败提示
+     */
+    CYLProgressMessage,
 };
 
 /*!

@@ -29,9 +29,19 @@ Rules:
 - First line: a one-sentence summary that starts with a verb or a noun phrase, not the declaration's name.
 - Use `@param name`, `@return`, `@note`, `@warning`, `@see`, `@code ... @endcode`. State nullability and empty values, the
   queue a callback runs on, threading, ownership, and side effects when they matter.
-- Section banners use `/*! @name Title */` as a block (and `#pragma mark - Title`). Never `///====` lines.
-- A short trailing note on the same line as a declaration may use `///<`. A comment that explains private code uses `//`
-  in the `.m` file and is not a doc comment.
+- Section banners are the same three-line block with `@name Title` (and `#pragma mark - Title`). Never `///====` lines.
+- **Single-line comments of public API use the same block.** A one-sentence comment is still three lines:
+
+  ```objc
+  /*!
+   * The latitude of the current location.
+   */
+  @property (nonatomic, readonly) CLLocationDegrees latitude;
+  ```
+
+  Never `/*! text */` on one line, and never a trailing `/**< */`, `/*!< */`, `///<`, or `//` after a declaration or an
+  enum case. A public API file has one comment format for every comment, short or long.
+- A comment that explains private code uses `//` in the `.m` file and is not a doc comment.
 - File header (`//  File.h`, creator, copyright) stays a `//` block at the top; it is not a doc comment.
 - Delete commented-out code. Never document it.
 - Write comments in English. Describe LeanCloud types in words in core.
@@ -40,17 +50,21 @@ Rules:
 
 ## Swift
 
-- One-line summary: `///`. Longer documentation: one `/** ... */` block with Markup (`- Parameter name:`, `- Returns:`,
-  `- Throws:`, `- Note:`), not stacked `///` lines.
+- Every public API comment, one line or several, is one `/** ... */` block with Markup (`- Parameter name:`,
+  `- Returns:`, `- Throws:`, `- Note:`). Never `///` lines: one format per file.
 - Swift code that is not public API (the demo) uses the same shapes but is not checked by the script.
 
 ## Other platforms (official documentation tools)
 
-Use the platform's own doc comment, one block per declaration, summary sentence first:
+The same two rules hold on every platform and in every language: one block per declaration, and the same block form for
+single-line and multi-line public API comments, so each public file has one comment format. Use the block form of the
+platform's documentation tool, summary sentence first:
 
 - Kotlin: KDoc `/** ... */` with `@param`, `@return`, `@throws`. Java: Javadoc `/** ... */`.
 - TypeScript: TSDoc `/** ... */`. JavaScript: JSDoc `/** ... */` with `@param`, `@returns`.
-- Dart and Flutter: `///` doc comments (the official Effective Dart style; this is the platform's own convention, so
-  stacked `///` is correct there).
-- Python: a docstring (PEP 257) as the first statement. Go: a comment directly above the declaration that starts with the
-  declaration's name. Rust: `///` or `/** */`. C#: XML documentation comments (`/// <summary>`).
+- Dart and Flutter: `/** ... */` (dartdoc reads it). This project keeps one block format, so it does not use Effective
+  Dart's `///` lines.
+- Python: a docstring (PEP 257) as the first statement, triple quotes on their own lines even for one sentence. Go: a
+  `/* ... */` comment directly above the declaration that starts with the declaration's name. Rust: `/** ... */`. C#:
+  `/** ... */` with XML documentation tags (`<summary>`).
+- A language whose tool has no block form uses its single doc-comment form for every comment in the file.

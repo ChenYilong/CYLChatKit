@@ -18,8 +18,14 @@
 
 @property (nonatomic,strong) void(^locationCompleteBlock)(CLLocationCoordinate2D coordinate2D);
 
-@property (assign, nonatomic, readonly) CLLocationDegrees longitude; /**< 经度 */
-@property (assign, nonatomic, readonly) CLLocationDegrees latitude; /**< 纬度 */
+/*!
+ * 经度
+ */
+@property (assign, nonatomic, readonly) CLLocationDegrees longitude;
+/*!
+ * 纬度
+ */
+@property (assign, nonatomic, readonly) CLLocationDegrees latitude;
 
 + (instancetype)shareManager;
 

@@ -14,6 +14,7 @@ Checked: all 92 public headers of `ChatKit/` (vendored code excluded).
 | Stacked `//` comments directly above a declaration | 123 blocks, 41 files | Converted to `/*! ... */` blocks (commented-out code was left alone) |
 | One `/** ... */` doc comment | 1 | Now `/*!` |
 | Single-line `/*! text */` | 12 files | Rewritten as the block form |
+| Trailing `/**< */` and `//` comments after a declaration or enum case | 43 | Moved into `/*! ... */` blocks above the declaration (single-line comments use the block format too); three commented-out enum cases in `CYLChatConstants.h` deleted |
 
 The conversion was mechanical (text unchanged). Comments that explain moved or deleted code (for example the note after
 the last declaration of `CYLMessage.h`) are plain `//` notes, not doc comments, and stay.

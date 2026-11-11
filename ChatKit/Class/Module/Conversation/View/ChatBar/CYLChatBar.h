@@ -11,10 +11,22 @@
 
 static CGFloat const CYLChatBarBottomOffset = 8.f;
 static CGFloat const CYLChatBarTextViewBottomOffset = 6 * 2;
-static CGFloat const kCYLChatBarTextViewFrameMinHeight = 37.f; //kCYLChatBarMinHeight - 2*CYLChatBarTextViewBottomOffset;
-static CGFloat const kCYLChatBarTextViewFrameMaxHeight = 102.f; //kCYLChatBarMaxHeight - 2*CYLChatBarTextViewBottomOffset;
-static CGFloat const kCYLChatBarMaxHeight = kCYLChatBarTextViewFrameMaxHeight + 2*CYLChatBarTextViewBottomOffset; //114.0f;
-static CGFloat const kCYLChatBarMinHeight = kCYLChatBarTextViewFrameMinHeight + 2*CYLChatBarTextViewBottomOffset; //49.0f;
+/*!
+ * The minimum height of the text view: `kCYLChatBarMinHeight - 2 * CYLChatBarTextViewBottomOffset`.
+ */
+static CGFloat const kCYLChatBarTextViewFrameMinHeight = 37.f;
+/*!
+ * The maximum height of the text view: `kCYLChatBarMaxHeight - 2 * CYLChatBarTextViewBottomOffset`.
+ */
+static CGFloat const kCYLChatBarTextViewFrameMaxHeight = 102.f;
+/*!
+ * The maximum height of the chat bar (114 pt).
+ */
+static CGFloat const kCYLChatBarMaxHeight = kCYLChatBarTextViewFrameMaxHeight + 2*CYLChatBarTextViewBottomOffset;
+/*!
+ * The minimum height of the chat bar (49 pt).
+ */
+static CGFloat const kCYLChatBarMinHeight = kCYLChatBarTextViewFrameMinHeight + 2*CYLChatBarTextViewBottomOffset;
 
 FOUNDATION_EXTERN NSString *const kCYLBatchDeleteTextPrefix;
 FOUNDATION_EXTERN NSString *const kCYLBatchDeleteTextSuffix;
@@ -23,11 +35,26 @@ FOUNDATION_EXTERN NSString *const kCYLBatchDeleteTextSuffix;
  *  functionView 类型
  */
 typedef NS_ENUM(NSUInteger, CYLFunctionViewShowType){
-    CYLFunctionViewShowNothing /**< 不显示functionView */,
-    CYLFunctionViewShowFace /**< 显示表情View */,
-    CYLFunctionViewShowVoice /**< 显示录音view */,
-    CYLFunctionViewShowMore /**< 显示更多view */,
-    CYLFunctionViewShowKeyboard /**< 显示键盘 */,
+    /*!
+     * 不显示functionView
+     */
+    CYLFunctionViewShowNothing,
+    /*!
+     * 显示表情View
+     */
+    CYLFunctionViewShowFace,
+    /*!
+     * 显示录音view
+     */
+    CYLFunctionViewShowVoice,
+    /*!
+     * 显示更多view
+     */
+    CYLFunctionViewShowMore,
+    /*!
+     * 显示键盘
+     */
+    CYLFunctionViewShowKeyboard,
 };
 
 @protocol CYLChatBarDelegate;

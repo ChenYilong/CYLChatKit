@@ -250,18 +250,36 @@ static NSInteger const CYLNotificationTextLengthOutLength = 1000;
  *  消息聊天类型
  */
 typedef NS_ENUM(NSUInteger, CYLConversationType){
-    CYLConversationTypeSingle = 0 /**< 单人聊天,不显示nickname */,
-    CYLConversationTypeGroup /**< 群组聊天,显示nickname */,
+    /*!
+     * 单人聊天,不显示nickname
+     */
+    CYLConversationTypeSingle = 0,
+    /*!
+     * 群组聊天,显示nickname
+     */
+    CYLConversationTypeGroup,
 };
 
 /*!
  *  消息拥有者类型
  */
 typedef NS_ENUM(NSUInteger, CYLMessageOwnerType){
-    CYLMessageOwnerTypeUnknown = 0 /**< 未知的消息拥有者 */,
-    CYLMessageOwnerTypeSystem /**< 系统消息 */,
-    CYLMessageOwnerTypeSelf NS_SWIFT_NAME(mine) /**< 自己发送的消息 */,
-    CYLMessageOwnerTypeOther /**< 接收到的他人消息 */,
+    /*!
+     * 未知的消息拥有者
+     */
+    CYLMessageOwnerTypeUnknown = 0,
+    /*!
+     * 系统消息
+     */
+    CYLMessageOwnerTypeSystem,
+    /*!
+     * 自己发送的消息
+     */
+    CYLMessageOwnerTypeSelf NS_SWIFT_NAME(mine),
+    /*!
+     * 接收到的他人消息
+     */
+    CYLMessageOwnerTypeOther,
 };
 
 /*!
@@ -276,38 +294,80 @@ static CYLMessageMediaType const kCYLIMMessageMediaTypeSystem = CYLMessageMediaT
  */
 typedef NS_ENUM(NSUInteger, CYLMessageSendState){
     CYLMessageSendStateNone = 0,
-    CYLMessageSendStateSending = 1, /**< 消息发送中 */
-    CYLMessageSendStateSent, /**< 消息发送成功 */
-    CYLMessageSendStateDelivered, /**< 消息对方已接收*/
-    CYLMessageSendStateFailed, /**< 消息发送失败 */
-    CYLMessageSendStateRead  /**< 消息已读 */
+    /*!
+     * 消息发送中
+     */
+    CYLMessageSendStateSending = 1,
+    /*!
+     * 消息发送成功
+     */
+    CYLMessageSendStateSent,
+    /*!
+     * 消息对方已接收
+     */
+    CYLMessageSendStateDelivered,
+    /*!
+     * 消息发送失败
+     */
+    CYLMessageSendStateFailed,
+    /*!
+     * 消息已读
+     */
+    CYLMessageSendStateRead
 };
 
 /*!
  *  消息读取状态,接收的消息时有
  */
 typedef NS_ENUM(NSUInteger, CYLMessageReadState) {
-    CYLMessageUnRead = 0 /**< 消息未读 */,
-    CYLMessageReading /**< 正在接收 */,
-    CYLMessageReaded /**< 消息已读 */,
+    /*!
+     * 消息未读
+     */
+    CYLMessageUnRead = 0,
+    /*!
+     * 正在接收
+     */
+    CYLMessageReading,
+    /*!
+     * 消息已读
+     */
+    CYLMessageReaded,
 };
 
 /*!
  *  录音消息的状态
  */
 typedef NS_ENUM(NSUInteger, CYLVoiceMessageState){
-    CYLVoiceMessageStateNormal,/**< 未播放状态 */
-    CYLVoiceMessageStateDownloading,/**< 正在下载中 */
-    CYLVoiceMessageStatePlaying,/**< 正在播放 */
-    CYLVoiceMessageStateCancel,/**< 播放被取消 */
+    /*!
+     * 未播放状态
+     */
+    CYLVoiceMessageStateNormal,
+    /*!
+     * 正在下载中
+     */
+    CYLVoiceMessageStateDownloading,
+    /*!
+     * 正在播放
+     */
+    CYLVoiceMessageStatePlaying,
+    /*!
+     * 播放被取消
+     */
+    CYLVoiceMessageStateCancel,
 };
 
 /*!
  *  CYLChatMessageCell menu对应action类型
  */
 typedef NS_ENUM(NSUInteger, CYLChatMessageCellMenuActionType) {
-    CYLChatMessageCellMenuActionTypeCopy, /**< 复制 */
-    CYLChatMessageCellMenuActionTypeRelay, /**< 转发 */
+    /*!
+     * 复制
+     */
+    CYLChatMessageCellMenuActionTypeCopy,
+    /*!
+     * 转发
+     */
+    CYLChatMessageCellMenuActionTypeRelay,
 };
 static CGFloat const kCYLVolumeMaxTimeLength = 60;
 static NSInteger const kCYLOnePageSize = 10;
@@ -387,14 +447,26 @@ static NSString *const CYLInputViewPluginClassKey = @"CYLInputViewPluginClassKey
  *  默认插件的类型定义
  */
 typedef NS_ENUM(NSUInteger, CYLInputViewPluginType) {
-    CYLInputViewPluginTypeDefault = 0,       /**< 默认未知类型 */
-    CYLInputViewPluginTypeTakePhoto = -1,         /**< 拍照 */
-    CYLInputViewPluginTypePickImage = -2,         /**< 选择照片 */
-    CYLInputViewPluginTypeLocation = -3,          /**< 地理位置 */
-    CYLInputViewPluginTypeShortVideo = -4,        /**< 短视频 */
-//    CYLInputViewPluginTypeMorePanel= -7,         /**< 显示更多面板 */
-//    CYLInputViewPluginTypeText = -1,              /**< 文本输入 */
-//    CYLInputViewPluginTypeVoice = -2,             /**< 语音输入 */
+    /*!
+     * 默认未知类型
+     */
+    CYLInputViewPluginTypeDefault = 0,
+    /*!
+     * 拍照
+     */
+    CYLInputViewPluginTypeTakePhoto = -1,
+    /*!
+     * 选择照片
+     */
+    CYLInputViewPluginTypePickImage = -2,
+    /*!
+     * 地理位置
+     */
+    CYLInputViewPluginTypeLocation = -3,
+    /*!
+     * 短视频
+     */
+    CYLInputViewPluginTypeShortVideo = -4,
 };
 
 #define CYL_CURRENT_CONVERSATIONVIEWCONTROLLER_OBJECT              \

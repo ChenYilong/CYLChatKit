@@ -55,17 +55,24 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
     ```
 
     One block per declaration, placed directly above it. Do not use `/** */` (one style only), and do not stack
-    `//` or `///` lines to build a multi-line comment. A short trailing `///<` after a declaration is allowed.
-  - Swift: a one-line summary uses `///`; anything longer uses a `/** ... */` block with Markup (`- Parameter`,
-    `- Returns`, `- Note`), not stacked `///` lines.
-  - Other platforms follow their official documentation tools, with the same rule of one block per declaration:
+    `//` or `///` lines to build a multi-line comment.
+  - **Single-line public API comments use the same block format.** A one-sentence comment is still written as
+    `/*!` / ` * text` / ` */` on its own lines above the declaration: no `/*! text */` on one line, no trailing
+    `/**< */`, `/*!< */`, `///<`, or `//` after a declaration (enum cases and properties included). One comment format per
+    public API file, for multi-line and single-line comments alike. This applies to every platform and language: pick
+    the platform's block doc-comment form below and use it for every public API comment in that file, short or long.
+  - Swift: every public API comment, one line or several, is one `/** ... */` block with Markup (`- Parameter`,
+    `- Returns`, `- Note`), never `///` lines, so a file has one format.
+  - Other platforms use the block form of their official documentation tool, for single-line and multi-line comments:
     Kotlin and Java `/** ... */` (KDoc, Javadoc: `@param`, `@return`), TypeScript and JavaScript `/** ... */` (TSDoc, JSDoc),
-    Dart and Flutter `///` doc comments (Effective Dart: a one-sentence summary first), Python docstrings (PEP 257),
-    Go doc comments directly above the declaration, C# XML documentation (`<summary>`), Rust `///` or `/** */`.
+    Dart and Flutter `/** ... */` (dartdoc reads it; this project keeps one block format instead of Effective Dart's
+    `///` lines), Python docstrings (PEP 257, triple quotes on their own lines), Go a `/* ... */` doc comment directly
+    above the declaration, C# `/** ... */` with XML documentation tags (`<summary>`), Rust `/** ... */`. A language whose
+    tool has no block form uses its one doc-comment form for every comment in the file.
   - Comments are English. Describe LeanCloud types in words in core. Do not document commented-out code, and delete it
     instead of keeping it.
-  - `scripts/check-comments.py` (CI job `Naming and comment rules`) fails on `///`, stacked `//`, and `/** */` doc comments
-    in core headers. Record undocumented public declarations as `TODO` in `docs/api-comments.md`.
+  - `scripts/check-comments.py` (CI job `Naming and comment rules`) fails on `///`, stacked `//`, `/** */`, one-line
+    `/*! text */`, and trailing `/**<` / `///<` / `//` comments in core headers. Record undocumented public declarations as `TODO` in `docs/api-comments.md`.
 - Write repository instructions, skills, comments, and user-facing documentation in English.
 - Preserve existing public names, including historical spellings, to avoid breaking clients. New identifiers should follow the naming skill.
 - Use full HTTPS GitHub issue URLs in code comments that explain issue-specific fixes.

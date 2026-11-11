@@ -5,8 +5,9 @@ In the public headers of core (ChatKit/**/*.h, vendored code excluded):
 - no whole-line `///` or `//!` comments and no stacked `//` comments directly above a declaration: a doc comment is a
   `/*! ... */` block, which Xcode Quick Help, DocC, and Swift's generated interface show to callers;
 - no `/** ... */` doc blocks (one style only).
-Trailing `///<` / `/**< */` comments on the same line as a declaration are allowed. The file header block at the top of a
-file and commented-out code are not doc comments and are ignored.
+- single-line doc comments use the same block: no `/*! text */` on one line, no trailing `/**< */`, `/*!< */`, `///<`,
+  or `//` after a declaration (one comment format per public file, for multi-line and single-line comments alike).
+The file header block at the top of a file and commented-out code are not doc comments and are ignored.
 With --report it also prints how many declarations have no doc comment (a TODO in docs/api-comments.md, not a failure).
 """
 import os, re, subprocess, sys
@@ -27,6 +28,12 @@ for f in files:
         s = L[i].strip()
         if re.match(r'^///(?!<)|^//!', s):
             fail.append('%s:%d: use a /*! ... */ block, not %s' % (f, i + 1, s[:3]))
+        if re.match(r'^/\*!.*\*/$', s) and not s.startswith('/*!\n'):
+            fail.append('%s:%d: write a single-line doc comment as a /*! ... */ block on its own lines' % (f, i + 1))
+        if re.search(r'\S\s*(/\*[*!]<|///<)', L[i]):
+            fail.append('%s:%d: move the trailing comment into a /*! ... */ block above the declaration' % (f, i + 1))
+        if re.search(r'[;,]\s*//(?!/)', L[i]) and not s.startswith('//') and 'http' not in L[i]:
+            fail.append('%s:%d: move the trailing // comment into a /*! ... */ block above the declaration' % (f, i + 1))
         if re.match(r'^/\*\*(?![*<])', s):
             fail.append('%s:%d: use /*! instead of /**' % (f, i + 1))
         if re.match(r'^//(?![/!<])', s) and i + 1 < len(L) and DECL.match(L[i + 1]) and not re.search(r'[;{}]\s*$|^//\s*(-|\+|@)', s):
