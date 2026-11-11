@@ -57,12 +57,12 @@ final class CYLDemoGroupConversationDetailViewController: CYLDemoSettingViewCont
         tableView.deselectRow(at: indexPath, animated: false)
         let item = data[indexPath.section].object(at: indexPath.row)
         if item.title == "群聊名称" {
-            let isCreater = conversation.cyl_isCreaterForCurrentUser()
+            let isCreater = conversation.cylIsCreaterForCurrentUser()
             let tooManyMembers = (conversation.members?.count ?? 0) > 5
             if tooManyMembers && !isCreater {
                 var creatorNickname: NSString?
                 if let creator = conversation.creator {
-                    _ = try? CYLChatKit.sharedInstance().getCachedProfileIfExists(creator, name: &creatorNickname, avatarURL: nil)
+                    CYLChatKit.sharedInstance().getCachedProfileIfExists(creator, name: &creatorNickname, avatarURL: nil, error: nil)
                 }
                 let title = "当前群聊人数较多，只有群主\((creatorNickname as String?) ?? conversation.creator ?? "(null)")才能修改群名称"
                 presentSimpleAlert(title: nil, message: title, buttonTitle: "我知道了")
@@ -102,7 +102,7 @@ final class CYLDemoGroupConversationDetailViewController: CYLDemoSettingViewCont
     override func settingSwitchCell(forItem settingItem: CYLDemoSettingItem, didChangeStatus on: Bool, completionHandler: @escaping CYLDemoSettingSwitchCellCompletionhandler) {
         if settingItem.title == "消息免打扰" {
             _ = NSObject.showHUD()
-            conversation.cyl_setConversationWithMute(on) { [weak self] succeeded, error in
+            conversation.cylSetConversation(withMute: on) { [weak self] succeeded, error in
                 completionHandler(succeeded, error)
                 NSObject.hideHUD()
                 guard let self = self else { return }
@@ -128,7 +128,7 @@ final class CYLDemoGroupConversationDetailViewController: CYLDemoSettingViewCont
             return
         }
         let peerId = user.clientId
-        let conversationViewController = CYLConversationViewController(peerId: peerId)
+        guard let conversationViewController = CYLConversationViewController(peerId: peerId) else { return }
         cyl_pushOrPop(to: conversationViewController, animated: true) { viewControllers, completionHandler in
             var viewControllerPopTo: UIViewController?
             var shouldPop = false

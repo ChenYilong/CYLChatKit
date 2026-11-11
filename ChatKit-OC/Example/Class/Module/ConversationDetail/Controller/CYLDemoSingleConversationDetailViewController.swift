@@ -19,7 +19,7 @@ final class CYLDemoSingleConversationDetailViewController: CYLDemoSettingViewCon
         if let cachedUser = cachedUser {
             return cachedUser
         }
-        if let peerId = conversation.cyl_peerId() {
+        if let peerId = conversation.cylPeerId() {
             cachedUser = (try? CYLChatKit.sharedInstance().getCachedProfilesIfExists([peerId]))?.first
         }
         return cachedUser
@@ -80,7 +80,7 @@ final class CYLDemoSingleConversationDetailViewController: CYLDemoSettingViewCon
     override func settingSwitchCell(forItem settingItem: CYLDemoSettingItem, didChangeStatus on: Bool, completionHandler: @escaping CYLDemoSettingSwitchCellCompletionhandler) {
         if settingItem.title == "消息免打扰" {
             _ = NSObject.showHUD()
-            conversation.cyl_setConversationWithMute(on) { [weak self] succeeded, error in
+            conversation.cylSetConversation(withMute: on) { [weak self] succeeded, error in
                 completionHandler(succeeded, error)
                 NSObject.hideHUD()
                 guard let self = self else { return }
@@ -110,7 +110,7 @@ final class CYLDemoSingleConversationDetailViewController: CYLDemoSettingViewCon
 
     func userGroupCellDidSelectUser(_ user: CYLUserDelegate) {
         let peerId = user.clientId
-        let conversationViewController = CYLConversationViewController(peerId: peerId)
+        guard let conversationViewController = CYLConversationViewController(peerId: peerId) else { return }
         cyl_pushOrPop(to: conversationViewController, animated: true) { viewControllers, completionHandler in
             var viewControllerPopTo: UIViewController?
             var shouldPop = false
@@ -145,7 +145,7 @@ final class CYLDemoSingleConversationDetailViewController: CYLDemoSettingViewCon
                     if let conversation = conversation {
                         NSObject.showSuccess("创建对话成功")
                         self.cyl_popSelectTabBarChildViewController(at: 0) { selectedTabBarChildViewController in
-                            let conversationViewController = CYLConversationViewController(conversationId: conversation.conversationId)
+                            guard let conversationViewController = CYLConversationViewController(conversationId: conversation.conversationId) else { return }
                             selectedTabBarChildViewController.navigationController?.pushViewController(conversationViewController, animated: true)
                         }
                     } else {

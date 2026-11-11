@@ -69,7 +69,7 @@ class CYLDemoSettingViewController: UITableViewController, CYLDemoSettingSwitchC
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = data[indexPath.section].object(at: indexPath.row)
-        guard let identifier = item.cellClassName else {
+        guard let identifier = item.cellClassName() else {
             return UITableViewCell()
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier) ?? UITableViewCell()
@@ -164,7 +164,12 @@ class CYLDemoSettingViewController: UITableViewController, CYLDemoSettingSwitchC
         if let currentClientID = CYLChatKit.sharedInstance().clientId {
             excluded.append(currentClientID)
         }
-        let contacts = Set(users.compactMap { ($0 as? NSObject).map { AnyHashable($0) } })
+        // The list wants CYLContact objects; the cached profiles are other CYLUserDelegate implementations, so build contacts
+        // through the protocol initializer (CYLContact adopts CYLUserDelegate).
+        let contactType = CYLContact.self as CYLUserDelegate.Type
+        let contacts = Set(users.compactMap { user -> CYLContact? in
+            return contactType.init(userId: user.userId, name: user.name, avatarURL: user.avatarURL, clientId: user.clientId) as? CYLContact
+        })
         let excludedSet = Set(excluded.map { AnyHashable($0) })
         let contactListViewController = CYLContactListViewController(contacts: contacts, userIds: Set(memeberIds), excludedUserIds: excludedSet, mode: .multipleSelection)
         contactListViewController.setSelectedContactsCallback { _, peerIds in

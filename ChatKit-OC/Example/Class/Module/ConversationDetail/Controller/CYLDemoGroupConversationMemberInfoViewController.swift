@@ -38,7 +38,7 @@ final class CYLDemoGroupConversationMemberInfoViewController: UITableViewControl
             } else {
                 var dict: [String: CYLDemoGroupConversationMemberInfoModel] = [:]
                 for info in infos ?? [] {
-                    if let memberId = info.memberId {
+                    if let memberId = info.memberId() {
                         let model = CYLDemoGroupConversationMemberInfoModel()
                         model.memberId = memberId
                         model.role = info.role

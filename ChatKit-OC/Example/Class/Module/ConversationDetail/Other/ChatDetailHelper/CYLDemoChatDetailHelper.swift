@@ -69,7 +69,7 @@ final class CYLDemoChatDetailHelper: NSObject {
         var nickName: NSString?
         let currentUserClientId: String? = CYLChatKit.sharedInstance().clientId
         if let clientId = currentUserClientId {
-            _ = try? CYLChatKit.sharedInstance().getCachedProfileIfExists(clientId, name: &nickName, avatarURL: nil)
+            CYLChatKit.sharedInstance().getCachedProfileIfExists(clientId, name: &nickName, avatarURL: nil, error: nil)
         }
         myNikeName.subTitle = (nickName as String?) ?? currentUserClientId
         let showOtherNikeName = CYLDemoCreateSettingItem("显示群成员昵称")
