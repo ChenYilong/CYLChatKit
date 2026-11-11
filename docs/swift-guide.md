@@ -27,6 +27,8 @@ Swift, in the same change.
 | `-configureBarButtonItemStyle:action:` | `configureBarButtonItem(style:action:)` | `NS_SWIFT_NAME` beside the declaration |
 | `-setBackgroundImage:forConversationId:scaledToSize:` | `setBackgroundImage(_:forConversationId:scaledToSize:)` | `NS_SWIFT_NAME` beside the declaration |
 | `-handleSingleSignOnError:callback:` | `handleSingleSignOnError(_:callback:)` | `NS_SWIFT_NAME` beside the declaration |
+| `-[CYLUserSystemService getProfileForUserId:error:]` | `getProfile(forUserId:)` (throws) | `NS_SWIFT_NAME` beside the declaration (the automatic name was not found by the macOS 26 build) |
+| `CYLLocalizedStringForKey` | returns `String`, not `String?` | `_Nonnull` on the new function |
 
 
 ## TODO
