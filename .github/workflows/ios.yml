@@ -2,9 +2,12 @@
 name: iOS
 
 on:
-  push:
-    branches: [master, 'claude/**']
+  # As in CYLTabBarController's ios.yml: pull requests and pushes to master. A branch with an open pull request used to
+  # run every job twice (push and pull_request), with two "Simulator screenshots" checks per commit; run a branch
+  # without a pull request by hand (workflow_dispatch).
   pull_request:
+  push:
+    branches: [master]
   workflow_dispatch:
 
 concurrency:

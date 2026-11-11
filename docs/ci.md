@@ -1,6 +1,6 @@
 # Continuous integration
 
-`.github/workflows/ios.yml` runs on pushes to `master` and `claude/**`, on pull requests, and on manual dispatch.
+`.github/workflows/ios.yml` runs on pull requests, on pushes to `master`, and on manual dispatch (`workflow_dispatch`), as CYLTabBarController's workflow does. Branches are built through their pull request; until 2026-11-11 pushes to `claude/**` also triggered it, so a branch with an open pull request ran every job twice (two `Simulator screenshots` checks per commit). A branch without a pull request is run by hand from the Actions tab.
 It is modeled on CYLTabBarController's workflow; jobs that do not apply here (unit tests, Carthage) are omitted
 because this repository has no test target and no Carthage support.
 
