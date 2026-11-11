@@ -31,7 +31,8 @@ extension AVIMMessage {
             return typedMessage
         }
         // The SDK returns a plain `AVIMMessage` for a custom message it does not recognize.
-        var messageText: String?
+        // Every branch below assigns it, so it is never nil.
+        let messageText: String
         var attributes: [AnyHashable: Any]?
         let json: [AnyHashable: Any]? = content.flatMap { ($0 as NSString).cyl_JSONValue() }
         if let degradeText = json?["_lctext"] as? String, degradeText.count > 0 {
