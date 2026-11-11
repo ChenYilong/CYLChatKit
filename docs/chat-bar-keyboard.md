@@ -39,6 +39,16 @@ after the chat appears, and `scripts/demo-screenshots.sh` takes the `chat-keyboa
   horizontal text inset grows to 12 pt so the text clears the rounded ends. The bar itself stays opaque: a glass material
   is capsule shaped by default, which does not suit a full-width bar.
 
+## Voice input (restored)
+
+The chat bar always contained voice recording (`CYLChatBar` voice button, hold-to-talk `voiceRecordButton`,
+`CYLRecordAudioHUD`, `CYLMp3Recorder`, `-chatBar:sendVoice:seconds:`), but it was switched off: the 2018 "update IM chatbar"
+commit of ChenYilong/Haidilao (5088ba45, the source of this code) hid `voiceButton` and commented out the body of
+`-showVoiceView:`. Nothing was missing from this repository, and Haidilao has only that same disabled copy.
+It is on again: the voice button sits left of the input field (the text view's left edge follows it), taps switch
+between the keyboard and the hold-to-talk button (`-voiceButtonAction:`), and the demo's Info.plist has
+`NSMicrophoneUsageDescription`.
+
 ## Guards for the Liquid Glass code
 
 All iOS 26 symbols are in `CYLChatLiquidGlass` (`ChatKit/Class/Tool/`), behind two guards, as CYLTabBarController does:
@@ -69,3 +79,8 @@ The rule is in `AGENTS.md` ("Guard every Liquid Glass API") and the `cylchatkit-
   or undocked keyboard on iPad, and a hardware keyboard with the shortcut bar.
 - TODO: The chat view still uses `[[UIApplication sharedApplication] keyWindow]` (deprecated since iOS 13) in several
   places; replace it with the window of the view's scene.
+- TODO: Verify the restored voice input in the CI screenshots (the voice button must appear left of the field) and on a
+  device: microphone permission, hold to talk, slide up to cancel, and sending through the provider (the demo's
+  `CYLDemoLeanCloudIMProvider` must send the audio message). Add a `chat-voice` screenshot step and an
+  `expect_accessibility` for `CYLChatBarVoiceButton` in `scripts/demo-screenshots.sh`.
+- TODO: Localize the microphone usage description (`InfoPlist.strings`, zh-Hans) and the hard-coded recording HUD texts.

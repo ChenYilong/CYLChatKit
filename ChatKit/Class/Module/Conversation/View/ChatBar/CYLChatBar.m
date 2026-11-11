@@ -109,7 +109,8 @@ NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
     }];
     
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.inputBarBackgroundView.mas_left).with.offset(offset);
+        // The text view starts after the voice button (restored: it had been hidden since the 2018 chat bar update).
+        make.left.equalTo(self.voiceButton.mas_right).with.offset(offset);
         make.right.equalTo(self.moreButton.mas_left).with.offset(-offset);
         
         make.top.equalTo(self.inputBarBackgroundView).with.offset(CYLChatBarTextViewBottomOffset);
@@ -843,6 +844,19 @@ NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
     UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil);
 }
 
+/// Switches between the keyboard and the hold-to-talk button (restored voice input; `-buttonAction:` is the send button).
+- (void)voiceButtonAction:(UIButton *)button {
+    self.faceButton.selected = NO;
+    self.moreButton.selected = NO;
+    self.voiceButton.selected = !self.voiceButton.selected;
+    if (self.voiceButton.selected) {
+        self.showType = CYLFunctionViewShowVoice;
+    } else {
+        self.showType = CYLFunctionViewShowKeyboard;
+        [self beginInputing];
+    }
+}
+
 - (void)buttonAction:(UIButton *)button {
     if (self.textView.text.length > 0) {
         [self sendTextMessage:self.textView.text];
@@ -919,10 +933,10 @@ NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
 }
 
 - (void)showVoiceView:(BOOL)show {
-    //    self.voiceButton.selected = show;
-    //    self.voiceRecordButton.selected = !show;
-    //    self.voiceRecordButton.hidden = !show;
-    //    self.textView.hidden = !self.voiceRecordButton.hidden;
+    self.voiceButton.selected = show;
+    self.voiceRecordButton.selected = NO;
+    self.voiceRecordButton.hidden = !show;
+    self.textView.hidden = show;
 }
 
 /**
@@ -1030,8 +1044,7 @@ NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
         [_voiceButton setTitleColor:self.messageInputViewRecordTextColor forState:UIControlStateHighlighted];
         [_voiceButton setBackgroundImage:[self imageInBundlePathForImageName:@"ToolViewInputVoice"] forState:UIControlStateNormal];
         [_voiceButton setBackgroundImage:[self imageInBundlePathForImageName:@"ToolViewKeyboard"] forState:UIControlStateSelected];
-        [_voiceButton addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-        _voiceButton.hidden = YES;
+        [_voiceButton addTarget:self action:@selector(voiceButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [_voiceButton sizeToFit];
     }
     return _voiceButton;

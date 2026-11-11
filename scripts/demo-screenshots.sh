@@ -212,6 +212,7 @@ shoot conversations -CYLDemoScreen conversations
 shoot chat -CYLDemoScreen chat
 expect_accessibility chat CYLChatBarSendButton "Send"
 expect_accessibility chat CYLChatBarTextView "Message"
+expect_accessibility chat CYLChatBarVoiceButton "Switch to voice input"
 # The chat with the keyboard up: the app focuses the input field next to the 发送 button, as a tap would.
 shoot chat-keyboard -CYLDemoScreen chat -CYLDemoKeyboard YES
 
@@ -228,6 +229,7 @@ expect_accessibility login-zh CYLDemoLoginClientIdTextField "客户端 ID"
 shoot chat-zh -CYLDemoScreen chat -AppleLanguages "(zh-Hans)" -AppleLocale zh_CN
 expect_accessibility chat-zh CYLChatBarSendButton "发送"
 expect_accessibility chat-zh CYLChatBarTextView "消息"
+expect_accessibility chat-zh CYLChatBarVoiceButton "切换到语音输入"
 
 xcrun simctl spawn "$DEVICE_ID" log show --last 2m --style compact \
     --predicate "process == \"$PROCESS_NAME\"" > "$OUT/app.log" 2>/dev/null || true

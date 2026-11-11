@@ -29,6 +29,8 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>ChatKit想要获取您位置，方便您在聊天服务中发送位置信息</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>The microphone records the voice messages you send.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIBackgroundModes</key>
