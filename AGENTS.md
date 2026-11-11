@@ -60,15 +60,22 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
     `/*!` / ` * text` / ` */` on its own lines above the declaration: no `/*! text */` on one line, no trailing
     `/**< */`, `/*!< */`, `///<`, or `//` after a declaration (enum cases and properties included). One comment format per
     public API file, for multi-line and single-line comments alike. This applies to every platform and language: pick
-    the platform's block doc-comment form below and use it for every public API comment in that file, short or long.
+    the platform's official doc-comment form below and use it for every public API comment in that file, short or long.
   - Swift: every public API comment, one line or several, is one `/** ... */` block with Markup (`- Parameter`,
     `- Returns`, `- Note`), never `///` lines, so a file has one format.
-  - Other platforms use the block form of their official documentation tool, for single-line and multi-line comments:
-    Kotlin and Java `/** ... */` (KDoc, Javadoc: `@param`, `@return`), TypeScript and JavaScript `/** ... */` (TSDoc, JSDoc),
-    Dart and Flutter `/** ... */` (dartdoc reads it; this project keeps one block format instead of Effective Dart's
-    `///` lines), Python docstrings (PEP 257, triple quotes on their own lines), Go a `/* ... */` doc comment directly
-    above the declaration, C# `/** ... */` with XML documentation tags (`<summary>`), Rust `/** ... */`. A language whose
-    tool has no block form uses its one doc-comment form for every comment in the file.
+  - **The official rules decide the format.** Every comment format follows the official documentation rules of its
+    platform and language; where this section and the official rule differ, the official rule wins and this section is
+    corrected. The two project rules stay on top of it: one comment format per public API file, and single-line comments
+    in the same form as multi-line ones.
+    - Block form is official, so single-line comments are blocks too: Objective-C (Apple and clang doc comments, `/*! ... */`,
+      chosen above), Swift (DocC reads `/** ... */`; this project uses it so Swift matches the Objective-C headers),
+      Kotlin (KDoc `/** ... */`), Java (Javadoc `/** ... */`), TypeScript (TSDoc `/** ... */`), JavaScript
+      (JSDoc `/** ... */`), Python (PEP 257 docstrings, triple quotes on their own lines even for one sentence).
+    - Line form is official: Dart and Flutter (Effective Dart: `///`), Go (Go Doc Comments: `//` directly above the
+      declaration, starting with its name), Rust (`///`; the style guide prefers line doc comments), C# (`///` with XML
+      tags such as `<summary>`). There every public API comment in the file, single-line or multi-line, uses that line
+      form; never mix it with block comments in the same file.
+    - A language whose tool has only one doc-comment form uses it for every comment in the file.
   - Comments are English. Describe LeanCloud types in words in core. Do not document commented-out code, and delete it
     instead of keeping it.
   - `scripts/check-comments.py` (CI job `Naming and comment rules`) fails on `///`, stacked `//`, `/** */`, one-line

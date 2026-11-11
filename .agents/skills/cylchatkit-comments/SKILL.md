@@ -56,15 +56,24 @@ Rules:
 
 ## Other platforms (official documentation tools)
 
-The same two rules hold on every platform and in every language: one block per declaration, and the same block form for
-single-line and multi-line public API comments, so each public file has one comment format. Use the block form of the
-platform's documentation tool, summary sentence first:
+**All comment formats follow the official rules.** Use the doc-comment form that the platform's official documentation
+tool and style guide prescribe; if this skill disagrees with the official rule, the official rule wins and this skill is
+fixed. On top of it, two project rules hold everywhere: one comment format per public API file, and single-line comments
+in the same form as multi-line ones. Summary sentence first.
 
+Block form is official (single-line comments are blocks too):
+
+- Objective-C: `/*! ... */` (Apple / clang doc comments; see above).
+- Swift: `/** ... */` with Markup (DocC reads it; chosen so Swift matches the Objective-C headers).
 - Kotlin: KDoc `/** ... */` with `@param`, `@return`, `@throws`. Java: Javadoc `/** ... */`.
 - TypeScript: TSDoc `/** ... */`. JavaScript: JSDoc `/** ... */` with `@param`, `@returns`.
-- Dart and Flutter: `/** ... */` (dartdoc reads it). This project keeps one block format, so it does not use Effective
-  Dart's `///` lines.
-- Python: a docstring (PEP 257) as the first statement, triple quotes on their own lines even for one sentence. Go: a
-  `/* ... */` comment directly above the declaration that starts with the declaration's name. Rust: `/** ... */`. C#:
-  `/** ... */` with XML documentation tags (`<summary>`).
-- A language whose tool has no block form uses its single doc-comment form for every comment in the file.
+- Python: a docstring (PEP 257) as the first statement, triple quotes on their own lines even for one sentence.
+
+Line form is official (every public API comment of the file uses it, single-line or multi-line; no block comments mixed in):
+
+- Dart and Flutter: `///` (Effective Dart: "DO use `///` doc comments").
+- Go: `//` comments directly above the declaration, starting with its name (Go Doc Comments).
+- Rust: `///` outer doc comments (`//!` for the crate or module).
+- C#: `///` with XML documentation tags (`<summary>`, `<param>`, `<returns>`).
+
+A language whose tool has only one doc-comment form uses it for every comment in the file.
