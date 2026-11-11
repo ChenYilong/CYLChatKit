@@ -32,6 +32,8 @@ after the chat appears, and `scripts/demo-screenshots.sh` takes the `chat-keyboa
   which is false on iPhones with a Dynamic Island (taller status bar), so the bar's bottom spacing was not refreshed
   when switching between the keyboard and the emoji or more panel. The spacing is now refreshed on every change, and
   `CYL_IS_iPHONEX` means "the key window has a bottom safe area".
+- **Accessibility:** the controls have localized VoiceOver labels and hints and stable identifiers, and the field and send
+  button scale with Dynamic Type; see `docs/accessibility.md`.
 - **The input field is a Liquid Glass capsule on iOS 26** (`-applyLiquidGlassStyleIfActive` in `CYLChatBar.m`). A
   glass backdrop is placed behind the text view, the text view's own background and border are removed, and its
   horizontal text inset grows to 12 pt so the text clears the rounded ends. The bar itself stays opaque: a glass material
@@ -60,8 +62,9 @@ The rule is in `AGENTS.md` ("Guard every Liquid Glass API") and the `cylchatkit-
   an entry in `CYLChatLiquidGlass`.
 - TODO: The emoji and more panels use a fixed height (`kFunctionViewHeight`, 210 pt) while the keyboard is 291 pt or taller
   on iPhones, so switching between keyboard and panel moves the bar. Make the panels as tall as the last keyboard height.
-- TODO: The 发送 title and several other texts in the chat bar are hard-coded Chinese strings (see
-  `docs/localization.md`); move them behind `CYLLocalizedStrings`.
+- TODO: Some chat bar texts are still hard-coded Chinese strings (see `docs/localization.md`): the recording HUD texts
+  (`松开手指,取消发送`, `手指上滑,取消发送`), which the code also compares by value with `isEqualToString:` and so need a
+  key-based rewrite first, and the emoji panel's send title. The send button and record button titles are localized.
 - TODO: Verify on devices: the Liquid Glass keyboard on a real iPhone (the CI simulator shows the layout only), a floating
   or undocked keyboard on iPad, and a hardware keyboard with the shortcut bar.
 - TODO: The chat view still uses `[[UIApplication sharedApplication] keyWindow]` (deprecated since iOS 13) in several

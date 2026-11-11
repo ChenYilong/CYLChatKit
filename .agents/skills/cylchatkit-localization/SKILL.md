@@ -32,8 +32,11 @@ web `locales/<lang>/<namespace>.json`, Flutter `.arb` files) but the rules are t
 3. Read it only through the layer's macro: `CYLLocalizedStrings(@"key")` in core, `LCCKExampleLocalizedString(@"key",
    @"fallback")` in the example. Use `[NSString stringWithFormat:]` for values.
 4. Never hard-code user-visible text, or log, assert, or debug text, that contains non-English characters. Image names
-   and documented localization keys are the only exceptions.
-5. Run `python3 scripts/check-localizations.py` and `plutil -lint <file>` (macOS).
+   and documented localization keys are the only exceptions. Accessibility labels, hints, values, and VoiceOver action
+   names are user-visible text too (`cylchatkit-accessibility`): they go through the macro with the other strings.
+5. Run `python3 scripts/check-localizations.py` and `plutil -lint <file>` (macOS). The script compares the keys and the
+   format specifiers (`%@`, `%1$@`, `%d`) of every language, and fails on a key passed to the macro that is not in the
+   table, so a typo cannot ship as a raw key on screen.
 
 Keys are stable ASCII identifiers. CYLTabBarController uses the original Chinese text as the key instead; this
 repository does not, because its existing tables use ASCII keys. Do not mix the two styles in one table.
@@ -56,6 +59,7 @@ repository does not, because its existing tables use ASCII keys. Do not mix the 
 - [ ] No new `NSLocalizedString` or `NSLocalizedStringFromTableInBundle` call outside a macro definition.
 - [ ] No new hard-coded non-English display text.
 - [ ] Every language of every touched table has the same keys and specifiers.
+- [ ] Every key passed to a macro exists in its table, and accessibility strings are localized too.
 - [ ] `python3 scripts/check-localizations.py` passes (CI job `Localization tables`).
 - [ ] Existing deviations and unfinished work are recorded as `TODO` in `docs/localization.md`.
 

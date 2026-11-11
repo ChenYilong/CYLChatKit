@@ -12,6 +12,7 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
   - `.agents/skills/cylchatkit-xcode-compat/SKILL.md`
   - `.agents/skills/cylchatkit-objc-naming/SKILL.md`
   - `.agents/skills/cylchatkit-localization/SKILL.md` (before adding or changing localized strings, tables, or bundles)
+  - `.agents/skills/cylchatkit-accessibility/SKILL.md` (before adding or changing any control, text, cell, or screen)
 
 ## Objective-C and API rules
 
@@ -117,14 +118,16 @@ text, complete tables). A localization change is accepted only when all of them 
    bundle gets a new macro (`CYL<Domain>LocalizedString` in core, `LCCK<Domain>LocalizedString` in the example); never
    point one macro at several bundles and never call `NSLocalizedString` or `NSLocalizedStringFromTableInBundle`
    directly in feature code.
-3. **No hard-coded display text in new or changed code.** Every string literal that is shown to a user, or written to a
-   log, assert, or debug message, and that contains non-English text goes through the layer's macro, with
+3. **No hard-coded display text in new or changed code.** Every string literal that is shown to a user, or read to a
+   VoiceOver user (accessibility labels, hints, values, and custom action names), or written to a log, assert, or debug
+   message, and that contains non-English text goes through the layer's macro, with
    `[NSString stringWithFormat:]` for values. Resource identifiers (image names) and documented localization keys are
    exempt. Existing literals are tracked in `docs/localization.md`.
 4. **Tables are complete.** Add every new key to every language of its table in the same commit, with the same `%@` /
    `%1$@` specifiers, so every language of a table has the same key set. Keys are stable ASCII identifiers (this
    repository's tables already use them). Check `.strings` files with `plutil -lint` and
-   `scripts/check-localizations.py`.
+   `scripts/check-localizations.py`, which also compares the format specifiers of each key between languages and fails
+   when a literal key passed to a layer's macro is not in its table (a typo).
 5. **The two layers stay isolated.** Core never reads an example bundle, the example never puts its strings in a core
    bundle, and the example's macros never read a core bundle. Apps can override core strings with
    `CustomizedChatKit.<Name>.bundle` (see `+[NSBundle cyl_bundleForName:class:]`).
@@ -136,6 +139,45 @@ text, complete tables). A localization change is accepted only when all of them 
 - **Example (`ChatKit-OC/`) strings live in example-level bundles**, for example `ChatKit-OC/Example/Class/Module/Other/LCCKExample.bundle`, added to the app target with explicit file references. Never put example strings in a core bundle, and core never reads an example bundle.
 - **Other platforms** follow the same rules with their own folder package: Android `res/values-<lang>/` in the library or app module, web `locales/<lang>/<namespace>.json`, Flutter `.arb` files per package. Keep one accessor per layer (a function where the platform has no macros), keep the core resources and keys stable, and keep example resources in the example. Swift cannot import function-like macros, so a Swift example defines its own accessor function for its bundle, and core exposes a function form of its macro for Swift callers.
 - Record existing deviations and unfinished localization work as `TODO` in `docs/localization.md`.
+
+## Accessibility
+
+Copied and adapted from CYLTabBarController's AGENTS.md ("Accessibility is required everywhere"). Accessibility is
+required everywhere in this project: the library (`ChatKit/`, shipped through CocoaPods) and every example fully support
+blind and low-vision users (VoiceOver, Voice Control, Switch Control, Dynamic Type, and the system display settings).
+This applies to new code, to code you change, and to existing code you review: fix what is missing when you meet it.
+Read `.agents/skills/cylchatkit-accessibility/SKILL.md` before touching a control, a text, a cell, or a screen.
+
+- **Blind users (VoiceOver, Voice Control, Switch Control).**
+  - Every control and every piece of text is an accessibility element with a meaningful label, and a value, a trait
+    (button, selected, static text), a state, and a hint where they help. Image-only buttons always get a label.
+  - A list row, a message row, or a contact row is one element (name, content, unread count, status in one label), not a
+    dozen stops on avatar, name, bubble, and icons; its taps (avatar, resend, play) are `accessibilityActivate` and
+    `accessibilityCustomActions`.
+  - Hide purely decorative views from accessibility (`isAccessibilityElement = NO`, `accessibilityElementsHidden`); never
+    leave an interactive view without a label.
+  - Every interactive element has a stable, non-localized `accessibilityIdentifier` (`CYLChatBarSendButton`) for UI tests.
+  - Labels, hints, values, and action names are localized: they go through the layer's localization macro like any other
+    text (see the localization criteria), so VoiceOver speaks the app's language.
+  - When a panel or screen changes under the user, post `UIAccessibilityLayoutChangedNotification` or
+    `UIAccessibilityScreenChangedNotification`.
+- **Low-vision users (visual accessibility).**
+  - All text scales with Dynamic Type: system text styles or `UIFontMetrics` with `adjustsFontForContentSizeCategory`,
+    with a `maximumPointSize` only where the layout cannot grow, and layouts that survive the accessibility sizes.
+  - State is never conveyed by color alone; text and controls keep enough contrast; touch targets are at least 44 x 44 pt
+    where the design allows.
+  - Respect Reduce Transparency, Increase Contrast, Bold Text, and Reduce Motion. The Liquid Glass material (see "Guard
+    every Liquid Glass API") adapts to them by itself; never force a material or an animation on top of that.
+- **Verify through accessibility first.** Automated checks drive the UI through accessibility: find elements by their
+  accessibility label or identifier, and fall back to coordinates only when no element can be found, then file the
+  missing label as a bug and fix it. In CI the demo writes the accessibility tree of each screen (`-LCCKDemoAccessibilityDump YES`),
+  `scripts/demo-screenshots.sh` prints it and fails when an expected element is missing (`expect_accessibility`), and it
+  takes a screenshot at a large Dynamic Type size. Add an expectation for every control a CI screen shows.
+- **Other platforms** use their own APIs with the same rules: Android `contentDescription`, `importantForAccessibility`,
+  `stateDescription` (TalkBack); React Native `accessible`, `accessibilityRole`, `accessibilityLabel`; Flutter
+  `Semantics`, `ExcludeSemantics`.
+- Record gaps as `TODO` in `docs/accessibility.md`. The convention: every component and every text of this project
+  supports accessibility. A change that adds a control or a text without it is not done.
 
 ## CI and demo screenshots
 

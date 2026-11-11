@@ -3,12 +3,16 @@
 
 For every `<lang>.lproj/<Table>.strings` under ChatKit/ and ChatKit-OC/Example/:
 - the file must parse as a strings file (`"key" = "value";` entries and comments), and
-- every language of the same table in the same folder must have the same key set.
+- every language of the same table in the same folder must have the same key set, and every key must have the same
+  format specifiers (`%@`, `%1$@`, `%d`, ...) in every language.
 
 It also checks the layer-macro acceptance criterion (AGENTS.md, "Internationalization and localization"): core
 (ChatKit/, vendored code excluded) and the example (ChatKit-OC/Example/) each define at least one localization macro,
 the two layers use different macro names, each macro names a bundle of its own layer, and no macro reads a bundle that
 belongs to the other layer.
+
+It also checks that every key passed to a layer's macro as a string literal exists in that layer's table (a typo would
+silently show the raw key).
 
 Vendor and legacy tables (LEGACY below) differ by language on purpose (plural variants, per-language emoji
 names), so their key differences are reported as warnings only. Every other table must match exactly.
@@ -32,6 +36,9 @@ LEGACY = {
 }
 
 
+SPECIFIER = re.compile(r'%(?:\d+\$)?[-+ 0#]*\d*(?:\.\d+)?(?:hh|h|ll|l|q|L|z|t|j)?[@diouxXeEfFgGaAcCsSp]')
+
+
 def parse(path):
     data = open(path, 'rb').read()
     for encoding in ('utf-8-sig', 'utf-16'):
@@ -42,19 +49,20 @@ def parse(path):
             continue
     else:
         raise ValueError('unknown encoding')
-    keys, pos = [], 0
+    keys, pairs, pos = [], {}, 0
     while pos < len(text):
         m = COMMENT.match(text, pos) or ENTRY.match(text, pos)
         if m:
             if m.re is ENTRY:
                 keys.append(m.group(1))
+                pairs[m.group(1)] = m.group(2)
             pos = m.end()
         elif text[pos:].strip() == '':
             break
         else:
             line = text.count('\n', 0, pos) + 1
             raise ValueError('syntax error near line %d' % line)
-    return keys
+    return keys, pairs
 
 
 LOCALIZATION_API = re.compile(r'NSLocalizedString\w*|localizedStringForKey:')
@@ -90,7 +98,65 @@ def layer_macros(root, base, skip):
     return macros
 
 
-def check_macros(root):
+def macro_call_keys(text, macro):
+    """Yields the string literal of the first argument of each `macro(...)` call in text, found with a small parser."""
+    for m in re.finditer(r'\b%s\(' % re.escape(macro), text):
+        depth, i, first, in_string = 1, m.end(), [], False
+        while i < len(text) and depth > 0:
+            c = text[i]
+            if in_string:
+                if c == '\\':
+                    first.append(text[i:i + 2]); i += 2; continue
+                if c == '"':
+                    in_string = False
+            elif c == '"':
+                in_string = True
+            elif c == '(':
+                depth += 1
+            elif c == ')':
+                depth -= 1
+                if depth == 0:
+                    break
+            elif c == ',' and depth == 1:
+                break
+            first.append(c)
+            i += 1
+        argument = ''.join(first)
+        for literal in STRING_LITERAL.findall(argument):
+            yield literal
+
+
+def check_used_keys(root, base, macros, skip, tables):
+    """Every literal key passed to a macro of this layer must exist in the table that the macro reads."""
+    failures = 0
+    defined = {}
+    for (folder, table), langs in tables.items():
+        if folder.replace(os.sep, '/').startswith(base.replace(os.sep, '/')):
+            defined.setdefault(table, set()).update(*(keys for keys, _ in langs.values()))
+    for name, literals in macros.items():
+        table = next((l + '.strings' for l in literals if (l + '.strings') in defined), None)
+        if not table:
+            continue
+        missing = {}
+        for dirpath, dirnames, filenames in os.walk(os.path.join(root, base)):
+            dirnames[:] = [d for d in dirnames if d != 'Pods' and not d.endswith('.bundle')]
+            if any(part in dirpath.replace(os.sep, '/').split('/') for part in skip):
+                continue
+            for filename in filenames:
+                if not filename.endswith(('.m', '.mm', '.h')):
+                    continue
+                path = os.path.join(dirpath, filename)
+                text = open(path, encoding='utf-8', errors='replace').read()
+                for key in macro_call_keys(text, name):
+                    if key not in defined[table]:
+                        missing.setdefault(key, set()).add(os.path.relpath(path, root))
+        for key, paths in sorted(missing.items()):
+            print('error: %s(@"%s") is not a key of %s (%s)' % (name, key, table, ', '.join(sorted(paths))))
+            failures += 1
+    return failures
+
+
+def check_macros(root, tables):
     """The two-macro acceptance criterion. Returns the number of failures."""
     core_bundles = bundle_names(root, 'ChatKit')
     example_bundles = bundle_names(root, os.path.join('ChatKit-OC', 'Example'))
@@ -118,6 +184,8 @@ def check_macros(root):
         failures += 1
     if core and example and not shared:
         print('%d different localization macros (core: %d, example: %d)' % (len(core) + len(example), len(core), len(example)))
+    failures += check_used_keys(root, 'ChatKit', core, {'Vendor'}, tables)
+    failures += check_used_keys(root, os.path.join('ChatKit-OC', 'Example'), example, set(), tables)
     return failures
 
 
@@ -136,7 +204,7 @@ def main():
                 path = os.path.join(dirpath, name)
                 rel = os.path.relpath(path, root)
                 try:
-                    keys = parse(path)
+                    keys, pairs = parse(path)
                 except ValueError as error:
                     print('error: %s: %s' % (rel, error))
                     failures += 1
@@ -145,20 +213,28 @@ def main():
                 if dupes:
                     print('warning: %s: duplicate keys %s' % (rel, ', '.join(dupes)))
                 folder = os.path.relpath(os.path.dirname(dirpath), root)
-                tables[(folder, name)][os.path.basename(dirpath)[:-len('.lproj')]] = set(keys)
+                tables[(folder, name)][os.path.basename(dirpath)[:-len('.lproj')]] = (set(keys), pairs)
     for (folder, table), langs in sorted(tables.items()):
         if len(langs) < 2:
             continue
-        union = set().union(*langs.values())
+        union = set().union(*(keys for keys, _ in langs.values()))
         legacy = (folder.replace(os.sep, '/'), table) in LEGACY
-        for lang, keys in sorted(langs.items()):
+        # Format specifiers: every language of a key must use the same ones, in any order.
+        if not legacy:
+            for key in sorted(union):
+                found = {lang: sorted(SPECIFIER.findall(pairs[key])) for lang, (_, pairs) in langs.items() if key in pairs}
+                if len({tuple(v) for v in found.values()}) > 1:
+                    print('error: %s/%s: key "%s" has different format specifiers: %s' % (
+                        folder, table, key, '; '.join('%s: %s' % (l, ' '.join(v) or '-') for l, v in sorted(found.items()))))
+                    failures += 1
+        for lang, (keys, _) in sorted(langs.items()):
             missing = sorted(union - keys)
             if missing:
                 print('%s: %s/%s.lproj/%s is missing %d key(s): %s' % (
                     'warning' if legacy else 'error', folder, lang, table, len(missing),
                     ', '.join(missing[:10]) + (' ...' if len(missing) > 10 else '')))
                 failures += 0 if legacy else 1
-    failures += check_macros(root)
+    failures += check_macros(root, tables)
     checked = sum(len(langs) for langs in tables.values())
     print('%d table file(s) in %d table(s) checked, %d failure(s)' % (checked, len(tables), failures))
     return 1 if failures else 0
