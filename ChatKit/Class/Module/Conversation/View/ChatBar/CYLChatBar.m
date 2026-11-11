@@ -22,6 +22,11 @@
 #import "NSString+CYLExtension.h"
 #import "CYLConversationService.h"
 #import "CYLChatLiquidGlass.h"
+#if __has_include(<CYLChatKit/LCChatKit.h>)
+#import <CYLChatKit/LCChatKit.h>
+#else
+#import "LCChatKit.h"
+#endif
 
 NSString *const kCYLBatchDeleteTextPrefix = @"kCYLBatchDeleteTextPrefix";
 NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
@@ -651,7 +656,48 @@ NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
     self.backgroundColor = self.messageInputViewBackgroundColor;
     [self setupConstraints];
     [self applyLiquidGlassStyleIfActive];
+    [self setupAccessibility];
     self.mentionSet = [NSMutableSet set];
+}
+
+#pragma mark - Accessibility and Dynamic Type
+
+/**
+ *  The font scaled for the user's text size (Dynamic Type). `maximumPointSize` 0 means no upper limit.
+ */
++ (UIFont *)scaledFont:(UIFont *)font maximumPointSize:(CGFloat)maximumPointSize {
+    UIFontMetrics *metrics = [UIFontMetrics metricsForTextStyle:UIFontTextStyleBody];
+    return maximumPointSize > 0 ? [metrics scaledFontForFont:font maximumPointSize:maximumPointSize] : [metrics scaledFontForFont:font];
+}
+
+/**
+ *  VoiceOver and Voice Control for the chat bar (AGENTS.md, "Accessibility"; docs/accessibility.md). The image-only
+ *  buttons get a label, every control a stable identifier for UI tests, and the labels are localized through
+ *  CYLLocalizedStrings. The send button and the field read their title and text by themselves.
+ */
+- (void)setupAccessibility {
+    self.textView.accessibilityLabel = CYLLocalizedStrings(@"chatbar.textview");
+    self.textView.accessibilityIdentifier = @"CYLChatBarTextView";
+    self.moreButton.accessibilityLabel = CYLLocalizedStrings(@"chatbar.send");
+    self.moreButton.accessibilityHint = CYLLocalizedStrings(@"chatbar.send.hint");
+    self.moreButton.accessibilityIdentifier = @"CYLChatBarSendButton";
+    self.faceButton.accessibilityHint = CYLLocalizedStrings(@"chatbar.face.hint");
+    self.faceButton.accessibilityIdentifier = @"CYLChatBarFaceButton";
+    self.voiceButton.accessibilityIdentifier = @"CYLChatBarVoiceButton";
+    self.voiceRecordButton.accessibilityLabel = CYLLocalizedStrings(@"chatbar.record");
+    self.voiceRecordButton.accessibilityHint = CYLLocalizedStrings(@"chatbar.record.hint");
+    self.voiceRecordButton.accessibilityIdentifier = @"CYLChatBarRecordButton";
+    [self updateAccessibilityState];
+}
+
+/**
+ *  The labels and traits that depend on state: the voice button switches between "voice input" and "keyboard", and
+ *  the emoji button is selected while its panel is up.
+ */
+- (void)updateAccessibilityState {
+    self.voiceButton.accessibilityLabel = CYLLocalizedStrings((self.voiceButton.selected ? @"chatbar.voice.toKeyboard" : @"chatbar.voice.toVoice"));
+    self.faceButton.accessibilityLabel = CYLLocalizedStrings(@"chatbar.face");
+    self.faceButton.accessibilityTraits = self.faceButton.selected ? (UIAccessibilityTraitButton | UIAccessibilityTraitSelected) : UIAccessibilityTraitButton;
 }
 
 /**
@@ -792,6 +838,9 @@ NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
     // The bottom spacing depends on the panel that is shown, on every device with a bottom safe area. It used to be
     // refreshed only when the status bar was 44 pt high, which is false on iPhones with a Dynamic Island.
     [self updateBottomSafeAreaOffsets];
+    [self updateAccessibilityState];
+    // The panel under the bar appeared or went away: tell VoiceOver to re-read the layout.
+    UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil);
 }
 
 - (void)buttonAction:(UIButton *)button {
@@ -957,7 +1006,8 @@ NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
 - (UITextView *)textView {
     if (!_textView) {
         _textView = [[UITextView alloc] init];
-        _textView.font = [UIFont systemFontOfSize:16.0f];
+        _textView.font = [CYLChatBar scaledFont:[UIFont systemFontOfSize:16.0f] maximumPointSize:0];
+        _textView.adjustsFontForContentSizeCategory = YES;
         _textView.delegate = self;
         //        _textView.placehodler;
         _textView.layer.cornerRadius = 4.0f;
@@ -999,10 +1049,11 @@ NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
         UIImage *voiceRecordButtonHighlightedBackgroundImage = [[self imageInBundlePathForImageName:@"VoiceBtn_BlackHL"] resizableImageWithCapInsets:edgeInsets resizingMode:UIImageResizingModeStretch];
         [_voiceRecordButton setBackgroundImage:voiceRecordButtonNormalBackgroundImage forState:UIControlStateNormal];
         [_voiceRecordButton setBackgroundImage:voiceRecordButtonHighlightedBackgroundImage forState:UIControlStateSelected];
-        _voiceRecordButton.titleLabel.font = [UIFont systemFontOfSize:14.0f];
-        [_voiceRecordButton setTitle:@"按住 说话" forState:UIControlStateNormal];
-        [_voiceRecordButton setTitle:@"松开 结束" forState:UIControlStateSelected];
-        [_voiceRecordButton setTitle:@"松开 结束" forState:UIControlStateHighlighted];
+        _voiceRecordButton.titleLabel.font = [CYLChatBar scaledFont:[UIFont systemFontOfSize:14.0f] maximumPointSize:20];
+        _voiceRecordButton.titleLabel.adjustsFontForContentSizeCategory = YES;
+        [_voiceRecordButton setTitle:CYLLocalizedStrings(@"chatbar.record") forState:UIControlStateNormal];
+        [_voiceRecordButton setTitle:CYLLocalizedStrings(@"chatbar.record.release") forState:UIControlStateSelected];
+        [_voiceRecordButton setTitle:CYLLocalizedStrings(@"chatbar.record.release") forState:UIControlStateHighlighted];
         
         // Cancel recordings when control tracking is interrupted or microphone authorization is requested.
         // https://github.com/ChenYilong/CYLChatKit/issues/3
@@ -1026,7 +1077,12 @@ NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
         _moreButton.tag = CYLFunctionViewShowMore;
 //        [_moreButton hdl_setBackgroundColor:[UIColor fd_c1] forState:UIControlStateHighlighted];
 //        [_moreButton hdl_setBackgroundColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-        [_moreButton setTitle:@"发送" forState:UIControlStateNormal];
+        [_moreButton setTitle:CYLLocalizedStrings(@"chatbar.send") forState:UIControlStateNormal];
+        // The button is 60 x 37 pt: scale with Dynamic Type up to a size that still fits, then shrink the text.
+        _moreButton.titleLabel.font = [CYLChatBar scaledFont:[UIFont systemFontOfSize:16.0f] maximumPointSize:22];
+        _moreButton.titleLabel.adjustsFontForContentSizeCategory = YES;
+        _moreButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+        _moreButton.titleLabel.minimumScaleFactor = 0.6;
         [_moreButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
         [_moreButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
         [_moreButton addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];

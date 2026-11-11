@@ -593,4 +593,126 @@ static CGFloat const CYL_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     return _conversationViewMessageLeftTextColor;
 }
 
+#pragma mark - Accessibility
+
+// One message row is one VoiceOver element (AGENTS.md, "Accessibility"; docs/accessibility.md): who sent it, what it
+// says, and whether it was delivered, in one label, instead of a dozen stops on avatar, name, bubble, and state icons.
+// The text comes from CYLLocalizedStrings, so it follows the app's language.
+
+- (BOOL)isAccessibilityElement {
+    return YES;
+}
+
+- (NSString *)accessibilityLabel {
+    CYLMessage *message = self.message;
+    if (!message) {
+        return nil;
+    }
+    NSMutableArray<NSString *> *parts = [NSMutableArray array];
+    NSString *sender = nil;
+    if (self.messageOwner == CYLMessageOwnerTypeSelf) {
+        sender = CYLLocalizedStrings(@"message.you");
+    } else if (self.messageOwner == CYLMessageOwnerTypeOther) {
+        sender = self.nickNameLabel.text.length > 0 ? self.nickNameLabel.text : message.localDisplayName;
+    }
+    if (sender.length > 0) {
+        [parts addObject:sender];
+    }
+    NSString *content = nil;
+    switch (self.mediaType) {
+        case CYLMessageMediaTypeImage:
+            content = CYLLocalizedStrings(@"message.image");
+            break;
+        case CYLMessageMediaTypeAudio:
+            content = [NSString stringWithFormat:CYLLocalizedStrings(@"message.voice"), message.voiceDuration ?: @"0"];
+            break;
+        case CYLMessageMediaTypeVideo:
+            content = CYLLocalizedStrings(@"message.video");
+            break;
+        case CYLMessageMediaTypeLocation:
+            content = [NSString stringWithFormat:CYLLocalizedStrings(@"message.location"), message.geolocations ?: @""];
+            break;
+        case CYLMessageMediaTypeFile:
+            content = CYLLocalizedStrings(@"message.file");
+            break;
+        case CYLMessageMediaTypeSystem:
+        case CYLMessageMediaTypeRecalled:
+            content = message.systemText.length > 0 ? message.systemText : message.text;
+            break;
+        default:
+            content = message.text;
+            break;
+    }
+    if (content.length > 0) {
+        [parts addObject:content];
+    }
+    if (self.messageSendState == CYLMessageSendStateSending) {
+        [parts addObject:CYLLocalizedStrings(@"message.status.sending")];
+    } else if (self.messageSendState == CYLMessageSendStateFailed) {
+        [parts addObject:CYLLocalizedStrings(@"message.status.failed")];
+    } else if (self.messageOwner == CYLMessageOwnerTypeSelf && self.messageReadState == CYLMessageReaded) {
+        [parts addObject:CYLLocalizedStrings(@"message.status.read")];
+    }
+    return [parts componentsJoinedByString:@", "];
+}
+
+- (NSString *)accessibilityHint {
+    switch (self.mediaType) {
+        case CYLMessageMediaTypeAudio:
+            return CYLLocalizedStrings(@"message.hint.play");
+        case CYLMessageMediaTypeImage:
+        case CYLMessageMediaTypeVideo:
+        case CYLMessageMediaTypeLocation:
+        case CYLMessageMediaTypeFile:
+            return CYLLocalizedStrings(@"message.hint.open");
+        default:
+            return nil;
+    }
+}
+
+- (UIAccessibilityTraits)accessibilityTraits {
+    switch (self.mediaType) {
+        case CYLMessageMediaTypeText:
+        case CYLMessageMediaTypeSystem:
+        case CYLMessageMediaTypeRecalled:
+            return UIAccessibilityTraitStaticText;
+        default:
+            return UIAccessibilityTraitButton;
+    }
+}
+
+/// The same as tapping the bubble: play the voice message, open the image, the location, and so on.
+- (BOOL)accessibilityActivate {
+    if ([self.delegate respondsToSelector:@selector(messageCellTappedMessage:)]) {
+        [self.delegate messageCellTappedMessage:self];
+        return YES;
+    }
+    return NO;
+}
+
+/// What a tap on the avatar or on the failure icon does, as VoiceOver actions.
+- (NSArray<UIAccessibilityCustomAction *> *)accessibilityCustomActions {
+    __weak typeof(self) weakSelf = self;
+    NSMutableArray<UIAccessibilityCustomAction *> *actions = [NSMutableArray array];
+    if (self.messageSendState == CYLMessageSendStateFailed) {
+        [actions addObject:[[UIAccessibilityCustomAction alloc] initWithName:CYLLocalizedStrings(@"message.action.resend") actionHandler:^BOOL(UIAccessibilityCustomAction *action) {
+            if ([weakSelf.delegate respondsToSelector:@selector(resendMessage:)]) {
+                [weakSelf.delegate resendMessage:weakSelf];
+                return YES;
+            }
+            return NO;
+        }]];
+    }
+    if (self.messageOwner == CYLMessageOwnerTypeOther) {
+        [actions addObject:[[UIAccessibilityCustomAction alloc] initWithName:CYLLocalizedStrings(@"message.action.profile") actionHandler:^BOOL(UIAccessibilityCustomAction *action) {
+            if ([weakSelf.delegate respondsToSelector:@selector(messageCellTappedHead:)]) {
+                [weakSelf.delegate messageCellTappedHead:weakSelf];
+                return YES;
+            }
+            return NO;
+        }]];
+    }
+    return actions;
+}
+
 @end

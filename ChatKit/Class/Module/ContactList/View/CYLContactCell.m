@@ -71,4 +71,36 @@
     }
 }
 
+#pragma mark - Accessibility
+
+// One contact row is one VoiceOver element (AGENTS.md, "Accessibility"; docs/accessibility.md): title and subtitle in
+// one label, selected while it is checked in the multiple-selection mode.
+
+- (BOOL)isAccessibilityElement {
+    return YES;
+}
+
+- (NSString *)accessibilityLabel {
+    NSMutableArray<NSString *> *parts = [NSMutableArray array];
+    if (self.titleLabel.text.length > 0) {
+        [parts addObject:self.titleLabel.text];
+    }
+    if (!self.subtitleLabel.hidden && self.subtitleLabel.text.length > 0) {
+        [parts addObject:self.subtitleLabel.text];
+    }
+    return [parts componentsJoinedByString:@", "];
+}
+
+- (NSString *)accessibilityHint {
+    return self.selectionStatusButton.hidden ? nil : CYLLocalizedStrings(@"contact.action.select");
+}
+
+- (UIAccessibilityTraits)accessibilityTraits {
+    UIAccessibilityTraits traits = UIAccessibilityTraitButton;
+    if (!self.selectionStatusButton.hidden && self.checked) {
+        traits |= UIAccessibilityTraitSelected;
+    }
+    return traits;
+}
+
 @end

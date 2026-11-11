@@ -220,4 +220,56 @@ CGFloat const CYLConversationListCellDefaultHeight = 61; //CYLImageSize + CYLVer
     self.nameLabel.text = nil;
 }
 
+#pragma mark - Accessibility
+
+// One conversation row is one VoiceOver element (AGENTS.md, "Accessibility"; docs/accessibility.md): the name, how many
+// messages are unread, the last message, and when it arrived, in one label. The avatar's tap (the profile) becomes a
+// VoiceOver action. The text comes from CYLLocalizedStrings, so it follows the app's language.
+
+- (BOOL)isAccessibilityElement {
+    return YES;
+}
+
+- (NSString *)accessibilityLabel {
+    NSMutableArray<NSString *> *parts = [NSMutableArray array];
+    if (self.nameLabel.text.length > 0) {
+        [parts addObject:self.nameLabel.text];
+    }
+    // Use the instance variable: the getter would create a badge view for a row that has none.
+    NSString *badgeText = _badgeView.badgeText;
+    if (badgeText.length > 0) {
+        [parts addObject:[NSString stringWithFormat:CYLLocalizedStrings(@"conversation.unread"), badgeText]];
+    } else if (_litteBadgeView && !_litteBadgeView.hidden) {
+        // Muted conversations show a dot instead of a count.
+        [parts addObject:CYLLocalizedStrings(@"conversation.unread.muted")];
+    }
+    if (_remindMuteImageView && !_remindMuteImageView.hidden) {
+        [parts addObject:CYLLocalizedStrings(@"conversation.muted")];
+    }
+    NSString *messageText = self.messageTextLabel.attributedText.string.length > 0 ? self.messageTextLabel.attributedText.string : self.messageTextLabel.text;
+    if (messageText.length > 0) {
+        [parts addObject:messageText];
+    }
+    if (self.timestampLabel.text.length > 0) {
+        [parts addObject:self.timestampLabel.text];
+    }
+    return [parts componentsJoinedByString:@", "];
+}
+
+- (UIAccessibilityTraits)accessibilityTraits {
+    return UIAccessibilityTraitButton;
+}
+
+- (NSArray<UIAccessibilityCustomAction *> *)accessibilityCustomActions {
+    __weak typeof(self) weakSelf = self;
+    return @[[[UIAccessibilityCustomAction alloc] initWithName:CYLLocalizedStrings(@"message.action.profile") actionHandler:^BOOL(UIAccessibilityCustomAction *action) {
+        CYLOpenProfileBlock openProfileBlock = [CYLUIService sharedInstance].openProfileBlock;
+        if (!openProfileBlock) {
+            return NO;
+        }
+        openProfileBlock(weakSelf.clientId, nil, nil);
+        return YES;
+    }]];
+}
+
 @end
