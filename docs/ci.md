@@ -136,8 +136,8 @@ When this was set up (commit `0f9b56e`, branch `feat/cross-platform-components`,
 - TODO: The macOS 26 simulator shows a system notification ("Ready for Apple Intelligence") over the top of the app in
   the chat screenshots. Suppress it in `scripts/demo-screenshots.sh` (for example by waiting for it to go away or by
   preparing the simulator before the first launch).
-- TODO: `chat-large-text` stayed black after eight retries in run 42952954376 (it worked in 42950845184). The script now
-  waits 8 s after changing the text size; confirm in the next runs.
+- `chat-large-text` stayed black in run 42952954376; with the 8 s wait after changing the text size it has been shot in
+  every run since.
 - Run 42961759816: `Build demo` and `pod lib lint` green. The view tree showed why the dump was empty: every view answered
   `isAccessibilityElement` NO, also the text field with its identifier, because UIKit's accessibility runtime is not
   loaded on a plain simulator. The dump now counts standard controls, labels, text views, cells, and identified views,
@@ -147,4 +147,6 @@ When this was set up (commit `0f9b56e`, branch `feat/cross-platform-components`,
   localized label (`Client ID`, `Send`, `Message`, `Switch to voice input`), but every identifier was empty because the
   dump read it through a `UIAccessibilityIdentification` cast that returned nil. It now reads `accessibilityIdentifier`
   from the view.
-- TODO: Confirm in the next run that every `expect_accessibility` passes.
+- Run 42969177671 (`00bdead`) is the first fully green run of the Swift demo on GitHub CI (macOS 26): all jobs passed,
+  seven screenshots, and every `expect_accessibility` found its element with identifier and localized label (English
+  and Chinese: `CYLDemoLoginClientIdTextField`, `CYLChatBarSendButton`, `CYLChatBarTextView`, `CYLChatBarVoiceButton`).

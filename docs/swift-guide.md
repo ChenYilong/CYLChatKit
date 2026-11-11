@@ -33,9 +33,10 @@ Swift, in the same change.
 
 ## TODO
 
-- TODO: The Swift demo (`ChatKit-OC/Example`, all Objective-C removed) was translated without a compiler. Verify it with
-  the CI `Examples` and `Simulator screenshots` jobs and fix compile errors by changing core only with Swift macros
-  beside the declarations (`NS_SWIFT_NAME`, `NS_REFINED_FOR_SWIFT`, `NS_ENUM`, nullability), never by editing signatures.
+- The Swift demo (`ChatKit-OC/Example`, no Objective-C) builds and runs on GitHub CI (macOS 26) since run 42969177671
+  (`00bdead`): `Build demo`, `pod lib lint`, and `Simulator screenshots` with all accessibility checks passed.
+- TODO: Verify the Swift demo beyond the CI screens: login with a real LeanCloud client, sending text, voice, image and
+  location messages, the conversation detail and settings screens, and a local run on macOS 27 with Xcode 27.
   Names the Swift code guessed at the importer: see the list in `docs/naming.md`-style notes below.
 - TODO: `CYLConversationProtocol` and `CYLIMMessageProtocol` declare their getters as methods, so a Swift extension cannot
   make `AVIMConversation` / `AVIMTypedMessage` conform. The demo registers the protocols at runtime
