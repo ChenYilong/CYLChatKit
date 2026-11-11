@@ -135,6 +135,7 @@ NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
     _faceView.delegate = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 }
 
@@ -301,11 +302,34 @@ NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
 }
 
 - (void)updateChatBarKeyBoardConstraints {
+    [self updateChatBarKeyBoardConstraintsWithKeyboardNotification:nil];
+}
+
+/**
+ *  Moves the chat bar to the keyboard's top edge. With a keyboard notification the move uses the keyboard's own
+ *  duration and animation curve, so the bar travels with the (iOS 26 Liquid Glass) keyboard instead of lagging
+ *  behind it on a fixed 0.25 s animation.
+ */
+- (void)updateChatBarKeyBoardConstraintsWithKeyboardNotification:(NSNotification *)notification {
     [self mas_updateConstraints:^(MASConstraintMaker *make) {
         make.bottom.mas_equalTo(-self.keyboardSize.height);
     }];
-    [UIView animateWithDuration:CYLAnimateDuration animations:^{
-        [self layoutIfNeeded];
+    NSTimeInterval duration = CYLAnimateDuration;
+    UIViewAnimationOptions options = UIViewAnimationOptionBeginFromCurrentState;
+    NSNumber *durationNumber = notification.userInfo[UIKeyboardAnimationDurationUserInfoKey];
+    NSNumber *curveNumber = notification.userInfo[UIKeyboardAnimationCurveUserInfoKey];
+    if (durationNumber) {
+        duration = durationNumber.doubleValue;
+    }
+    if (curveNumber) {
+        // The keyboard's curve (7) is not one of the public UIViewAnimationCurve values; shifting it into the options
+        // is the documented way to reuse it.
+        options |= ((UIViewAnimationOptions)curveNumber.unsignedIntegerValue << 16);
+    }
+    // The bar's frame comes from its constraints, which the superview lays out.
+    UIView *layoutView = self.superview ?: self;
+    [UIView animateWithDuration:duration delay:0 options:options animations:^{
+        [layoutView layoutIfNeeded];
     } completion:nil];
 }
 
@@ -518,7 +542,7 @@ NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
     if (_showType == CYLFunctionViewShowKeyboard) {
         _showType = CYLFunctionViewShowNothing;
     }
-    [self updateChatBarKeyBoardConstraints];
+    [self updateChatBarKeyBoardConstraintsWithKeyboardNotification:notification];
     [self updateChatBarConstraintsIfNeeded];
 }
 
@@ -529,21 +553,7 @@ NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
         return;
     }
     CGFloat oldHeight = self.keyboardSize.height;
-    CGRect keyboardFrame = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    UIView *containerView = self.superview;
-    if (containerView) {
-        CGRect keyboardFrameInContainer = [containerView convertRect:keyboardFrame fromView:nil];
-        CGRect intersection = CGRectIntersection(containerView.bounds, keyboardFrameInContainer);
-        CGFloat bottomOverlap = !CGRectIsNull(intersection)
-            && CGRectGetMaxY(intersection) >= CGRectGetMaxY(containerView.bounds) - 1.0
-            ? CGRectGetHeight(intersection)
-            : 0;
-        // Keyboard frames are screen-based; convert them before offsetting the chat bar to avoid overshooting.
-        // https://github.com/leancloud/ChatKit-OC/issues/329
-        self.keyboardSize = CGSizeMake(CGRectIsNull(intersection) ? 0 : CGRectGetWidth(intersection), bottomOverlap);
-    } else {
-        self.keyboardSize = keyboardFrame.size;
-    }
+    self.keyboardSize = [self keyboardSizeForNotification:notification];
     //兼容搜狗输入法：一次键盘事件会通知两次，且键盘高度不一。
     if (self.keyboardSize.height != oldHeight) {
         _showType = CYLFunctionViewShowNothing;
@@ -553,8 +563,45 @@ NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
         return;
     }
     self.allowTextViewContentOffset = YES;
-    [self updateChatBarKeyBoardConstraints];
+    [self updateChatBarKeyBoardConstraintsWithKeyboardNotification:notification];
     self.showType = CYLFunctionViewShowKeyboard;
+}
+
+/**
+ *  Follows a keyboard that is already visible when its height changes (input method switch, prediction bar, iPad
+ *  keyboard docking). Showing and hiding are handled by -keyboardWillShow: and -keyboardWillHide:.
+ */
+- (void)keyboardWillChangeFrame:(NSNotification *)notification {
+    if (self.isClosed || self.keyboardSize.height == 0) {
+        return;
+    }
+    CGSize newSize = [self keyboardSizeForNotification:notification];
+    if (newSize.height == 0 || fabs(newSize.height - self.keyboardSize.height) < 1.0) {
+        return;
+    }
+    self.keyboardSize = newSize;
+    [self updateChatBarKeyBoardConstraintsWithKeyboardNotification:notification];
+    [self updateChatBarConstraintsIfNeeded];
+}
+
+/**
+ *  The part of the keyboard that covers the bottom of the chat bar's superview. Keyboard frames are screen based, so
+ *  they are converted first to avoid overshooting.
+ *  https://github.com/leancloud/ChatKit-OC/issues/329
+ */
+- (CGSize)keyboardSizeForNotification:(NSNotification *)notification {
+    CGRect keyboardFrame = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    UIView *containerView = self.superview;
+    if (!containerView) {
+        return keyboardFrame.size;
+    }
+    CGRect keyboardFrameInContainer = [containerView convertRect:keyboardFrame fromView:nil];
+    CGRect intersection = CGRectIntersection(containerView.bounds, keyboardFrameInContainer);
+    CGFloat bottomOverlap = !CGRectIsNull(intersection)
+        && CGRectGetMaxY(intersection) >= CGRectGetMaxY(containerView.bounds) - 1.0
+        ? CGRectGetHeight(intersection)
+        : 0;
+    return CGSizeMake(CGRectIsNull(intersection) ? 0 : CGRectGetWidth(intersection), bottomOverlap);
 }
 
 /**
@@ -594,6 +641,9 @@ NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
     }];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    // The iOS 26 Liquid Glass keyboard (like other keyboards) can change its height while it stays visible, for
+    // example when the input method or the prediction bar changes; no show or hide notification is posted for that.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
     //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(confirmRecordVoice) name:kCYLRecordAudioTooLong object:nil];
     //修复录音时点击Home键 在返回App后 仍然显示录音动效的问题
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeBackgroundCancelRecordVoice) name:UIApplicationDidEnterBackgroundNotification object:nil];
@@ -718,9 +768,9 @@ NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
             break;
     }
     [self updateChatBarConstraintsIfNeeded];
-    if (@available(iOS 11.0, *) && CYL_IS_iPHONEX) {
-        [self safeAreaInsetsDidChange];
-    }
+    // The bottom spacing depends on the panel that is shown, on every device with a bottom safe area. It used to be
+    // refreshed only when the status bar was 44 pt high, which is false on iPhones with a Dynamic Island.
+    [self updateBottomSafeAreaOffsets];
 }
 
 - (void)buttonAction:(UIButton *)button {
@@ -1061,6 +1111,11 @@ NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
 }
 
 - (void)safeAreaInsetsDidChange {
+    [super safeAreaInsetsDidChange];
+    [self updateBottomSafeAreaOffsets];
+}
+
+- (void)updateBottomSafeAreaOffsets {
     CGFloat safeAreaOffset = 0;
     if ((_showType != CYLFunctionViewShowFace) &&  (_showType != CYLFunctionViewShowMore)) {
         safeAreaOffset = -self.safeAreaInsets.bottom;

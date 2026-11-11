@@ -78,7 +78,33 @@ static CGFloat const CYLAvatarBottomToMessageContentTop = -1.f;
 static CGFloat const CYL_MSG_CELL_EDGES_OFFSET = 16;
 
 #define CYL_STATUSBAR_HEIGHT ([UIApplication sharedApplication].statusBarFrame.size.height)
-#define CYL_IS_iPHONEX ((CYL_STATUSBAR_HEIGHT == 44) ? YES : NO)
+
+/// Whether the device has a bottom safe area (the home indicator): iPhone X and later. The check is the bottom safe
+/// area of the key window, not the status bar height: the old check (`status bar == 44`) was NO on iPhones with a
+/// Dynamic Island, whose status bar is taller.
+static inline BOOL CYLChatDeviceHasBottomSafeArea(void) {
+    UIWindow *window = nil;
+    for (UIScene *scene in [UIApplication sharedApplication].connectedScenes) {
+        if (![scene isKindOfClass:[UIWindowScene class]]) {
+            continue;
+        }
+        for (UIWindow *candidate in ((UIWindowScene *)scene).windows) {
+            if (candidate.isKeyWindow) {
+                window = candidate;
+                break;
+            }
+        }
+        if (window) {
+            break;
+        }
+    }
+    // Apps without scenes (like the demo) have no scene windows.
+    if (!window) {
+        window = [UIApplication sharedApplication].keyWindow;
+    }
+    return window.safeAreaInsets.bottom > 0;
+}
+#define CYL_IS_iPHONEX (CYLChatDeviceHasBottomSafeArea())
 static NSInteger const CYL_iPHONEX_OFFSET = 34;
 
 static NSString *const CYLBadgeTextForNumberGreaterThanLimit = @"···";
