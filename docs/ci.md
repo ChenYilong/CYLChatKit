@@ -25,6 +25,8 @@ The macOS runner is `macos-26` unless the repository variable `MACOS_RUNNER` nam
 | GitHub CI/CD | macOS 26 (`macos-26`) | the Xcode of the `macos-26` image |
 | Local run (the user's own Mac, no GitHub CI/CD) | macOS 27 | Xcode 27, with the Simulator |
 
+The GitHub environment is confirmed against CYLTabBarController's `.github/workflows/ios.yml` (checked at `4209e37`: `macos-26`, variable `MACOS_RUNNER` for `xcode-27`); a local run ignores that check.
+
 Both use the same scripts (`scripts/update-cyltabbarcontroller-commit.sh`, `ci-build-example.sh`, `demo-screenshots.sh`).
 See `AGENTS.md` ("CI/CD and test environments") and `.agents/skills/cylchatkit-cicd/SKILL.md`.
 

@@ -15,6 +15,20 @@ description: "CYLChatKit CI/CD and test environments: GitHub CI/CD runs on macOS
 **Local run** means running directly on the user's own Mac, not through GitHub CI/CD: build with Xcode 27, launch the
 Simulator, and test there. **GitHub CI/CD** means the workflow on GitHub's macOS 26 runners.
 
+## Check the reference workflow first
+
+For GitHub CI/CD, always read CYLTabBarController's workflow before you rely on or change the runner:
+https://github.com/ChenYilong/CYLTabBarController/blob/master/.github/workflows/ios.yml
+
+- It decides the environment: at the last check (CYLTabBarController `4209e37`, 2026-11-10) it used
+  `runs-on: ${{ vars.MACOS_RUNNER || 'macos-26' }}`, i.e. macOS 26 with Apple Silicon and the default Xcode 26.x, and named
+  `xcode-27` as the `MACOS_RUNNER` value for the Xcode 27 public preview. The iOS default is therefore macOS 26.
+- Fetch it with `git clone --depth 1 https://github.com/ChenYilong/CYLTabBarController.git <new empty dir>` (or the
+  GitHub file view) and `grep -n 'runs-on\|MACOS_RUNNER\|xcode' .github/workflows/ios.yml`. Keep this repository's
+  `.github/workflows/ios.yml` and `docs/ci.md` in step with what it says.
+- **Local runs are exempt:** if the user asks for a local run, skip this check. The system is macOS 27 with Xcode 27 on the
+  user's Mac, and the Simulator is used directly.
+
 ## Rules
 
 - Use the repository scripts in both environments, so they build the same thing:

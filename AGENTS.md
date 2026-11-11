@@ -229,7 +229,7 @@ Read `.agents/skills/cylchatkit-cicd/SKILL.md` before running a build or test, o
 
 | Where | System | Xcode | How it runs |
 |:---|:---|:---|:---|
-| **GitHub CI/CD** (`.github/workflows/ios.yml`) | **macOS 26** (runner label `macos-26`; Linux jobs use `ubuntu-latest`) | the Xcode that the `macos-26` image provides | Every push and pull request; the macOS jobs build the library, the demo, and the podspec, and run the simulator screenshots |
+| **GitHub CI/CD** (`.github/workflows/ios.yml`, default for iOS; confirm against CYLTabBarController's `ios.yml`) | **macOS 26** (runner label `macos-26`; Linux jobs use `ubuntu-latest`) | the Xcode that the `macos-26` image provides | Every push and pull request; the macOS jobs build the library, the demo, and the podspec, and run the simulator screenshots |
 | **Local run** | **macOS 27** | **Xcode 27** | On the user's own Mac, without GitHub CI/CD: build, run the simulator directly, and test with Xcode 27 |
 
 - "Local run" means exactly that: the work happens on the user's Mac with Xcode 27 and the Simulator, and nothing goes
@@ -243,6 +243,15 @@ Read `.agents/skills/cylchatkit-cicd/SKILL.md` before running a build or test, o
   Liquid Glass guards (see "Guard every Liquid Glass API") valid on both SDKs.
 - Keep the deployment target at iOS 15.0 in both. Do not raise it because Xcode 27 or macOS 26 allows newer APIs.
 - The workflow runs macOS jobs on `${{ vars.MACOS_RUNNER || 'macos-26' }}`; the default stays `macos-26`.
+- **Always check the reference workflow first.** Before running or changing anything that depends on the GitHub runner
+  (macOS version, Xcode version, runner label), read CYLTabBarController's
+  [`.github/workflows/ios.yml`](https://github.com/ChenYilong/CYLTabBarController/blob/master/.github/workflows/ios.yml) at its
+  current state to confirm the environment, and keep this repository's workflow in step with it. At the last check
+  (CYLTabBarController `4209e37`, 2026-11-10) it used `runs-on: ${{ vars.MACOS_RUNNER || 'macos-26' }}` (macOS 26,
+  Apple Silicon, default Xcode 26.x) and documented `xcode-27` as the value of the repository variable `MACOS_RUNNER` for the
+  Xcode 27 public preview. For iOS the default GitHub CI/CD environment is **macOS 26** unless that file says otherwise.
+- **A local run ignores this restriction.** When the user asks for a local run, do not look up the workflow or the runner:
+  the system is macOS 27 with Xcode 27, on the user's own Mac, using the Simulator directly.
 
 ## CI and demo screenshots
 
