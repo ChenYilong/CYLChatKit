@@ -18,6 +18,19 @@ because this repository has no test target and no Carthage support.
 
 The macOS runner is `macos-26` unless the repository variable `MACOS_RUNNER` names another one.
 
+## Environments: GitHub CI/CD and local run
+
+| Where | System | Xcode |
+|:---|:---|:---|
+| GitHub CI/CD | macOS 26 (`macos-26`) | the Xcode of the `macos-26` image |
+| Local run (the user's own Mac, no GitHub CI/CD) | macOS 27 | Xcode 27, with the Simulator |
+
+Both use the same scripts (`scripts/update-cyltabbarcontroller-commit.sh`, `ci-build-example.sh`, `demo-screenshots.sh`).
+See `AGENTS.md` ("CI/CD and test environments") and `.agents/skills/cylchatkit-cicd/SKILL.md`.
+
+TODO: A local run on macOS 27 with Xcode 27 has never been done for this repository; the screenshots and the iOS 27
+Liquid Glass behavior (`+[CYLChatLiquidGlass isActive]` is always on from iOS 27) are only verified by the macOS 26 CI.
+
 ## Screenshots
 
 The demo needs a LeanCloud login to show real data, which CI does not have. For screenshots, `AppDelegate` reads the

@@ -14,6 +14,7 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
   - `.agents/skills/cylchatkit-localization/SKILL.md` (before adding or changing localized strings, tables, or bundles)
   - `.agents/skills/cylchatkit-accessibility/SKILL.md` (before adding or changing any control, text, cell, or screen)
   - `.agents/skills/cylchatkit-commit/SKILL.md` (before every commit)
+  - `.agents/skills/cylchatkit-cicd/SKILL.md` (before running a build or test, or changing the workflow)
   - `.agents/skills/cylchatkit-comments/SKILL.md` (before writing or changing a public declaration or its comment)
 
 ## Objective-C and API rules
@@ -221,6 +222,27 @@ Read `.agents/skills/cylchatkit-accessibility/SKILL.md` before touching a contro
   `Semantics`, `ExcludeSemantics`.
 - Record gaps as `TODO` in `docs/accessibility.md`. The convention: every component and every text of this project
   supports accessibility. A change that adds a control or a text without it is not done.
+
+## CI/CD and test environments
+
+Read `.agents/skills/cylchatkit-cicd/SKILL.md` before running a build or test, or changing the workflow.
+
+| Where | System | Xcode | How it runs |
+|:---|:---|:---|:---|
+| **GitHub CI/CD** (`.github/workflows/ios.yml`) | **macOS 26** (runner label `macos-26`; Linux jobs use `ubuntu-latest`) | the Xcode that the `macos-26` image provides | Every push and pull request; the macOS jobs build the library, the demo, and the podspec, and run the simulator screenshots |
+| **Local run** | **macOS 27** | **Xcode 27** | On the user's own Mac, without GitHub CI/CD: build, run the simulator directly, and test with Xcode 27 |
+
+- "Local run" means exactly that: the work happens on the user's Mac with Xcode 27 and the Simulator, and nothing goes
+  through GitHub Actions. Use the same scripts as CI (`scripts/ci-build-example.sh`, `scripts/demo-screenshots.sh`,
+  `scripts/update-cyltabbarcontroller-commit.sh`) so both environments build the same thing.
+- An agent session in the cloud has no Xcode (Linux): it can only run the static checks. Its compile results come from
+  GitHub CI/CD (macOS 26); when the user asks for a local run, hand over the commands for macOS 27 and Xcode 27 instead of
+  guessing.
+- The two environments can differ (SDK, Simulator runtimes, iOS 26 and iOS 27 behavior). Report which one produced a
+  result: say "GitHub CI (macOS 26)" or "local (macOS 27, Xcode 27)", and do not treat one as proof for the other. Keep the
+  Liquid Glass guards (see "Guard every Liquid Glass API") valid on both SDKs.
+- Keep the deployment target at iOS 15.0 in both. Do not raise it because Xcode 27 or macOS 26 allows newer APIs.
+- The workflow runs macOS jobs on `${{ vars.MACOS_RUNNER || 'macos-26' }}`; the default stays `macos-26`.
 
 ## CI and demo screenshots
 
