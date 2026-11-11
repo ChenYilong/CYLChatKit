@@ -109,23 +109,23 @@ final class CYLDemoContactListController: CYLChatBaseTableViewController {
     // MARK: - tableview
 
     @objc
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return sortedSectionTitles.count
     }
 
     @objc
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionKey = sortedSectionTitles[section]
         return sections[sectionKey]?.count ?? 0
     }
 
     @objc
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 64.0
     }
 
     @objc
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CYLDemoContactListControllerIdentifier, for: indexPath) as! CYLDemoContactCell
         let sectionKey = sortedSectionTitles[indexPath.section]
         let peerId = sections[sectionKey]?[indexPath.row] ?? ""
@@ -157,17 +157,17 @@ final class CYLDemoContactListController: CYLChatBaseTableViewController {
     }
 
     @objc
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sortedSectionTitles[section]
     }
 
     @objc
-    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         return sortedSectionTitles
     }
 
     @objc
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if mode == .multipleSelection {
             return
@@ -187,12 +187,12 @@ final class CYLDemoContactListController: CYLChatBaseTableViewController {
     }
 
     @objc
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
 
     @objc
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         if mode == .multipleSelection || mode == .singleSelection {
             // `Insert | Delete` (3) is the multi-selection control. It is not a named case of the Swift enum.
             return UITableViewCell.EditingStyle(rawValue: UITableViewCell.EditingStyle.insert.rawValue | UITableViewCell.EditingStyle.delete.rawValue)!
@@ -201,7 +201,7 @@ final class CYLDemoContactListController: CYLChatBaseTableViewController {
     }
 
     @objc
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if mode == .normal {
             let sectionKey = sortedSectionTitles[indexPath.section]
             guard var array = sections[sectionKey] else {

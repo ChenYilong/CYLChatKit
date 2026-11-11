@@ -40,8 +40,10 @@ final class CYLDemoProfileNameEditViewController: FXFormViewController {
         formController.form = nameForm
     }
 
-    @objc func onSaveCellClick(_ sender: UITableViewCell & FXFormFieldCell) {
-        guard let nameForm = sender.field.form as? CYLDemoNameForm else { return }
+    /// FXForms sends the tapped cell, which conforms to its cell protocol; its `field` is read through key-value coding.
+    @objc func onSaveCellClick(_ sender: UITableViewCell) {
+        guard let field = sender.value(forKey: "field") as? NSObject,
+              let nameForm = field.value(forKey: "form") as? CYLDemoNameForm else { return }
         if nameForm.name == placeholderName {
             navigationController?.popViewController(animated: true)
             return

@@ -31,7 +31,7 @@ enum CYLDemoLeanCloudRuntime {
     private static let registration: Bool = {
         // Same as `+load` of `CYLDemoEmotionMessage` in the Objective-C code.
         CYLDemoEmotionMessage.registerSubclass()
-        registeredMediaTypes.insert(Int(CYLDemoEmotionMessage.classMediaType()))
+        registeredMediaTypes.insert(Int(CYLDemoEmotionMessage.classMediaType().rawValue))
         addProtocol(CYLIMMessageProtocol.self, to: AVIMTypedMessage.self)
         addProtocol(CYLConversationProtocol.self, to: AVIMConversation.self)
         return true
@@ -44,7 +44,7 @@ enum CYLDemoLeanCloudRuntime {
     /// Whether a custom message class with this media type is registered (the SDK keeps its own private registry).
     static func isCustomMessageTypeRegistered(_ mediaType: AVIMMessageMediaType) -> Bool {
         registerOnce()
-        return registeredMediaTypes.contains(Int(mediaType))
+        return registeredMediaTypes.contains(Int(mediaType.rawValue))
     }
 
     private static func addProtocol(_ protocolObject: Protocol, to cls: AnyClass) {
@@ -129,7 +129,7 @@ final class CYLDemoLeanCloudIMProvider: NSObject, CYLIMProvider {
         conversations.joinConversation(conversation, callback: callback)
     }
 
-    func markConversationAsRead(_ conversation: CYLConversationProtocol) {
+    func markConversation(asRead conversation: CYLConversationProtocol) {
         conversations.markConversationAsRead(conversation)
     }
 
@@ -230,11 +230,11 @@ final class CYLDemoLeanCloudIMProvider: NSObject, CYLIMProvider {
         return conversations.removeAllCachedRecentConversations()
     }
 
-    func findRecentConversations(withBlock block: CYLIMRecentConversationsResultBlock?) {
+    func findRecentConversations(block: CYLIMRecentConversationsResultBlock?) {
         conversations.findRecentConversations(withBlock: block)
     }
 
-    func fetchRelationConversationsFromServerCallback(_ block: CYLArrayResultBlock?) {
+    func fetchRelationConversations(fromServerCallback block: CYLArrayResultBlock?) {
         conversations.fetchRelationConversationsFromServerCallback(block)
     }
 

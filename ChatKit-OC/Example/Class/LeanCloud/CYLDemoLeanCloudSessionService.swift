@@ -193,7 +193,7 @@ final class CYLDemoLeanCloudSessionService: CYLSingleton, AVIMClientDelegate, AV
 
     /// A custom message that this client version does not support is delivered here.
     @objc(conversation:didReceiveCommonMessage:)
-    func conversation(_ conversation: AVIMConversation, didReceiveCommon message: AVIMMessage) {
+    func conversation(_ conversation: AVIMConversation, didReceiveCommonMessage message: AVIMMessage) {
         if !message.cylDemoIsValidMessage() {
             return
         }

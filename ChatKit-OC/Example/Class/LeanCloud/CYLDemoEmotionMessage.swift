@@ -10,7 +10,16 @@ import AVOSCloud
 import AVOSCloudIM
 
 /// The media type of `CYLDemoEmotionMessage`. Positive values are reserved for custom messages.
-let kAVIMMessageMediaTypeEmotion: AVIMMessageMediaType = 1
+let kAVIMMessageMediaTypeEmotion: AVIMMessageMediaType = cylDemoMediaType(1)
+
+/// Builds a media type from its raw value, also for custom values the SDK enum does not list.
+func cylDemoMediaType(_ raw: Int8) -> AVIMMessageMediaType {
+    if let known = AVIMMessageMediaType(rawValue: raw) {
+        return known
+    }
+    precondition(MemoryLayout<AVIMMessageMediaType>.size == MemoryLayout<Int8>.size)
+    return unsafeBitCast(raw, to: AVIMMessageMediaType.self)
+}
 
 private let cylDemoEmotionPathKey = "emotionPath"
 

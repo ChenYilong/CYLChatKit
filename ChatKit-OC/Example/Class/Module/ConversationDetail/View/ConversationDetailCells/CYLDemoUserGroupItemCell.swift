@@ -7,7 +7,7 @@ import UIKit
 import CYLChatKit
 import SDWebImage
 
-enum CYLDemoConversationOperationType: Int {
+@objc enum CYLDemoConversationOperationType: Int {
     case none
     case add
     case remove

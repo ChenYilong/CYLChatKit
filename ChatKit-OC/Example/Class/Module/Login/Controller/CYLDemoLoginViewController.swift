@@ -75,10 +75,10 @@ final class CYLDemoLoginViewController: UIViewController, UITextFieldDelegate, M
     @objc(autoCompleteTextField:shouldConfigureCell:withAutoCompleteString:withAttributedString:forAutoCompleteObject:forRowAtIndexPath:)
     func autoCompleteTextField(_ textField: MLPAutoCompleteTextField!,
                                shouldConfigureCell cell: UITableViewCell!,
-                               withAutoCompleteString autocompleteString: String!,
-                               withAttributedString boldedString: NSAttributedString!,
-                               forAutoCompleteObject autocompleteObject: MLPAutoCompletionObject!,
-                               forRowAtIndexPath indexPath: IndexPath!) -> Bool {
+                               withAutoComplete autocompleteString: String!,
+                               with boldedString: NSAttributedString!,
+                               forAutoComplete autocompleteObject: MLPAutoCompletionObject!,
+                               forRowAt indexPath: IndexPath!) -> Bool {
         // This is your chance to customize an autocomplete table view cell before it appears.
         var avatorURL: URL?
         for user in CYLDemoContactProfiles {
@@ -93,9 +93,9 @@ final class CYLDemoLoginViewController: UIViewController, UITextFieldDelegate, M
 
     @objc(autoCompleteTextField:didSelectAutoCompleteString:withAutoCompleteObject:forRowAtIndexPath:)
     func autoCompleteTextField(_ textField: MLPAutoCompleteTextField!,
-                               didSelectAutoCompleteString selectedString: String!,
-                               withAutoCompleteObject selectedObject: MLPAutoCompletionObject!,
-                               forRowAtIndexPath indexPath: IndexPath!) {
+                               didSelectAutoComplete selectedString: String!,
+                               withAutoComplete selectedObject: MLPAutoCompletionObject!,
+                               forRowAt indexPath: IndexPath!) {
         clientIDHandler?(selectedString)
     }
 
@@ -105,7 +105,7 @@ final class CYLDemoLoginViewController: UIViewController, UITextFieldDelegate, M
     }
 
     @objc(autoCompleteTextField:willShowAutoCompleteTableView:)
-    func autoCompleteTextField(_ textField: MLPAutoCompleteTextField!, willShowAutoCompleteTableView autoCompleteTableView: UITableView!) {
+    func autoCompleteTextField(_ textField: MLPAutoCompleteTextField!, willShowAutoComplete autoCompleteTableView: UITableView!) {
         NSLog("Autocomplete table view will be added to the view hierarchy")
     }
 
