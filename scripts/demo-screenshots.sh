@@ -79,6 +79,10 @@ xcrun simctl boot "$DEVICE_ID" 2>/dev/null || true
 xcrun simctl bootstatus "$DEVICE_ID" -b
 xcrun simctl status_bar "$DEVICE_ID" override --time 9:41 --batteryState charged --batteryLevel 100 \
     --cellularBars 4 --wifiBars 3 || true
+# Load UIKit's accessibility runtime in apps, as UI-test automation does, so standard controls answer
+# isAccessibilityElement with YES and carry their labels in the dump. Without it every view answered NO (run 42961759816).
+xcrun simctl spawn "$DEVICE_ID" defaults write com.apple.Accessibility ApplicationAccessibilityEnabled -bool true || true
+xcrun simctl spawn "$DEVICE_ID" defaults write com.apple.Accessibility AccessibilityEnabled -bool true || true
 # The demo's -CYLDemoScreenshots flag keeps app-side overlays out of the screenshots: it skips the notification
 # permission request and does not open the keyboard by itself (-CYLDemoKeyboard does, for the keyboard screenshot).
 xcrun simctl install "$DEVICE_ID" "$APP"
@@ -149,7 +153,11 @@ shoot() {
     xcrun simctl launch --terminate-running-process "$DEVICE_ID" "$BUNDLE_ID" -CYLDemoScreenshots YES \
         -CYLDemoAccessibilityDump YES "$@"
     sleep 8
-    if ! xcrun simctl spawn "$DEVICE_ID" launchctl list | grep -q "$BUNDLE_ID"; then
+    # Read the list first: `launchctl list | grep -q` closed the pipe early, and with pipefail the SIGPIPE ("signal 13:
+    # Broken pipe") looked like a crash although the app was running (chat-zh in run 42961759816).
+    local services
+    services=$(xcrun simctl spawn "$DEVICE_ID" launchctl list 2>/dev/null || true)
+    if ! grep -q "$BUNDLE_ID" <<< "$services"; then
         echo "::error::$BUNDLE_ID is not running after launch ($name); it crashed"
         print_crash "$started"
         CRASHED="$CRASHED $name"

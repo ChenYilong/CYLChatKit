@@ -131,6 +131,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
     }
 
+    /// Whether the dump lists the object as one element. UIKit answers `isAccessibilityElement` with YES for its controls
+    /// and labels only after its accessibility runtime has loaded (VoiceOver or UI-test automation is on); on a plain CI
+    /// simulator every view answered NO (run 42961759816). So standard controls, labels, text views, cells, and views
+    /// with an identifier count too: the same elements VoiceOver reads.
+    private static func isDumpedAsElement(_ object: NSObject) -> Bool {
+        if object.isAccessibilityElement {
+            return true
+        }
+        guard let view = object as? UIView else {
+            return false
+        }
+        if view is UIControl || view is UILabel || view is UITextView || view is UITableViewCell
+            || view is UICollectionViewCell {
+            return true
+        }
+        return !(view.accessibilityIdentifier ?? "").isEmpty
+    }
+
+    /// The accessibility label, or the visible text that VoiceOver would read when no label is set.
+    private static func dumpedLabel(of object: NSObject) -> String {
+        if let label = object.accessibilityLabel, !label.isEmpty {
+            return label
+        }
+        switch object {
+        case let label as UILabel:
+            return label.text ?? ""
+        case let button as UIButton:
+            return button.currentTitle ?? ""
+        case let field as UITextField:
+            return field.placeholder ?? field.text ?? ""
+        case let textView as UITextView:
+            return textView.text ?? ""
+        default:
+            return ""
+        }
+    }
+
     /// Walks like VoiceOver: an accessibility element ends the walk; a container lists its `accessibilityElements`, any
     /// other view its visible subviews.
     private func appendAccessibility(of object: NSObject, depth: Int, to dump: inout String) {
@@ -140,10 +177,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             }
         }
         let indent = String(repeating: " ", count: depth * 2)
-        if object.isAccessibilityElement {
+        if Self.isDumpedAsElement(object) {
             let identifier = (object as? UIAccessibilityIdentification)?.accessibilityIdentifier ?? ""
             let traits = String(object.accessibilityTraits.rawValue, radix: 16)
-            dump += "\(indent)\(NSStringFromClass(type(of: object))) label=\"\(object.accessibilityLabel ?? "")\" "
+            dump += "\(indent)\(NSStringFromClass(type(of: object))) label=\"\(Self.dumpedLabel(of: object))\" "
                 + "value=\"\(object.accessibilityValue ?? "")\" hint=\"\(object.accessibilityHint ?? "")\" "
                 + "id=\"\(identifier)\" traits=0x\(traits)\n"
             return

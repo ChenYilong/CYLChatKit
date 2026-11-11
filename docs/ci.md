@@ -138,3 +138,9 @@ When this was set up (commit `0f9b56e`, branch `feat/cross-platform-components`,
   preparing the simulator before the first launch).
 - TODO: `chat-large-text` stayed black after eight retries in run 42952954376 (it worked in 42950845184). The script now
   waits 8 s after changing the text size; confirm in the next runs.
+- Run 42961759816: `Build demo` and `pod lib lint` green. The view tree showed why the dump was empty: every view answered
+  `isAccessibilityElement` NO, also the text field with its identifier, because UIKit's accessibility runtime is not
+  loaded on a plain simulator. The dump now counts standard controls, labels, text views, cells, and identified views,
+  and the script turns on `ApplicationAccessibilityEnabled`. The reported `chat-zh` crash was the script's own
+  `launchctl list | grep -q` pipe failing with SIGPIPE under pipefail; fixed.
+- TODO: Confirm in the next run that every `expect_accessibility` passes and no false crash is reported.
