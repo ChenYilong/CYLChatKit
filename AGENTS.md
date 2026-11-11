@@ -13,6 +13,7 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
   - `.agents/skills/cylchatkit-objc-naming/SKILL.md`
   - `.agents/skills/cylchatkit-localization/SKILL.md` (before adding or changing localized strings, tables, or bundles)
   - `.agents/skills/cylchatkit-accessibility/SKILL.md` (before adding or changing any control, text, cell, or screen)
+  - `.agents/skills/cylchatkit-commit/SKILL.md` (before every commit)
 
 ## Objective-C and API rules
 
@@ -210,6 +211,10 @@ Read `.agents/skills/cylchatkit-accessibility/SKILL.md` before touching a contro
 - Never run broad deletion commands against `.git/objects` or other Git internals. Do not delete AppleDouble files in Git internals as a cleanup shortcut; leave them untouched unless a specific file is proven corrupt and a safe Git-aware repair is planned.
 - Use concise English commit messages. Never commit credentials, signing assets, or local build output.
 - Before every commit, review the changed scope and relevant documentation for unfinished work. Record every incomplete or unverified item with the literal keyword `TODO` in the most relevant existing document under `docs/`; include remaining implementation details, constraints, known defects, verification steps, and API design or compatibility risks. Do not call an item complete based only on reserved keys, stubs, or compilation.
+- **Every commit message body must contain the author line `By @ChenYilong <luohanchenyilong@163.com>`**, on its own
+  line, after the description and before any trailers (such as `Claude-Session:`). Commits made by an agent carry it too.
+  See `.agents/skills/cylchatkit-commit/SKILL.md`. The `commit-msg` hook below only removes `Co-Authored-By:` lines, so
+  this line stays.
 - Use an English Conventional Commit subject compatible with Commitizen. The subject summarizes the completed work; use the body for concise details and remaining tasks. If the detailed description exceeds 50 characters, create or update a suitable `docs/` note and include its link in the commit body. Do not create duplicate tracking documents.
 
 ## Commitizen defaults
