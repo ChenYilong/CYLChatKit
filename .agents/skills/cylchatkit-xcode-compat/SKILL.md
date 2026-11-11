@@ -63,6 +63,27 @@ than `master` or `main`.
 
 Lockfiles (`Podfile.lock`) are not committed, so every dependency needs an explicit version or a `:git`/`:commit` pin.
 
+## SDK and OS guards for Liquid Glass
+
+The deployment target is iOS 15.0 and CI builds with the newest Xcode, so any API newer than iOS 15, above all the iOS 26
+Liquid Glass material (`UIGlassEffect`), needs both guards (`AGENTS.md`, "Guard every Liquid Glass API"):
+
+```objc
+#if defined(__IPHONE_26_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_26_0
+    if (@available(iOS 26.0, *)) {
+        // iOS 26 API here
+    }
+#endif
+```
+
+- The compile-time check keeps the library building with an older Xcode; the run-time check keeps it working on an older
+  system. Neither is enough alone.
+- Put the iOS 26 code in `CYLChatLiquidGlass` (`ChatKit/Class/Tool/CYLChatLiquidGlass.{h,m}`). Its `+isActive` also returns
+  NO when the app sets `UIDesignRequiresCompatibility` on iOS 26, which is the app's opt-out of Liquid Glass. Other
+  files call it and keep their old styling when it answers NO or nil.
+- Check that a change leaves the old look untouched: with the guards false, the code path must be the one that existed
+  before. Verify with the CI screenshots, and with `UIDesignRequiresCompatibility` set when you can.
+
 ## Project structure
 
 - Keep all source and resource membership explicit in `PBXGroup`, `PBXFileReference`, and `PBXBuildFile` entries.
