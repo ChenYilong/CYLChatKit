@@ -219,6 +219,9 @@ shoot chat-keyboard -CYLDemoScreen chat -CYLDemoKeyboard YES
 # Visual accessibility: the largest of the usual Dynamic Type sizes (Larger Text, accessibility size 3), with a sample
 # message typed in, so the scaled text view and send button show.
 xcrun simctl ui "$DEVICE_ID" content_size accessibility-extra-large || echo "::warning::could not set the text size"
+# Changing the text size makes the simulator redraw its UI; give it time, or the next launch can stay black (the first
+# CI runs of the Swift demo showed a black chat-large-text screenshot after eight retries).
+sleep 8
 shoot chat-large-text -CYLDemoScreen chat -CYLDemoText "Hello Jerry, this is a longer sample message that wraps"
 xcrun simctl ui "$DEVICE_ID" content_size large || true
 

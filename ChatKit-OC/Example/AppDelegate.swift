@@ -95,6 +95,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 self.appendAccessibility(of: window, depth: 0, to: &dump)
             }
             if dump.isEmpty {
+                for window in windows {
+                    self.appendViewTree(of: window, depth: 0, to: &dump)
+                }
                 // Diagnostics for CI: say what was walked instead of writing an empty file.
                 dump = "(no accessibility elements; windows: \(windows.count))\n"
                     + windows.map { "  \(NSStringFromClass(type(of: $0))) key=\($0.isKeyWindow) alpha=\($0.alpha) "
@@ -104,6 +107,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             let directory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first ?? ""
             let path = (directory as NSString).appendingPathComponent("accessibility.txt")
             try? dump.write(toFile: path, atomically: true, encoding: .utf8)
+        }
+    }
+
+    /// Diagnostics when nothing was found: the raw view tree with the properties that decide the walk.
+    private func appendViewTree(of view: UIView, depth: Int, to dump: inout String) {
+        guard depth < 14 else { return }
+        dump += String(repeating: " ", count: depth * 2)
+            + "\(NSStringFromClass(type(of: view))) hidden=\(view.isHidden) alpha=\(view.alpha) "
+            + "axElement=\(view.isAccessibilityElement) axHidden=\(view.accessibilityElementsHidden) "
+            + "axElements=\(view.accessibilityElements?.count ?? -1) id=\"\(view.accessibilityIdentifier ?? "")\"\n"
+        for subview in view.subviews {
+            appendViewTree(of: subview, depth: depth + 1, to: &dump)
         }
     }
 
@@ -124,14 +139,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 + "id=\"\(identifier)\" traits=0x\(traits)\n"
             return
         }
-        var children: [Any] = object.accessibilityElements ?? []
-        if children.isEmpty, let view = object as? UIView {
-            children = view.subviews
+        // A container's `accessibilityElements` and a view's subviews are both walked (each object once). On the macOS 26
+        // simulator a window's `accessibilityElements` can hold objects that end the walk, so subviews alone are not
+        // replaced by them any more.
+        var children: [NSObject] = (object.accessibilityElements ?? []).compactMap { $0 as? NSObject }
+        if let view = object as? UIView {
+            for subview in view.subviews where !children.contains(where: { $0 === subview }) {
+                children.append(subview)
+            }
         }
         for child in children {
-            if let child = child as? NSObject {
-                appendAccessibility(of: child, depth: depth + 1, to: &dump)
-            }
+            appendAccessibility(of: child, depth: depth + 1, to: &dump)
         }
     }
 

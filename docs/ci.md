@@ -127,3 +127,14 @@ When this was set up (commit `0f9b56e`, branch `feat/cross-platform-components`,
   (`CYLDemoTabBar.json`, explicit file reference) loaded with `tabBarControllerWithConfigurationFile:error:`, register the
   pages (`conversations`, `contacts`, and a plus child page) with `CYLTabBarPageRegistry`, and add a screenshot of the
   plus child page. Do this after the Swift demo builds in CI.
+
+## Swift demo on GitHub CI (macOS 26)
+
+- Run 42950845184 was the first where the Swift demo built and ran: all seven screenshots, but empty accessibility dumps.
+  Run 42952954376 showed one key window with one subview and no elements found; the walk now visits both
+  `accessibilityElements` and subviews and writes the raw view tree when it still finds nothing.
+- TODO: The macOS 26 simulator shows a system notification ("Ready for Apple Intelligence") over the top of the app in
+  the chat screenshots. Suppress it in `scripts/demo-screenshots.sh` (for example by waiting for it to go away or by
+  preparing the simulator before the first launch).
+- TODO: `chat-large-text` stayed black after eight retries in run 42952954376 (it worked in 42950845184). The script now
+  waits 8 s after changing the text size; confirm in the next runs.
