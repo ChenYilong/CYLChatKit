@@ -33,7 +33,7 @@ extension CYLCommonUtils {
     /// Objective-C: `+isCacheDataAvailableForFile:`.
     @objc(isCacheDataAvailableForFile:)
     class func isCacheDataAvailable(for file: AVFile?) -> Bool {
-        let objectId = file?.objectId
+        let objectId = file?.objectId()
         let localPath = getPath(from: file)
         let data = NSData(contentsOfFile: localPath)
         if (objectId?.count ?? 0) > 0 && (data?.length ?? 0) > 0 {

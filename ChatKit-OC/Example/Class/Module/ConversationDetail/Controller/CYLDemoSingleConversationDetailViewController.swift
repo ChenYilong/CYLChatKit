@@ -145,7 +145,7 @@ final class CYLDemoSingleConversationDetailViewController: CYLDemoSettingViewCon
                     if let conversation = conversation {
                         NSObject.showSuccess("创建对话成功")
                         self.cyl_popSelectTabBarChildViewController(at: 0) { selectedTabBarChildViewController in
-                            guard let conversationViewController = CYLConversationViewController(conversationId: conversation.conversationId) else { return }
+                            guard let conversationViewController = CYLConversationViewController(conversationId: conversation.conversationId()) else { return }
                             selectedTabBarChildViewController.navigationController?.pushViewController(conversationViewController, animated: true)
                         }
                     } else {

@@ -350,7 +350,7 @@ final class CYLDemoLeanCloudConversationService: CYLSingleton {
         }
         sendMessage(typedMessage,
                     conversation: avimConversation,
-                    options: .requestReceipt,
+                    options: AVIMMessageSendOption(AVIMMessageSendOptionRequestReceipt),
                     mentionList: mentionList,
                     progressBlock: progressBlock,
                     callback: block)
@@ -416,7 +416,7 @@ final class CYLDemoLeanCloudConversationService: CYLSingleton {
                 }
             } else {
                 // Decides from the local cache whether to ask the server. Not for the first page.
-                conversation.queryMessages(beforeId: messageId, timestamp: timestamp, limit: unsignedLimit) { messages, error in
+                conversation.queryMessages(beforeId: messageId ?? "", timestamp: timestamp, limit: unsignedLimit) { messages, error in
                     callback(messages, error)
                 }
             }
@@ -478,6 +478,7 @@ final class CYLDemoLeanCloudConversationService: CYLSingleton {
     private func setupSucceedMessageDatabase(withPath path: String) {
         databaseQueue = FMDatabaseQueue(path: path)
         databaseQueue?.inDatabase { db in
+            guard let db = db else { return }
             db.executeUpdate(cylDemoConversationTableCreateSQL, withArgumentsIn: [])
         }
     }
@@ -501,6 +502,7 @@ final class CYLDemoLeanCloudConversationService: CYLSingleton {
         cachedConversation?.readInBackground()
         sqliteQueue.async {
             self.databaseQueue?.inDatabase { db in
+                guard let db = db else { return }
                 db.executeUpdate(cylDemoConversationTableUpdateUnreadCountSQL, withArgumentsIn: [0, conversationId])
             }
         }
@@ -513,6 +515,7 @@ final class CYLDemoLeanCloudConversationService: CYLSingleton {
         removeCachedConversation(forId: conversationId)
         sqliteQueue.async {
             self.databaseQueue?.inDatabase { db in
+                guard let db = db else { return }
                 db.executeUpdate(cylDemoConversationTableDeleteSQL, withArgumentsIn: [conversationId])
             }
         }
@@ -533,6 +536,7 @@ final class CYLDemoLeanCloudConversationService: CYLSingleton {
                     self.setCachedConversation(conversation, forId: conversationId)
                 }
                 self.databaseQueue?.inDatabase { db in
+                    guard let db = db else { return }
                     let archived = self.archivedData(from: conversation)
                     db.executeUpdate(cylDemoConversationTableInsertSQL,
                                      withArgumentsIn: [conversationId, archived, 0, false, ""])
@@ -554,6 +558,7 @@ final class CYLDemoLeanCloudConversationService: CYLSingleton {
     func increaseUnreadCount(_ increaseUnreadCount: UInt, withConversationId conversationId: String, shouldRefreshWhenFinished: Bool) {
         sqliteQueue.async {
             self.databaseQueue?.inDatabase { db in
+                guard let db = db else { return }
                 if increaseUnreadCount == 1 {
                     db.executeUpdate(cylDemoConversationTableIncreaseOneUnreadCountSQL, withArgumentsIn: [conversationId])
                 } else {
@@ -570,6 +575,7 @@ final class CYLDemoLeanCloudConversationService: CYLSingleton {
     func updateMentioned(_ mentioned: Bool, conversationId: String, shouldRefreshWhenFinished: Bool) {
         sqliteQueue.async {
             self.databaseQueue?.inDatabase { db in
+                guard let db = db else { return }
                 db.executeUpdate(cylDemoConversationTableUpdateMentionedSQL, withArgumentsIn: [mentioned, conversationId])
             }
         }
@@ -591,6 +597,7 @@ final class CYLDemoLeanCloudConversationService: CYLSingleton {
         }
         sqliteQueue.async {
             self.databaseQueue?.inDatabase { db in
+                guard let db = db else { return }
                 db.executeUpdate(cylDemoConversationTableUpdateDraftSQL, withArgumentsIn: [draft ?? "", conversationId])
             }
         }
@@ -629,6 +636,7 @@ final class CYLDemoLeanCloudConversationService: CYLSingleton {
         }
         sqliteQueue.async {
             self.databaseQueue?.inDatabase { db in
+                guard let db = db else { return }
                 db.beginTransaction()
                 for conversation in avimConversations {
                     db.executeUpdate(cylDemoConversationTableUpdateDataSQL,
@@ -646,6 +654,7 @@ final class CYLDemoLeanCloudConversationService: CYLSingleton {
     func removeAllCachedRecentConversations() -> Bool {
         var removeAllCachedRecentConversationsSuccess = false
         databaseQueue?.inDatabase { db in
+            guard let db = db else { return }
             removeAllCachedRecentConversationsSuccess = db.executeUpdate(cylDemoDeleteConversationTable, withArgumentsIn: [])
         }
         if removeAllCachedRecentConversationsSuccess {
@@ -782,6 +791,7 @@ final class CYLDemoLeanCloudConversationService: CYLSingleton {
         if cachedConversations == nil {
             var loaded: [String: AVIMConversation] = [:]
             databaseQueue?.inDatabase { db in
+                guard let db = db else { return }
                 let resultSet = db.executeQuery(cylDemoConversationTableSelectSQL, withArgumentsIn: [])
                 while let resultSet = resultSet, resultSet.next() {
                     if let conversation = self.createConversation(from: resultSet),
@@ -826,6 +836,7 @@ final class CYLDemoLeanCloudConversationService: CYLSingleton {
         }
         databaseQueue = FMDatabaseQueue(path: path)
         databaseQueue?.inDatabase { db in
+            guard let db = db else { return }
             db.executeUpdate(cylDemoCreateTableSQL, withArgumentsIn: [])
         }
     }
@@ -847,6 +858,7 @@ final class CYLDemoLeanCloudConversationService: CYLSingleton {
     private func records(byConversationId conversationId: String) -> [FailedMessageRecord] {
         var records: [FailedMessageRecord] = []
         databaseQueue?.inDatabase { db in
+            guard let db = db else { return }
             let resultSet = db.executeQuery(cylDemoSelectMessagesSQL, withArgumentsIn: [conversationId])
             while let resultSet = resultSet, resultSet.next() {
                 if let record = self.record(from: resultSet) {
@@ -871,6 +883,7 @@ final class CYLDemoLeanCloudConversationService: CYLSingleton {
         var records: [FailedMessageRecord] = []
         let query = cylDemoSelectMessagesByIDSQL(messageIdsString)
         databaseQueue?.inDatabase { db in
+            guard let db = db else { return }
             let resultSet = db.executeQuery(query, withArgumentsIn: [])
             while let resultSet = resultSet, resultSet.next() {
                 if let record = self.record(from: resultSet) {
@@ -893,6 +906,7 @@ final class CYLDemoLeanCloudConversationService: CYLSingleton {
     func deleteFailedMessage(byRecordId recordId: String) -> Bool {
         var result = false
         databaseQueue?.inDatabase { db in
+            guard let db = db else { return }
             result = db.executeUpdate(cylDemoDeleteMessageSQL, withArgumentsIn: [recordId])
         }
         return result
@@ -901,6 +915,7 @@ final class CYLDemoLeanCloudConversationService: CYLSingleton {
     func insertFailedCYLMessage(_ message: CYLMessage) {
         let data = NSKeyedArchiver.archivedData(withRootObject: message)
         databaseQueue?.inDatabase { db in
+            guard let db = db else { return }
             db.executeUpdate(cylDemoInsertMessageSQL,
                              withArgumentsIn: [message.localMessageId as Any, message.conversationId as Any, data])
         }
@@ -914,6 +929,7 @@ final class CYLDemoLeanCloudConversationService: CYLSingleton {
     func insertFailedMessage(_ message: CYLIMMessageProtocol) {
         let data = NSKeyedArchiver.archivedData(withRootObject: message)
         databaseQueue?.inDatabase { db in
+            guard let db = db else { return }
             db.executeUpdate(cylDemoInsertMessageSQL,
                              withArgumentsIn: [message.messageId() as Any, message.conversationId() as Any, data])
         }

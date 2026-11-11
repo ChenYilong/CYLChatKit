@@ -132,7 +132,7 @@ final class CYLDemoContactListController: CYLChatBaseTableViewController {
         cell.identifier = peerId
         var name: NSString?
         var avatarURL: NSURL?
-        try? CYLChatKit.sharedInstance().getCachedProfileIfExists(peerId, name: &name, avatarURL: &avatarURL)
+        CYLChatKit.sharedInstance().getCachedProfileIfExists(peerId, name: &name, avatarURL: &avatarURL, error: nil)
         var displayName = name as String?
         let avatorURL = avatarURL as URL?
         if displayName == nil || avatorURL == nil {

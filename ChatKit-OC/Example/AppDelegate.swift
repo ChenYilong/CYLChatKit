@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // The Objective-C plus button registered itself in `+load`; Swift has no `+load`, so register it here, before
         // any tab bar controller is created.
-        CYLDemoPlusButtonSubclass.registerPlusButton()
+        CYLDemoPlusButtonSubclass.register()
         registerForRemoteNotification()
         customizeNavigationBar()
         let window = UIWindow(frame: UIScreen.main.bounds)

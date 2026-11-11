@@ -9,6 +9,6 @@
 #import "CYLChatKit.h"
 #import "NSBundle+CYLExtension.h"
 
-NSString *CYLLocalizedStringForKey(NSString *key) {
+NSString * _Nonnull CYLLocalizedStringForKey(NSString * _Nonnull key) {
     return CYLLocalizedStrings(key);
 }

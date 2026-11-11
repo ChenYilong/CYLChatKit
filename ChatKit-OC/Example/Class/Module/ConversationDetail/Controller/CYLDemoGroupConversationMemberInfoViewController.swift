@@ -41,7 +41,7 @@ final class CYLDemoGroupConversationMemberInfoViewController: UITableViewControl
                     if let memberId = info.memberId() {
                         let model = CYLDemoGroupConversationMemberInfoModel()
                         model.memberId = memberId
-                        model.role = info.role
+                        model.role = info.role()
                         dict[memberId] = model
                     }
                 }

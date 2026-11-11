@@ -83,7 +83,7 @@ final class CYLDemoChatKitExample: NSObject {
         let allPersonIds = CYLDemoContactManager.defaultManager().fetchContactPeerIds().compactMap { $0 as? String }
         let users: [CYLUserDelegate] = (try? kit.getCachedProfilesIfExists(allPersonIds, shouldSameCount: true)) ?? []
         // ChatKit's contact list takes `CYLContact` objects.
-        let contacts = Set(users.map {
+        let contacts = Set(users.compactMap {
             CYLContact(userId: $0.userId, name: $0.name, avatarURL: $0.avatarURL, clientId: $0.clientId)
         })
         let currentClientID = kit.clientId ?? ""
@@ -118,7 +118,7 @@ final class CYLDemoChatKitExample: NSObject {
     static func exampleOpenConversationViewController(withPeerId peerId: String,
                                                       fromNavigationController navigationController: UINavigationController?) {
         let conversationViewController = CYLConversationViewController(peerId: peerId)!
-        conversationViewController.setViewWillDisappearBlock { viewController, _ in
+        conversationViewController.viewWillDisappearBlock = { viewController, _ in
             self.hideHUDForView(viewController?.view)
         }
         cylDemoPushToViewController(conversationViewController)
@@ -128,11 +128,11 @@ final class CYLDemoChatKitExample: NSObject {
     static func exampleOpenConversationViewController(withConversaionId conversationId: String,
                                                       fromNavigationController navigationController: UINavigationController?) {
         let conversationViewController = CYLConversationViewController(conversationId: conversationId)!
-        conversationViewController.enableAutoJoin = true
-        conversationViewController.setViewWillDisappearBlock { viewController, _ in
+        conversationViewController.isEnableAutoJoin = true
+        conversationViewController.viewWillDisappearBlock = { viewController, _ in
             self.hideHUDForView(viewController?.view)
         }
-        conversationViewController.setViewWillAppearBlock { _, animated in
+        conversationViewController.viewWillAppearBlock = { _, animated in
             UIApplication.shared.setStatusBarStyle(.lightContent, animated: animated)
         }
         cylDemoPushToViewController(conversationViewController)

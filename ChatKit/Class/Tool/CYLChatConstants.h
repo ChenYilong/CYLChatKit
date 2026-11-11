@@ -134,7 +134,7 @@ static NSString *const CYLBadgeTextForNumberGreaterThanLimit = @"···";
  * Function form of `CYLLocalizedStrings` for Swift callers (Swift cannot import function-like macros). Same bundle and
  * table: `Other.bundle`, `LCChatKitString`.
  */
-FOUNDATION_EXTERN NSString *CYLLocalizedStringForKey(NSString *key);
+FOUNDATION_EXTERN NSString * _Nonnull CYLLocalizedStringForKey(NSString * _Nonnull key);
 
 
 #ifdef DEBUG

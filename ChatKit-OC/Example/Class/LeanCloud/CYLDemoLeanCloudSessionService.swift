@@ -54,7 +54,7 @@ final class CYLDemoLeanCloudSessionService: CYLSingleton, AVIMClientDelegate, AV
     // MARK: - Session
 
     @objc func isClientOpened() -> Bool {
-        return client?.status == .opened
+        return client?.status() == .opened
     }
 
     /// ChatKit's CYLSessionService has validated `clientId` and dispatched to the main queue.
@@ -160,10 +160,10 @@ final class CYLDemoLeanCloudSessionService: CYLSingleton, AVIMClientDelegate, AV
     /// Called by the three SDK callbacks above and when opening the client, so the status is handled in one place.
     private func updateConnectStatus() {
         // For better UI presentation.
-        if client?.status == .paused || client?.status == .resuming {
+        if client?.status() == .paused || client?.status() == .resuming {
             return
         }
-        connect = (client?.status == .opened)
+        connect = (client?.status() == .opened)
         NotificationCenter.default.post(name: Notification.Name(CYLNotificationConnectivityUpdated),
                                         object: NSNumber(value: connect))
     }

@@ -36,10 +36,10 @@ extension CYLMessage {
         let serverMessageId = message.messageId
         let mediaType = message.mediaType
 
-        if mediaType == AVIMMessageMediaType(kAVIMMessageMediaTypeText) {
+        if mediaType == .text {
             let textMsg = message as! AVIMTextMessage
             cylDemoMessage = CYLMessage(text: textMsg.text, senderId: senderId, sender: sender, timestamp: time, serverMessageId: serverMessageId)
-        } else if mediaType == AVIMMessageMediaType(kAVIMMessageMediaTypeAudio) {
+        } else if mediaType == .audio {
             let audioMsg = message as! AVIMAudioMessage
             let duration = String(format: "%.0f", audioMsg.duration)
             let audioFile: AVFile? = audioMsg.file
@@ -48,12 +48,12 @@ extension CYLMessage {
             if FileManager.default.fileExists(atPath: localPath) {
                 voicePath = localPath
             } else {
-                voicePath = audioFile?.url
+                voicePath = audioFile?.url()
             }
             cylDemoMessage = CYLMessage(voicePath: voicePath, voiceURL: nil, voiceDuration: duration, senderId: senderId, sender: sender, timestamp: time, serverMessageId: serverMessageId)
-        } else if mediaType == AVIMMessageMediaType(kAVIMMessageMediaTypeLocation) {
+        } else if mediaType == .location {
             let locationMsg = message as! AVIMLocationMessage
-            let image = UIImage.cyl_imageNamed("MessageBubble_Location", bundleName: "MessageBubble", bundleForClass: self)
+            let image = UIImage.cyl_imageNamed("MessageBubble_Location", bundleName: "MessageBubble", bundleFor: self)
             cylDemoMessage = CYLMessage(localPositionPhoto: image,
                                         geolocations: locationMsg.text,
                                         location: CLLocation(latitude: locationMsg.latitude, longitude: locationMsg.longitude),
@@ -61,11 +61,11 @@ extension CYLMessage {
                                         sender: sender,
                                         timestamp: time,
                                         serverMessageId: serverMessageId)
-        } else if mediaType == AVIMMessageMediaType(kAVIMMessageMediaTypeImage) {
+        } else if mediaType == .image {
             let imageMsg = message as! AVIMImageMessage
             let imageFile: AVFile? = imageMsg.file
             let imagePath = CYLCommonUtils.getPath(from: imageFile)
-            let originURL: URL? = imageFile?.url.flatMap { URL(string: $0) }
+            let originURL: URL? = imageFile?.url().flatMap { URL(string: $0) }
             cylDemoMessage = CYLMessage(photo: nil,
                                         photoWidth: UInt32(truncatingIfNeeded: imageMsg.width),
                                         photoHeight: UInt32(truncatingIfNeeded: imageMsg.height),
@@ -77,9 +77,9 @@ extension CYLMessage {
                                         sender: sender,
                                         timestamp: time,
                                         serverMessageId: serverMessageId)
-        } else if mediaType == AVIMMessageMediaType(kAVIMMessageMediaTypeVideo)
-                    || mediaType == AVIMMessageMediaType(kAVIMMessageMediaTypeFile)
-                    || mediaType == AVIMMessageMediaType(kAVIMMessageMediaTypeRecalled) {
+        } else if mediaType == .video
+                    || mediaType == .file
+                    || mediaType == .recalled {
             return nil
         } else {
             let degradeKey: String = CYLCustomMessageDegradeKey

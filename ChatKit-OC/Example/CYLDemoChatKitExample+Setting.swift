@@ -101,7 +101,7 @@ extension CYLDemoChatKitExample {
     private func cylDemoSetupConversationEditActionForConversationList() {
         // Custom cell menu.
         CYLChatKit.sharedInstance().conversationEditActionBlock = { [weak self] indexPath, _, conversation, controller in
-            guard let self = self, let conversation = conversation, let controller = controller else {
+            guard let self = self, let indexPath = indexPath, let conversation = conversation, let controller = controller else {
                 return []
             }
             return self.cylDemoExampleConversationEditAction(at: indexPath, conversation: conversation, controller: controller)
@@ -110,13 +110,13 @@ extension CYLDemoChatKitExample {
 
     /// What happens when a cell of the conversation list is selected or deleted.
     private func cylDemoSetupConversationsCellOperation() {
-        CYLChatKit.sharedInstance().setDidSelectConversationsListCellBlock { _, conversation, controller in
+        CYLChatKit.sharedInstance().didSelectConversationsListCellBlock = { _, conversation, controller in
             CYLDemoChatKitExample.exampleOpenConversationViewController(
                 withConversaionId: conversation?.conversationId() ?? "",
                 fromNavigationController: controller?.navigationController)
         }
         // Called after a conversation is deleted (usually nothing to do).
-        CYLChatKit.sharedInstance().setDidDeleteConversationsListCellBlock { _, _, _ in
+        CYLChatKit.sharedInstance().didDeleteConversationsListCellBlock = { _, _, _ in
             // TODO:
         }
     }
@@ -435,7 +435,7 @@ extension CYLDemoChatKitExample {
             CYLDemoChatKitExample.cylDemoExampleChangeGroupAvatarURLs(forConversationId: conversationId, shouldInsert: false)
         }
         actionItemChangeGroupAvatar.backgroundColor = UIColor(red: 251 / 255.0, green: 186 / 255.0, blue: 11 / 255.0, alpha: 1.0)
-        if conversation.cylType() == .single {
+        if conversation.cyl_type() == .single {
             return [actionItemDelete, actionItemMore]
         }
         return [actionItemDelete, actionItemMore, actionItemChangeGroupAvatar]

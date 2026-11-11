@@ -56,7 +56,7 @@ FOUNDATION_EXTERN NSString *const CYLUserSystemServiceErrorDomain;
 
 - (void)getProfilesInBackgroundForUserIds:(NSArray<NSString *> *)userIds callback:(CYLUserResultsCallBack)callback;
 
-- (id<CYLUserDelegate>)getProfileForUserId:(NSString *)userId error:(NSError * __autoreleasing *)theError;
+- (id<CYLUserDelegate>)getProfileForUserId:(NSString *)userId error:(NSError * __autoreleasing *)theError NS_SWIFT_NAME(getProfile(forUserId:));
 
 /*!
  * Firstly try memory cache, then fetch.
