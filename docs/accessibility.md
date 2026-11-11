@@ -2,7 +2,7 @@
 
 Rules: `AGENTS.md`, "Accessibility", and `.agents/skills/cylchatkit-accessibility/SKILL.md`. They are copied and adapted
 from CYLTabBarController. Strings follow the localization rules (`docs/localization.md`): accessibility labels, hints,
-values, and action names are localized through `CYLLocalizedStrings` (core) and `LCCKExampleLocalizedString` (example).
+values, and action names are localized through `CYLLocalizedStrings` (core) and `CYLDemoExampleLocalizedString` (example).
 
 ## What is covered
 
@@ -14,12 +14,12 @@ values, and action names are localized through `CYLLocalizedStrings` (core) and 
 | Conversation row (`CYLConversationListCell`) | One element: name, unread count (or "unread messages" when muted), muted, last message, time; custom action Open profile | Not done (see TODO) | No: needs conversations |
 | Contact row (`CYLContactCell`) | One element: title and subtitle; selected trait when checked; hint in selection mode | Not done (see TODO) | No: needs contacts |
 | Chat bar glass input field | The system glass material adapts to Reduce Transparency, Increase Contrast, and Reduce Motion by itself (Apple's guidance; not verified here) | Same | Not verified |
-| Demo login screen | Client ID field: label, hint, identifier `LCCKLoginClientIdTextField`; the title is localized text | Standard text | Yes: dump with `expect_accessibility` (English and Chinese) |
+| Demo login screen | Client ID field: label, hint, identifier `CYLDemoLoginClientIdTextField`; the title is localized text | Standard text | Yes: dump with `expect_accessibility` (English and Chinese) |
 | Demo tab bar | Tab titles come from the example bundle (localized), which VoiceOver reads | System tab bar | Screenshots only |
 
 ## How CI verifies it
 
-`scripts/demo-screenshots.sh` launches the demo with `-LCCKDemoAccessibilityDump YES`; the app writes what VoiceOver would
+`scripts/demo-screenshots.sh` launches the demo with `-CYLDemoAccessibilityDump YES`; the app writes what VoiceOver would
 find on the screen (class, label, value, hint, identifier, traits) and the script prints it after each screenshot, between
 `===BEGIN ACCESSIBILITY <name>===` and `===END ACCESSIBILITY <name>===`. It fails the job when an expected element is
 missing (`expect_accessibility`). Screenshots: `chat-large-text` (Dynamic Type accessibility size 3 with a typed message),
@@ -31,7 +31,7 @@ and `login-zh` and `chat-zh` (Simplified Chinese). See `docs/ci.md`.
   code), VoiceOver reading order, and Voice Control. Test with VoiceOver on a device or the Accessibility Inspector on a
   signed-in demo. Consider adding fake rows to the screenshot mode so CI can check them.
 - TODO: The voice and emoji buttons of the chat bar are never shown (`hidden = YES`), and the "more" button is the send
-  button, so the emoji panel (`CYLChatFaceView`, `CYLFacePageView`, `AGEmojiKeyBoardView`), the "more" panel
+  button, so the emoji panel (`CYLChatFaceView`, `CYLFacePageView`, `CYLEmojiKeyboardView`), the "more" panel
   (`CYLChatMoreView`, `CYLChatMoreItem`, and the plugins `CYLInputViewPlugin*`), and the voice recording HUDs
   (`CYLRecordAudioHUD`, `CYLProgressHUD`) are unreachable. If they are enabled again, give every emoji (an image view with a
   tap gesture) a label and the button trait, make `CYLChatMoreItem` one element that activates on `accessibilityActivate`,

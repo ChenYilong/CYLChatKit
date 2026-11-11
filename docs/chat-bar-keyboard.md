@@ -13,11 +13,11 @@ Search the code for the send button's title, `发送` (Send), and you land on th
 | `CYLChatBar.m`, `moreButton` getter | The send button, titled 发送, to the right of the input field. The property name `moreButton` is historical: its action (`-buttonAction:`) sends the typed text |
 | `CYLChatBar.m`, `textView` getter | The input field beside it; tapping it brings up the system keyboard with the bar on top |
 | `CYLChatBar.m`, `-keyboardWillShow:` / `-keyboardWillHide:` / `-keyboardWillChangeFrame:` | Keyboard tracking |
-| `CYLChatFaceView.m`, `AGEmojiKeyBoardView.m` | The emoji panels, which have their own 发送 button and stand in for the keyboard |
+| `CYLChatFaceView.m`, `CYLEmojiKeyboardView.m` | The emoji panels, which have their own 发送 button and stand in for the keyboard |
 | `CYLChatMoreView.m` | The "more" panel (photo, camera, location); height `kFunctionViewHeight` (210 pt) |
 
 To see the keyboard while debugging: open a chat, find the 发送 button, and tap the input field next to it. In CI the demo
-does the same: `-LCCKDemoScreen chat -LCCKDemoKeyboard YES` focuses the input field (`-[CYLChatBar beginInputing]`) 1.5 s
+does the same: `-CYLDemoScreen chat -CYLDemoKeyboard YES` focuses the input field (`-[CYLChatBar beginInputing]`) 1.5 s
 after the chat appears, and `scripts/demo-screenshots.sh` takes the `chat-keyboard` screenshot.
 
 ## What was adapted for iOS 26

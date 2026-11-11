@@ -7,68 +7,68 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E41DDF5CD1FEF72F70EEB285 /* LCCKGroupConversationMemberInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2705F95659F5FBAAAEA788DD /* LCCKGroupConversationMemberInfoViewController.m */; };
-		0559B5CE3A663E3A3CFF76AD /* LCCKContactListController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0CB1FDB9FC4AD87BFBD45AA /* LCCKContactListController.m */; };
-		A7672B2444FA6A48C26F2611 /* LCCKContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D8A705227326F63D215FC7A /* LCCKContactCell.m */; };
-		D6C6062015836565A5F1DF69 /* LCCKContactCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B010ADA19D354A08D14BB107 /* LCCKContactCell.xib */; };
-		9320A86A2849EBC98CCC8C35 /* LCCKGroupConversationManagementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 231A4FE296B417FBCA0EAEDD /* LCCKGroupConversationManagementViewController.m */; };
-		2CED63493BE78D49FB7D2CF9 /* LCCKExample.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DA321A6C109B235AD56D1507 /* LCCKExample.bundle */; };
-		1EC742A9A64D35D2B5B383CA /* AVIMConversation+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 0669560418FDF8FF4487F8ED /* AVIMConversation+LCCKExtension.m */; };
-		317AC316A0573F974B44268D /* CYLMessage+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = A166CE33749D0D81CDBF99D9 /* CYLMessage+LCCKExtension.m */; };
-		3AFB59942977C9AA3976C547 /* AVIMMessage+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = F93EE382B6E649274F68DFBB /* AVIMMessage+LCCKExtension.m */; };
-		3E9EB52CA58B5999E1FB7686 /* LCCKLeanCloudConversationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 17855C4993EC373D7E6D5B2F /* LCCKLeanCloudConversationService.m */; };
+		E41DDF5CD1FEF72F70EEB285 /* CYLDemoGroupConversationMemberInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2705F95659F5FBAAAEA788DD /* CYLDemoGroupConversationMemberInfoViewController.m */; };
+		0559B5CE3A663E3A3CFF76AD /* CYLDemoContactListController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0CB1FDB9FC4AD87BFBD45AA /* CYLDemoContactListController.m */; };
+		A7672B2444FA6A48C26F2611 /* CYLDemoContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D8A705227326F63D215FC7A /* CYLDemoContactCell.m */; };
+		D6C6062015836565A5F1DF69 /* CYLDemoContactCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B010ADA19D354A08D14BB107 /* CYLDemoContactCell.xib */; };
+		9320A86A2849EBC98CCC8C35 /* CYLDemoGroupConversationManagementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 231A4FE296B417FBCA0EAEDD /* CYLDemoGroupConversationManagementViewController.m */; };
+		2CED63493BE78D49FB7D2CF9 /* CYLDemoExample.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DA321A6C109B235AD56D1507 /* CYLDemoExample.bundle */; };
+		1EC742A9A64D35D2B5B383CA /* AVIMConversation+CYLDemoExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 0669560418FDF8FF4487F8ED /* AVIMConversation+CYLDemoExtension.m */; };
+		317AC316A0573F974B44268D /* CYLMessage+CYLDemoExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = A166CE33749D0D81CDBF99D9 /* CYLMessage+CYLDemoExtension.m */; };
+		3AFB59942977C9AA3976C547 /* AVIMMessage+CYLDemoExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = F93EE382B6E649274F68DFBB /* AVIMMessage+CYLDemoExtension.m */; };
+		3E9EB52CA58B5999E1FB7686 /* CYLDemoLeanCloudConversationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 17855C4993EC373D7E6D5B2F /* CYLDemoLeanCloudConversationService.m */; };
 		4F5E34B61FA069300067EB95 /* EmojisList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F5E34B51FA069300067EB95 /* EmojisList.plist */; };
 		4F5E34B81FA069540067EB95 /* [删除]@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F5E34B71FA069540067EB95 /* [删除]@2x.png */; };
-		560FCA8CFA42C345A0BC9B31 /* AVIMTypedMessage+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 022F1E093BCB469ABEBD73A1 /* AVIMTypedMessage+LCCKExtension.m */; };
-		5A64B08CF04651B31F361271 /* AVIMEmotionMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 17B83CD24B84E995F26462DE /* AVIMEmotionMessage.m */; };
-		6FA5969799D8B0A04A1FE7AF /* LCCKLeanCloudIMProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 951BD5C139229E7A457A608C /* LCCKLeanCloudIMProvider.m */; };
-		9A4730621CECAEC500AEB86F /* LCCKUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47302E1CECAEC500AEB86F /* LCCKUser.m */; };
-		9A4730671CECAEC500AEB86F /* LCCKLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47303E1CECAEC500AEB86F /* LCCKLoginViewController.m */; };
-		9A4730681CECAEC500AEB86F /* LCCKLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A47303F1CECAEC500AEB86F /* LCCKLoginViewController.xib */; };
-		9A4730691CECAEC500AEB86F /* DEMOCustomAutoCompleteObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730421CECAEC500AEB86F /* DEMOCustomAutoCompleteObject.m */; };
-		9A47306A1CECAEC500AEB86F /* DEMODataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730441CECAEC500AEB86F /* DEMODataSource.m */; };
-		9A47306B1CECAEC500AEB86F /* LCCKLoginDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730461CECAEC500AEB86F /* LCCKLoginDataSource.m */; };
-		9A47306C1CECAEC500AEB86F /* LCCKMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47304B1CECAEC500AEB86F /* LCCKMapViewController.m */; };
-		9A47306E1CECAEC500AEB86F /* LCCKUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730501CECAEC500AEB86F /* LCCKUtil.m */; };
-		9A47306F1CECAEC500AEB86F /* LCCKPlusButtonSubclass.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730531CECAEC500AEB86F /* LCCKPlusButtonSubclass.m */; };
+		560FCA8CFA42C345A0BC9B31 /* AVIMTypedMessage+CYLDemoExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 022F1E093BCB469ABEBD73A1 /* AVIMTypedMessage+CYLDemoExtension.m */; };
+		5A64B08CF04651B31F361271 /* CYLDemoEmotionMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 17B83CD24B84E995F26462DE /* CYLDemoEmotionMessage.m */; };
+		6FA5969799D8B0A04A1FE7AF /* CYLDemoLeanCloudIMProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 951BD5C139229E7A457A608C /* CYLDemoLeanCloudIMProvider.m */; };
+		9A4730621CECAEC500AEB86F /* CYLDemoUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47302E1CECAEC500AEB86F /* CYLDemoUser.m */; };
+		9A4730671CECAEC500AEB86F /* CYLDemoLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47303E1CECAEC500AEB86F /* CYLDemoLoginViewController.m */; };
+		9A4730681CECAEC500AEB86F /* CYLDemoLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A47303F1CECAEC500AEB86F /* CYLDemoLoginViewController.xib */; };
+		9A4730691CECAEC500AEB86F /* CYLDemoCustomAutoCompleteObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730421CECAEC500AEB86F /* CYLDemoCustomAutoCompleteObject.m */; };
+		9A47306A1CECAEC500AEB86F /* CYLDemoDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730441CECAEC500AEB86F /* CYLDemoDataSource.m */; };
+		9A47306B1CECAEC500AEB86F /* CYLDemoLoginDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730461CECAEC500AEB86F /* CYLDemoLoginDataSource.m */; };
+		9A47306C1CECAEC500AEB86F /* CYLDemoMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47304B1CECAEC500AEB86F /* CYLDemoMapViewController.m */; };
+		9A47306E1CECAEC500AEB86F /* CYLDemoUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730501CECAEC500AEB86F /* CYLDemoUtil.m */; };
+		9A47306F1CECAEC500AEB86F /* CYLDemoPlusButtonSubclass.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730531CECAEC500AEB86F /* CYLDemoPlusButtonSubclass.m */; };
 		9A4730701CECAEC500AEB86F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A4730551CECAEC500AEB86F /* Assets.xcassets */; };
 		9A4730711CECAEC500AEB86F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A4730561CECAEC500AEB86F /* LaunchScreen.storyboard */; };
 		9A4730731CECAEC500AEB86F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730591CECAEC500AEB86F /* main.m */; };
-		9A4730751CECAEC500AEB86F /* NSObject+LCCKHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47305E1CECAEC500AEB86F /* NSObject+LCCKHUD.m */; };
+		9A4730751CECAEC500AEB86F /* NSObject+CYLDemoHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47305E1CECAEC500AEB86F /* NSObject+CYLDemoHUD.m */; };
 		9A53BE401D8BB19C00AAB118 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE391D8BB19C00AAB118 /* AppDelegate.m */; };
-		9A53BE411D8BB19C00AAB118 /* LCChatKitExample.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE3B1D8BB19C00AAB118 /* LCChatKitExample.m */; };
-		9A53BE421D8BB19C00AAB118 /* LCChatKitExample+Setting.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE3D1D8BB19C00AAB118 /* LCChatKitExample+Setting.m */; };
-		9A53BE431D8BB19C00AAB118 /* LCCKTabBarControllerConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE3F1D8BB19C00AAB118 /* LCCKTabBarControllerConfig.m */; };
-		9A55EB351E00FC5A0079EB65 /* LCCKProfileNameEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A55EB341E00FC5A0079EB65 /* LCCKProfileNameEditViewController.m */; };
-		9A562A361E03D52F00BB23DD /* LCCKSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A231E03D52F00BB23DD /* LCCKSettingViewController.m */; };
-		9A562A371E03D52F00BB23DD /* LCCKSettingButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A261E03D52F00BB23DD /* LCCKSettingButtonCell.m */; };
-		9A562A381E03D52F00BB23DD /* LCCKSettingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A281E03D52F00BB23DD /* LCCKSettingCell.m */; };
-		9A562A391E03D52F00BB23DD /* LCCKSettingSwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A2A1E03D52F00BB23DD /* LCCKSettingSwitchCell.m */; };
-		9A562A3A1E03D52F00BB23DD /* LCCKSettingGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A2E1E03D52F00BB23DD /* LCCKSettingGroup.m */; };
-		9A562A3B1E03D52F00BB23DD /* LCCKSettingItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A301E03D52F00BB23DD /* LCCKSettingItem.m */; };
-		9A562A3C1E03D52F00BB23DD /* LCCKSettingFooterTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A331E03D52F00BB23DD /* LCCKSettingFooterTitleView.m */; };
-		9A562A3D1E03D52F00BB23DD /* LCCKSettingHeaderTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A351E03D52F00BB23DD /* LCCKSettingHeaderTitleView.m */; };
-		9A7E2DE91D5F1040003A7312 /* LCCKContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7E2DE81D5F1040003A7312 /* LCCKContactManager.m */; };
-		9AC3A4901DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A48F1DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.m */; };
-		9AC3A4931DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4921DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.m */; };
-		9AC3A4B81DF9BEE600F3405F /* LCCKUIUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4B31DF9BEE600F3405F /* LCCKUIUtility.m */; };
-		9AC3A4B91DF9BEE600F3405F /* UIColor+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4B51DF9BEE600F3405F /* UIColor+LCCKExtension.m */; };
-		9AC3A4BA1DF9BEE600F3405F /* UIFont+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4B71DF9BEE600F3405F /* UIFont+LCCKExtension.m */; };
-		9AC3A4CC1DF9C14500F3405F /* NSDate+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4C71DF9C14500F3405F /* NSDate+LCCKExtension.m */; };
-		9AC3A4CD1DF9C14500F3405F /* NSFileManager+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4C91DF9C14500F3405F /* NSFileManager+LCCKExtension.m */; };
+		9A53BE411D8BB19C00AAB118 /* CYLDemoChatKitExample.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE3B1D8BB19C00AAB118 /* CYLDemoChatKitExample.m */; };
+		9A53BE421D8BB19C00AAB118 /* CYLDemoChatKitExample+Setting.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE3D1D8BB19C00AAB118 /* CYLDemoChatKitExample+Setting.m */; };
+		9A53BE431D8BB19C00AAB118 /* CYLDemoTabBarControllerConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE3F1D8BB19C00AAB118 /* CYLDemoTabBarControllerConfig.m */; };
+		9A55EB351E00FC5A0079EB65 /* CYLDemoProfileNameEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A55EB341E00FC5A0079EB65 /* CYLDemoProfileNameEditViewController.m */; };
+		9A562A361E03D52F00BB23DD /* CYLDemoSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A231E03D52F00BB23DD /* CYLDemoSettingViewController.m */; };
+		9A562A371E03D52F00BB23DD /* CYLDemoSettingButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A261E03D52F00BB23DD /* CYLDemoSettingButtonCell.m */; };
+		9A562A381E03D52F00BB23DD /* CYLDemoSettingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A281E03D52F00BB23DD /* CYLDemoSettingCell.m */; };
+		9A562A391E03D52F00BB23DD /* CYLDemoSettingSwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A2A1E03D52F00BB23DD /* CYLDemoSettingSwitchCell.m */; };
+		9A562A3A1E03D52F00BB23DD /* CYLDemoSettingGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A2E1E03D52F00BB23DD /* CYLDemoSettingGroup.m */; };
+		9A562A3B1E03D52F00BB23DD /* CYLDemoSettingItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A301E03D52F00BB23DD /* CYLDemoSettingItem.m */; };
+		9A562A3C1E03D52F00BB23DD /* CYLDemoSettingFooterTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A331E03D52F00BB23DD /* CYLDemoSettingFooterTitleView.m */; };
+		9A562A3D1E03D52F00BB23DD /* CYLDemoSettingHeaderTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A351E03D52F00BB23DD /* CYLDemoSettingHeaderTitleView.m */; };
+		9A7E2DE91D5F1040003A7312 /* CYLDemoContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7E2DE81D5F1040003A7312 /* CYLDemoContactManager.m */; };
+		9AC3A4901DF9B7B400F3405F /* CYLDemoSingleConversationDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A48F1DF9B7B400F3405F /* CYLDemoSingleConversationDetailViewController.m */; };
+		9AC3A4931DF9B7D500F3405F /* CYLDemoGroupConversationDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4921DF9B7D500F3405F /* CYLDemoGroupConversationDetailViewController.m */; };
+		9AC3A4B81DF9BEE600F3405F /* CYLDemoUIUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4B31DF9BEE600F3405F /* CYLDemoUIUtility.m */; };
+		9AC3A4B91DF9BEE600F3405F /* UIColor+CYLDemoExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4B51DF9BEE600F3405F /* UIColor+CYLDemoExtension.m */; };
+		9AC3A4BA1DF9BEE600F3405F /* UIFont+CYLDemoExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4B71DF9BEE600F3405F /* UIFont+CYLDemoExtension.m */; };
+		9AC3A4CC1DF9C14500F3405F /* NSDate+CYLDemoExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4C71DF9C14500F3405F /* NSDate+CYLDemoExtension.m */; };
+		9AC3A4CD1DF9C14500F3405F /* NSFileManager+CYLDemoExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4C91DF9C14500F3405F /* NSFileManager+CYLDemoExtension.m */; };
 		9AC3A4D31DF9C16A00F3405F /* NSDate+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4D01DF9C16A00F3405F /* NSDate+Extension.m */; };
 		9AC3A4D41DF9C16A00F3405F /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4D21DF9C16A00F3405F /* NSDate+Utilities.m */; };
 		9AC3A4D71DF9C25200F3405F /* NSFileManager+Paths.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4D61DF9C25200F3405F /* NSFileManager+Paths.m */; };
-		9AC3A4DD1DF9C8BD00F3405F /* LCCKUserGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4DA1DF9C8BD00F3405F /* LCCKUserGroupCell.m */; };
-		9AC3A4DE1DF9C8BD00F3405F /* LCCKUserGroupItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4DC1DF9C8BD00F3405F /* LCCKUserGroupItemCell.m */; };
-		9AC3A4E21DF9CE0300F3405F /* LCCKChatDetailHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4E11DF9CE0300F3405F /* LCCKChatDetailHelper.m */; };
+		9AC3A4DD1DF9C8BD00F3405F /* CYLDemoUserGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4DA1DF9C8BD00F3405F /* CYLDemoUserGroupCell.m */; };
+		9AC3A4DE1DF9C8BD00F3405F /* CYLDemoUserGroupItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4DC1DF9C8BD00F3405F /* CYLDemoUserGroupItemCell.m */; };
+		9AC3A4E21DF9CE0300F3405F /* CYLDemoChatDetailHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4E11DF9CE0300F3405F /* CYLDemoChatDetailHelper.m */; };
 		9AD665CC1D2277830040A4E3 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721B1CED662D004FDACC /* SystemConfiguration.framework */; };
 		9AD665CD1D22778B0040A4E3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */; };
 		9AD665CE1D2277920040A4E3 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721F1CED6644004FDACC /* CoreTelephony.framework */; };
 		9AD665CF1D22779A0040A4E3 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B72211CED664D004FDACC /* CoreLocation.framework */; };
-		C5C92F6F6C4B7B0667812ED3 /* CYLCommonUtils+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = C0D281FD3CC22B2AD4F50E6D /* CYLCommonUtils+LCCKExtension.m */; };
+		C5C92F6F6C4B7B0667812ED3 /* CYLCommonUtils+CYLDemoExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = C0D281FD3CC22B2AD4F50E6D /* CYLCommonUtils+CYLDemoExtension.m */; };
 		D6B21DCFEA88FFA0694238EC /* libPods-ChatKit-OC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D62193C0ECACB72DC928AD70 /* libPods-ChatKit-OC.a */; };
-		DC69C37A7861B08FC4799F3D /* LCCKLeanCloudSessionService.m in Sources */ = {isa = PBXBuildFile; fileRef = 0233781E958C082D597A4D8F /* LCCKLeanCloudSessionService.m */; };
+		DC69C37A7861B08FC4799F3D /* CYLDemoLeanCloudSessionService.m in Sources */ = {isa = PBXBuildFile; fileRef = 0233781E958C082D597A4D8F /* CYLDemoLeanCloudSessionService.m */; };
 		E7586C4F1D630681000C18B4 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7586C4E1D630681000C18B4 /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
 
@@ -86,132 +86,132 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		3DF176981CDA6BA7E3E51CDE /* LCCKGroupConversationMemberInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKGroupConversationMemberInfoViewController.h; sourceTree = "<group>"; };
-		2705F95659F5FBAAAEA788DD /* LCCKGroupConversationMemberInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKGroupConversationMemberInfoViewController.m; sourceTree = "<group>"; };
-		4EF1A70E78E9E01165FFAAAA /* LCCKContactListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKContactListController.h; sourceTree = "<group>"; };
-		A0CB1FDB9FC4AD87BFBD45AA /* LCCKContactListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKContactListController.m; sourceTree = "<group>"; };
-		C4D54A6FEFCB0BB1CBB969D2 /* LCCKContactCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKContactCell.h; sourceTree = "<group>"; };
-		2D8A705227326F63D215FC7A /* LCCKContactCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKContactCell.m; sourceTree = "<group>"; };
-		B010ADA19D354A08D14BB107 /* LCCKContactCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LCCKContactCell.xib; sourceTree = "<group>"; };
-		89C0FF4451DBD875B3B8A8AA /* LCCKGroupConversationManagementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKGroupConversationManagementViewController.h; sourceTree = "<group>"; };
-		231A4FE296B417FBCA0EAEDD /* LCCKGroupConversationManagementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKGroupConversationManagementViewController.m; sourceTree = "<group>"; };
-		DA321A6C109B235AD56D1507 /* LCCKExample.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = LCCKExample.bundle; sourceTree = "<group>"; };
-		022F1E093BCB469ABEBD73A1 /* AVIMTypedMessage+LCCKExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AVIMTypedMessage+LCCKExtension.m"; sourceTree = "<group>"; };
-		0233781E958C082D597A4D8F /* LCCKLeanCloudSessionService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LCCKLeanCloudSessionService.m; sourceTree = "<group>"; };
-		0669560418FDF8FF4487F8ED /* AVIMConversation+LCCKExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AVIMConversation+LCCKExtension.m"; sourceTree = "<group>"; };
-		17855C4993EC373D7E6D5B2F /* LCCKLeanCloudConversationService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LCCKLeanCloudConversationService.m; sourceTree = "<group>"; };
-		17B83CD24B84E995F26462DE /* AVIMEmotionMessage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = AVIMEmotionMessage.m; sourceTree = "<group>"; };
-		2380FFF0825E84C711209800 /* AVIMEmotionMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = AVIMEmotionMessage.h; sourceTree = "<group>"; };
-		3D36EEFDD9498F40B768B63B /* CYLMessage+LCCKExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CYLMessage+LCCKExtension.h"; sourceTree = "<group>"; };
+		3DF176981CDA6BA7E3E51CDE /* CYLDemoGroupConversationMemberInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoGroupConversationMemberInfoViewController.h; sourceTree = "<group>"; };
+		2705F95659F5FBAAAEA788DD /* CYLDemoGroupConversationMemberInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoGroupConversationMemberInfoViewController.m; sourceTree = "<group>"; };
+		4EF1A70E78E9E01165FFAAAA /* CYLDemoContactListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoContactListController.h; sourceTree = "<group>"; };
+		A0CB1FDB9FC4AD87BFBD45AA /* CYLDemoContactListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoContactListController.m; sourceTree = "<group>"; };
+		C4D54A6FEFCB0BB1CBB969D2 /* CYLDemoContactCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoContactCell.h; sourceTree = "<group>"; };
+		2D8A705227326F63D215FC7A /* CYLDemoContactCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoContactCell.m; sourceTree = "<group>"; };
+		B010ADA19D354A08D14BB107 /* CYLDemoContactCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CYLDemoContactCell.xib; sourceTree = "<group>"; };
+		89C0FF4451DBD875B3B8A8AA /* CYLDemoGroupConversationManagementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoGroupConversationManagementViewController.h; sourceTree = "<group>"; };
+		231A4FE296B417FBCA0EAEDD /* CYLDemoGroupConversationManagementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoGroupConversationManagementViewController.m; sourceTree = "<group>"; };
+		DA321A6C109B235AD56D1507 /* CYLDemoExample.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CYLDemoExample.bundle; sourceTree = "<group>"; };
+		022F1E093BCB469ABEBD73A1 /* AVIMTypedMessage+CYLDemoExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AVIMTypedMessage+CYLDemoExtension.m"; sourceTree = "<group>"; };
+		0233781E958C082D597A4D8F /* CYLDemoLeanCloudSessionService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CYLDemoLeanCloudSessionService.m; sourceTree = "<group>"; };
+		0669560418FDF8FF4487F8ED /* AVIMConversation+CYLDemoExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AVIMConversation+CYLDemoExtension.m"; sourceTree = "<group>"; };
+		17855C4993EC373D7E6D5B2F /* CYLDemoLeanCloudConversationService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CYLDemoLeanCloudConversationService.m; sourceTree = "<group>"; };
+		17B83CD24B84E995F26462DE /* CYLDemoEmotionMessage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CYLDemoEmotionMessage.m; sourceTree = "<group>"; };
+		2380FFF0825E84C711209800 /* CYLDemoEmotionMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CYLDemoEmotionMessage.h; sourceTree = "<group>"; };
+		3D36EEFDD9498F40B768B63B /* CYLMessage+CYLDemoExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CYLMessage+CYLDemoExtension.h"; sourceTree = "<group>"; };
 		4F5E34B51FA069300067EB95 /* EmojisList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = EmojisList.plist; sourceTree = "<group>"; };
 		4F5E34B71FA069540067EB95 /* [删除]@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "[删除]@2x.png"; sourceTree = "<group>"; };
 		7404AB0E0935F68A63803D6D /* Pods-ChatKit-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.release.xcconfig"; sourceTree = "<group>"; };
-		78932A7FCE2FEB02F2BCBE30 /* AVIMMessage+LCCKExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AVIMMessage+LCCKExtension.h"; sourceTree = "<group>"; };
-		88476BB114A869E434648F8D /* CYLCommonUtils+LCCKExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CYLCommonUtils+LCCKExtension.h"; sourceTree = "<group>"; };
-		951BD5C139229E7A457A608C /* LCCKLeanCloudIMProvider.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = LCCKLeanCloudIMProvider.m; sourceTree = "<group>"; };
+		78932A7FCE2FEB02F2BCBE30 /* AVIMMessage+CYLDemoExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AVIMMessage+CYLDemoExtension.h"; sourceTree = "<group>"; };
+		88476BB114A869E434648F8D /* CYLCommonUtils+CYLDemoExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CYLCommonUtils+CYLDemoExtension.h"; sourceTree = "<group>"; };
+		951BD5C139229E7A457A608C /* CYLDemoLeanCloudIMProvider.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CYLDemoLeanCloudIMProvider.m; sourceTree = "<group>"; };
 		9A0B721B1CED662D004FDACC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		9A0B721F1CED6644004FDACC /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		9A0B72211CED664D004FDACC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		9A47302D1CECAEC500AEB86F /* LCCKUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKUser.h; sourceTree = "<group>"; };
-		9A47302E1CECAEC500AEB86F /* LCCKUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKUser.m; sourceTree = "<group>"; };
-		9A47303D1CECAEC500AEB86F /* LCCKLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKLoginViewController.h; sourceTree = "<group>"; };
-		9A47303E1CECAEC500AEB86F /* LCCKLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKLoginViewController.m; sourceTree = "<group>"; };
-		9A47303F1CECAEC500AEB86F /* LCCKLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LCCKLoginViewController.xib; sourceTree = "<group>"; };
-		9A4730411CECAEC500AEB86F /* DEMOCustomAutoCompleteObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DEMOCustomAutoCompleteObject.h; sourceTree = "<group>"; };
-		9A4730421CECAEC500AEB86F /* DEMOCustomAutoCompleteObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DEMOCustomAutoCompleteObject.m; sourceTree = "<group>"; };
-		9A4730431CECAEC500AEB86F /* DEMODataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DEMODataSource.h; sourceTree = "<group>"; };
-		9A4730441CECAEC500AEB86F /* DEMODataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DEMODataSource.m; sourceTree = "<group>"; };
-		9A4730451CECAEC500AEB86F /* LCCKLoginDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKLoginDataSource.h; sourceTree = "<group>"; };
-		9A4730461CECAEC500AEB86F /* LCCKLoginDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKLoginDataSource.m; sourceTree = "<group>"; };
-		9A47304A1CECAEC500AEB86F /* LCCKMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKMapViewController.h; sourceTree = "<group>"; };
-		9A47304B1CECAEC500AEB86F /* LCCKMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKMapViewController.m; sourceTree = "<group>"; };
-		9A47304E1CECAEC500AEB86F /* LCCKConstantsDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKConstantsDefinition.h; sourceTree = "<group>"; };
-		9A47304F1CECAEC500AEB86F /* LCCKUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKUtil.h; sourceTree = "<group>"; };
-		9A4730501CECAEC500AEB86F /* LCCKUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKUtil.m; sourceTree = "<group>"; };
-		9A4730521CECAEC500AEB86F /* LCCKPlusButtonSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKPlusButtonSubclass.h; sourceTree = "<group>"; };
-		9A4730531CECAEC500AEB86F /* LCCKPlusButtonSubclass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKPlusButtonSubclass.m; sourceTree = "<group>"; };
+		9A47302D1CECAEC500AEB86F /* CYLDemoUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoUser.h; sourceTree = "<group>"; };
+		9A47302E1CECAEC500AEB86F /* CYLDemoUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoUser.m; sourceTree = "<group>"; };
+		9A47303D1CECAEC500AEB86F /* CYLDemoLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoLoginViewController.h; sourceTree = "<group>"; };
+		9A47303E1CECAEC500AEB86F /* CYLDemoLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoLoginViewController.m; sourceTree = "<group>"; };
+		9A47303F1CECAEC500AEB86F /* CYLDemoLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CYLDemoLoginViewController.xib; sourceTree = "<group>"; };
+		9A4730411CECAEC500AEB86F /* CYLDemoCustomAutoCompleteObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoCustomAutoCompleteObject.h; sourceTree = "<group>"; };
+		9A4730421CECAEC500AEB86F /* CYLDemoCustomAutoCompleteObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoCustomAutoCompleteObject.m; sourceTree = "<group>"; };
+		9A4730431CECAEC500AEB86F /* CYLDemoDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoDataSource.h; sourceTree = "<group>"; };
+		9A4730441CECAEC500AEB86F /* CYLDemoDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoDataSource.m; sourceTree = "<group>"; };
+		9A4730451CECAEC500AEB86F /* CYLDemoLoginDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoLoginDataSource.h; sourceTree = "<group>"; };
+		9A4730461CECAEC500AEB86F /* CYLDemoLoginDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoLoginDataSource.m; sourceTree = "<group>"; };
+		9A47304A1CECAEC500AEB86F /* CYLDemoMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoMapViewController.h; sourceTree = "<group>"; };
+		9A47304B1CECAEC500AEB86F /* CYLDemoMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoMapViewController.m; sourceTree = "<group>"; };
+		9A47304E1CECAEC500AEB86F /* CYLDemoConstantsDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoConstantsDefinition.h; sourceTree = "<group>"; };
+		9A47304F1CECAEC500AEB86F /* CYLDemoUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoUtil.h; sourceTree = "<group>"; };
+		9A4730501CECAEC500AEB86F /* CYLDemoUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoUtil.m; sourceTree = "<group>"; };
+		9A4730521CECAEC500AEB86F /* CYLDemoPlusButtonSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoPlusButtonSubclass.h; sourceTree = "<group>"; };
+		9A4730531CECAEC500AEB86F /* CYLDemoPlusButtonSubclass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoPlusButtonSubclass.m; sourceTree = "<group>"; };
 		9A4730551CECAEC500AEB86F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9A4730571CECAEC500AEB86F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9A4730581CECAEC500AEB86F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9A4730591CECAEC500AEB86F /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		9A47305D1CECAEC500AEB86F /* NSObject+LCCKHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+LCCKHUD.h"; sourceTree = "<group>"; };
-		9A47305E1CECAEC500AEB86F /* NSObject+LCCKHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+LCCKHUD.m"; sourceTree = "<group>"; };
+		9A47305D1CECAEC500AEB86F /* NSObject+CYLDemoHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+CYLDemoHUD.h"; sourceTree = "<group>"; };
+		9A47305E1CECAEC500AEB86F /* NSObject+CYLDemoHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+CYLDemoHUD.m"; sourceTree = "<group>"; };
 		9A4CBADB1DB87F2000E61C92 /* ChatKit-OC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ChatKit-OC.entitlements"; sourceTree = "<group>"; };
 		9A53BE381D8BB19C00AAB118 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9A53BE391D8BB19C00AAB118 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		9A53BE3A1D8BB19C00AAB118 /* LCChatKitExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCChatKitExample.h; sourceTree = "<group>"; };
-		9A53BE3B1D8BB19C00AAB118 /* LCChatKitExample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCChatKitExample.m; sourceTree = "<group>"; };
-		9A53BE3C1D8BB19C00AAB118 /* LCChatKitExample+Setting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LCChatKitExample+Setting.h"; sourceTree = "<group>"; };
-		9A53BE3D1D8BB19C00AAB118 /* LCChatKitExample+Setting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LCChatKitExample+Setting.m"; sourceTree = "<group>"; };
-		9A53BE3E1D8BB19C00AAB118 /* LCCKTabBarControllerConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKTabBarControllerConfig.h; sourceTree = "<group>"; };
-		9A53BE3F1D8BB19C00AAB118 /* LCCKTabBarControllerConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKTabBarControllerConfig.m; sourceTree = "<group>"; };
-		9A55EB331E00FC5A0079EB65 /* LCCKProfileNameEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKProfileNameEditViewController.h; sourceTree = "<group>"; };
-		9A55EB341E00FC5A0079EB65 /* LCCKProfileNameEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKProfileNameEditViewController.m; sourceTree = "<group>"; };
-		9A562A221E03D52F00BB23DD /* LCCKSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSettingViewController.h; sourceTree = "<group>"; };
-		9A562A231E03D52F00BB23DD /* LCCKSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSettingViewController.m; sourceTree = "<group>"; };
-		9A562A251E03D52F00BB23DD /* LCCKSettingButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSettingButtonCell.h; sourceTree = "<group>"; };
-		9A562A261E03D52F00BB23DD /* LCCKSettingButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSettingButtonCell.m; sourceTree = "<group>"; };
-		9A562A271E03D52F00BB23DD /* LCCKSettingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSettingCell.h; sourceTree = "<group>"; };
-		9A562A281E03D52F00BB23DD /* LCCKSettingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSettingCell.m; sourceTree = "<group>"; };
-		9A562A291E03D52F00BB23DD /* LCCKSettingSwitchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSettingSwitchCell.h; sourceTree = "<group>"; };
-		9A562A2A1E03D52F00BB23DD /* LCCKSettingSwitchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSettingSwitchCell.m; sourceTree = "<group>"; };
+		9A53BE3A1D8BB19C00AAB118 /* CYLDemoChatKitExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoChatKitExample.h; sourceTree = "<group>"; };
+		9A53BE3B1D8BB19C00AAB118 /* CYLDemoChatKitExample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoChatKitExample.m; sourceTree = "<group>"; };
+		9A53BE3C1D8BB19C00AAB118 /* CYLDemoChatKitExample+Setting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CYLDemoChatKitExample+Setting.h"; sourceTree = "<group>"; };
+		9A53BE3D1D8BB19C00AAB118 /* CYLDemoChatKitExample+Setting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CYLDemoChatKitExample+Setting.m"; sourceTree = "<group>"; };
+		9A53BE3E1D8BB19C00AAB118 /* CYLDemoTabBarControllerConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoTabBarControllerConfig.h; sourceTree = "<group>"; };
+		9A53BE3F1D8BB19C00AAB118 /* CYLDemoTabBarControllerConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoTabBarControllerConfig.m; sourceTree = "<group>"; };
+		9A55EB331E00FC5A0079EB65 /* CYLDemoProfileNameEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoProfileNameEditViewController.h; sourceTree = "<group>"; };
+		9A55EB341E00FC5A0079EB65 /* CYLDemoProfileNameEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoProfileNameEditViewController.m; sourceTree = "<group>"; };
+		9A562A221E03D52F00BB23DD /* CYLDemoSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoSettingViewController.h; sourceTree = "<group>"; };
+		9A562A231E03D52F00BB23DD /* CYLDemoSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoSettingViewController.m; sourceTree = "<group>"; };
+		9A562A251E03D52F00BB23DD /* CYLDemoSettingButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoSettingButtonCell.h; sourceTree = "<group>"; };
+		9A562A261E03D52F00BB23DD /* CYLDemoSettingButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoSettingButtonCell.m; sourceTree = "<group>"; };
+		9A562A271E03D52F00BB23DD /* CYLDemoSettingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoSettingCell.h; sourceTree = "<group>"; };
+		9A562A281E03D52F00BB23DD /* CYLDemoSettingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoSettingCell.m; sourceTree = "<group>"; };
+		9A562A291E03D52F00BB23DD /* CYLDemoSettingSwitchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoSettingSwitchCell.h; sourceTree = "<group>"; };
+		9A562A2A1E03D52F00BB23DD /* CYLDemoSettingSwitchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoSettingSwitchCell.m; sourceTree = "<group>"; };
 		9A562A2B1E03D52F00BB23DD /* TLSettingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLSettingCell.h; sourceTree = "<group>"; };
-		9A562A2D1E03D52F00BB23DD /* LCCKSettingGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSettingGroup.h; sourceTree = "<group>"; };
-		9A562A2E1E03D52F00BB23DD /* LCCKSettingGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSettingGroup.m; sourceTree = "<group>"; };
-		9A562A2F1E03D52F00BB23DD /* LCCKSettingItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSettingItem.h; sourceTree = "<group>"; };
-		9A562A301E03D52F00BB23DD /* LCCKSettingItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSettingItem.m; sourceTree = "<group>"; };
-		9A562A321E03D52F00BB23DD /* LCCKSettingFooterTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSettingFooterTitleView.h; sourceTree = "<group>"; };
-		9A562A331E03D52F00BB23DD /* LCCKSettingFooterTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSettingFooterTitleView.m; sourceTree = "<group>"; };
-		9A562A341E03D52F00BB23DD /* LCCKSettingHeaderTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSettingHeaderTitleView.h; sourceTree = "<group>"; };
-		9A562A351E03D52F00BB23DD /* LCCKSettingHeaderTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSettingHeaderTitleView.m; sourceTree = "<group>"; };
+		9A562A2D1E03D52F00BB23DD /* CYLDemoSettingGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoSettingGroup.h; sourceTree = "<group>"; };
+		9A562A2E1E03D52F00BB23DD /* CYLDemoSettingGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoSettingGroup.m; sourceTree = "<group>"; };
+		9A562A2F1E03D52F00BB23DD /* CYLDemoSettingItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoSettingItem.h; sourceTree = "<group>"; };
+		9A562A301E03D52F00BB23DD /* CYLDemoSettingItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoSettingItem.m; sourceTree = "<group>"; };
+		9A562A321E03D52F00BB23DD /* CYLDemoSettingFooterTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoSettingFooterTitleView.h; sourceTree = "<group>"; };
+		9A562A331E03D52F00BB23DD /* CYLDemoSettingFooterTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoSettingFooterTitleView.m; sourceTree = "<group>"; };
+		9A562A341E03D52F00BB23DD /* CYLDemoSettingHeaderTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoSettingHeaderTitleView.h; sourceTree = "<group>"; };
+		9A562A351E03D52F00BB23DD /* CYLDemoSettingHeaderTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoSettingHeaderTitleView.m; sourceTree = "<group>"; };
 		9A754D4B1CECAC3E000967F1 /* ChatKit-OC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ChatKit-OC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9A7E2DE61D5F0B59003A7312 /* LCCKExampleConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKExampleConstants.h; sourceTree = "<group>"; };
-		9A7E2DE71D5F1040003A7312 /* LCCKContactManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKContactManager.h; sourceTree = "<group>"; };
-		9A7E2DE81D5F1040003A7312 /* LCCKContactManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKContactManager.m; sourceTree = "<group>"; };
+		9A7E2DE61D5F0B59003A7312 /* CYLDemoExampleConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoExampleConstants.h; sourceTree = "<group>"; };
+		9A7E2DE71D5F1040003A7312 /* CYLDemoContactManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoContactManager.h; sourceTree = "<group>"; };
+		9A7E2DE81D5F1040003A7312 /* CYLDemoContactManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoContactManager.m; sourceTree = "<group>"; };
 		9AAFE6571D48C863004A0309 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		9AB37B251DC86A60000782F2 /* ChatKit 自定义样式.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = "ChatKit 自定义样式.md"; path = "../../../../../ChatKit 自定义样式.md"; sourceTree = "<group>"; };
 		9AB37B261DC86A60000782F2 /* ChatKit 自定义业务.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = "ChatKit 自定义业务.md"; path = "../../../../../ChatKit 自定义业务.md"; sourceTree = "<group>"; };
 		9AB37B281DC86A60000782F2 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../../../../README.md; sourceTree = "<group>"; };
 		9AB37B2F1DC86A6E000782F2 /* issue_template.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = issue_template.md; path = ../../../../../.github/issue_template.md; sourceTree = "<group>"; };
 		9AB37B301DC86A6E000782F2 /* pull_request_template.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = pull_request_template.md; path = ../../../../../.github/pull_request_template.md; sourceTree = "<group>"; };
-		9AC3A48E1DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSingleConversationDetailViewController.h; sourceTree = "<group>"; };
-		9AC3A48F1DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSingleConversationDetailViewController.m; sourceTree = "<group>"; };
-		9AC3A4911DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKGroupConversationDetailViewController.h; sourceTree = "<group>"; };
-		9AC3A4921DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKGroupConversationDetailViewController.m; sourceTree = "<group>"; };
-		9AC3A4B21DF9BEE600F3405F /* LCCKUIUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKUIUtility.h; sourceTree = "<group>"; };
-		9AC3A4B31DF9BEE600F3405F /* LCCKUIUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKUIUtility.m; sourceTree = "<group>"; };
-		9AC3A4B41DF9BEE600F3405F /* UIColor+LCCKExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+LCCKExtension.h"; sourceTree = "<group>"; };
-		9AC3A4B51DF9BEE600F3405F /* UIColor+LCCKExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+LCCKExtension.m"; sourceTree = "<group>"; };
-		9AC3A4B61DF9BEE600F3405F /* UIFont+LCCKExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+LCCKExtension.h"; sourceTree = "<group>"; };
-		9AC3A4B71DF9BEE600F3405F /* UIFont+LCCKExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+LCCKExtension.m"; sourceTree = "<group>"; };
-		9AC3A4C61DF9C14500F3405F /* NSDate+LCCKExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+LCCKExtension.h"; sourceTree = "<group>"; };
-		9AC3A4C71DF9C14500F3405F /* NSDate+LCCKExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+LCCKExtension.m"; sourceTree = "<group>"; };
-		9AC3A4C81DF9C14500F3405F /* NSFileManager+LCCKExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+LCCKExtension.h"; sourceTree = "<group>"; };
-		9AC3A4C91DF9C14500F3405F /* NSFileManager+LCCKExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+LCCKExtension.m"; sourceTree = "<group>"; };
+		9AC3A48E1DF9B7B400F3405F /* CYLDemoSingleConversationDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoSingleConversationDetailViewController.h; sourceTree = "<group>"; };
+		9AC3A48F1DF9B7B400F3405F /* CYLDemoSingleConversationDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoSingleConversationDetailViewController.m; sourceTree = "<group>"; };
+		9AC3A4911DF9B7D500F3405F /* CYLDemoGroupConversationDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoGroupConversationDetailViewController.h; sourceTree = "<group>"; };
+		9AC3A4921DF9B7D500F3405F /* CYLDemoGroupConversationDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoGroupConversationDetailViewController.m; sourceTree = "<group>"; };
+		9AC3A4B21DF9BEE600F3405F /* CYLDemoUIUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoUIUtility.h; sourceTree = "<group>"; };
+		9AC3A4B31DF9BEE600F3405F /* CYLDemoUIUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoUIUtility.m; sourceTree = "<group>"; };
+		9AC3A4B41DF9BEE600F3405F /* UIColor+CYLDemoExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+CYLDemoExtension.h"; sourceTree = "<group>"; };
+		9AC3A4B51DF9BEE600F3405F /* UIColor+CYLDemoExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+CYLDemoExtension.m"; sourceTree = "<group>"; };
+		9AC3A4B61DF9BEE600F3405F /* UIFont+CYLDemoExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+CYLDemoExtension.h"; sourceTree = "<group>"; };
+		9AC3A4B71DF9BEE600F3405F /* UIFont+CYLDemoExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+CYLDemoExtension.m"; sourceTree = "<group>"; };
+		9AC3A4C61DF9C14500F3405F /* NSDate+CYLDemoExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+CYLDemoExtension.h"; sourceTree = "<group>"; };
+		9AC3A4C71DF9C14500F3405F /* NSDate+CYLDemoExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+CYLDemoExtension.m"; sourceTree = "<group>"; };
+		9AC3A4C81DF9C14500F3405F /* NSFileManager+CYLDemoExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+CYLDemoExtension.h"; sourceTree = "<group>"; };
+		9AC3A4C91DF9C14500F3405F /* NSFileManager+CYLDemoExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+CYLDemoExtension.m"; sourceTree = "<group>"; };
 		9AC3A4CF1DF9C16A00F3405F /* NSDate+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Extension.h"; sourceTree = "<group>"; };
 		9AC3A4D01DF9C16A00F3405F /* NSDate+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Extension.m"; sourceTree = "<group>"; };
 		9AC3A4D11DF9C16A00F3405F /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
 		9AC3A4D21DF9C16A00F3405F /* NSDate+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Utilities.m"; sourceTree = "<group>"; };
 		9AC3A4D51DF9C25200F3405F /* NSFileManager+Paths.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Paths.h"; sourceTree = "<group>"; };
 		9AC3A4D61DF9C25200F3405F /* NSFileManager+Paths.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Paths.m"; sourceTree = "<group>"; };
-		9AC3A4D91DF9C8BD00F3405F /* LCCKUserGroupCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKUserGroupCell.h; sourceTree = "<group>"; };
-		9AC3A4DA1DF9C8BD00F3405F /* LCCKUserGroupCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKUserGroupCell.m; sourceTree = "<group>"; };
-		9AC3A4DB1DF9C8BD00F3405F /* LCCKUserGroupItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKUserGroupItemCell.h; sourceTree = "<group>"; };
-		9AC3A4DC1DF9C8BD00F3405F /* LCCKUserGroupItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKUserGroupItemCell.m; sourceTree = "<group>"; };
-		9AC3A4E01DF9CE0300F3405F /* LCCKChatDetailHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKChatDetailHelper.h; sourceTree = "<group>"; };
-		9AC3A4E11DF9CE0300F3405F /* LCCKChatDetailHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKChatDetailHelper.m; sourceTree = "<group>"; };
-		9C41FB302EA3AF9C9EFA71D0 /* AVIMTypedMessage+LCCKExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AVIMTypedMessage+LCCKExtension.h"; sourceTree = "<group>"; };
-		A166CE33749D0D81CDBF99D9 /* CYLMessage+LCCKExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CYLMessage+LCCKExtension.m"; sourceTree = "<group>"; };
-		A81A200C5F6DA6E5CF65376C /* LCCKLeanCloudIMProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = LCCKLeanCloudIMProvider.h; sourceTree = "<group>"; };
-		C0D281FD3CC22B2AD4F50E6D /* CYLCommonUtils+LCCKExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CYLCommonUtils+LCCKExtension.m"; sourceTree = "<group>"; };
+		9AC3A4D91DF9C8BD00F3405F /* CYLDemoUserGroupCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoUserGroupCell.h; sourceTree = "<group>"; };
+		9AC3A4DA1DF9C8BD00F3405F /* CYLDemoUserGroupCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoUserGroupCell.m; sourceTree = "<group>"; };
+		9AC3A4DB1DF9C8BD00F3405F /* CYLDemoUserGroupItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoUserGroupItemCell.h; sourceTree = "<group>"; };
+		9AC3A4DC1DF9C8BD00F3405F /* CYLDemoUserGroupItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoUserGroupItemCell.m; sourceTree = "<group>"; };
+		9AC3A4E01DF9CE0300F3405F /* CYLDemoChatDetailHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoChatDetailHelper.h; sourceTree = "<group>"; };
+		9AC3A4E11DF9CE0300F3405F /* CYLDemoChatDetailHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoChatDetailHelper.m; sourceTree = "<group>"; };
+		9C41FB302EA3AF9C9EFA71D0 /* AVIMTypedMessage+CYLDemoExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AVIMTypedMessage+CYLDemoExtension.h"; sourceTree = "<group>"; };
+		A166CE33749D0D81CDBF99D9 /* CYLMessage+CYLDemoExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CYLMessage+CYLDemoExtension.m"; sourceTree = "<group>"; };
+		A81A200C5F6DA6E5CF65376C /* CYLDemoLeanCloudIMProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CYLDemoLeanCloudIMProvider.h; sourceTree = "<group>"; };
+		C0D281FD3CC22B2AD4F50E6D /* CYLCommonUtils+CYLDemoExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CYLCommonUtils+CYLDemoExtension.m"; sourceTree = "<group>"; };
 		D62193C0ECACB72DC928AD70 /* libPods-ChatKit-OC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChatKit-OC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E55D34EC8F162DB5443587B0 /* Pods-ChatKit-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.debug.xcconfig"; sourceTree = "<group>"; };
-		E68479705B82BD57C9D47CDF /* LCCKLeanCloudConversationService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = LCCKLeanCloudConversationService.h; sourceTree = "<group>"; };
+		E68479705B82BD57C9D47CDF /* CYLDemoLeanCloudConversationService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CYLDemoLeanCloudConversationService.h; sourceTree = "<group>"; };
 		E7586C4E1D630681000C18B4 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
-		EBAF16851651C853B9AD2E54 /* AVIMConversation+LCCKExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AVIMConversation+LCCKExtension.h"; sourceTree = "<group>"; };
-		F34AC56EDFEBB45BC0F4BBF1 /* LCCKLeanCloudSessionService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = LCCKLeanCloudSessionService.h; sourceTree = "<group>"; };
-		F93EE382B6E649274F68DFBB /* AVIMMessage+LCCKExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AVIMMessage+LCCKExtension.m"; sourceTree = "<group>"; };
+		EBAF16851651C853B9AD2E54 /* AVIMConversation+CYLDemoExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AVIMConversation+CYLDemoExtension.h"; sourceTree = "<group>"; };
+		F34AC56EDFEBB45BC0F4BBF1 /* CYLDemoLeanCloudSessionService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CYLDemoLeanCloudSessionService.h; sourceTree = "<group>"; };
+		F93EE382B6E649274F68DFBB /* AVIMMessage+CYLDemoExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AVIMMessage+CYLDemoExtension.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -243,8 +243,8 @@
 		154E0BBF4D12D1E40AC24FA8 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				4EF1A70E78E9E01165FFAAAA /* LCCKContactListController.h */,
-				A0CB1FDB9FC4AD87BFBD45AA /* LCCKContactListController.m */,
+				4EF1A70E78E9E01165FFAAAA /* CYLDemoContactListController.h */,
+				A0CB1FDB9FC4AD87BFBD45AA /* CYLDemoContactListController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -252,9 +252,9 @@
 		E1F08BC7F753498FDECFA1DF /* View */ = {
 			isa = PBXGroup;
 			children = (
-				C4D54A6FEFCB0BB1CBB969D2 /* LCCKContactCell.h */,
-				2D8A705227326F63D215FC7A /* LCCKContactCell.m */,
-				B010ADA19D354A08D14BB107 /* LCCKContactCell.xib */,
+				C4D54A6FEFCB0BB1CBB969D2 /* CYLDemoContactCell.h */,
+				2D8A705227326F63D215FC7A /* CYLDemoContactCell.m */,
+				B010ADA19D354A08D14BB107 /* CYLDemoContactCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -262,24 +262,24 @@
 		51F089E8BD8FA22A9C0F2388 /* LeanCloud */ = {
 			isa = PBXGroup;
 			children = (
-				EBAF16851651C853B9AD2E54 /* AVIMConversation+LCCKExtension.h */,
-				0669560418FDF8FF4487F8ED /* AVIMConversation+LCCKExtension.m */,
-				2380FFF0825E84C711209800 /* AVIMEmotionMessage.h */,
-				17B83CD24B84E995F26462DE /* AVIMEmotionMessage.m */,
-				78932A7FCE2FEB02F2BCBE30 /* AVIMMessage+LCCKExtension.h */,
-				F93EE382B6E649274F68DFBB /* AVIMMessage+LCCKExtension.m */,
-				9C41FB302EA3AF9C9EFA71D0 /* AVIMTypedMessage+LCCKExtension.h */,
-				022F1E093BCB469ABEBD73A1 /* AVIMTypedMessage+LCCKExtension.m */,
-				88476BB114A869E434648F8D /* CYLCommonUtils+LCCKExtension.h */,
-				C0D281FD3CC22B2AD4F50E6D /* CYLCommonUtils+LCCKExtension.m */,
-				E68479705B82BD57C9D47CDF /* LCCKLeanCloudConversationService.h */,
-				17855C4993EC373D7E6D5B2F /* LCCKLeanCloudConversationService.m */,
-				A81A200C5F6DA6E5CF65376C /* LCCKLeanCloudIMProvider.h */,
-				951BD5C139229E7A457A608C /* LCCKLeanCloudIMProvider.m */,
-				F34AC56EDFEBB45BC0F4BBF1 /* LCCKLeanCloudSessionService.h */,
-				0233781E958C082D597A4D8F /* LCCKLeanCloudSessionService.m */,
-				3D36EEFDD9498F40B768B63B /* CYLMessage+LCCKExtension.h */,
-				A166CE33749D0D81CDBF99D9 /* CYLMessage+LCCKExtension.m */,
+				EBAF16851651C853B9AD2E54 /* AVIMConversation+CYLDemoExtension.h */,
+				0669560418FDF8FF4487F8ED /* AVIMConversation+CYLDemoExtension.m */,
+				2380FFF0825E84C711209800 /* CYLDemoEmotionMessage.h */,
+				17B83CD24B84E995F26462DE /* CYLDemoEmotionMessage.m */,
+				78932A7FCE2FEB02F2BCBE30 /* AVIMMessage+CYLDemoExtension.h */,
+				F93EE382B6E649274F68DFBB /* AVIMMessage+CYLDemoExtension.m */,
+				9C41FB302EA3AF9C9EFA71D0 /* AVIMTypedMessage+CYLDemoExtension.h */,
+				022F1E093BCB469ABEBD73A1 /* AVIMTypedMessage+CYLDemoExtension.m */,
+				88476BB114A869E434648F8D /* CYLCommonUtils+CYLDemoExtension.h */,
+				C0D281FD3CC22B2AD4F50E6D /* CYLCommonUtils+CYLDemoExtension.m */,
+				E68479705B82BD57C9D47CDF /* CYLDemoLeanCloudConversationService.h */,
+				17855C4993EC373D7E6D5B2F /* CYLDemoLeanCloudConversationService.m */,
+				A81A200C5F6DA6E5CF65376C /* CYLDemoLeanCloudIMProvider.h */,
+				951BD5C139229E7A457A608C /* CYLDemoLeanCloudIMProvider.m */,
+				F34AC56EDFEBB45BC0F4BBF1 /* CYLDemoLeanCloudSessionService.h */,
+				0233781E958C082D597A4D8F /* CYLDemoLeanCloudSessionService.m */,
+				3D36EEFDD9498F40B768B63B /* CYLMessage+CYLDemoExtension.h */,
+				A166CE33749D0D81CDBF99D9 /* CYLMessage+CYLDemoExtension.m */,
 			);
 			name = LeanCloud;
 			path = LeanCloud;
@@ -303,12 +303,12 @@
 			children = (
 				9A53BE381D8BB19C00AAB118 /* AppDelegate.h */,
 				9A53BE391D8BB19C00AAB118 /* AppDelegate.m */,
-				9A53BE3A1D8BB19C00AAB118 /* LCChatKitExample.h */,
-				9A53BE3B1D8BB19C00AAB118 /* LCChatKitExample.m */,
-				9A53BE3C1D8BB19C00AAB118 /* LCChatKitExample+Setting.h */,
-				9A53BE3D1D8BB19C00AAB118 /* LCChatKitExample+Setting.m */,
-				9A53BE3E1D8BB19C00AAB118 /* LCCKTabBarControllerConfig.h */,
-				9A53BE3F1D8BB19C00AAB118 /* LCCKTabBarControllerConfig.m */,
+				9A53BE3A1D8BB19C00AAB118 /* CYLDemoChatKitExample.h */,
+				9A53BE3B1D8BB19C00AAB118 /* CYLDemoChatKitExample.m */,
+				9A53BE3C1D8BB19C00AAB118 /* CYLDemoChatKitExample+Setting.h */,
+				9A53BE3D1D8BB19C00AAB118 /* CYLDemoChatKitExample+Setting.m */,
+				9A53BE3E1D8BB19C00AAB118 /* CYLDemoTabBarControllerConfig.h */,
+				9A53BE3F1D8BB19C00AAB118 /* CYLDemoTabBarControllerConfig.m */,
 				9A47302B1CECAEC500AEB86F /* Class */,
 			);
 			path = Example;
@@ -328,8 +328,8 @@
 		9A47302C1CECAEC500AEB86F /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				9A47302D1CECAEC500AEB86F /* LCCKUser.h */,
-				9A47302E1CECAEC500AEB86F /* LCCKUser.m */,
+				9A47302D1CECAEC500AEB86F /* CYLDemoUser.h */,
+				9A47302E1CECAEC500AEB86F /* CYLDemoUser.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -359,9 +359,9 @@
 		9A47303C1CECAEC500AEB86F /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				9A47303D1CECAEC500AEB86F /* LCCKLoginViewController.h */,
-				9A47303E1CECAEC500AEB86F /* LCCKLoginViewController.m */,
-				9A47303F1CECAEC500AEB86F /* LCCKLoginViewController.xib */,
+				9A47303D1CECAEC500AEB86F /* CYLDemoLoginViewController.h */,
+				9A47303E1CECAEC500AEB86F /* CYLDemoLoginViewController.m */,
+				9A47303F1CECAEC500AEB86F /* CYLDemoLoginViewController.xib */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -369,12 +369,12 @@
 		9A4730401CECAEC500AEB86F /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				9A4730411CECAEC500AEB86F /* DEMOCustomAutoCompleteObject.h */,
-				9A4730421CECAEC500AEB86F /* DEMOCustomAutoCompleteObject.m */,
-				9A4730431CECAEC500AEB86F /* DEMODataSource.h */,
-				9A4730441CECAEC500AEB86F /* DEMODataSource.m */,
-				9A4730451CECAEC500AEB86F /* LCCKLoginDataSource.h */,
-				9A4730461CECAEC500AEB86F /* LCCKLoginDataSource.m */,
+				9A4730411CECAEC500AEB86F /* CYLDemoCustomAutoCompleteObject.h */,
+				9A4730421CECAEC500AEB86F /* CYLDemoCustomAutoCompleteObject.m */,
+				9A4730431CECAEC500AEB86F /* CYLDemoDataSource.h */,
+				9A4730441CECAEC500AEB86F /* CYLDemoDataSource.m */,
+				9A4730451CECAEC500AEB86F /* CYLDemoLoginDataSource.h */,
+				9A4730461CECAEC500AEB86F /* CYLDemoLoginDataSource.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -383,9 +383,9 @@
 			isa = PBXGroup;
 			children = (
 				9A4730491CECAEC500AEB86F /* Controller */,
-				9A47304E1CECAEC500AEB86F /* LCCKConstantsDefinition.h */,
-				9A47304F1CECAEC500AEB86F /* LCCKUtil.h */,
-				9A4730501CECAEC500AEB86F /* LCCKUtil.m */,
+				9A47304E1CECAEC500AEB86F /* CYLDemoConstantsDefinition.h */,
+				9A47304F1CECAEC500AEB86F /* CYLDemoUtil.h */,
+				9A4730501CECAEC500AEB86F /* CYLDemoUtil.m */,
 				9A4730511CECAEC500AEB86F /* View */,
 			);
 			path = Main;
@@ -394,8 +394,8 @@
 		9A4730491CECAEC500AEB86F /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				9A47304A1CECAEC500AEB86F /* LCCKMapViewController.h */,
-				9A47304B1CECAEC500AEB86F /* LCCKMapViewController.m */,
+				9A47304A1CECAEC500AEB86F /* CYLDemoMapViewController.h */,
+				9A47304B1CECAEC500AEB86F /* CYLDemoMapViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -403,8 +403,8 @@
 		9A4730511CECAEC500AEB86F /* View */ = {
 			isa = PBXGroup;
 			children = (
-				9A4730521CECAEC500AEB86F /* LCCKPlusButtonSubclass.h */,
-				9A4730531CECAEC500AEB86F /* LCCKPlusButtonSubclass.m */,
+				9A4730521CECAEC500AEB86F /* CYLDemoPlusButtonSubclass.h */,
+				9A4730531CECAEC500AEB86F /* CYLDemoPlusButtonSubclass.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -415,7 +415,7 @@
 				4F5E34B71FA069540067EB95 /* [删除]@2x.png */,
 				4F5E34B51FA069300067EB95 /* EmojisList.plist */,
 				9A4730551CECAEC500AEB86F /* Assets.xcassets */,
-				DA321A6C109B235AD56D1507 /* LCCKExample.bundle */,
+				DA321A6C109B235AD56D1507 /* CYLDemoExample.bundle */,
 				9A4730561CECAEC500AEB86F /* LaunchScreen.storyboard */,
 				9A4730581CECAEC500AEB86F /* Info.plist */,
 				9A4730591CECAEC500AEB86F /* main.m */,
@@ -431,10 +431,10 @@
 		9A47305A1CECAEC500AEB86F /* Tool */ = {
 			isa = PBXGroup;
 			children = (
-				9A7E2DE71D5F1040003A7312 /* LCCKContactManager.h */,
-				9A7E2DE81D5F1040003A7312 /* LCCKContactManager.m */,
+				9A7E2DE71D5F1040003A7312 /* CYLDemoContactManager.h */,
+				9A7E2DE81D5F1040003A7312 /* CYLDemoContactManager.m */,
 				9A47305B1CECAEC500AEB86F /* MBProgressHUD */,
-				9A7E2DE61D5F0B59003A7312 /* LCCKExampleConstants.h */,
+				9A7E2DE61D5F0B59003A7312 /* CYLDemoExampleConstants.h */,
 			);
 			path = Tool;
 			sourceTree = "<group>";
@@ -442,8 +442,8 @@
 		9A47305B1CECAEC500AEB86F /* MBProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
-				9A47305D1CECAEC500AEB86F /* NSObject+LCCKHUD.h */,
-				9A47305E1CECAEC500AEB86F /* NSObject+LCCKHUD.m */,
+				9A47305D1CECAEC500AEB86F /* NSObject+CYLDemoHUD.h */,
+				9A47305E1CECAEC500AEB86F /* NSObject+CYLDemoHUD.m */,
 			);
 			path = MBProgressHUD;
 			sourceTree = "<group>";
@@ -451,12 +451,12 @@
 		9A562A241E03D52F00BB23DD /* SettingCells */ = {
 			isa = PBXGroup;
 			children = (
-				9A562A251E03D52F00BB23DD /* LCCKSettingButtonCell.h */,
-				9A562A261E03D52F00BB23DD /* LCCKSettingButtonCell.m */,
-				9A562A271E03D52F00BB23DD /* LCCKSettingCell.h */,
-				9A562A281E03D52F00BB23DD /* LCCKSettingCell.m */,
-				9A562A291E03D52F00BB23DD /* LCCKSettingSwitchCell.h */,
-				9A562A2A1E03D52F00BB23DD /* LCCKSettingSwitchCell.m */,
+				9A562A251E03D52F00BB23DD /* CYLDemoSettingButtonCell.h */,
+				9A562A261E03D52F00BB23DD /* CYLDemoSettingButtonCell.m */,
+				9A562A271E03D52F00BB23DD /* CYLDemoSettingCell.h */,
+				9A562A281E03D52F00BB23DD /* CYLDemoSettingCell.m */,
+				9A562A291E03D52F00BB23DD /* CYLDemoSettingSwitchCell.h */,
+				9A562A2A1E03D52F00BB23DD /* CYLDemoSettingSwitchCell.m */,
 				9A562A2B1E03D52F00BB23DD /* TLSettingCell.h */,
 			);
 			path = SettingCells;
@@ -465,10 +465,10 @@
 		9A562A2C1E03D52F00BB23DD /* SettingModels */ = {
 			isa = PBXGroup;
 			children = (
-				9A562A2D1E03D52F00BB23DD /* LCCKSettingGroup.h */,
-				9A562A2E1E03D52F00BB23DD /* LCCKSettingGroup.m */,
-				9A562A2F1E03D52F00BB23DD /* LCCKSettingItem.h */,
-				9A562A301E03D52F00BB23DD /* LCCKSettingItem.m */,
+				9A562A2D1E03D52F00BB23DD /* CYLDemoSettingGroup.h */,
+				9A562A2E1E03D52F00BB23DD /* CYLDemoSettingGroup.m */,
+				9A562A2F1E03D52F00BB23DD /* CYLDemoSettingItem.h */,
+				9A562A301E03D52F00BB23DD /* CYLDemoSettingItem.m */,
 			);
 			path = SettingModels;
 			sourceTree = "<group>";
@@ -476,10 +476,10 @@
 		9A562A311E03D52F00BB23DD /* SettingViews */ = {
 			isa = PBXGroup;
 			children = (
-				9A562A321E03D52F00BB23DD /* LCCKSettingFooterTitleView.h */,
-				9A562A331E03D52F00BB23DD /* LCCKSettingFooterTitleView.m */,
-				9A562A341E03D52F00BB23DD /* LCCKSettingHeaderTitleView.h */,
-				9A562A351E03D52F00BB23DD /* LCCKSettingHeaderTitleView.m */,
+				9A562A321E03D52F00BB23DD /* CYLDemoSettingFooterTitleView.h */,
+				9A562A331E03D52F00BB23DD /* CYLDemoSettingFooterTitleView.m */,
+				9A562A341E03D52F00BB23DD /* CYLDemoSettingHeaderTitleView.h */,
+				9A562A351E03D52F00BB23DD /* CYLDemoSettingHeaderTitleView.m */,
 			);
 			path = SettingViews;
 			sourceTree = "<group>";
@@ -518,16 +518,16 @@
 		9AC3A48A1DF9B72B00F3405F /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				3DF176981CDA6BA7E3E51CDE /* LCCKGroupConversationMemberInfoViewController.h */,
-				2705F95659F5FBAAAEA788DD /* LCCKGroupConversationMemberInfoViewController.m */,
-				89C0FF4451DBD875B3B8A8AA /* LCCKGroupConversationManagementViewController.h */,
-				231A4FE296B417FBCA0EAEDD /* LCCKGroupConversationManagementViewController.m */,
-				9AC3A48E1DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.h */,
-				9AC3A48F1DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.m */,
-				9AC3A4911DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.h */,
-				9AC3A4921DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.m */,
-				9A55EB331E00FC5A0079EB65 /* LCCKProfileNameEditViewController.h */,
-				9A55EB341E00FC5A0079EB65 /* LCCKProfileNameEditViewController.m */,
+				3DF176981CDA6BA7E3E51CDE /* CYLDemoGroupConversationMemberInfoViewController.h */,
+				2705F95659F5FBAAAEA788DD /* CYLDemoGroupConversationMemberInfoViewController.m */,
+				89C0FF4451DBD875B3B8A8AA /* CYLDemoGroupConversationManagementViewController.h */,
+				231A4FE296B417FBCA0EAEDD /* CYLDemoGroupConversationManagementViewController.m */,
+				9AC3A48E1DF9B7B400F3405F /* CYLDemoSingleConversationDetailViewController.h */,
+				9AC3A48F1DF9B7B400F3405F /* CYLDemoSingleConversationDetailViewController.m */,
+				9AC3A4911DF9B7D500F3405F /* CYLDemoGroupConversationDetailViewController.h */,
+				9AC3A4921DF9B7D500F3405F /* CYLDemoGroupConversationDetailViewController.m */,
+				9A55EB331E00FC5A0079EB65 /* CYLDemoProfileNameEditViewController.h */,
+				9A55EB341E00FC5A0079EB65 /* CYLDemoProfileNameEditViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -551,8 +551,8 @@
 		9AC3A4941DF9BB6700F3405F /* SettingViewController */ = {
 			isa = PBXGroup;
 			children = (
-				9A562A221E03D52F00BB23DD /* LCCKSettingViewController.h */,
-				9A562A231E03D52F00BB23DD /* LCCKSettingViewController.m */,
+				9A562A221E03D52F00BB23DD /* CYLDemoSettingViewController.h */,
+				9A562A231E03D52F00BB23DD /* CYLDemoSettingViewController.m */,
 				9A562A241E03D52F00BB23DD /* SettingCells */,
 				9A562A2C1E03D52F00BB23DD /* SettingModels */,
 				9A562A311E03D52F00BB23DD /* SettingViews */,
@@ -572,12 +572,12 @@
 		9AC3A4B11DF9BEE600F3405F /* UIUtilities */ = {
 			isa = PBXGroup;
 			children = (
-				9AC3A4B21DF9BEE600F3405F /* LCCKUIUtility.h */,
-				9AC3A4B31DF9BEE600F3405F /* LCCKUIUtility.m */,
-				9AC3A4B41DF9BEE600F3405F /* UIColor+LCCKExtension.h */,
-				9AC3A4B51DF9BEE600F3405F /* UIColor+LCCKExtension.m */,
-				9AC3A4B61DF9BEE600F3405F /* UIFont+LCCKExtension.h */,
-				9AC3A4B71DF9BEE600F3405F /* UIFont+LCCKExtension.m */,
+				9AC3A4B21DF9BEE600F3405F /* CYLDemoUIUtility.h */,
+				9AC3A4B31DF9BEE600F3405F /* CYLDemoUIUtility.m */,
+				9AC3A4B41DF9BEE600F3405F /* UIColor+CYLDemoExtension.h */,
+				9AC3A4B51DF9BEE600F3405F /* UIColor+CYLDemoExtension.m */,
+				9AC3A4B61DF9BEE600F3405F /* UIFont+CYLDemoExtension.h */,
+				9AC3A4B71DF9BEE600F3405F /* UIFont+CYLDemoExtension.m */,
 			);
 			path = UIUtilities;
 			sourceTree = "<group>";
@@ -591,10 +591,10 @@
 				9AC3A4D01DF9C16A00F3405F /* NSDate+Extension.m */,
 				9AC3A4D11DF9C16A00F3405F /* NSDate+Utilities.h */,
 				9AC3A4D21DF9C16A00F3405F /* NSDate+Utilities.m */,
-				9AC3A4C61DF9C14500F3405F /* NSDate+LCCKExtension.h */,
-				9AC3A4C71DF9C14500F3405F /* NSDate+LCCKExtension.m */,
-				9AC3A4C81DF9C14500F3405F /* NSFileManager+LCCKExtension.h */,
-				9AC3A4C91DF9C14500F3405F /* NSFileManager+LCCKExtension.m */,
+				9AC3A4C61DF9C14500F3405F /* NSDate+CYLDemoExtension.h */,
+				9AC3A4C71DF9C14500F3405F /* NSDate+CYLDemoExtension.m */,
+				9AC3A4C81DF9C14500F3405F /* NSFileManager+CYLDemoExtension.h */,
+				9AC3A4C91DF9C14500F3405F /* NSFileManager+CYLDemoExtension.m */,
 			);
 			path = DataUtilities;
 			sourceTree = "<group>";
@@ -602,10 +602,10 @@
 		9AC3A4D81DF9C8BD00F3405F /* ConversationDetailCells */ = {
 			isa = PBXGroup;
 			children = (
-				9AC3A4D91DF9C8BD00F3405F /* LCCKUserGroupCell.h */,
-				9AC3A4DA1DF9C8BD00F3405F /* LCCKUserGroupCell.m */,
-				9AC3A4DB1DF9C8BD00F3405F /* LCCKUserGroupItemCell.h */,
-				9AC3A4DC1DF9C8BD00F3405F /* LCCKUserGroupItemCell.m */,
+				9AC3A4D91DF9C8BD00F3405F /* CYLDemoUserGroupCell.h */,
+				9AC3A4DA1DF9C8BD00F3405F /* CYLDemoUserGroupCell.m */,
+				9AC3A4DB1DF9C8BD00F3405F /* CYLDemoUserGroupItemCell.h */,
+				9AC3A4DC1DF9C8BD00F3405F /* CYLDemoUserGroupItemCell.m */,
 			);
 			path = ConversationDetailCells;
 			sourceTree = "<group>";
@@ -613,8 +613,8 @@
 		9AC3A4DF1DF9CE0300F3405F /* ChatDetailHelper */ = {
 			isa = PBXGroup;
 			children = (
-				9AC3A4E01DF9CE0300F3405F /* LCCKChatDetailHelper.h */,
-				9AC3A4E11DF9CE0300F3405F /* LCCKChatDetailHelper.m */,
+				9AC3A4E01DF9CE0300F3405F /* CYLDemoChatDetailHelper.h */,
+				9AC3A4E11DF9CE0300F3405F /* CYLDemoChatDetailHelper.m */,
 			);
 			path = ChatDetailHelper;
 			sourceTree = "<group>";
@@ -707,13 +707,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6C6062015836565A5F1DF69 /* LCCKContactCell.xib in Resources */,
+				D6C6062015836565A5F1DF69 /* CYLDemoContactCell.xib in Resources */,
 				9A4730711CECAEC500AEB86F /* LaunchScreen.storyboard in Resources */,
 				9A4730701CECAEC500AEB86F /* Assets.xcassets in Resources */,
-				2CED63493BE78D49FB7D2CF9 /* LCCKExample.bundle in Resources */,
+				2CED63493BE78D49FB7D2CF9 /* CYLDemoExample.bundle in Resources */,
 				4F5E34B81FA069540067EB95 /* [删除]@2x.png in Resources */,
 				4F5E34B61FA069300067EB95 /* EmojisList.plist in Resources */,
-				9A4730681CECAEC500AEB86F /* LCCKLoginViewController.xib in Resources */,
+				9A4730681CECAEC500AEB86F /* CYLDemoLoginViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -799,8 +799,8 @@
 				"${PODS_ROOT}/../../ChatKit/Class/Resources/Emoji.bundle",
 				"${PODS_ROOT}/../../ChatKit/Class/Resources/en.lproj",
 				"${PODS_ROOT}/../../ChatKit/Class/Resources/Lan.bundle",
-				"${PODS_ROOT}/../../ChatKit/Class/Resources/LCCKPhotoBrowser.bundle",
-				"${PODS_ROOT}/../../ChatKit/Class/Resources/LCCKRecordAudioHUD.bundle",
+				"${PODS_ROOT}/../../ChatKit/Class/Resources/CYLDemoPhotoBrowser.bundle",
+				"${PODS_ROOT}/../../ChatKit/Class/Resources/CYLDemoRecordAudioHUD.bundle",
 				"${PODS_ROOT}/../../ChatKit/Class/Resources/localization",
 				"${PODS_ROOT}/../../ChatKit/Class/Resources/MBProgressHUD.bundle",
 				"${PODS_ROOT}/../../ChatKit/Class/Resources/MessageBubble.bundle",
@@ -830,8 +830,8 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Emoji.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/en.lproj",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lan.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/LCCKPhotoBrowser.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/LCCKRecordAudioHUD.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/CYLDemoPhotoBrowser.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/CYLDemoRecordAudioHUD.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/localization",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MBProgressHUD.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MessageBubble.bundle",
@@ -877,56 +877,56 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E41DDF5CD1FEF72F70EEB285 /* LCCKGroupConversationMemberInfoViewController.m in Sources */,
-				0559B5CE3A663E3A3CFF76AD /* LCCKContactListController.m in Sources */,
-				A7672B2444FA6A48C26F2611 /* LCCKContactCell.m in Sources */,
-				9320A86A2849EBC98CCC8C35 /* LCCKGroupConversationManagementViewController.m in Sources */,
-				9A47306F1CECAEC500AEB86F /* LCCKPlusButtonSubclass.m in Sources */,
-				9A4730671CECAEC500AEB86F /* LCCKLoginViewController.m in Sources */,
-				9AC3A4DD1DF9C8BD00F3405F /* LCCKUserGroupCell.m in Sources */,
-				9A53BE421D8BB19C00AAB118 /* LCChatKitExample+Setting.m in Sources */,
-				9A53BE411D8BB19C00AAB118 /* LCChatKitExample.m in Sources */,
-				9A55EB351E00FC5A0079EB65 /* LCCKProfileNameEditViewController.m in Sources */,
-				9A562A381E03D52F00BB23DD /* LCCKSettingCell.m in Sources */,
-				9A562A371E03D52F00BB23DD /* LCCKSettingButtonCell.m in Sources */,
+				E41DDF5CD1FEF72F70EEB285 /* CYLDemoGroupConversationMemberInfoViewController.m in Sources */,
+				0559B5CE3A663E3A3CFF76AD /* CYLDemoContactListController.m in Sources */,
+				A7672B2444FA6A48C26F2611 /* CYLDemoContactCell.m in Sources */,
+				9320A86A2849EBC98CCC8C35 /* CYLDemoGroupConversationManagementViewController.m in Sources */,
+				9A47306F1CECAEC500AEB86F /* CYLDemoPlusButtonSubclass.m in Sources */,
+				9A4730671CECAEC500AEB86F /* CYLDemoLoginViewController.m in Sources */,
+				9AC3A4DD1DF9C8BD00F3405F /* CYLDemoUserGroupCell.m in Sources */,
+				9A53BE421D8BB19C00AAB118 /* CYLDemoChatKitExample+Setting.m in Sources */,
+				9A53BE411D8BB19C00AAB118 /* CYLDemoChatKitExample.m in Sources */,
+				9A55EB351E00FC5A0079EB65 /* CYLDemoProfileNameEditViewController.m in Sources */,
+				9A562A381E03D52F00BB23DD /* CYLDemoSettingCell.m in Sources */,
+				9A562A371E03D52F00BB23DD /* CYLDemoSettingButtonCell.m in Sources */,
 				9AC3A4D41DF9C16A00F3405F /* NSDate+Utilities.m in Sources */,
-				9AC3A4CD1DF9C14500F3405F /* NSFileManager+LCCKExtension.m in Sources */,
-				9AC3A4931DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.m in Sources */,
-				9A47306A1CECAEC500AEB86F /* DEMODataSource.m in Sources */,
-				9A562A3B1E03D52F00BB23DD /* LCCKSettingItem.m in Sources */,
-				9A562A391E03D52F00BB23DD /* LCCKSettingSwitchCell.m in Sources */,
-				9A47306C1CECAEC500AEB86F /* LCCKMapViewController.m in Sources */,
-				9A4730621CECAEC500AEB86F /* LCCKUser.m in Sources */,
-				9A47306E1CECAEC500AEB86F /* LCCKUtil.m in Sources */,
-				9A562A3C1E03D52F00BB23DD /* LCCKSettingFooterTitleView.m in Sources */,
-				9AC3A4E21DF9CE0300F3405F /* LCCKChatDetailHelper.m in Sources */,
-				9A562A3A1E03D52F00BB23DD /* LCCKSettingGroup.m in Sources */,
-				9A4730691CECAEC500AEB86F /* DEMOCustomAutoCompleteObject.m in Sources */,
-				9AC3A4B91DF9BEE600F3405F /* UIColor+LCCKExtension.m in Sources */,
-				9AC3A4901DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.m in Sources */,
+				9AC3A4CD1DF9C14500F3405F /* NSFileManager+CYLDemoExtension.m in Sources */,
+				9AC3A4931DF9B7D500F3405F /* CYLDemoGroupConversationDetailViewController.m in Sources */,
+				9A47306A1CECAEC500AEB86F /* CYLDemoDataSource.m in Sources */,
+				9A562A3B1E03D52F00BB23DD /* CYLDemoSettingItem.m in Sources */,
+				9A562A391E03D52F00BB23DD /* CYLDemoSettingSwitchCell.m in Sources */,
+				9A47306C1CECAEC500AEB86F /* CYLDemoMapViewController.m in Sources */,
+				9A4730621CECAEC500AEB86F /* CYLDemoUser.m in Sources */,
+				9A47306E1CECAEC500AEB86F /* CYLDemoUtil.m in Sources */,
+				9A562A3C1E03D52F00BB23DD /* CYLDemoSettingFooterTitleView.m in Sources */,
+				9AC3A4E21DF9CE0300F3405F /* CYLDemoChatDetailHelper.m in Sources */,
+				9A562A3A1E03D52F00BB23DD /* CYLDemoSettingGroup.m in Sources */,
+				9A4730691CECAEC500AEB86F /* CYLDemoCustomAutoCompleteObject.m in Sources */,
+				9AC3A4B91DF9BEE600F3405F /* UIColor+CYLDemoExtension.m in Sources */,
+				9AC3A4901DF9B7B400F3405F /* CYLDemoSingleConversationDetailViewController.m in Sources */,
 				9A4730731CECAEC500AEB86F /* main.m in Sources */,
-				9A4730751CECAEC500AEB86F /* NSObject+LCCKHUD.m in Sources */,
+				9A4730751CECAEC500AEB86F /* NSObject+CYLDemoHUD.m in Sources */,
 				9A53BE401D8BB19C00AAB118 /* AppDelegate.m in Sources */,
-				9AC3A4BA1DF9BEE600F3405F /* UIFont+LCCKExtension.m in Sources */,
-				9A53BE431D8BB19C00AAB118 /* LCCKTabBarControllerConfig.m in Sources */,
-				9A562A361E03D52F00BB23DD /* LCCKSettingViewController.m in Sources */,
-				9AC3A4CC1DF9C14500F3405F /* NSDate+LCCKExtension.m in Sources */,
-				9A47306B1CECAEC500AEB86F /* LCCKLoginDataSource.m in Sources */,
-				9AC3A4B81DF9BEE600F3405F /* LCCKUIUtility.m in Sources */,
-				9A562A3D1E03D52F00BB23DD /* LCCKSettingHeaderTitleView.m in Sources */,
-				9A7E2DE91D5F1040003A7312 /* LCCKContactManager.m in Sources */,
+				9AC3A4BA1DF9BEE600F3405F /* UIFont+CYLDemoExtension.m in Sources */,
+				9A53BE431D8BB19C00AAB118 /* CYLDemoTabBarControllerConfig.m in Sources */,
+				9A562A361E03D52F00BB23DD /* CYLDemoSettingViewController.m in Sources */,
+				9AC3A4CC1DF9C14500F3405F /* NSDate+CYLDemoExtension.m in Sources */,
+				9A47306B1CECAEC500AEB86F /* CYLDemoLoginDataSource.m in Sources */,
+				9AC3A4B81DF9BEE600F3405F /* CYLDemoUIUtility.m in Sources */,
+				9A562A3D1E03D52F00BB23DD /* CYLDemoSettingHeaderTitleView.m in Sources */,
+				9A7E2DE91D5F1040003A7312 /* CYLDemoContactManager.m in Sources */,
 				9AC3A4D31DF9C16A00F3405F /* NSDate+Extension.m in Sources */,
 				9AC3A4D71DF9C25200F3405F /* NSFileManager+Paths.m in Sources */,
-				9AC3A4DE1DF9C8BD00F3405F /* LCCKUserGroupItemCell.m in Sources */,
-				1EC742A9A64D35D2B5B383CA /* AVIMConversation+LCCKExtension.m in Sources */,
-				5A64B08CF04651B31F361271 /* AVIMEmotionMessage.m in Sources */,
-				3AFB59942977C9AA3976C547 /* AVIMMessage+LCCKExtension.m in Sources */,
-				560FCA8CFA42C345A0BC9B31 /* AVIMTypedMessage+LCCKExtension.m in Sources */,
-				C5C92F6F6C4B7B0667812ED3 /* CYLCommonUtils+LCCKExtension.m in Sources */,
-				3E9EB52CA58B5999E1FB7686 /* LCCKLeanCloudConversationService.m in Sources */,
-				6FA5969799D8B0A04A1FE7AF /* LCCKLeanCloudIMProvider.m in Sources */,
-				DC69C37A7861B08FC4799F3D /* LCCKLeanCloudSessionService.m in Sources */,
-				317AC316A0573F974B44268D /* CYLMessage+LCCKExtension.m in Sources */,
+				9AC3A4DE1DF9C8BD00F3405F /* CYLDemoUserGroupItemCell.m in Sources */,
+				1EC742A9A64D35D2B5B383CA /* AVIMConversation+CYLDemoExtension.m in Sources */,
+				5A64B08CF04651B31F361271 /* CYLDemoEmotionMessage.m in Sources */,
+				3AFB59942977C9AA3976C547 /* AVIMMessage+CYLDemoExtension.m in Sources */,
+				560FCA8CFA42C345A0BC9B31 /* AVIMTypedMessage+CYLDemoExtension.m in Sources */,
+				C5C92F6F6C4B7B0667812ED3 /* CYLCommonUtils+CYLDemoExtension.m in Sources */,
+				3E9EB52CA58B5999E1FB7686 /* CYLDemoLeanCloudConversationService.m in Sources */,
+				6FA5969799D8B0A04A1FE7AF /* CYLDemoLeanCloudIMProvider.m in Sources */,
+				DC69C37A7861B08FC4799F3D /* CYLDemoLeanCloudSessionService.m in Sources */,
+				317AC316A0573F974B44268D /* CYLMessage+CYLDemoExtension.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

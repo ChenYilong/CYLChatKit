@@ -77,6 +77,13 @@ jobs:
       - uses: actions/checkout@v4
       - run: python3 scripts/check-localizations.py
 
+  naming:
+    name: Naming rules
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/check-naming.py
+
   projects:
     name: Xcode projects
     needs: changes

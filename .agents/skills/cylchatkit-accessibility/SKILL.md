@@ -23,9 +23,9 @@ you change, and to existing code you review: fix what is missing when you meet i
    - What a tap on a sub-view does (avatar, resend, play) becomes `accessibilityActivate` or `accessibilityCustomActions`.
 4. **Hide decorations.** `isAccessibilityElement = NO` or `accessibilityElementsHidden = YES` for purely decorative views.
 5. **Identifiers.** Every interactive element gets a stable, non-localized `accessibilityIdentifier`, named like the
-   existing ones: `CYLChatBarSendButton`, `CYLChatBarTextView`, `LCCKLoginClientIdTextField`.
+   existing ones: `CYLChatBarSendButton`, `CYLChatBarTextView`, `CYLDemoLoginClientIdTextField`.
 6. **Localize every accessibility string.** Labels, hints, values, and action names go through the layer's macro
-   (`CYLLocalizedStrings` in core, `LCCKExampleLocalizedString` in the example), with keys added to every language of the
+   (`CYLLocalizedStrings` in core, `CYLDemoExampleLocalizedString` in the example), with keys added to every language of the
    table (`cylchatkit-localization`). The accessibility keys of the chat bar, message rows, and conversation rows are in
    `Other.bundle` (`chatbar.*`, `message.*`, `conversation.*`).
 7. **Announce changes.** After a panel or screen changes, post `UIAccessibilityLayoutChangedNotification` (a part of the
@@ -47,7 +47,7 @@ you change, and to existing code you review: fix what is missing when you meet i
 ## Verify
 
 - **Through accessibility first.** The demo writes the accessibility tree of the screen when it is launched with
-  `-LCCKDemoAccessibilityDump YES`. `scripts/demo-screenshots.sh` prints it between `===BEGIN ACCESSIBILITY <name>===` and
+  `-CYLDemoAccessibilityDump YES`. `scripts/demo-screenshots.sh` prints it between `===BEGIN ACCESSIBILITY <name>===` and
   `===END ACCESSIBILITY <name>===` and fails when `expect_accessibility <screen> <identifier> "<label>"` finds no such
   element. Add an expectation for every control a CI screen shows, in English and in Simplified Chinese.
 - **Rows without data.** Conversation, message, and contact rows need data, which CI does not have; check their labels by

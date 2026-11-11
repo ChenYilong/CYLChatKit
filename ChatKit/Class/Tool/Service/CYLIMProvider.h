@@ -11,7 +11,7 @@
 //  it uses and registers it once, before opening a session:
 //
 //  ```
-//  [LCChatKit sharedInstance].IMProvider = [MyIMProvider new];
+//  [CYLChatKit sharedInstance].IMProvider = [MyIMProvider new];
 //  ```
 //
 //  The demo app (`ChatKit-OC`) contains a complete LeanCloud implementation,
@@ -79,10 +79,10 @@ typedef void (^CYLIMRecentConversationsResultBlock)(NSArray<id<CYLConversationPr
 /// The underlying SDK client object, exposed for app code that needs SDK-specific features.
 - (nullable id)client;
 
-/// Called by `+[LCChatKit setAppId:appKey:]` so the provider can initialize its SDK.
+/// Called by `+[CYLChatKit setAppId:appKey:]` so the provider can initialize its SDK.
 - (void)setAppId:(NSString *)appId appKey:(NSString *)appKey;
 
-/// Called by `+[LCChatKit setAllLogsEnabled:]`.
+/// Called by `+[CYLChatKit setAllLogsEnabled:]`.
 - (void)setAllLogsEnabled:(BOOL)enabled;
 
 @end

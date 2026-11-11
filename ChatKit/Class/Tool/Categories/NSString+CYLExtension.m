@@ -132,7 +132,7 @@ NSString *const CYLPhoneRegex =  @"\\d{3,4}[- ]?\\d{7,8}";
 }
 
 - (NSString *)cyl_pathForConversationBackgroundImage {
-    NSString *path = [NSString stringWithFormat:@"%@/APP/%@/User/%@/Conversation/%@/Background/", [NSFileManager cyl_documentsPath], [LCChatKit sharedInstance].appId,[CYLSessionService sharedInstance].clientId, [CYLConversationService sharedInstance].currentConversation.conversationId];
+    NSString *path = [NSString stringWithFormat:@"%@/APP/%@/User/%@/Conversation/%@/Background/", [NSFileManager cyl_documentsPath], [CYLChatKit sharedInstance].appId,[CYLSessionService sharedInstance].clientId, [CYLConversationService sharedInstance].currentConversation.conversationId];
     if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
         NSError *error;
         [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&error];

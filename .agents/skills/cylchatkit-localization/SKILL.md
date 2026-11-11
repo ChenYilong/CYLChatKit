@@ -18,7 +18,7 @@ the layers never read each other's bundles.
 | Layer | Folder | Bundles | Macro | Defined in |
 |:---|:---|:---|:---|:---|
 | Core | `ChatKit/` | `ChatKit/Class/Resources/*.bundle` (always kept; clients can override with `CustomizedChatKit.<Name>.bundle`) | `CYLLocalizedStrings(key)` reads table `LCChatKitString` in `Other.bundle` | `ChatKit/Class/Tool/CYLChatConstants.h` |
-| Example | `ChatKit-OC/` | `ChatKit-OC/Example/Class/Module/Other/LCCKExample.bundle` | `LCCKExampleLocalizedString(key, defaultValue)` reads table `LCCKExample` in `LCCKExample.bundle` | `ChatKit-OC/Example/Class/Tool/LCCKExampleConstants.h` |
+| Example | `ChatKit-OC/` | `ChatKit-OC/Example/Class/Module/Other/CYLDemoExample.bundle` | `CYLDemoExampleLocalizedString(key, defaultValue)` reads table `CYLDemoExample` in `CYLDemoExample.bundle` | `ChatKit-OC/Example/Class/Tool/CYLDemoExampleConstants.h` |
 
 Vendored macros (`DateToolsLocalizedStrings` in `NSDate+CYLDateTools.h`) belong to their vendor bundle and do not count
 as a layer macro. A bundle is a folder package; on other platforms the folder form differs (Android `res/values-<lang>/`,
@@ -29,7 +29,7 @@ web `locales/<lang>/<namespace>.json`, Flutter `.arb` files) but the rules are t
 1. Pick the layer: core strings are shown by the library UI, example strings only by the demo app.
 2. Add the key to **every** `<lang>.lproj/<Table>.strings` of the table in that layer's bundle, in the same commit.
    Keep `%@` / `%1$@` specifiers identical in every language.
-3. Read it only through the layer's macro: `CYLLocalizedStrings(@"key")` in core, `LCCKExampleLocalizedString(@"key",
+3. Read it only through the layer's macro: `CYLLocalizedStrings(@"key")` in core, `CYLDemoExampleLocalizedString(@"key",
    @"fallback")` in the example. Use `[NSString stringWithFormat:]` for values.
 4. Never hard-code user-visible text, or log, assert, or debug text, that contains non-English characters. Image names
    and documented localization keys are the only exceptions. Accessibility labels, hints, values, and VoiceOver action
@@ -49,7 +49,7 @@ repository does not, because its existing tables use ASCII keys. Do not mix the 
    table, or key.
 2. Example: create `ChatKit-OC/Example/.../<Name>.bundle/<lang>.lproj/<Table>.strings`, add it to the app target with
    explicit file references in `ChatKit-OC.xcodeproj` (resources build phase; keep `objectVersion = 46`), and add a macro
-   `LCCK<Domain>LocalizedString(key, defaultValue)` in `LCCKExampleConstants.h`.
+   `CYLDemo<Domain>LocalizedString(key, defaultValue)` in `CYLDemoExampleConstants.h`.
 3. One macro per bundle and table. The macro body is the only place that names the bundle and table.
 
 ## Acceptance checklist

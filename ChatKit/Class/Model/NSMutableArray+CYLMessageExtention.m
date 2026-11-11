@@ -7,10 +7,10 @@
 //
 
 #import "NSMutableArray+CYLMessageExtention.h"
-#if __has_include(<CYLChatKit/LCChatKit.h>)
-#import <CYLChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/CYLChatKit.h>)
+#import <CYLChatKit/CYLChatKit.h>
 #else
-#import "LCChatKit.h"
+#import "CYLChatKit.h"
 #endif
 
 @implementation NSMutableArray (CYLMessageExtention)
@@ -22,7 +22,7 @@
     dispatch_group_async(group, queue, ^{
         
         void(^filteredMessageCallback)(NSArray *_cylimTypedMessages) = ^(NSArray *_cylimTypedMessages) {
-            id<CYLIMProvider> IMProvider = [LCChatKit sharedInstance].IMProvider;
+            id<CYLIMProvider> IMProvider = [CYLChatKit sharedInstance].IMProvider;
             for (id<CYLIMMessageProtocol> typedMessage in _cylimTypedMessages) {
                 id message = [IMProvider displayMessageFromIMMessage:typedMessage];
                 if (message) {

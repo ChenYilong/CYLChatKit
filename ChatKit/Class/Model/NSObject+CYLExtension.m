@@ -8,10 +8,10 @@
 
 #import "NSObject+CYLExtension.h"
 
-#if __has_include(<CYLChatKit/LCChatKit.h>)
-#import <CYLChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/CYLChatKit.h>)
+#import <CYLChatKit/CYLChatKit.h>
 #else
-#import "LCChatKit.h"
+#import "CYLChatKit.h"
 #endif
 
 @implementation NSObject (CYLExtension)
@@ -112,7 +112,7 @@
 }
 
 - (BOOL)cyl_isCreatorForCurrentGroupConversaton {
-    BOOL isCreator = [[CYLConversationService sharedInstance].currentConversation.creator isEqualToString:[LCChatKit sharedInstance].clientId];
+    BOOL isCreator = [[CYLConversationService sharedInstance].currentConversation.creator isEqualToString:[CYLChatKit sharedInstance].clientId];
     BOOL isGroupConversation = [CYLConversationService sharedInstance].currentConversation.members.count > 2;
     if (isCreator && isGroupConversation) {
         return YES;

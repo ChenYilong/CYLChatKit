@@ -10,7 +10,7 @@
 #import "CYLChatMoreView.h"
 #import "CYLChatFaceView.h"
 #import "CYLProgressHUD.h"
-#import "Mp3Recorder.h"
+#import "CYLMp3Recorder.h"
 #import <AVFoundation/AVFoundation.h>
 #if __has_include(<Masonry/Masonry.h>)
 #import <Masonry/Masonry.h>
@@ -22,18 +22,18 @@
 #import "NSString+CYLExtension.h"
 #import "CYLConversationService.h"
 #import "CYLChatLiquidGlass.h"
-#if __has_include(<CYLChatKit/LCChatKit.h>)
-#import <CYLChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/CYLChatKit.h>)
+#import <CYLChatKit/CYLChatKit.h>
 #else
-#import "LCChatKit.h"
+#import "CYLChatKit.h"
 #endif
 
 NSString *const kCYLBatchDeleteTextPrefix = @"kCYLBatchDeleteTextPrefix";
 NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
 
-@interface CYLChatBar () <UITextViewDelegate, UINavigationControllerDelegate, Mp3RecorderDelegate, CYLChatFaceViewDelegate>
+@interface CYLChatBar () <UITextViewDelegate, UINavigationControllerDelegate, CYLMp3RecorderDelegate, CYLChatFaceViewDelegate>
 
-@property (strong, nonatomic) Mp3Recorder *MP3;
+@property (strong, nonatomic) CYLMp3Recorder *MP3;
 @property (strong, nonatomic) NSTimer *recordingTimeoutTimer;
 @property (assign, nonatomic) BOOL recordingDidReachTimeLimit;
 @property (assign, nonatomic) BOOL recordButtonTracking;
@@ -627,7 +627,7 @@ NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
     self.close = NO;
     self.oldTextViewHeight = kCYLChatBarTextViewFrameMinHeight;
     self.allowTextViewContentOffset = YES;
-    self.MP3 = [[Mp3Recorder alloc] initWithDelegate:self];
+    self.MP3 = [[CYLMp3Recorder alloc] initWithDelegate:self];
     [self faceView];
     [self moreView];
     [self addSubview:self.inputBarBackgroundView];

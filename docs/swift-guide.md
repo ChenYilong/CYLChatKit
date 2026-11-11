@@ -17,7 +17,7 @@ Swift, in the same change.
 
 | Objective-C | Swift | Adaptation in core |
 |:---|:---|:---|
-| `[LCChatKit sharedInstance]` | `LCChatKit.sharedInstance()` | none yet |
+| `[CYLChatKit sharedInstance]` (formerly `[LCChatKit sharedInstance]`) | `CYLChatKit.sharedInstance()` | none yet; the class was renamed from `LCChatKit`, see `docs/naming.md` |
 | `[[CYLConversationViewController alloc] initWithPeerId:peerId]` | `CYLConversationViewController(peerId:)` | none yet |
 | `[[CYLConversationViewController alloc] initWithConversationId:conversationId]` | `CYLConversationViewController(conversationId:)` | none yet |
 
@@ -25,7 +25,7 @@ Swift, in the same change.
 
 - TODO: Migrate the iOS example (`ChatKit-OC/`, Objective-C) to Swift: app delegate, LeanCloud provider
   (`ChatKit-OC/Example/Class/LeanCloud`), login, contacts, conversation detail, settings, and utilities. Keep the
-  screenshot launch hooks (`-LCCKDemoScreen`, `-LCCKDemoScreenshots`) and the CI build and screenshots green after each
+  screenshot launch hooks (`-CYLDemoScreen`, `-CYLDemoScreenshots`) and the CI build and screenshots green after each
   step. Decide whether the migrated demo keeps the `ChatKit-OC` folder and scheme names (CI and docs refer to them).
 - TODO: Audit the core public headers for Swift import quality: nullability coverage, untyped collections, string
   constants that should be `NS_TYPED_ENUM`, and enums that are plain C enums (for example `CYLChatScrollDirection`).
@@ -34,4 +34,4 @@ Swift, in the same change.
   protocols `CYLConversationProtocol` and `CYLIMMessageProtocol`) and add underscore-free twins with `NS_SWIFT_NAME`
   as CYLTabBarController does; core must call the twin when it is implemented.
 - TODO: Localization from Swift: core needs a function form of `CYLLocalizedStrings` (function-like macros are not
-  imported into Swift), and the Swift example needs its own accessor for `LCCKExample.bundle`. See `docs/localization.md`.
+  imported into Swift), and the Swift example needs its own accessor for `CYLDemoExample.bundle`. See `docs/localization.md`.

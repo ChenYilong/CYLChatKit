@@ -8,10 +8,10 @@
 
 #import "CYLChatImageMessageCell.h"
 #import "UIImage+CYLExtension.h"
-#if __has_include(<CYLChatKit/LCChatKit.h>)
-#import <CYLChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/CYLChatKit.h>)
+#import <CYLChatKit/CYLChatKit.h>
 #else
-#import "LCChatKit.h"
+#import "CYLChatKit.h"
 #endif
 
 #if __has_include(<SDWebImage/UIImageView+WebCache.h>)
@@ -78,7 +78,7 @@
  * Downloads the image through the IM provider, or from `originPhotoURL` if the provider does not download attachments.
  */
 - (void)downloadAttachmentOfMessage:(CYLMessage *)message completion:(void (^)(NSURL *filePath, NSError *error))completion {
-    id<CYLIMProvider> IMProvider = [LCChatKit sharedInstance].IMProvider;
+    id<CYLIMProvider> IMProvider = [CYLChatKit sharedInstance].IMProvider;
     if ([IMProvider respondsToSelector:@selector(downloadAttachmentOfMessage:completion:)]) {
         [IMProvider downloadAttachmentOfMessage:message completion:completion];
         return;

@@ -8,10 +8,10 @@
 
 #import "CYLSessionService.h"
 
-#if __has_include(<CYLChatKit/LCChatKit.h>)
-#import <CYLChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/CYLChatKit.h>)
+#import <CYLChatKit/CYLChatKit.h>
 #else
-#import "LCChatKit.h"
+#import "CYLChatKit.h"
 #endif
 
 NSString *const CYLSessionServiceErrorDomain = @"CYLSessionServiceErrorDomain";
@@ -29,9 +29,9 @@ NSString *const CYLSessionServiceErrorDomain = @"CYLSessionServiceErrorDomain";
 #pragma mark - IM provider
 
 - (id<CYLIMProvider>)IMProvider {
-    id<CYLIMProvider> IMProvider = [LCChatKit sharedInstance].IMProvider;
+    id<CYLIMProvider> IMProvider = [CYLChatKit sharedInstance].IMProvider;
     if (!IMProvider) {
-        CYLLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"Set `-[LCChatKit setIMProvider:]` before using ChatKit.");
+        CYLLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"Set `-[CYLChatKit setIMProvider:]` before using ChatKit.");
     }
     return IMProvider;
 }
@@ -80,7 +80,7 @@ NSString *const CYLSessionServiceErrorDomain = @"CYLSessionServiceErrorDomain";
         id<CYLIMProvider> IMProvider = self.IMProvider;
         if (!IMProvider) {
             NSInteger code = 0;
-            NSString *errorReasonText = @"IM provider not set. Set `-[LCChatKit setIMProvider:]` first.";
+            NSString *errorReasonText = @"IM provider not set. Set `-[CYLChatKit setIMProvider:]` first.";
             NSDictionary *errorInfo = @{
                                         @"code":@(code),
                                         NSLocalizedDescriptionKey : errorReasonText,

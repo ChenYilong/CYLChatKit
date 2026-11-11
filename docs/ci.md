@@ -10,6 +10,7 @@ because this repository has no test target and no Carthage support.
 | ShellCheck | Lints `scripts/*.sh` | — |
 | Resolve CYLTabBarController commit | Finds the newest commit of CYLTabBarController on any branch (by commit time) once per run, passes it to the build jobs in `CYLTABBARCONTROLLER_COMMIT`, and lists it in the job summary | `scripts/update-cyltabbarcontroller-commit.sh` |
 | Localization tables | Parses `.strings` files, compares key sets across languages, and checks that core and the example each define their own localization macro (at least two different macros) | `scripts/check-localizations.py` |
+| Naming rules | Fails on legacy names (`LCCK`, `lcck_`, `LCChatKit`, `AG*`, `JZ*`, `Mp3Recorder`) in core, demo, and scripts, and on classes, protocols, and enums without the `CYL` (core) or `CYLDemo` (demo) prefix | `scripts/check-naming.py` |
 | Xcode projects | `objectVersion = 46`, `compatibilityVersion = "Xcode 3.2"`, no synchronized folders, every `IPHONEOS_DEPLOYMENT_TARGET` is 15.0, parsing with `xcodeproj`, `xcodebuild -list` for both projects | inline |
 | pod lib lint | Compiles `CYLChatKit.podspec` with its dependencies (`--allow-warnings --skip-tests`); CYLTableViewPlaceHolder comes from the commit pinned in `ChatKit-OC/Podfile` | `scripts/pod-lint.sh` |
 | Build demo | Pins CYLTabBarController, runs `pod install`, and builds `ChatKit-OC` unsigned for the iOS Simulator | `scripts/ci-build-example.sh` |
@@ -20,24 +21,24 @@ The macOS runner is `macos-26` unless the repository variable `MACOS_RUNNER` nam
 ## Screenshots
 
 The demo needs a LeanCloud login to show real data, which CI does not have. For screenshots, `AppDelegate` reads the
-launch argument `-LCCKDemoScreen` (an `NSUserDefaults` key):
+launch argument `-CYLDemoScreen` (an `NSUserDefaults` key):
 
 - no argument: the normal login screen (`login.png`)
-- `-LCCKDemoScreen conversations`: the tab bar UI without logging in (`conversations.png`)
-- `-LCCKDemoScreen chat`: a conversation view with peer `Jerry` pushed on the first tab (`chat.png`)
-- `-LCCKDemoScreen chat -LCCKDemoText <text>`: the same chat with that text typed into the input field and no keyboard; with the
+- `-CYLDemoScreen conversations`: the tab bar UI without logging in (`conversations.png`)
+- `-CYLDemoScreen chat`: a conversation view with peer `Jerry` pushed on the first tab (`chat.png`)
+- `-CYLDemoScreen chat -CYLDemoText <text>`: the same chat with that text typed into the input field and no keyboard; with the
   text size set to accessibility size 3 it is the `chat-large-text.png` screenshot (Dynamic Type).
 - `-AppleLanguages "(zh-Hans)" -AppleLocale zh_CN` on the login screen and on the chat: `login-zh.png` and `chat-zh.png`, the
-  same screens in Simplified Chinese (core strings from `Other.bundle`, example strings from `LCCKExample.bundle`).
-- `-LCCKDemoAccessibilityDump YES` (every launch): the app writes the screen's accessibility tree and the script prints it
+  same screens in Simplified Chinese (core strings from `Other.bundle`, example strings from `CYLDemoExample.bundle`).
+- `-CYLDemoAccessibilityDump YES` (every launch): the app writes the screen's accessibility tree and the script prints it
   after each screenshot (`===BEGIN ACCESSIBILITY <name>===`), then fails the job when `expect_accessibility` finds no
   element with an expected identifier and label (`docs/accessibility.md`).
-- `-LCCKDemoScreen chat -LCCKDemoKeyboard YES`: the same chat with the input field focused, as a tap on the field next to
+- `-CYLDemoScreen chat -CYLDemoKeyboard YES`: the same chat with the input field focused, as a tap on the field next to
   the 发送 (send) button would do, so the keyboard is up (`chat-keyboard.png`; see `docs/chat-bar-keyboard.md`). Before the
   simulator boots, the script writes the keyboard's "Slide to Type" introduction as already shown, so that sheet does not
   cover the keyboard.
 
-Every launch also passes `-LCCKDemoScreenshots YES`, which skips the notification permission request and keeps the
+Every launch also passes `-CYLDemoScreenshots YES`, which skips the notification permission request and keeps the
 login field from opening the keyboard, so no system overlay covers the app. When a launch crashes, the script prints
 the crash report's exception and backtrace in a `Crash details` log group and the job fails.
 A screenshot taken before the app drew its first frame is black (the first launch runs under Rosetta and can be

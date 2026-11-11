@@ -4,8 +4,8 @@
 # CI helper (docs/ci.md), adapted from CYLTabBarController's scripts/theme-screenshots.sh: builds the ChatKit-OC
 # demo for an iPhone simulator, launches it, and takes one screenshot per screen:
 #   login          - the normal launch screen
-#   conversations  - `-LCCKDemoScreen conversations`: the tab bar UI without a LeanCloud login
-#   chat           - `-LCCKDemoScreen chat`: a conversation view pushed on the first tab
+#   conversations  - `-CYLDemoScreen conversations`: the tab bar UI without a LeanCloud login
+#   chat           - `-CYLDemoScreen chat`: a conversation view pushed on the first tab
 # Each screenshot is also printed as base64 JPEG between markers, so it can be recovered from the job log.
 set -euo pipefail
 
@@ -79,8 +79,8 @@ xcrun simctl boot "$DEVICE_ID" 2>/dev/null || true
 xcrun simctl bootstatus "$DEVICE_ID" -b
 xcrun simctl status_bar "$DEVICE_ID" override --time 9:41 --batteryState charged --batteryLevel 100 \
     --cellularBars 4 --wifiBars 3 || true
-# The demo's -LCCKDemoScreenshots flag keeps app-side overlays out of the screenshots: it skips the notification
-# permission request and does not open the keyboard by itself (-LCCKDemoKeyboard does, for the keyboard screenshot).
+# The demo's -CYLDemoScreenshots flag keeps app-side overlays out of the screenshots: it skips the notification
+# permission request and does not open the keyboard by itself (-CYLDemoKeyboard does, for the keyboard screenshot).
 xcrun simctl install "$DEVICE_ID" "$APP"
 PROCESS_NAME=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$APP/Info.plist")
 
@@ -146,8 +146,8 @@ shoot() {
     if [[ -n "$data" ]]; then
         rm -f "$data/Documents/accessibility.txt"
     fi
-    xcrun simctl launch --terminate-running-process "$DEVICE_ID" "$BUNDLE_ID" -LCCKDemoScreenshots YES \
-        -LCCKDemoAccessibilityDump YES "$@"
+    xcrun simctl launch --terminate-running-process "$DEVICE_ID" "$BUNDLE_ID" -CYLDemoScreenshots YES \
+        -CYLDemoAccessibilityDump YES "$@"
     sleep 8
     if ! xcrun simctl spawn "$DEVICE_ID" launchctl list | grep -q "$BUNDLE_ID"; then
         echo "::error::$BUNDLE_ID is not running after launch ($name); it crashed"
@@ -207,25 +207,25 @@ CRASHED=""
 BLACK=""
 A11Y=""
 shoot login
-expect_accessibility login LCCKLoginClientIdTextField "Client ID"
-shoot conversations -LCCKDemoScreen conversations
-shoot chat -LCCKDemoScreen chat
+expect_accessibility login CYLDemoLoginClientIdTextField "Client ID"
+shoot conversations -CYLDemoScreen conversations
+shoot chat -CYLDemoScreen chat
 expect_accessibility chat CYLChatBarSendButton "Send"
 expect_accessibility chat CYLChatBarTextView "Message"
 # The chat with the keyboard up: the app focuses the input field next to the 发送 button, as a tap would.
-shoot chat-keyboard -LCCKDemoScreen chat -LCCKDemoKeyboard YES
+shoot chat-keyboard -CYLDemoScreen chat -CYLDemoKeyboard YES
 
 # Visual accessibility: the largest of the usual Dynamic Type sizes (Larger Text, accessibility size 3), with a sample
 # message typed in, so the scaled text view and send button show.
 xcrun simctl ui "$DEVICE_ID" content_size accessibility-extra-large || echo "::warning::could not set the text size"
-shoot chat-large-text -LCCKDemoScreen chat -LCCKDemoText "Hello Jerry, this is a longer sample message that wraps"
+shoot chat-large-text -CYLDemoScreen chat -CYLDemoText "Hello Jerry, this is a longer sample message that wraps"
 xcrun simctl ui "$DEVICE_ID" content_size large || true
 
 # Localization: the same screens in Simplified Chinese. The strings come from the core bundle (Other.bundle) and the
-# example bundle (LCCKExample.bundle) through their two macros.
+# example bundle (CYLDemoExample.bundle) through their two macros.
 shoot login-zh -AppleLanguages "(zh-Hans)" -AppleLocale zh_CN
-expect_accessibility login-zh LCCKLoginClientIdTextField "客户端 ID"
-shoot chat-zh -LCCKDemoScreen chat -AppleLanguages "(zh-Hans)" -AppleLocale zh_CN
+expect_accessibility login-zh CYLDemoLoginClientIdTextField "客户端 ID"
+shoot chat-zh -CYLDemoScreen chat -AppleLanguages "(zh-Hans)" -AppleLocale zh_CN
 expect_accessibility chat-zh CYLChatBarSendButton "发送"
 expect_accessibility chat-zh CYLChatBarTextView "消息"
 

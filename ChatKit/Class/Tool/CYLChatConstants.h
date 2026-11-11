@@ -113,7 +113,7 @@ static NSString *const CYLBadgeTextForNumberGreaterThanLimit = @"···";
 
 #ifndef CYLLocalizedStrings
 #define CYLLocalizedStrings(key) \
-    NSLocalizedStringFromTableInBundle(key, @"LCChatKitString", [NSBundle cyl_bundleForName:@"Other" class:[LCChatKit class]], nil)
+    NSLocalizedStringFromTableInBundle(key, @"LCChatKitString", [NSBundle cyl_bundleForName:@"Other" class:[CYLChatKit class]], nil)
 #endif
 
 

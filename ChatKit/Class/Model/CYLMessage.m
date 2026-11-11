@@ -6,10 +6,10 @@
 //  Copyright © 2018 ChenYilong（wechat id：chenyilong1010）. All rights reserved.
 //
 #import "CYLMessage.h"
-#if __has_include(<CYLChatKit/LCChatKit.h>)
-#import <CYLChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/CYLChatKit.h>)
+#import <CYLChatKit/CYLChatKit.h>
 #else
-#import "LCChatKit.h"
+#import "CYLChatKit.h"
 #endif
 #import "CYLSessionService.h"
 #import "CYLUserSystemService.h"

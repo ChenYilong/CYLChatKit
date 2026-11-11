@@ -14,7 +14,7 @@
 FOUNDATION_EXTERN NSString *const CYLSessionServiceErrorDemain;
 
 /*!
- * Session state used by the UI. IM work is forwarded to `-[LCChatKit IMProvider]`.
+ * Session state used by the UI. IM work is forwarded to `-[CYLChatKit IMProvider]`.
  */
 @interface CYLSessionService : CYLSingleton <CYLSessionService>
 

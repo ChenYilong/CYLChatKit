@@ -15,7 +15,7 @@
  *   The following example shows how to use AVUser as the user system:
 
  ```
-    [[LCChatKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, CYLFetchProfilesCompletionHandler completionHandler) {
+    [[CYLChatKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, CYLFetchProfilesCompletionHandler completionHandler) {
         NSMutableArray<id<CYLUserDelegate>> *userList = [NSMutableArray array];
         for (NSString *userId in userIds) {
             //MyUser is a subclass of AVUser, conforming to the CYLUserDelegate protocol.

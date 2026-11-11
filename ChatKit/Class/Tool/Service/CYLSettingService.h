@@ -52,7 +52,7 @@ FOUNDATION_EXTERN NSString *const CYLSettingServiceErrorDomain;
 
 // please call in application:didFinishLaunchingWithOptions:launchOptions
 /*!
- * Push and badge methods are forwarded to `-[LCChatKit IMProvider]` when it implements `CYLIMPushProvider`.
+ * Push and badge methods are forwarded to `-[CYLChatKit IMProvider]` when it implements `CYLIMPushProvider`.
  */
 - (void)registerForRemoteNotification;
 - (void)saveInstallationWithDeviceToken:(NSData *)deviceToken userId:(NSString *)userId;

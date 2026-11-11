@@ -1,5 +1,5 @@
 //
-//  LCChatKit_Internal.h
+//  CYLChatKit_Internal.h
 //  LeanCloudChatKit-iOS
 //
 //  v2.1.1 Created by ElonChan on 16/3/9.

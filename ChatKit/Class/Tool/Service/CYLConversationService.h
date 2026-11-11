@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "CYLServiceDefinition.h"
 
-#if __has_include(<CYLChatKit/LCChatKit.h>)
-    #import <CYLChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/CYLChatKit.h>)
+    #import <CYLChatKit/CYLChatKit.h>
 #else
-    #import "LCChatKit.h"
+    #import "CYLChatKit.h"
 #endif
 
 @class CYLMessage;
@@ -25,7 +25,7 @@
 FOUNDATION_EXTERN NSString *const CYLConversationServiceErrorDomain;
 
 /*!
- * Conversation state used by the UI. IM work and local storage are forwarded to `-[LCChatKit IMProvider]`.
+ * Conversation state used by the UI. IM work and local storage are forwarded to `-[CYLChatKit IMProvider]`.
  */
 @interface CYLConversationService : CYLSingleton <CYLConversationService>
 

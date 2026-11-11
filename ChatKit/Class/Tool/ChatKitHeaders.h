@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 
 
-#if __has_include(<CYLChatKit/LCChatKit.h>)
+#if __has_include(<CYLChatKit/CYLChatKit.h>)
 
     #import <CYLChatKit/CYLSessionService.h>
     #import <CYLChatKit/CYLUserSystemService.h>

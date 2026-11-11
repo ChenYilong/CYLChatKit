@@ -23,7 +23,7 @@ Core (`ChatKit/`) uses the `CYL` prefix, following the CYLTabBarController namin
   (`CYLMessageMediaTypeText`, `CYLIMErrorCodeConnectionLost`), like `CYLBadgeStyleRedDot`.
 - `Delegate` is reserved for delegates. Model protocols use `Protocol` (`CYLConversationProtocol`,
   `CYLIMMessageProtocol`); role protocols use a role noun (`CYLIMProvider`, `CYLIMSessionProvider`).
-- `LCChatKit` (the facade class) and `ChatKitHeaders.h` keep their names; they do not contain `LCCK`.
+- The facade class is `CYLChatKit` (formerly `LCChatKit`, renamed in the naming review of 2026-11, see `docs/naming.md`); `ChatKitHeaders.h` keeps its name.
 
 ### Prefix rename (LCCK → CYL)
 
@@ -67,37 +67,37 @@ Runtime string values that contained `LCCK` changed too, because the rename cove
   `CYLCustomConversationViewControllerBackgroundImageNamePrefix`). After upgrading, a user's saved chat background
   falls back to the default once.
 
-The demo (`ChatKit-OC/`) is not core. It keeps the `LCCK` prefix for its own classes and methods
-(`LCCKLeanCloudIMProvider`, `LCCKUser`, `lcck_setObject:forKey:`, and so on) and uses the renamed core API.
-The demo still has its own `LCCKContactListMode` enum and `LCCKContactCell`; previously they had the same
+The demo (`ChatKit-OC/`) is not core. It uses the `CYLDemo` prefix (`cyl_demo_` for category methods; it was `LCCK` / `lcck_` before 2026-11) for its own classes and methods
+(`CYLDemoLeanCloudIMProvider`, `CYLDemoUser`, `cyl_demo_setObject:forKey:`, and so on) and uses the renamed core API.
+The demo still has its own `CYLDemoContactListMode` enum and `CYLDemoContactCell`; previously they had the same
 names as core types, which are now `CYLContactListMode` and `CYLContactCell`.
 
 ## Architecture
 
 ```
-App ──registers──▶ [LCChatKit sharedInstance].IMProvider : id<CYLIMProvider>
+App ──registers──▶ [CYLChatKit sharedInstance].IMProvider : id<CYLIMProvider>
                                    ▲
 ChatKit UI (view controllers,      │ protocol calls only
 view models, cells)  ──▶ facade services (CYLSessionService,
                          CYLConversationService, CYLConversationListService,
                          CYLSettingService)
                                    │
-Demo: LCCKLeanCloudIMProvider ─────┘ forwards to LCCKLeanCloudSessionService and
-                                     LCCKLeanCloudConversationService (AVIMClient,
+Demo: CYLDemoLeanCloudIMProvider ─────┘ forwards to CYLDemoLeanCloudSessionService and
+                                     CYLDemoLeanCloudConversationService (AVIMClient,
                                      AVIMConversation, SQLite caches)
 ```
 
 - The facade services keep their class names, singletons, UI state (current conversation,
   hooks, reconnect HUD, single sign-on alert) and public methods. IM work is forwarded to
-  `-[LCChatKit IMProvider]`.
-- The provider is stored on the `LCChatKit` singleton, which is not reset by
+  `-[CYLChatKit IMProvider]`.
+- The provider is stored on the `CYLChatKit` singleton, which is not reset by
   `+[CYLSingleton destroyAllInstance]`, so it survives closing a session. The demo services
   are `CYLSingleton` subclasses and are reset with ChatKit's own services, as before.
-- Register the provider before calling `+[LCChatKit setAppId:appKey:]`:
+- Register the provider before calling `+[CYLChatKit setAppId:appKey:]`:
 
   ```objc
-  [LCChatKit sharedInstance].IMProvider = [[LCCKLeanCloudIMProvider alloc] init];
-  [LCChatKit setAppId:appId appKey:appKey];
+  [CYLChatKit sharedInstance].IMProvider = [[CYLDemoLeanCloudIMProvider alloc] init];
+  [CYLChatKit setAppId:appId appKey:appKey];
   ```
 
 ## New public API (ChatKit)
@@ -109,7 +109,7 @@ Demo: LCCKLeanCloudIMProvider ─────┘ forwards to LCCKLeanCloudSessio
 | `CYLIMMessageProtocol` | `ChatKit/Class/Model/CYLIMMessageProtocol.h` | Opaque IM SDK message (custom messages and raw messages kept for paging, editing, recalling). `AVIMTypedMessage` conforms through the demo category. |
 | `CYLMessageMediaType` (`CYLMessageMediaTypeText`, …) | `CYLConstants.h` | ChatKit-owned media type: `NS_ENUM(int8_t, …)` with the same raw values as `AVIMMessageMediaType`. |
 | `CYLIMErrorCode` (`CYLIMErrorCodeConnectionLost`) | `CYLConstants.h` | Same value (9001) as LeanCloud's `AVIMErrorCodeConnectionLost`. |
-| `-[LCChatKit IMProvider]` | `LCChatKit.h` | Provider registration. |
+| `-[CYLChatKit IMProvider]` | `CYLChatKit.h` | Provider registration. |
 | `-[CYLSessionService isClientOpened]`, `-handleSingleSignOnError:callback:` | `CYLSessionService.h` | Replace `client.status` checks; providers call the latter for session conflicts. |
 | `-[CYLConversationService sendMessage:conversation:mentionList:progressBlock:callback:]` | `CYLConversationService.h` | Provider-neutral send. |
 
@@ -127,10 +127,10 @@ no warnings.
 | `AVIMMessage+CYLExtension`, `AVIMEmotionMessage` | Same names. |
 | `+[CYLMessage messageWithAVIMTypedMessage:]` | `CYLMessage+CYLExtension` (same selector). |
 | `+[CYLCommonUtils getPathFromFile:]`, `+isCacheDataAvailableForFile:` | `CYLCommonUtils+CYLExtension` (same selectors). |
-| LeanCloud parts of `CYLSessionService` | `LCCKLeanCloudSessionService`. |
-| LeanCloud parts of `CYLConversationService` and `CYLConversationListService` (SQLite stores included) | `LCCKLeanCloudConversationService`. |
-| LeanCloud push and badge code of `CYLSettingService` | `LCCKLeanCloudIMProvider`. |
-| `-[CYLConversationService sendMessage:conversation:options:progressBlock:callback:]` | `-[LCCKLeanCloudConversationService sendMessage:conversation:options:mentionList:progressBlock:callback:]`. |
+| LeanCloud parts of `CYLSessionService` | `CYLDemoLeanCloudSessionService`. |
+| LeanCloud parts of `CYLConversationService` and `CYLConversationListService` (SQLite stores included) | `CYLDemoLeanCloudConversationService`. |
+| LeanCloud push and badge code of `CYLSettingService` | `CYLDemoLeanCloudIMProvider`. |
+| `-[CYLConversationService sendMessage:conversation:options:progressBlock:callback:]` | `-[CYLDemoLeanCloudConversationService sendMessage:conversation:options:mentionList:progressBlock:callback:]`. |
 
 Removed:
 
@@ -187,7 +187,7 @@ Done in a Linux container without Xcode or an iOS SDK:
 - clang `-fsyntax-only` on the protocol headers with stub Foundation/UIKit: no errors with `-Wall -Wnullability-completeness`.
 - clang conformance check of `AVIMConversation`/`AVIMTypedMessage` (exact SDK 11.5.2 declarations) plus the demo categories: no warnings.
 - clang with auto-generated UIKit stubs on the rewritten core files: no errors in provider or protocol code. This found three files that had relied on `LCChatKit.h` arriving through the removed `AVIMConversation+CYLExtension.h` import; they now import it directly.
-- A selector-level script confirmed every provider call in core is declared, `LCCKLeanCloudIMProvider` implements all 36 required selectors, every forwarded selector exists in the demo services, and the SDK classes plus categories satisfy both model protocols.
+- A selector-level script confirmed every provider call in core is declared, `CYLDemoLeanCloudIMProvider` implements all 36 required selectors, every forwarded selector exists in the demo services, and the SDK classes plus categories satisfy both model protocols.
 - Both `.pbxproj` files parse with `xcodeproj` 1.28.1, keep `objectVersion = 46` and `compatibilityVersion = "Xcode 3.2"`, and contain no synchronized groups or newer keys.
 - Lockfiles were checked with `cocoapods-core` 1.17.0 at the time; they are no longer committed (see `AGENTS.md`).
 
@@ -216,7 +216,7 @@ CI (`docs/ci.md`, Xcode 26.6, iOS 26.5 simulator SDK) is the first real macOS bu
   CYLChatKit umbrella header and broke the module build in the demo app; the framework's files are now excluded from
   the pod's sources (the framework itself is still vendored).
 - `lame.framework` has no arm64 simulator slice, so the podspec excludes arm64 from simulator builds.
-- `LCChatKit` forwards the two `CYLUserSystemService` members it lacked (`fetchProfilesBlock`,
+- `CYLChatKit` forwards the two `CYLUserSystemService` members it lacked (`fetchProfilesBlock`,
   `-getCachedProfileIfExists:name:avatarURL:userTye:error:`). Added after that run; the next lint confirms the
   `-Wprotocol` warning is gone.
 

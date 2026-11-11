@@ -11,10 +11,10 @@
 #import "NSString+CYLExtension.h"
 #import "UIImage+CYLExtension.h"
 #import "CYLConversationService.h"
-#if __has_include(<CYLChatKit/LCChatKit.h>)
-#import <CYLChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/CYLChatKit.h>)
+#import <CYLChatKit/CYLChatKit.h>
 #else
-#import "LCChatKit.h"
+#import "CYLChatKit.h"
 #endif
 
 NSString *const CYLSettingServiceErrorDomain = @"CYLSettingServiceErrorDomain";
@@ -35,14 +35,14 @@ static BOOL CYLAllLogsEnabled;
 
 + (void)setAllLogsEnabled:(BOOL)enabled {
     CYLAllLogsEnabled = enabled;
-    id<CYLIMProvider> IMProvider = [LCChatKit sharedInstance].IMProvider;
+    id<CYLIMProvider> IMProvider = [CYLChatKit sharedInstance].IMProvider;
     if ([IMProvider respondsToSelector:@selector(setAllLogsEnabled:)]) {
         [IMProvider setAllLogsEnabled:YES];
     }
 }
 
 - (id<CYLIMProvider>)pushProvider {
-    return [LCChatKit sharedInstance].IMProvider;
+    return [CYLChatKit sharedInstance].IMProvider;
 }
 
 + (BOOL)allLogsEnabled {

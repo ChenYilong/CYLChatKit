@@ -77,8 +77,8 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
 
 ```
 ├── ChatKit  ＃核心库文件夹
-│   ├── LCChatKit.h  # 这是整个库的入口，也是中枢，相当于”组件化方案“中的 Mediator。
-│   ├── LCChatKit.m
+│   ├── CYLChatKit.h  # 这是整个库的入口，也是中枢，相当于”组件化方案“中的 Mediator。
+│   ├── CYLChatKit.m
 │   └── Class
 │       ├── Model
 │       ├── Module
@@ -100,8 +100,8 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
 └── ChatKit-OC  # Demo演示
     ├── ChatKit-OC.xcodeproj
     └── Example
-        └── LCChatKitExample.h  #这是Demo演示的入口类，这个类中提供了很多胶水函数，可完成初步的集成
-        └── LCChatKitExample.m
+        └── CYLDemoChatKitExample.h  #这是Demo演示的入口类，这个类中提供了很多胶水函数，可完成初步的集成
+        └── CYLDemoChatKitExample.m
             ├── Model
             ├── Module
             │   ├── ContactList
@@ -121,7 +121,7 @@ git clone --depth=1 https://github.com/leancloud/ChatKit-OC
  从上面可以看出，`ChatKit-OC` 项目包分为两个部分：
 
 * `ChatKit` 是库的核心库文件夹。
-* `ChatKit-OC` 为Demo 演示部分，其中 `LCChatKitExample` 这个类提供了很多胶水函数，可完成初步的集成。
+* `ChatKit-OC` 为Demo 演示部分，其中 `CYLDemoChatKitExample` 这个类提供了很多胶水函数，可完成初步的集成。
 
 
 ## 使用方法
@@ -212,7 +212,7 @@ ChatKit 支持以下两种方式导入到您的项目中：
 然后在需要的地方导入 ChatKit：
 
   ```Objective-C
-     #import <CYLChatKit/LCChatKit.h>
+     #import <CYLChatKit/CYLChatKit.h>
   ```
 
 
@@ -268,39 +268,39 @@ pod update
 
  > **IM provider (since the LeanCloud decoupling).** ChatKit is now UI only and no longer depends on LeanCloud.
  > Before step 1, register an object that implements `CYLIMProvider`:
- > `[LCChatKit sharedInstance].IMProvider = [[LCCKLeanCloudIMProvider alloc] init];`
- > The LeanCloud implementation (`LCCKLeanCloudIMProvider`) and its `AVOSCloud`/`AVOSCloudIM` pods live in the demo
+ > `[CYLChatKit sharedInstance].IMProvider = [[CYLDemoLeanCloudIMProvider alloc] init];`
+ > The LeanCloud implementation (`CYLDemoLeanCloudIMProvider`) and its `AVOSCloud`/`AVOSCloudIM` pods live in the demo
  > (`ChatKit-OC/Example/Class/LeanCloud`). Copy that folder and add the two pods to use LeanCloud,
  > or implement `CYLIMProvider` for another IM SDK. In the steps below, "LeanCloud" refers to the demo provider.
  > See [docs/leancloud-decoupling.md](docs/leancloud-decoupling.md).
 
- 1. 在 `-[AppDelegate application:didFinishLaunchingWithOptions:]` 中调用 `-[LCChatKit setAppId:appKey:]` 来开启 LeanCloud 服务。需要到
+ 1. 在 `-[AppDelegate application:didFinishLaunchingWithOptions:]` 中调用 `-[CYLChatKit setAppId:appKey:]` 来开启 LeanCloud 服务。需要到
  [LeanCloud（原名 `AVOS` ）](https://leancloud.cn/?source=T6M35E4H) 申请一个 AppId 和一个 AppKey，可以在控制台里创建应用，替换 Demo 中的 AppId 和 AppKey。
- 2. 调用 `-[LCChatKit sharedInstance]` 来初始化一个单例对象。为了让这个库更易入手，避免引入过多公开的类和概念，我们采用了设计模式中的「门面模式」，将你在使用 ChatKit 库时所需要用到的所有方法都放在了 `LCChatKit` 这一个类中。它是一个 Mediator，是整个库的入口。如果不作出特殊说明，下面所说的「调用 API」，调用方都是 `-[LCChatKit sharedInstance]` 。示意图如下：
+ 2. 调用 `-[CYLChatKit sharedInstance]` 来初始化一个单例对象。为了让这个库更易入手，避免引入过多公开的类和概念，我们采用了设计模式中的「门面模式」，将你在使用 ChatKit 库时所需要用到的所有方法都放在了 `CYLChatKit` 这一个类中。它是一个 Mediator，是整个库的入口。如果不作出特殊说明，下面所说的「调用 API」，调用方都是 `-[CYLChatKit sharedInstance]` 。示意图如下：
 
  ![](http://ww2.sinaimg.cn/large/801b780ajw1f88fhsglsxj20dn08oq3d.jpg)
 
- 3. 实现 `-[[LCChatKit sharedInstance] setFetchProfilesBlock:]`，设置用户体系，里面要实现如何根据 userId 获取到一个 User 对象的逻辑。ChatKit 会在需要用到 User 信息时调用你设置的这个逻辑。更具体的设置方法请参考： [《ChatKit 自定义业务-设置单聊用户的头像和昵称》](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#设置单聊用户的头像和昵称) 。`CYLUserSystemService.h` 文件中给出了例子，演示了如何集成 LeanCloud 原生的用户系统 `AVUser`。
- 4. 如果你实现了 `-[[LCChatKit sharedInstance] setGenerateSignatureBlock:]` 方法，那么 ChatKit 会自动为以下行为添加签名：`open`（开启聊天）、`start`（创建对话）、`kick`（踢人）、`invite`（邀请）。反之不会。
- 5. 调用 `-[[LCChatKit sharedInstance] openWithClientId:callback:]` 开启 LeanCloud 的 IM 服务 LeanMessage，开始聊天。请确保在 open 操作之前已经实现 `-[[LCChatKit sharedInstance] setFetchProfilesBlock:]`，否则 ChatKit 将抛出异常进行提示。
- 6. 调用 `-[[LCChatKit sharedInstance] closeWithCallback:]` 关闭 LeanCloud 的 IM 服务，结束聊天。
+ 3. 实现 `-[[CYLChatKit sharedInstance] setFetchProfilesBlock:]`，设置用户体系，里面要实现如何根据 userId 获取到一个 User 对象的逻辑。ChatKit 会在需要用到 User 信息时调用你设置的这个逻辑。更具体的设置方法请参考： [《ChatKit 自定义业务-设置单聊用户的头像和昵称》](https://github.com/leancloud/ChatKit-OC/blob/master/ChatKit%20自定义业务.md#设置单聊用户的头像和昵称) 。`CYLUserSystemService.h` 文件中给出了例子，演示了如何集成 LeanCloud 原生的用户系统 `AVUser`。
+ 4. 如果你实现了 `-[[CYLChatKit sharedInstance] setGenerateSignatureBlock:]` 方法，那么 ChatKit 会自动为以下行为添加签名：`open`（开启聊天）、`start`（创建对话）、`kick`（踢人）、`invite`（邀请）。反之不会。
+ 5. 调用 `-[[CYLChatKit sharedInstance] openWithClientId:callback:]` 开启 LeanCloud 的 IM 服务 LeanMessage，开始聊天。请确保在 open 操作之前已经实现 `-[[CYLChatKit sharedInstance] setFetchProfilesBlock:]`，否则 ChatKit 将抛出异常进行提示。
+ 6. 调用 `-[[CYLChatKit sharedInstance] closeWithCallback:]` 关闭 LeanCloud 的 IM 服务，结束聊天。
 
 下面按步骤进行详细的介绍。
 
 ### 胶水函数快速集成
 
-ChatKit 提供了一个快速集成的演示类 `LCChatKitExample`，路径如下：
+ChatKit 提供了一个快速集成的演示类 `CYLDemoChatKitExample`，路径如下：
 
 ```Objective-C
  ├── ChatKit  ＃核心库文件夹
  └──  ChatKit-OC  # Demo演示
     ├── ChatKit-OC.xcodeproj
     └── Example
-        └── LCChatKitExample.h  # 这是 Demo 演示的入口类，这个类中提供了很多胶水函数，可完成初步的集成。
-        └── LCChatKitExample.m
+        └── CYLDemoChatKitExample.h  # 这是 Demo 演示的入口类，这个类中提供了很多胶水函数，可完成初步的集成。
+        └── CYLDemoChatKitExample.m
 ```
 
-使用 `LCChatKitExample` 提供的函数即可完成从程序启动到登录再到登出的完整流程，你可以仿照 LCChatKitExample 里的写法，或者直接将 LCChatKitExample 拖入到你的项目中。
+使用 `CYLDemoChatKitExample` 提供的函数即可完成从程序启动到登录再到登出的完整流程，你可以仿照 CYLDemoChatKitExample 里的写法，或者直接将 CYLDemoChatKitExample 拖入到你的项目中。
 
 - 在 `-[AppDelegate didFinishLaunchingWithOptions:]` 等函数中调用下面这几个基础的入口胶水函数，可完成初步的集成。也可以参考胶水函数中的代码，自行撰写逻辑。胶水函数的调用时机可以通过函数的命名中看出。
 - 胶水代码中包含了特地设置的 `#warning`，请仔细阅读这些 warning 的注释，根据实际情况调整代码，以符合你的需求。
@@ -372,17 +372,17 @@ CYLConversationViewController *conversationViewController = [[CYLConversationVie
 
 #### 由最近联系人进入聊天界面
 
-按照上面的步骤，我们可以非常方便地打开最近联系人页面。但是我们会发现，点击其中的某个联系人／聊天群组，我们并不能直接进入聊天界面。要做到这一点，我们需要给 LCChatKit 设置上事件响应函数，示例代码如下：
+按照上面的步骤，我们可以非常方便地打开最近联系人页面。但是我们会发现，点击其中的某个联系人／聊天群组，我们并不能直接进入聊天界面。要做到这一点，我们需要给 CYLChatKit 设置上事件响应函数，示例代码如下：
 
 ```objective-c
-[[LCChatKit sharedInstance] setDidSelectConversationsListCellBlock:^(NSIndexPath *indexPath, id<CYLConversationProtocol> conversation, CYLConversationListViewController *controller) {
+[[CYLChatKit sharedInstance] setDidSelectConversationsListCellBlock:^(NSIndexPath *indexPath, id<CYLConversationProtocol> conversation, CYLConversationListViewController *controller) {
     NSLog(@"conversation selected");
     CYLConversationViewController *conversationVC = [[CYLConversationViewController alloc] initWithConversationId:conversation.conversationId];
     [controller.navigationController pushViewController:conversationVC animated:YES];
 }];
 ```
 
-对于联系人列表页面，可以使用 `[LCChatKit sharedInstance]` 来调用如下四种操作接口：
+对于联系人列表页面，可以使用 `[CYLChatKit sharedInstance]` 来调用如下四种操作接口：
 
 
 ```objective-c
@@ -431,7 +431,7 @@ The full list of public declarations is in [docs/api-reference.md](docs/api-refe
 如果通过 peerId 打开对话，或者通过 conversationId 打开对话时，网络出现问题或 传入参数有误，那么对话根本无法进行，这时候我们可以通过给 CYLConversationViewController 设定 conversationHandler 进行处理。示例代码如下：
 
 ```objective-c
- [[LCChatKit sharedInstance] setFetchConversationHandler:^(
+ [[CYLChatKit sharedInstance] setFetchConversationHandler:^(
                                                               id<CYLConversationProtocol> conversation,
                                                               CYLConversationViewController *aConversationController) {
     if (!conversation) {

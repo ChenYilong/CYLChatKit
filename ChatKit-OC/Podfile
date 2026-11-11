@@ -15,10 +15,10 @@ target 'ChatKit-OC' do
   #======================== Demo Dependency ================
   #=========================================================
 
-  # The LeanCloud IM backend (LCCKLeanCloudIMProvider) lives in the demo, not in ChatKit.
+  # The LeanCloud IM backend (CYLDemoLeanCloudIMProvider) lives in the demo, not in ChatKit.
   pod 'AVOSCloud', '11.5.2'
   pod 'AVOSCloudIM', '11.5.2'
-  # SQLite caches of the LeanCloud provider (LCCKLeanCloudConversationService). ChatKit itself does not use FMDB.
+  # SQLite caches of the LeanCloud provider (CYLDemoLeanCloudConversationService). ChatKit itself does not use FMDB.
   pod 'FMDB', '2.6.2'
 
   # CYLTabBarController is always the newest commit of its repository on any branch, by commit time, not a version

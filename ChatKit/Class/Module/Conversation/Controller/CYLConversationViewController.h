@@ -158,14 +158,14 @@ FOUNDATION_EXTERN NSString *const CYLConversationViewControllerErrorDomain;
 /*!
  * 设置获取 conversation 对象结束后的 Handler。 这里可以做异常处理，比如获取失败等操作。
  * 获取失败时，CYLConversationHandler 返回值中的 conversation 为 nil，成功时为正确的 conversation 值。
- * @attention 执行优先级高于 LCChatKit 类中的同名方法，如果在 LCChatKit 中设置过同名方法，就可以不设置本类中的该方法。
+ * @attention 执行优先级高于 CYLChatKit 类中的同名方法，如果在 CYLChatKit 中设置过同名方法，就可以不设置本类中的该方法。
  */
 - (void)setFetchConversationHandler:(CYLFetchConversationHandler)fetchConversationHandler;
 
 /*!
  * 设置获取历史纪录结束时的 Handler。 这里可以做异常处理，比如获取失败等操作。
  * 获取失败时，CYLViewControllerBooleanResultBlock 返回值中的 error 不为 nil，包含错误原因，成功时 succeeded 值为 YES。
- * @attention 执行优先级高于 LCChatKit 类中的同名方法，如果在 LCChatKit 中设置过同名方法，就可以不设置本类中的该方法。
+ * @attention 执行优先级高于 CYLChatKit 类中的同名方法，如果在 CYLChatKit 中设置过同名方法，就可以不设置本类中的该方法。
  */
 - (void)setLoadLatestMessagesHandler:(CYLLoadLatestMessagesHandler)loadLatestMessagesHandler;
 

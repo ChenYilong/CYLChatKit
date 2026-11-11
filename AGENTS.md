@@ -20,8 +20,23 @@ CYLChatKit is a legacy Objective-C chat UI framework and demo. The README marks 
 - Each header/implementation filename must match its primary type. Name new category files `Type+CYLExtension.h` / `.m`.
 - **Guard every Liquid Glass (iOS 26 and later) API.** Code that uses SDK APIs newer than the iOS 15 deployment target, above all the Liquid Glass material (`UIGlassEffect` and other iOS 26 symbols), sits behind both guards: at compile time `#if defined(__IPHONE_26_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_26_0` (the library must still build with an older Xcode), and at run time `if (@available(iOS 26.0, *))`. Core keeps this code in `CYLChatLiquidGlass`, whose `+isActive` also honors the app's `UIDesignRequiresCompatibility` opt-out, as CYLTabBarController's `+[CYLConstants isLiquidGlassActive]` does. Other core files call that class and keep their existing styling when it answers NO or nil, so they contain no guards and no iOS 26 symbols. A Liquid Glass style adaptation only changes the look, never behavior, layout constants, or public API on an older SDK or system.
 - Before adding a `CYL` name to core, check that `CYLTabBarController` (the commit pinned in `ChatKit-OC/Podfile`, see "CYLTabBarController dependency") and `CYLDeallocBlockExecutor` (a core dependency) do not already define the same class, header, macro, constant, or category selector. The pinned commit moves, so repeat the check when you work on a name that could clash. Use a `CYLChat` prefix for core names that would collide (for example `CYLChatBaseViewController`, `CYLChatConstants.h`).
-- The demo (`ChatKit-OC/`) keeps the `LCCK` prefix for its own symbols and uses the core `CYL` API.
-- `LCChatKit` and `ChatKitHeaders.h` keep their names. Do not rename released symbols to normalize naming beyond this repository-wide change.
+- **Naming rule, copied from CYLTabBarController's AGENTS.md.** Every class, protocol, type, function, and constant starts
+  with `CYL`. Category methods and properties start with `cyl_` (also for extensions of system types in other languages).
+  Name each file after its main type. When code is copied in from another project, remove its foreign prefix (`AG`,
+  `JZ`, `XX`, `My`, `QMUI`, `JX`, `LCCK`, and so on), rename its symbols, files, and references, and keep a credit comment
+  with the original name and source. The rule applies to sample apps too (CYLTabBarController's is `CYLDemoTheme`).
+  Already shipped public names stay (the rule is for new code); see `.agents/skills/cylchatkit-objc-naming/SKILL.md` and
+  `docs/naming.md`.
+- The facade class is `CYLChatKit` (it was `LCChatKit`; renamed in the naming review recorded in `docs/naming.md`).
+  `ChatKitHeaders.h` keeps its name. The core resource names `Other.bundle` and the table `LCChatKitString` also keep their
+  names (never rename a core bundle, table, or key).
+- The demo (`ChatKit-OC/`) follows the same rule with the `CYLDemo` prefix (`CYLDemoUser`, `CYLDemoChatKitExample`),
+  `CYLDEMO_` for macros, and `cyl_demo_` for its category methods, so a demo name never clashes with a core `CYL` name
+  or with a `cyl_` selector of core or CYLTabBarController. It uses the core `CYL` API. The demo contains no `LCCK` or
+  `lcck_`.
+- Vendored libraries keep their upstream identifiers only when they are pre-built binaries or C libraries that cannot be
+  renamed (the `lame` framework) and third-party APIs used by name (LeanCloud `AVIM*` types, CYLTabBarController); every vendored Objective-C source file in core or the demo follows the copied-code rule.
+- Do not rename released symbols just to normalize naming beyond the changes listed in `docs/naming.md`.
 - Write repository instructions, skills, comments, and user-facing documentation in English.
 - Preserve existing public names, including historical spellings, to avoid breaking clients. New identifiers should follow the naming skill.
 - Use full HTTPS GitHub issue URLs in code comments that explain issue-specific fixes.
@@ -109,13 +124,13 @@ text, complete tables). A localization change is accepted only when all of them 
 
 1. **At least two different localization macros exist, one per layer.** Core (`ChatKit/`) defines a macro that reads a
    string from a core bundle (`CYLLocalizedStrings(key)` in `CYLChatConstants.h`), and the example (`ChatKit-OC/`)
-   defines its own macro that reads a string from an example bundle (`LCCKExampleLocalizedString(key, defaultValue)` in
-   `LCCKExampleConstants.h`). Vendored macros (such as `DateToolsLocalizedStrings`) do not count. Where a platform has
+   defines its own macro that reads a string from an example bundle (`CYLDemoExampleLocalizedString(key, defaultValue)` in
+   `CYLDemoExampleConstants.h`). Vendored macros (such as `DateToolsLocalizedStrings`) do not count. Where a platform has
    no macros, a single function or helper per layer is the equivalent, with the same rules.
    `scripts/check-localizations.py` (CI job `Localization tables`) fails when a layer has no such macro, when both
    layers use the same name, or when a macro reads a bundle that belongs to the other layer.
 2. **A macro names its bundle and table in exactly one place, its own body.** Feature code passes only a key. A new
-   bundle gets a new macro (`CYL<Domain>LocalizedString` in core, `LCCK<Domain>LocalizedString` in the example); never
+   bundle gets a new macro (`CYL<Domain>LocalizedString` in core, `CYLDemo<Domain>LocalizedString` in the example); never
    point one macro at several bundles and never call `NSLocalizedString` or `NSLocalizedStringFromTableInBundle`
    directly in feature code.
 3. **No hard-coded display text in new or changed code.** Every string literal that is shown to a user, or read to a
@@ -136,7 +151,7 @@ text, complete tables). A localization change is accepted only when all of them 
 
 - **iOS structure:** put every localization table in a `.bundle`: `<Name>.bundle/<lang>.lproj/<Table>.strings` (and `.stringsdict` for plurals). Several bundles are allowed, one per feature or vendor domain (for example `Other.bundle`, `DateTools.bundle`, `CYLPBLocalizations.bundle`). Do not add `.lproj` folders outside a bundle. The only exception is what the system reads from the app's main bundle (localized storyboards such as `LaunchScreen`, and `InfoPlist.strings`), which stays in app-level `.lproj` folders.
 - **Core bundles (`ChatKit/Class/Resources/*.bundle`) are always kept.** Never delete or rename a core bundle, table, or key: clients depend on them. Update them cautiously: add keys or languages, keep existing keys stable, change existing values only when the task requires it. The podspec copies `ChatKit/Class/Resources/*`, so a new core bundle placed there ships without podspec changes.
-- **Example (`ChatKit-OC/`) strings live in example-level bundles**, for example `ChatKit-OC/Example/Class/Module/Other/LCCKExample.bundle`, added to the app target with explicit file references. Never put example strings in a core bundle, and core never reads an example bundle.
+- **Example (`ChatKit-OC/`) strings live in example-level bundles**, for example `ChatKit-OC/Example/Class/Module/Other/CYLDemoExample.bundle`, added to the app target with explicit file references. Never put example strings in a core bundle, and core never reads an example bundle.
 - **Other platforms** follow the same rules with their own folder package: Android `res/values-<lang>/` in the library or app module, web `locales/<lang>/<namespace>.json`, Flutter `.arb` files per package. Keep one accessor per layer (a function where the platform has no macros), keep the core resources and keys stable, and keep example resources in the example. Swift cannot import function-like macros, so a Swift example defines its own accessor function for its bundle, and core exposes a function form of its macro for Swift callers.
 - Record existing deviations and unfinished localization work as `TODO` in `docs/localization.md`.
 
@@ -170,7 +185,7 @@ Read `.agents/skills/cylchatkit-accessibility/SKILL.md` before touching a contro
     every Liquid Glass API") adapts to them by itself; never force a material or an animation on top of that.
 - **Verify through accessibility first.** Automated checks drive the UI through accessibility: find elements by their
   accessibility label or identifier, and fall back to coordinates only when no element can be found, then file the
-  missing label as a bug and fix it. In CI the demo writes the accessibility tree of each screen (`-LCCKDemoAccessibilityDump YES`),
+  missing label as a bug and fix it. In CI the demo writes the accessibility tree of each screen (`-CYLDemoAccessibilityDump YES`),
   `scripts/demo-screenshots.sh` prints it and fails when an expected element is missing (`expect_accessibility`), and it
   takes a screenshot at a large Dynamic Type size. Add an expectation for every control a CI screen shows.
 - **Other platforms** use their own APIs with the same rules: Android `contentDescription`, `importantForAccessibility`,
@@ -183,7 +198,7 @@ Read `.agents/skills/cylchatkit-accessibility/SKILL.md` before touching a contro
 
 - `.github/workflows/ios.yml` and `docs/ci.md` define CI. Keep the workflow, its scripts under `scripts/`, and `docs/ci.md` consistent.
 - Every CI run that builds code (library, demo, project, podspec, dependency, or workflow changes) must produce screenshots of the running demo (`ChatKit-OC`) from the `Simulator screenshots` job. When you report the result of such a run, show the screenshots: download the `demo-screenshots` artifact, or decode the base64 blocks the job prints between `===BEGIN SCREENSHOT <name>===` and `===END SCREENSHOT <name>===`, and send the images to the user.
-- If a run produces no screenshots, first find out why and change CI (workflow, `scripts/demo-screenshots.sh`, or the demo's `-LCCKDemoScreen` launch hook) so that later runs do produce them, then run CI again. Only if that still fails, state the exact reason (failing job, step, and log excerpt) and record it as a `TODO` in `docs/ci.md`.
+- If a run produces no screenshots, first find out why and change CI (workflow, `scripts/demo-screenshots.sh`, or the demo's `-CYLDemoScreen` launch hook) so that later runs do produce them, then run CI again. Only if that still fails, state the exact reason (failing job, step, and log excerpt) and record it as a `TODO` in `docs/ci.md`.
 - Never report a build as verified from compilation alone when the screenshots are missing.
 
 ## Git changes

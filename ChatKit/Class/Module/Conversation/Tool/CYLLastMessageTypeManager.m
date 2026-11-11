@@ -7,10 +7,10 @@
 //
 
 #import "CYLLastMessageTypeManager.h"
-#if __has_include(<CYLChatKit/LCChatKit.h>)
-#import <CYLChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/CYLChatKit.h>)
+#import <CYLChatKit/CYLChatKit.h>
 #else
-#import "LCChatKit.h"
+#import "CYLChatKit.h"
 #endif
 #import "CYLUserSystemService.h"
 #import "NSObject+CYLExtension.h"

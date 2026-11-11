@@ -23,10 +23,10 @@
 #import "UIImageView+WebCache.h"
 #endif
 
-#if __has_include(<CYLChatKit/LCChatKit.h>)
-#import <CYLChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/CYLChatKit.h>)
+#import <CYLChatKit/CYLChatKit.h>
 #else
-#import "LCChatKit.h"
+#import "CYLChatKit.h"
 #endif
 
 #import "UIImageView+CYLExtension.h"
@@ -424,7 +424,7 @@ static CGFloat const CYL_MSG_CELL_NICKNAME_FONT_SIZE = 12;
     if (!_avatarImageView) {
         _avatarImageView = [[UIImageView alloc] init];
         _avatarImageView.contentMode = UIViewContentModeScaleAspectFill;//防止特别长或者宽的图片显示不正常
-        CYLAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
+        CYLAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [CYLChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
         if (avatarImageViewCornerRadiusBlock) {
             CGSize avatarImageViewSize = CGSizeMake(kAvatarImageViewWidth, kAvatarImageViewHeight);
             // Set bounds before applying the configured corner radius to prevent first-layout clipping failures: https://github.com/leancloud/ChatKit-OC/issues/347
@@ -512,7 +512,7 @@ static CGFloat const CYL_MSG_CELL_NICKNAME_FONT_SIZE = 12;
         dispatch_time_t when = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delaySeconds * NSEC_PER_SEC));
         dispatch_after(when, dispatch_get_main_queue(), ^{
             [self becomeFirstResponder];
-            CYLLongPressMessageBlock longPressMessageBlock = [LCChatKit sharedInstance].longPressMessageBlock;
+            CYLLongPressMessageBlock longPressMessageBlock = [CYLChatKit sharedInstance].longPressMessageBlock;
             NSDictionary *userInfo = @{ CYLLongPressMessageUserInfoKeyFromController: self.delegate,
                                         CYLLongPressMessageUserInfoKeyFromView: self.tableView,
                                         CYLLongPressMessageUserInfoKeyMessageOwner: @(self.messageOwner),

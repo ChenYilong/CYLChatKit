@@ -9,10 +9,10 @@
 #import "CYLConversationListCell.h"
 #import "CYLBadgeView.h"
 
-#if __has_include(<CYLChatKit/LCChatKit.h>)
-#import <CYLChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/CYLChatKit.h>)
+#import <CYLChatKit/CYLChatKit.h>
 #else
-#import "LCChatKit.h"
+#import "CYLChatKit.h"
 #endif
 
 #import "UIImageView+CYLExtension.h"
@@ -96,7 +96,7 @@ CGFloat const CYLConversationListCellDefaultHeight = 61; //CYLImageSize + CYLVer
     if (_avatarImageView == nil) {
         UIImageView *avatarImageView = [[UIImageView alloc] initWithFrame:CGRectMake(CYLHorizontalSpacing, CYLVerticalSpacing, CYLImageSize, CYLImageSize)];
         avatarImageView.contentMode = UIViewContentModeScaleAspectFill;//防止特别长或者宽的图片显示不正常
-        CYLAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
+        CYLAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [CYLChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
         if (avatarImageViewCornerRadiusBlock) {
             CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(avatarImageView.frame.size);
             // Related avatar rounding and refresh-flicker reports: https://github.com/leancloud/ChatKit-OC/issues/348 and https://github.com/leancloud/ChatKit-OC/issues/385
@@ -172,7 +172,7 @@ CGFloat const CYLConversationListCellDefaultHeight = 61; //CYLImageSize + CYLVer
         remindMuteImageView.frame = CGRectMake(CGRectGetMaxX(_messageTextLabel.frame) + CYLHorizontalSpacing, CGRectGetMinY(_messageTextLabel.frame), CYLRemindMuteSize, CYLRemindMuteSize);
         NSString *remindMuteImageName = @"Connectkeyboad_banner_mute";
 //        remindMuteImageView.imageEdgeInsets = UIEdgeInsetsMake(2.5, 2.5, 2.5, 2.5);
-        UIImage *remindMuteImage = [UIImage cyl_imageNamed:remindMuteImageName bundleName:@"Other" bundleForClass:[LCChatKit class]];
+        UIImage *remindMuteImage = [UIImage cyl_imageNamed:remindMuteImageName bundleName:@"Other" bundleForClass:[CYLChatKit class]];
         [remindMuteImageView setImage:remindMuteImage forState:UIControlStateNormal];
         remindMuteImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         remindMuteImageView.hidden = YES;

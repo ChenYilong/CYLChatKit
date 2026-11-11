@@ -31,7 +31,7 @@ Pod::Spec.new do |s|
     core.resources = 'ChatKit/Class/Resources/*', 'ChatKit/**/*.xib'
     core.frameworks = 'Foundation', 'CoreGraphics', 'UIKit', 'MobileCoreServices', 'AVFoundation', 'CoreLocation', 'MediaPlayer', 'CoreMedia', 'CoreText', 'AudioToolbox', 'MapKit', 'ImageIO', 'SystemConfiguration', 'CFNetwork', 'QuartzCore', 'Security', 'CoreTelephony'
 
-    # ChatKit is UI only and does not depend on an IM SDK. Apps implement `LCCKIMProvider`;
+    # ChatKit is UI only and does not depend on an IM SDK. Apps implement `CYLDemoIMProvider`;
     # the demo app (ChatKit-OC) contains the LeanCloud implementation and its AVOSCloud dependencies.
     core.dependency "MJRefresh"
     core.dependency "Masonry", "~> 1.0.1"

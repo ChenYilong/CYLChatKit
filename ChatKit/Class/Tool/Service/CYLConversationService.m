@@ -7,13 +7,13 @@
 //
 //  ChatKit no longer links an IM SDK. This service keeps the state the UI needs
 //  (current conversation, hooks) and forwards IM operations and local storage to
-//  `-[LCChatKit IMProvider]`.
+//  `-[CYLChatKit IMProvider]`.
 
 #import "CYLConversationService.h"
-#if __has_include(<CYLChatKit/LCChatKit.h>)
-#import <CYLChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/CYLChatKit.h>)
+#import <CYLChatKit/CYLChatKit.h>
 #else
-#import "LCChatKit.h"
+#import "CYLChatKit.h"
 #endif
 
 #import "CYLMessage.h"
@@ -31,9 +31,9 @@ NSString *const CYLConversationServiceErrorDomain = @"CYLConversationServiceErro
 #pragma mark - IM provider
 
 - (id<CYLIMProvider>)IMProvider {
-    id<CYLIMProvider> IMProvider = [LCChatKit sharedInstance].IMProvider;
+    id<CYLIMProvider> IMProvider = [CYLChatKit sharedInstance].IMProvider;
     if (!IMProvider) {
-        CYLLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"Set `-[LCChatKit setIMProvider:]` before using ChatKit.");
+        CYLLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), @"Set `-[CYLChatKit setIMProvider:]` before using ChatKit.");
     }
     return IMProvider;
 }

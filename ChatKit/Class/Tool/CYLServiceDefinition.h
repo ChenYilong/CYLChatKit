@@ -331,7 +331,7 @@ typedef CGFloat (^CYLAvatarImageViewCornerRadiusBlock)(CGSize avatarImageViewSiz
  
  ```
  #ifndef __OPTIMIZE__
- [[LCChatKit sharedInstance] setAllLogsEnabled:YES];
+ [[CYLChatKit sharedInstance] setAllLogsEnabled:YES];
  #endif
  ```
  

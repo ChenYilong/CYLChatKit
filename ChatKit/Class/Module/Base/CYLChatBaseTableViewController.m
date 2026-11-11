@@ -11,7 +11,7 @@
 #import "CYLStatusView.h"
 #import "CYLChatConstants.h"
 #import "CYLSessionService.h"
-#import "LCChatKit.h"
+#import "CYLChatKit.h"
 
 @interface CYLChatBaseTableViewController () <CYLStatusViewDelegate>
 

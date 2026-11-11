@@ -32,6 +32,6 @@ source: 自动生成（.claude/hooks/folder_assets.py）
   (`ChatKit/Class/Tool/CYLChatConstants.h`), or the macro of another core bundle. A new core bundle gets its own
   `CYL<Domain>LocalizedString(key)` macro.
 - Example strings never go in this folder. The example has its own bundle and its own macro,
-  `LCCKExampleLocalizedString(key, defaultValue)`, so a project always has at least two different localization macros.
+  `CYLDemoExampleLocalizedString(key, defaultValue)`, so a project always has at least two different localization macros.
 - Before changing anything here, read `.agents/skills/cylchatkit-localization/SKILL.md` and the "Internationalization
   and localization" section of the root `AGENTS.md`.

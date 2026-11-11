@@ -15,10 +15,10 @@
 #else
 #import "CYLDeallocBlockExecutor.h"
 #endif
-#if __has_include(<CYLChatKit/LCChatKit.h>)
-#import <CYLChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/CYLChatKit.h>)
+#import <CYLChatKit/CYLChatKit.h>
 #else
-#import "LCChatKit.h"
+#import "CYLChatKit.h"
 #endif
 static CGFloat const kCYLTitleFontSize = 17.f;
 
@@ -111,7 +111,7 @@ static void * const CYLConversationViewControllerMembersCountContext = (void*)&C
     if (_remindMuteImageView == nil) {
         UIImageView *remindMuteImageView = [[UIImageView alloc] init];
         NSString *remindMuteImageName = @"Connectkeyboad_banner_mute";
-        UIImage *remindMuteImage = [UIImage cyl_imageNamed:remindMuteImageName bundleName:@"Other" bundleForClass:[LCChatKit class]];
+        UIImage *remindMuteImage = [UIImage cyl_imageNamed:remindMuteImageName bundleName:@"Other" bundleForClass:[CYLChatKit class]];
         remindMuteImageView.contentMode = UIViewContentModeScaleAspectFill;
         remindMuteImageView.image = remindMuteImage;
         remindMuteImageView.hidden = YES;

@@ -14,10 +14,10 @@
     #import "UIImageView+WebCache.h"
 #endif
 
-#if __has_include(<CYLChatKit/LCChatKit.h>)
-    #import <CYLChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/CYLChatKit.h>)
+    #import <CYLChatKit/CYLChatKit.h>
 #else
-    #import "LCChatKit.h"
+    #import "CYLChatKit.h"
 #endif
 
 @interface CYLContactCell ()
@@ -41,7 +41,7 @@
 }
 
 - (void)setup {
-    CYLAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [LCChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
+    CYLAvatarImageViewCornerRadiusBlock avatarImageViewCornerRadiusBlock = [CYLChatKit sharedInstance].avatarImageViewCornerRadiusBlock;
     if (avatarImageViewCornerRadiusBlock) {
         CGFloat avatarImageViewCornerRadius = avatarImageViewCornerRadiusBlock(self.avatarImageView.frame.size);
         // Related avatar corner-radius report: https://github.com/leancloud/ChatKit-OC/issues/347
@@ -50,15 +50,15 @@
     }
     NSString *selectionStatusButtonNormalImageName = @"CellGraySelected";
     NSString *selectionStatusButtonSelectedImageName = @"CellBlueSelected";
-    UIImage *selectionStatusButtonNormalImage = [UIImage cyl_imageNamed:selectionStatusButtonNormalImageName bundleName:@"Other" bundleForClass:[LCChatKit class]];
-    UIImage *selectionStatusButtonSelectedImage = [UIImage cyl_imageNamed:selectionStatusButtonSelectedImageName bundleName:@"Other" bundleForClass:[LCChatKit class]];
+    UIImage *selectionStatusButtonNormalImage = [UIImage cyl_imageNamed:selectionStatusButtonNormalImageName bundleName:@"Other" bundleForClass:[CYLChatKit class]];
+    UIImage *selectionStatusButtonSelectedImage = [UIImage cyl_imageNamed:selectionStatusButtonSelectedImageName bundleName:@"Other" bundleForClass:[CYLChatKit class]];
     [self.selectionStatusButton setImage:selectionStatusButtonNormalImage forState:UIControlStateNormal];
     [self.selectionStatusButton setImage:selectionStatusButtonSelectedImage forState:UIControlStateSelected];
 }
 
 - (void)configureWithAvatarURL:(NSURL *)avatarURL title:(NSString *)title subtitle:(NSString *)subtitle model:(CYLContactListMode)model {
     NSString *imageName = @"Placeholder_Avatar";
-    UIImage *image = [UIImage cyl_imageNamed:imageName bundleName:@"Placeholder" bundleForClass:[LCChatKit class]];
+    UIImage *image = [UIImage cyl_imageNamed:imageName bundleName:@"Placeholder" bundleForClass:[CYLChatKit class]];
     UIImage *avatarImage = image;
     [self.avatarImageView sd_setImageWithURL:avatarURL placeholderImage:avatarImage];
     self.titleLabel.text = title;

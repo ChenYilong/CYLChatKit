@@ -12,8 +12,8 @@ changes, and open TODOs), [README](../README.md), [business customization](../Ch
 
 - Every core type, protocol, enum, constant, and macro starts with `CYL`; category methods and properties start with `cyl_`, and their setters with `setCyl_`.
 - Names that would collide with `CYLTabBarController` or `CYLDeallocBlockExecutor` use `CYLChat` (`CYLChatBaseViewController`, `CYLChatBaseNavigationController`, `CYLChatBaseTableViewController`, `CYLChatConstants.h`).
-- The facade class `LCChatKit` and `ChatKitHeaders.h` keep their names.
-- Core contains no IM SDK code. The IM backend is an `id<CYLIMProvider>` registered on `LCChatKit`; the demo ships a LeanCloud implementation, `LCCKLeanCloudIMProvider`, whose own symbols keep the demo prefix `LCCK`.
+- The facade class is `CYLChatKit` (it was `LCChatKit` before the naming review of 2026-11) and `ChatKitHeaders.h` keeps its name.
+- Core contains no IM SDK code. The IM backend is an `id<CYLIMProvider>` registered on `CYLChatKit`; the demo ships a LeanCloud implementation, `CYLDemoLeanCloudIMProvider`, whose own symbols keep the demo prefix `CYLDemo`.
 
 ## Rename assessment
 
@@ -48,16 +48,16 @@ has not been run; it is tracked as a TODO in [leancloud-decoupling.md](leancloud
 
 ```objc
 // 1. Register an IM backend (the demo uses LeanCloud).
-[LCChatKit sharedInstance].IMProvider = [[LCCKLeanCloudIMProvider alloc] init];
+[CYLChatKit sharedInstance].IMProvider = [[CYLDemoLeanCloudIMProvider alloc] init];
 // 2. Start ChatKit after each login, then open the IM session.
-[LCChatKit setAppId:appId appKey:appKey];
-[[LCChatKit sharedInstance] openWithClientId:clientId callback:^(BOOL succeeded, NSError *error) { /* ... */ }];
+[CYLChatKit setAppId:appId appKey:appKey];
+[[CYLChatKit sharedInstance] openWithClientId:clientId callback:^(BOOL succeeded, NSError *error) { /* ... */ }];
 // 3. Show the UI.
 CYLConversationListViewController *list = [[CYLConversationListViewController alloc] init];
 CYLConversationViewController *chat = [[CYLConversationViewController alloc] initWithConversationId:conversationId];
 ```
 
-Key types: `LCChatKit` (facade), `CYLIMProvider` (IM backend protocol), `CYLConversationProtocol` and
+Key types: `CYLChatKit` (facade), `CYLIMProvider` (IM backend protocol), `CYLConversationProtocol` and
 `CYLIMMessageProtocol` (models provided by the backend), `CYLMessage` (display model),
 `CYLConversationViewController`, `CYLConversationListViewController`, `CYLChatMessageCell` (custom cells).
 
@@ -80,11 +80,11 @@ Key types: `LCChatKit` (facade), `CYLIMProvider` (IM backend protocol), `CYLConv
 
 ### Entry point
 
-#### `LCChatKit.h`
+#### `CYLChatKit.h`
 
-Path: `ChatKit/Class/LCChatKit.h`
+Path: `ChatKit/Class/CYLChatKit.h`
 
-**Class `LCChatKit`** : `NSObject` &lt;CYLSessionService, CYLUserSystemService, CYLSignatureService, CYLSettingService, CYLUIService, CYLConversationService, CYLConversationsListService&gt;
+**Class `CYLChatKit`** : `NSObject` &lt;CYLSessionService, CYLUserSystemService, CYLSignatureService, CYLSettingService, CYLUIService, CYLConversationService, CYLConversationsListService&gt;
 
 ```objc
 @property (nonatomic, strong) id<CYLIMProvider> IMProvider;
@@ -1700,11 +1700,11 @@ Path: `ChatKit/Class/Tool/Categories/UIView+CYLChatExtension.h`
 typedef void (^CYLViewActionBlock)(UIView *subview);
 ```
 
-#### `LCChatKit_Internal.h`
+#### `CYLChatKit_Internal.h`
 
-Path: `ChatKit/Class/Tool/LCChatKit_Internal.h`
+Path: `ChatKit/Class/Tool/CYLChatKit_Internal.h`
 
-**Category `LCChatKit (CYLServices)`**
+**Category `CYLChatKit (CYLServices)`**
 
 ```objc
 @property (nonatomic, strong, readonly) CYLSessionService *sessionService;
@@ -2918,7 +2918,7 @@ Types, constants, and macros. Members of a renamed type keep their selectors unl
 | category | `LCCKAlertController(Convenience)` | `CYLAlertController(Convenience)` |
 | category | `LCCKAlertController(Internal)` | `CYLAlertController(Internal)` |
 | category | `LCCKConversationService(LCCKDeprecated)` | `CYLConversationService(CYLDeprecated)` |
-| category | `LCChatKit(LCCKServices)` | `LCChatKit(CYLServices)` |
+| category | `LCChatKit(LCCKServices)` | `CYLChatKit(CYLServices)` |
 | category | `NSBundle(LCCKExtension)` | `NSBundle(CYLExtension)` |
 | category | `NSBundle(LCCKSCaleArray)` | `NSBundle(CYLSCaleArray)` |
 | category | `NSFileManager(LCCKExtension)` | `NSFileManager(CYLExtension)` |
@@ -3408,7 +3408,7 @@ Members whose selector changed:
 | constants | `kAVIMMessageMediaTypeEmotion` | moved | moved to the demo with `AVIMEmotionMessage` |
 | member | `LCCKCommonUtils +getPathFromFile:` | moved | moved to the demo category `CYLCommonUtils (LCCKExtension)` |
 | member | `LCCKCommonUtils +isCacheDataAvailableForFile:` | moved | moved to the demo category `CYLCommonUtils (LCCKExtension)` |
-| member | `LCCKConversationService -sendMessage:conversation:options:progressBlock:callback:` | moved | moved to the demo: `-[LCCKLeanCloudConversationService sendMessage:conversation:options:mentionList:progressBlock:callback:]` |
+| member | `CYLDemoConversationService -sendMessage:conversation:options:progressBlock:callback:` | moved | moved to the demo: `-[CYLDemoLeanCloudConversationService sendMessage:conversation:options:mentionList:progressBlock:callback:]` |
 | member | `LCCKMessage +messageWithAVIMTypedMessage:` | moved | moved to the demo category `CYLMessage (LCCKExtension)` |
 | member | `NSObject(LCCKDeallocBlockExecutor) -lcck_executeAtDealloc:` | removed | removed: use `-cyl_willDeallocWithSelfCallback:` from the `CYLDeallocBlockExecutor` pod |
 | member | `UIImage(LCCKExtension) +lcck_imageNamed:` | removed | removed: declared but never implemented; would clash with CYLTabBarController |

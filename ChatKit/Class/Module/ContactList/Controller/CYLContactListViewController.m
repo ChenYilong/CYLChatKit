@@ -212,7 +212,7 @@ static NSString *const CYLContactListViewControllerIdentifier = @"CYLContactList
     self.navigationItem.title = @"联系人";
     self.tableView.tableHeaderView = self.searchBar;
     self.tableView.tableFooterView = [[UIView alloc] init];
-    NSBundle *bundle = [NSBundle bundleForClass:[LCChatKit class]];
+    NSBundle *bundle = [NSBundle bundleForClass:[CYLChatKit class]];
     [self setupSearchBarControllerWithSearchBar:self.searchBar bundle:bundle];
     [self.tableView registerNib:[UINib nibWithNibName:@"CYLContactCell" bundle:bundle]
          forCellReuseIdentifier:CYLContactListViewControllerIdentifier];
@@ -499,7 +499,7 @@ static NSString *const CYLContactListViewControllerIdentifier = @"CYLContactList
     if (theHUDActionBlock) {
         theHUDActionBlock(self, nil, @"获取联系人信息...", CYLMessageHUDActionTypeShow);
     }
-    [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:[NSArray arrayWithArray:[_userIds allObjects]] callback:^(NSArray<id<CYLUserDelegate>> *users, NSError *error) {
+    [[CYLChatKit sharedInstance] getProfilesInBackgroundForUserIds:[NSArray arrayWithArray:[_userIds allObjects]] callback:^(NSArray<id<CYLUserDelegate>> *users, NSError *error) {
         if (theHUDActionBlock) {
             theHUDActionBlock(self, nil, nil, CYLMessageHUDActionTypeHide);
         }

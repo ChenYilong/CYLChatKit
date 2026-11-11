@@ -5,10 +5,10 @@
 //  v2.1.1 Created by ElonChan ( https://github.com/ChenYilong/CYLChatKit ) on 15/11/18.
 //  Copyright © 2018 ChenYilong（wechat id：chenyilong1010） . All rights reserved.
 //
-#if __has_include(<CYLChatKit/LCChatKit.h>)
-#import <CYLChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/CYLChatKit.h>)
+#import <CYLChatKit/CYLChatKit.h>
 #else
-#import "LCChatKit.h"
+#import "CYLChatKit.h"
 #endif
 
 #import "CYLConversationViewModel.h"
@@ -251,7 +251,7 @@
 
 - (void)conversationInvalided:(NSNotification *)notification {
     NSString *clientId = notification.object;
-    [[LCChatKit sharedInstance] deleteRecentConversationWithConversationId:self.currentConversationId];
+    [[CYLChatKit sharedInstance] deleteRecentConversationWithConversationId:self.currentConversationId];
     [[CYLUserSystemService sharedInstance] getProfilesInBackgroundForUserIds:@[ clientId ] callback:^(NSArray<id<CYLUserDelegate>> *users, NSError *error) {
         id<CYLUserDelegate> user;
         @try {
@@ -628,7 +628,7 @@ fromTimestamp     |    toDate   |                |  上次上拉刷新顶端，�
 }
 
 - (id<CYLIMProvider>)IMProvider {
-    return [LCChatKit sharedInstance].IMProvider;
+    return [CYLChatKit sharedInstance].IMProvider;
 }
 
 /*!

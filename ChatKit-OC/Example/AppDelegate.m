@@ -7,20 +7,20 @@
 //
 
 #import "AppDelegate.h"
-#import "LCCKTabBarControllerConfig.h"
-#import "LCCKConstantsDefinition.h"
-#import "LCChatKitExample.h"
-#import "LCCKUtil.h"
-#if __has_include(<ChatKit/LCChatKit.h>)
-#import <ChatKit/LCChatKit.h>
+#import "CYLDemoTabBarControllerConfig.h"
+#import "CYLDemoConstantsDefinition.h"
+#import "CYLDemoChatKitExample.h"
+#import "CYLDemoUtil.h"
+#if __has_include(<ChatKit/CYLChatKit.h>)
+#import <ChatKit/CYLChatKit.h>
 #else
-#import "LCChatKit.h"
+#import "CYLChatKit.h"
 #endif
-#import "LCCKLoginViewController.h"
+#import "CYLDemoLoginViewController.h"
 #import "CYLChatBar.h"
 #import <AVOSCloud/AVOSCloud.h>
 #import <AVOSCloudIM/AVOSCloudIM.h>
-#import "LCCKLeanCloudIMProvider.h"
+#import "CYLDemoLeanCloudIMProvider.h"
 
 #if XCODE_VERSION_GREATER_THAN_OR_EQUAL_TO_8
 /// Notification become independent from UIKit
@@ -34,8 +34,8 @@
 @end
 
 #warning TODO: CHANGE TO YOUR OWN AppId and AppKey
-static NSString *const LCCKAPPID = @"dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz";
-static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
+static NSString *const CYLDemoAPPID = @"dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz";
+static NSString *const CYLDemoAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
 
 @implementation AppDelegate
 
@@ -43,16 +43,16 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
     [self registerForRemoteNotification];
     [self customizeNavigationBar];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    LCCKLoginViewController *loginViewController = [[LCCKLoginViewController alloc] initWithNibName:NSStringFromClass([LCCKLoginViewController class]) bundle:[NSBundle mainBundle]];
+    CYLDemoLoginViewController *loginViewController = [[CYLDemoLoginViewController alloc] initWithNibName:NSStringFromClass([CYLDemoLoginViewController class]) bundle:[NSBundle mainBundle]];
     loginViewController.autoLogin = YES;
     [loginViewController setClientIDHandler:^(NSString *clientID) {
-        [LCCKUtil showProgressText:@"open client ..." duration:10.0f];
-        [LCChatKitExample invokeThisMethodAfterLoginSuccessWithClientId:clientID success:^{
-            [LCCKUtil hideProgress];
-            LCCKTabBarControllerConfig *tabBarControllerConfig = [[LCCKTabBarControllerConfig alloc] init];
+        [CYLDemoUtil showProgressText:@"open client ..." duration:10.0f];
+        [CYLDemoChatKitExample invokeThisMethodAfterLoginSuccessWithClientId:clientID success:^{
+            [CYLDemoUtil hideProgress];
+            CYLDemoTabBarControllerConfig *tabBarControllerConfig = [[CYLDemoTabBarControllerConfig alloc] init];
             self.window.rootViewController = tabBarControllerConfig.tabBarController;
         } failed:^(NSError *error) {
-            [LCCKUtil hideProgress];
+            [CYLDemoUtil hideProgress];
             NSLog(@"%@",error);
         }];
     }];
@@ -61,8 +61,8 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
     // 必须在 APPID 初始化之前调用，否则走的是中国节点。
     // [AVOSCloud setServiceRegion:AVServiceRegionUS];
     // ChatKit is UI only. Plug in the LeanCloud IM backend before starting ChatKit.
-    [LCChatKit sharedInstance].IMProvider = [[LCCKLeanCloudIMProvider alloc] init];
-    [LCChatKit setAppId:LCCKAPPID appKey:LCCKAPPKEY];
+    [CYLChatKit sharedInstance].IMProvider = [[CYLDemoLeanCloudIMProvider alloc] init];
+    [CYLChatKit setAppId:CYLDemoAPPID appKey:CYLDemoAPPKEY];
     // 启用未读消息
     [AVIMClient setUnreadNotificationEnabled:true];
     [AVIMClient setTimeoutIntervalInSeconds:20];
@@ -80,12 +80,12 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
 }
 
 /*!
- * `-LCCKDemoAccessibilityDump YES` writes what VoiceOver would find on the screen, element by element, to
+ * `-CYLDemoAccessibilityDump YES` writes what VoiceOver would find on the screen, element by element, to
  * Documents/accessibility.txt a few seconds after launch. CI (scripts/demo-screenshots.sh) prints that file next to each
  * screenshot, so a run shows the accessibility labels, hints, and identifiers and not only the pixels.
  */
 - (void)dumpAccessibilityIfRequested {
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"LCCKDemoAccessibilityDump"]) {
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"CYLDemoAccessibilityDump"]) {
         return;
     }
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -123,21 +123,21 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
 }
 
 /*!
- * CI screenshots (scripts/demo-screenshots.sh) launch the app with `-LCCKDemoScreen <name>` to show ChatKit's UI
+ * CI screenshots (scripts/demo-screenshots.sh) launch the app with `-CYLDemoScreen <name>` to show ChatKit's UI
  * without logging in to the IM service, which a CI runner cannot rely on:
  * - `conversations`: the tab bar with the conversation list.
  * - `chat`: a conversation screen with the chat input bar.
- * `-LCCKDemoText <text>` (with `chat`) types that text into the input field without opening the keyboard.
- * `-LCCKDemoKeyboard YES` (with `chat`) then focuses the input field next to the 发送 (send) button, the same as
+ * `-CYLDemoText <text>` (with `chat`) types that text into the input field without opening the keyboard.
+ * `-CYLDemoKeyboard YES` (with `chat`) then focuses the input field next to the 发送 (send) button, the same as
  * tapping it, so the keyboard comes up and the screenshot shows the chat bar sitting on it.
  * Without the argument the app starts at the login screen as usual.
  */
 - (void)showScreenForScreenshotIfRequested {
-    NSString *screen = [[NSUserDefaults standardUserDefaults] stringForKey:@"LCCKDemoScreen"];
+    NSString *screen = [[NSUserDefaults standardUserDefaults] stringForKey:@"CYLDemoScreen"];
     if (screen.length == 0) {
         return;
     }
-    LCCKTabBarControllerConfig *tabBarControllerConfig = [[LCCKTabBarControllerConfig alloc] init];
+    CYLDemoTabBarControllerConfig *tabBarControllerConfig = [[CYLDemoTabBarControllerConfig alloc] init];
     CYLTabBarController *tabBarController = tabBarControllerConfig.tabBarController;
     self.window.rootViewController = tabBarController;
     if ([screen isEqualToString:@"chat"]) {
@@ -145,13 +145,13 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
         if ([firstViewController isKindOfClass:[UINavigationController class]]) {
             CYLConversationViewController *conversationViewController = [[CYLConversationViewController alloc] initWithPeerId:@"Jerry"];
             [(UINavigationController *)firstViewController pushViewController:conversationViewController animated:NO];
-            NSString *demoText = [[NSUserDefaults standardUserDefaults] stringForKey:@"LCCKDemoText"];
+            NSString *demoText = [[NSUserDefaults standardUserDefaults] stringForKey:@"CYLDemoText"];
             if (demoText.length > 0) {
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [conversationViewController.chatBar appendString:demoText beginInputing:NO];
                 });
             }
-            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LCCKDemoKeyboard"]) {
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"CYLDemoKeyboard"]) {
                 // The chat bar is opened in -viewDidAppear:, so wait until the screen is up.
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [conversationViewController.chatBar beginInputing];
@@ -175,11 +175,11 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    [[LCChatKit sharedInstance] syncBadge];
+    [[CYLChatKit sharedInstance] syncBadge];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    [[LCChatKit sharedInstance] syncBadge];
+    [[CYLChatKit sharedInstance] syncBadge];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
@@ -197,7 +197,7 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
          convid = 55bae86300b0efdcbe3e742e;
          }
          */
-        [[LCChatKit sharedInstance] didReceiveRemoteNotification:userInfo];
+        [[CYLChatKit sharedInstance] didReceiveRemoteNotification:userInfo];
     }
 }
 
@@ -221,9 +221,9 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
  * 初始化UNUserNotificationCenter
  */
 - (void)registerForRemoteNotification {
-    // CI screenshots (scripts/demo-screenshots.sh) pass -LCCKDemoScreenshots YES so the permission alert does not cover
+    // CI screenshots (scripts/demo-screenshots.sh) pass -CYLDemoScreenshots YES so the permission alert does not cover
     // the screen.
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LCCKDemoScreenshots"]) {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"CYLDemoScreenshots"]) {
         return;
     }
     // iOS 10 兼容

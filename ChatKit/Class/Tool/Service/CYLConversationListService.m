@@ -30,10 +30,10 @@
 
 
 #import "CYLConversationListService.h"
-#if __has_include(<CYLChatKit/LCChatKit.h>)
-#import <CYLChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/CYLChatKit.h>)
+#import <CYLChatKit/CYLChatKit.h>
 #else
-#import "LCChatKit.h"
+#import "CYLChatKit.h"
 #endif
 
 @implementation CYLConversationListService
@@ -44,15 +44,15 @@
 @synthesize conversationListShowHookBlock = _conversationListShowHookBlock;
 
 /*!
- * Loading recent conversations depends on the IM SDK, so it is implemented by `-[LCChatKit IMProvider]`.
+ * Loading recent conversations depends on the IM SDK, so it is implemented by `-[CYLChatKit IMProvider]`.
  */
 - (void)findRecentConversationsWithBlock:(CYLRecentConversationsCallback)block {
-    id<CYLIMProvider> IMProvider = [LCChatKit sharedInstance].IMProvider;
+    id<CYLIMProvider> IMProvider = [CYLChatKit sharedInstance].IMProvider;
     if (!IMProvider) {
         NSInteger code = 0;
         NSDictionary *errorInfo = @{
                                     @"code" : @(code),
-                                    NSLocalizedDescriptionKey : @"IM provider not set. Set `-[LCChatKit setIMProvider:]` first.",
+                                    NSLocalizedDescriptionKey : @"IM provider not set. Set `-[CYLChatKit setIMProvider:]` first.",
                                     };
         NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:code userInfo:errorInfo];
         dispatch_async(dispatch_get_main_queue(),^{
@@ -66,7 +66,7 @@
 }
 
 - (void)fetchRelationConversationsFromServerCallback:(CYLArrayResultBlock)block {
-    [[LCChatKit sharedInstance].IMProvider fetchRelationConversationsFromServerCallback:block];
+    [[CYLChatKit sharedInstance].IMProvider fetchRelationConversationsFromServerCallback:block];
 }
 
 #pragma mark -

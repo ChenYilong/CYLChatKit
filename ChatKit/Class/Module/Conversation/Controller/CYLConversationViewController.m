@@ -11,10 +11,10 @@
 
 #import "CYLConversationViewController.h"
 
-#if __has_include(<CYLChatKit/LCChatKit.h>)
-#import <CYLChatKit/LCChatKit.h>
+#if __has_include(<CYLChatKit/CYLChatKit.h>)
+#import <CYLChatKit/CYLChatKit.h>
 #else
-#import "LCChatKit.h"
+#import "CYLChatKit.h"
 #endif
 
 #import "UITableView+FDTemplateLayoutCell.h"
@@ -139,7 +139,7 @@ NSString *const CYLConversationViewControllerErrorDomain = @"CYLConversationView
                     return;
                 }
                 if (self.isEnableAutoJoin) {
-                    [[LCChatKit sharedInstance].IMProvider joinConversation:conversation callback:^(BOOL succeeded, NSError *error) {
+                    [[CYLChatKit sharedInstance].IMProvider joinConversation:conversation callback:^(BOOL succeeded, NSError *error) {
                         [self refreshConversation:conversation isJoined:succeeded error:error];
                         if (succeeded) {
                             self.firstTimeJoinGroup = YES;
@@ -587,7 +587,7 @@ NSString *const CYLConversationViewControllerErrorDomain = @"CYLConversationView
 
 - (void)callbackCurrentConversationEvenNotExists:(id<CYLConversationProtocol>)conversation callback:(CYLBooleanResultBlock)callback {
     if (conversation.createAt) {
-        id<CYLIMProvider> IMProvider = [LCChatKit sharedInstance].IMProvider;
+        id<CYLIMProvider> IMProvider = [CYLChatKit sharedInstance].IMProvider;
         if ([IMProvider respondsToSelector:@selector(prepareConversation:)]) {
             [IMProvider prepareConversation:conversation];
         }
@@ -609,7 +609,7 @@ NSString *const CYLConversationViewControllerErrorDomain = @"CYLConversationView
         if (!_peerId && members.count == 2) {
             _peerId = conversation.cyl_peerId;
         }
-        [[LCChatKit sharedInstance] getProfilesInBackgroundForUserIds:members callback:^(NSArray<id<CYLUserDelegate>> *users, NSError *error) {
+        [[CYLChatKit sharedInstance] getProfilesInBackgroundForUserIds:members callback:^(NSArray<id<CYLUserDelegate>> *users, NSError *error) {
             if (!self.disableTitleAutoConfig && (users.count > 0)) {
                 [self setupNavigationItemTitleWithConversation:conversation];
             }
@@ -701,7 +701,7 @@ NSString *const CYLConversationViewControllerErrorDomain = @"CYLConversationView
 }
 
 - (NSString *)userId {
-    return [LCChatKit sharedInstance].clientId;
+    return [CYLChatKit sharedInstance].clientId;
 }
 
 #pragma mark - CYLChatBarDelegate
@@ -919,7 +919,7 @@ NSString *const CYLConversationViewControllerErrorDomain = @"CYLConversationView
 }
 
 - (void)avatarImageViewLongPressed:(CYLChatMessageCell *)messageCell {
-    if (messageCell.message.senderId == [LCChatKit sharedInstance].clientId || self.conversation.cyl_type == CYLConversationTypeSingle) {
+    if (messageCell.message.senderId == [CYLChatKit sharedInstance].clientId || self.conversation.cyl_type == CYLConversationTypeSingle) {
         return;
     }
     NSString *userName = messageCell.message.localDisplayName;
