@@ -17,23 +17,33 @@ Pod::Spec.new do |s|
   s.subspec 'Core' do |core|
     core.source_files = 'ChatKit', 'ChatKit/**/*.{h,m}'
     core.public_header_files = 'ChatKit/**/*.h'
+    # iOS 7 backport of UITableViewRowAction. It refuses to compile when the minimum deployment target is iOS 8 or
+    # later (#error), and UIKit provides the class on every supported iOS version.
+    # The lame header ships inside lame.framework (vendored below) and is imported as <lame/lame.h>. Keeping it out
+    # of the pod's own headers keeps it out of the CYLChatKit umbrella header, where it broke the module build.
+    core.exclude_files = 'ChatKit/Class/Tool/Vendor/CYLTableViewRowAction/CYLTableViewRowAction.m',
+                         'ChatKit/Class/Tool/Vendor/VoiceLib/lame.framework/**/*'
     core.vendored_frameworks = 'ChatKit/Class/Tool/Vendor/VoiceLib/lame.framework'
+    # lame.framework has device slices (armv7, armv7s, arm64) and Intel simulator slices (i386, x86_64), but no arm64
+    # simulator slice, so simulator builds link x86_64 only. Remove this once lame ships as an XCFramework.
+    core.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+    core.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
     core.resources = 'ChatKit/Class/Resources/*', 'ChatKit/**/*.xib'
     core.frameworks = 'Foundation', 'CoreGraphics', 'UIKit', 'MobileCoreServices', 'AVFoundation', 'CoreLocation', 'MediaPlayer', 'CoreMedia', 'CoreText', 'AudioToolbox', 'MapKit', 'ImageIO', 'SystemConfiguration', 'CFNetwork', 'QuartzCore', 'Security', 'CoreTelephony'
 
-    core.dependency "AVOSCloud", "~> 11.5.1"
-    core.dependency "AVOSCloudIM", "~> 11.5.1"
+    # ChatKit is UI only and does not depend on an IM SDK. Apps implement `CYLIMProvider`;
+    # the demo app (ChatKit-OC) contains the LeanCloud implementation and its AVOSCloud dependencies.
     core.dependency "MJRefresh"
     core.dependency "Masonry", "~> 1.0.1"
     core.dependency "SDWebImage", "~> 3.8.0"
-    core.dependency "FMDB", "~> 2.6.2"
     core.dependency "pop", "~> 1.0.9"
     core.dependency "UITableView+FDTemplateLayoutCell"
     core.dependency "FDStackView", "~> 1.0"
     core.dependency "DACircularProgress", "~> 2.3.1"
     core.dependency "MLLabel", "~> 1.10.5"
     core.dependency "MWPhotoBrowser", "~> 2.1.2"
-    core.dependency "CYLDeallocBlockExecutor", "~> 1.1.2"
+    core.dependency "CYLDeallocBlockExecutor", "~> 1.2.0"
+    core.dependency "CYLTableViewPlaceHolder", "~> 1.1.0"
   end
 
   s.pod_target_xcconfig = {

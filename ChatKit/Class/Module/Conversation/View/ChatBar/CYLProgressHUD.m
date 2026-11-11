@@ -1,0 +1,345 @@
+//
+//  CYLProgressHUD.m
+//  CYLChatBarExample
+//
+//  v2.1.1 Created by ElonChan ( https://github.com/ChenYilong/CYLChatKit ) on 15/8/17.
+//  Copyright (c) 2018 ChenYilong（wechat id：chenyilong1010） . All rights reserved.
+//
+
+#import "CYLProgressHUD.h"
+#import "UIImage+CYLExtension.h"
+#import "CYLChatConstants.h"
+
+@interface CYLProgressHUD ()
+
+@property (assign, nonatomic) CGFloat angle;
+@property (strong, nonatomic) UILabel *centerLabel;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *subTitleLabel;
+@property (assign, nonatomic) CYLProgressState progressState;
+@property (assign, nonatomic) NSTimeInterval seconds;
+@property (strong, nonatomic) UIView *bgView;
+@property (strong, nonatomic) UIImageView *cancleImageView;
+@property (strong, nonatomic) UIImageView *volumeImageView;
+@property (strong, nonatomic) UIImageView *soundImageView;
+@property (assign, nonatomic) CGFloat countdownTime;
+
+@end
+
+@implementation CYLProgressHUD
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        [self setup];
+    }
+    return self;
+}
+
+- (void)setup {
+    [self addSubview:self.bgView];
+    [self.bgView addSubview:self.cancleImageView];
+    [self.bgView addSubview:self.volumeImageView];
+    [self.bgView addSubview:self.soundImageView];
+    [self.bgView addSubview:self.centerLabel];
+    [self.bgView addSubview:self.subTitleLabel];
+    [self.bgView addSubview:self.titleLabel];
+}
+
+#pragma mark - Private Methods
+
+- (void)show {
+    self.angle = 0.0f;
+    self.seconds = 0;
+    self.subTitleLabel.text = @"手指上滑,取消发送";
+    self.subTitleLabel.backgroundColor = [UIColor clearColor];
+    self.countdownTime = kCYLVolumeMaxTimeLength;
+    self.titleLabel.text = @"录音时间";
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(!self.superview)
+            [[UIApplication sharedApplication].keyWindow addSubview:self];
+        [UIView animateWithDuration:.5 animations:^{
+            self.alpha = 1;
+        } completion:nil];
+        [self setNeedsDisplay];
+    });
+    
+    self.titleLabel.alpha = 0;
+    self.centerLabel.alpha = 0;
+    
+    _cancleImageView.alpha = 0;
+    _soundImageView.alpha = 1;
+    _volumeImageView.alpha = 1;
+}
+
+- (void)timerAction {
+    // Related report: the recording countdown can continue below zero: https://github.com/leancloud/ChatKit-OC/issues/414
+    self.angle -= 3;
+    self.seconds = MIN(self.seconds + 1, kCYLVolumeMaxTimeLength * 10);
+    float second = MAX(0, self.countdownTime);
+    if (second <= 10.0f) {
+        _cancleImageView.alpha = 0;
+        _soundImageView.alpha = 0;
+        _volumeImageView.alpha = 0;
+        self.centerLabel.alpha = 1;
+    }
+    //超时做调整
+    //    if (second <= 0.1f) {
+    //        [[CYLProgressHUD sharedView]dismiss];
+    //    }
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.09];
+    UIView.AnimationRepeatAutoreverses = YES;
+    if (second <= 10.0f) {
+        self.centerLabel.textColor = [UIColor redColor];
+    } else {
+        self.centerLabel.textColor = [UIColor yellowColor];
+    }
+    self.countdownTime = MAX(0, second - 0.1);
+    self.centerLabel.text = [NSString stringWithFormat:@"%.0f",self.countdownTime];
+    [UIView commitAnimations];
+}
+
+- (void)setSubTitle:(NSString *)subTitle {
+    self.subTitleLabel.text = subTitle;
+    if ([subTitle isEqualToString:@"松开手指,取消发送"]) {
+        self.subTitleLabel.backgroundColor = [[UIColor redColor]colorWithAlphaComponent:0.7];
+    } else if ([subTitle isEqualToString:@"手指上滑,取消发送"]) {
+        self.subTitleLabel.backgroundColor = [UIColor clearColor];
+    }
+    
+    if ((kCYLVolumeMaxTimeLength - self.seconds/10.0) <= 10) {
+        return;
+    }
+    if ([subTitle isEqualToString:@"松开手指,取消发送"]) {
+        _cancleImageView.alpha = 1;
+        _soundImageView.alpha = 0;
+        _volumeImageView.alpha = 0;
+    } else if ([subTitle isEqualToString:@"手指上滑,取消发送"]) {
+        _cancleImageView.alpha = 0;
+        _soundImageView.alpha = 1;
+        _volumeImageView.alpha = 1;
+    }
+}
+
+- (void)changeVolumeImageView:(float)volume timeLength:(NSTimeInterval)timeLength{
+    NSString *imageName = @"";
+    if (volume <= -50) {
+        imageName = @"RecordingSignal001";
+    } else if (volume <= -40) {
+        imageName = @"RecordingSignal002";
+    } else if (volume <= -31) {
+        imageName = @"RecordingSignal003";
+    } else if (volume <= -21) {
+        imageName = @"RecordingSignal004";
+    } else if (volume <= -13) {
+        imageName = @"RecordingSignal005";
+    } else if (volume <= -7) {
+        imageName = @"RecordingSignal006";
+    } else if (volume <= -3) {
+        imageName = @"RecordingSignal007";
+    } else {
+        imageName = @"RecordingSignal008";
+    }
+    UIImage *image = [UIImage cyl_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
+    self.volumeImageView.image = image;
+    
+    self.seconds = MIN(MAX(timeLength, 0), kCYLVolumeMaxTimeLength * 10);
+    self.countdownTime = MAX(0, kCYLVolumeMaxTimeLength - self.seconds/10.0);
+    if ((kCYLVolumeMaxTimeLength - self.seconds/10.0) <= 10) {
+        _cancleImageView.alpha = 0;
+        _soundImageView.alpha = 0;
+        _volumeImageView.alpha = 0;
+        self.centerLabel.alpha = 1;
+        self.centerLabel.textColor = [UIColor redColor];
+        self.centerLabel.font = [UIFont systemFontOfSize:60];
+    } else {
+        self.centerLabel.textColor = [UIColor yellowColor];
+    }
+    self.centerLabel.text = [NSString stringWithFormat:@"%.0f", self.countdownTime];
+}
+
+- (void)dismiss{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.subTitleLabel.text = nil;
+        self.titleLabel.text = nil;
+        self.centerLabel.font = [UIFont systemFontOfSize:20];
+        self.centerLabel.textColor = [UIColor whiteColor];
+        
+        CGFloat timeLonger;
+        if (self.progressState == CYLProgressShort) {
+            timeLonger = 1;
+        } else {
+            timeLonger = 0.6;
+        }
+        [UIView animateWithDuration:timeLonger
+                              delay:0
+                            options:UIViewAnimationCurveEaseIn | UIViewAnimationOptionAllowUserInteraction
+                         animations:^{
+                             self.alpha = 0;
+                         }
+                         completion:^(BOOL finished){
+                             if(self.alpha == 0) {
+                                 // The HUD is a subview of the existing key window; do not create a new key window during dismissal.
+                                 // https://github.com/leancloud/ChatKit-OC/issues/420
+                                 [self removeFromSuperview];
+                             }
+                         }];
+    });
+}
+
+#pragma mark - Setters
+
+- (void)setProgressState:(CYLProgressState)progressState {
+    switch (progressState) {
+        case CYLProgressSuccess:
+            self.centerLabel.text = @"录音成功";
+            break;
+        case CYLProgressShort:
+            self.centerLabel.text = @"时间太短,请重试";
+            break;
+        case CYLProgressError:
+            self.centerLabel.text = @"录音失败";
+            break;
+        case CYLProgressMessage:
+            break;
+    }
+    self.centerLabel.font = [UIFont systemFontOfSize:20];
+    self.centerLabel.textColor = [UIColor whiteColor];
+}
+
+
+#pragma mark - Getters
+
+- (UIView *)bgView {
+    if (!_bgView) {
+        _bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 136, 136)];
+        _bgView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
+        _bgView.center = CGPointMake([[UIScreen mainScreen] bounds].size.width/2,[[UIScreen mainScreen] bounds].size.height/2);
+        _bgView.layer.cornerRadius = 5.0;
+        _bgView.layer.masksToBounds = YES;
+    }
+    return _bgView;
+}
+
+- (UILabel *)centerLabel{
+    if (!_centerLabel) {
+        _centerLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 150, 60)];
+        _centerLabel.backgroundColor = [UIColor clearColor];
+        _centerLabel
+        .center = CGPointMake([self.bgView bounds].size.width/2,[self.bgView bounds].size.height/2-10);
+        _centerLabel.text = [NSString stringWithFormat:@"%f",self.countdownTime];
+        _centerLabel.textAlignment = NSTextAlignmentCenter;
+        _centerLabel.font = [UIFont systemFontOfSize:20];
+        _centerLabel.textColor = [UIColor yellowColor];
+        
+    }
+    return _centerLabel;
+}
+
+- (UIImageView *)cancleImageView {
+    if (!_cancleImageView) {
+        _cancleImageView = [[UIImageView alloc]initWithImage:({
+            NSString *imageName = @"RecordCancel";
+            UIImage *image = [UIImage cyl_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
+            image;})
+                            ];
+        _cancleImageView.center =  CGPointMake([self.bgView bounds].size.width/2,[self.bgView bounds].size.height/2-10);
+    }
+    return _cancleImageView;
+}
+
+- (UIImageView *)volumeImageView {
+    if (!_volumeImageView) {
+        _volumeImageView = [[UIImageView alloc]initWithImage:({
+            NSString *imageName = @"RecordingSignal001";
+            UIImage *image = [UIImage cyl_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
+            image;})
+                            ];
+        _volumeImageView.center =  CGPointMake([self.bgView bounds].size.width/2+30,[self.bgView bounds].size.height/2-10);
+    }
+    return _volumeImageView;
+}
+
+- (UIImageView *)soundImageView {
+    if (!_soundImageView) {
+        _soundImageView = [[UIImageView alloc]initWithImage:({
+            NSString *imageName = @"RecordingBkg";
+            UIImage *image = [UIImage cyl_imageNamed:imageName bundleName:@"MessageBubble" bundleForClass:[self class]];
+            image;})
+                           ];
+        _soundImageView.center =  CGPointMake([self.bgView bounds].size.width/2-14,[self.bgView bounds].size.height/2-10);
+    }
+    return _soundImageView;
+}
+
+
+- (UILabel *)titleLabel{
+    if (!_titleLabel) {
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 20)];
+        _titleLabel.center = CGPointMake([self.bgView bounds].size.width/2,[self.bgView bounds].size.height/2 - 30);
+        _titleLabel.text = @"录音时间";
+        _titleLabel.textAlignment = NSTextAlignmentCenter;
+        _titleLabel.font = [UIFont boldSystemFontOfSize:18];
+        _titleLabel.textColor = [UIColor whiteColor];
+    }
+    return _titleLabel;
+}
+
+
+- (UILabel *)subTitleLabel{
+    if (!_subTitleLabel) {
+        _subTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 126, 20)];
+        _subTitleLabel.center = CGPointMake([self.bgView bounds].size.width/2,[self.bgView bounds].size.height/2 + 48);
+        _subTitleLabel.text = @"手指上滑,取消发送";
+        _subTitleLabel.textAlignment = NSTextAlignmentCenter;
+        _subTitleLabel.font = [UIFont boldSystemFontOfSize:14];
+        _subTitleLabel.textColor = [UIColor whiteColor];
+        _subTitleLabel.layer.cornerRadius = 3.0;
+        _subTitleLabel.layer.masksToBounds = YES;
+    }
+    return _subTitleLabel;
+}
+
+#pragma mark - Class Methods
+
++ (CYLProgressHUD *)sharedView {
+    static dispatch_once_t once;
+    static CYLProgressHUD *sharedView;
+    dispatch_once(&once, ^ {
+        sharedView = [[CYLProgressHUD alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        //        sharedView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+        sharedView.backgroundColor = [UIColor clearColor];
+    });
+    return sharedView;
+}
+
++ (void)show {
+    [[CYLProgressHUD sharedView] show];
+}
+
++ (void)dismissWithProgressState:(CYLProgressState)progressState {
+    [[CYLProgressHUD sharedView] setProgressState:progressState];
+    [[CYLProgressHUD sharedView] dismiss];
+}
+
++ (void)dismissWithMessage:(NSString *)message {
+    [[CYLProgressHUD sharedView] setProgressState:CYLProgressMessage];
+    [CYLProgressHUD sharedView].centerLabel.text = message;
+    [[CYLProgressHUD sharedView] dismiss];
+}
+
++ (void)changeSubTitle:(NSString *)str
+{
+    [[CYLProgressHUD sharedView] setSubTitle:str];
+}
+
++ (NSTimeInterval)seconds{
+    return [[CYLProgressHUD sharedView] seconds] / 10;
+}
+
++ (void)realtimeChangeVolumeImageView:(float)volume timeLength:(NSTimeInterval)timeLength{
+    [[CYLProgressHUD sharedView] changeVolumeImageView:volume timeLength:timeLength];
+}
+
+@end

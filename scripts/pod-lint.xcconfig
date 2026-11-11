@@ -1,0 +1,5 @@
+// Dependencies such as pop, DACircularProgress, and SDWebImage 3 declare deployment targets
+// far below iOS 15.0, which current Xcode versions refuse to build. A Podfile post_install
+// hook does not run during `pod lib lint`, so xcodebuild applies this file (through
+// XCODE_XCCONFIG_FILE) on top of every target's settings instead.
+IPHONEOS_DEPLOYMENT_TARGET = 15.0

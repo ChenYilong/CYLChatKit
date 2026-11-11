@@ -1,0 +1,18 @@
+//
+//  CYLChatMoreCell.h
+//  CYLChatBarExample
+//
+//  Created by ElonChan ( https://github.com/ChenYilong/CYLChatKit ) on 15/8/18.
+//  Copyright (c) 2015年 https://LeanCloud.cn . All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+/*!
+ *  更多列表展示cell
+ */
+@interface CYLChatMoreItem : UIControl
+
+- (void)fillViewWithTitle:(NSString *)title imageName:(NSString *)imageName;
+
+@end

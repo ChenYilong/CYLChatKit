@@ -69,3 +69,35 @@
 "button.label.info.message" = "Information Message";
 "button.label.hide.all" = "Hide All";
 
+
+/* Chat bar, accessibility labels and hints, message rows, conversation rows (docs/accessibility.md) */
+"chatbar.send" = "Send";
+"chatbar.send.hint" = "Sends the typed message";
+"chatbar.voice.toVoice" = "Switch to voice input";
+"chatbar.voice.toKeyboard" = "Switch to keyboard";
+"chatbar.face" = "Emoji";
+"chatbar.face.hint" = "Shows the emoji panel";
+"chatbar.textview" = "Message";
+"chatbar.record" = "Hold to talk";
+"chatbar.record.release" = "Release to finish";
+"chatbar.record.hint" = "Press and hold to record a voice message, release to send";
+"plugin.pickImage" = "Photos";
+"plugin.takePhoto" = "Camera";
+"plugin.location" = "Location";
+"message.you" = "You";
+"message.image" = "Image";
+"message.voice" = "Voice message, %@ seconds";
+"message.video" = "Video";
+"message.location" = "Location: %@";
+"message.file" = "File";
+"message.status.sending" = "Sending";
+"message.status.failed" = "Failed to send";
+"message.status.read" = "Read";
+"message.action.resend" = "Resend";
+"message.action.profile" = "Open profile";
+"message.hint.play" = "Plays the voice message";
+"message.hint.open" = "Opens the message";
+"conversation.unread" = "%@ unread";
+"conversation.unread.muted" = "Unread messages";
+"conversation.muted" = "Muted";
+"contact.action.select" = "Selects the contact";
