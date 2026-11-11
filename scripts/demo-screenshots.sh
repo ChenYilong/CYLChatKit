@@ -65,12 +65,22 @@ APP=$(find "$DERIVED/Build/Products" -maxdepth 2 -name '*.app' -path '*iphonesim
 BUNDLE_ID=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP/Info.plist")
 echo "App: $APP ($BUNDLE_ID)"
 
+# Seed the keyboard preferences before the first boot. Otherwise the keyboard's first-use introduction ("Speed up your
+# typing by sliding your finger...", Slide to Type) covers the keyboard in the keyboard screenshot. Both preference
+# domains are written because it is not certain which one the keyboard reads on a given iOS version.
+PREFS="$HOME/Library/Developer/CoreSimulator/Devices/$DEVICE_ID/data/Library/Preferences"
+mkdir -p "$PREFS"
+for domain in com.apple.keyboard.preferences com.apple.Preferences; do
+    defaults write "$PREFS/$domain" DidShowContinuousPathIntroduction -bool true
+    defaults write "$PREFS/$domain" KeyboardContinuousPathEnabled -bool false
+done
+
 xcrun simctl boot "$DEVICE_ID" 2>/dev/null || true
 xcrun simctl bootstatus "$DEVICE_ID" -b
 xcrun simctl status_bar "$DEVICE_ID" override --time 9:41 --batteryState charged --batteryLevel 100 \
     --cellularBars 4 --wifiBars 3 || true
-# The demo's -LCCKDemoScreenshots flag keeps system overlays out of the screenshots: it skips the notification
-# permission request and does not open the keyboard (whose first-run swipe-typing introduction covers the screen).
+# The demo's -LCCKDemoScreenshots flag keeps app-side overlays out of the screenshots: it skips the notification
+# permission request and does not open the keyboard by itself (-LCCKDemoKeyboard does, for the keyboard screenshot).
 xcrun simctl install "$DEVICE_ID" "$APP"
 PROCESS_NAME=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$APP/Info.plist")
 
@@ -164,6 +174,8 @@ BLACK=""
 shoot login
 shoot conversations -LCCKDemoScreen conversations
 shoot chat -LCCKDemoScreen chat
+# The chat with the keyboard up: the app focuses the input field next to the 发送 button, as a tap would.
+shoot chat-keyboard -LCCKDemoScreen chat -LCCKDemoKeyboard YES
 
 xcrun simctl spawn "$DEVICE_ID" log show --last 2m --style compact \
     --predicate "process == \"$PROCESS_NAME\"" > "$OUT/app.log" 2>/dev/null || true

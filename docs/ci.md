@@ -25,6 +25,10 @@ launch argument `-LCCKDemoScreen` (an `NSUserDefaults` key):
 - no argument: the normal login screen (`login.png`)
 - `-LCCKDemoScreen conversations`: the tab bar UI without logging in (`conversations.png`)
 - `-LCCKDemoScreen chat`: a conversation view with peer `Jerry` pushed on the first tab (`chat.png`)
+- `-LCCKDemoScreen chat -LCCKDemoKeyboard YES`: the same chat with the input field focused, as a tap on the field next to
+  the 发送 (send) button would do, so the keyboard is up (`chat-keyboard.png`; see `docs/chat-bar-keyboard.md`). Before the
+  simulator boots, the script writes the keyboard's "Slide to Type" introduction as already shown, so that sheet does not
+  cover the keyboard.
 
 Every launch also passes `-LCCKDemoScreenshots YES`, which skips the notification permission request and keeps the
 login field from opening the keyboard, so no system overlay covers the app. When a launch crashes, the script prints

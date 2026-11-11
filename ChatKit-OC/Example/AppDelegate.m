@@ -17,6 +17,7 @@
 #import "LCChatKit.h"
 #endif
 #import "LCCKLoginViewController.h"
+#import "CYLChatBar.h"
 #import <AVOSCloud/AVOSCloud.h>
 #import <AVOSCloudIM/AVOSCloudIM.h>
 #import "LCCKLeanCloudIMProvider.h"
@@ -82,6 +83,8 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
  * without logging in to the IM service, which a CI runner cannot rely on:
  * - `conversations`: the tab bar with the conversation list.
  * - `chat`: a conversation screen with the chat input bar.
+ * `-LCCKDemoKeyboard YES` (with `chat`) then focuses the input field next to the 发送 (send) button, the same as
+ * tapping it, so the keyboard comes up and the screenshot shows the chat bar sitting on it.
  * Without the argument the app starts at the login screen as usual.
  */
 - (void)showScreenForScreenshotIfRequested {
@@ -97,6 +100,12 @@ static NSString *const LCCKAPPKEY = @"ye24iIK6ys8IvaISMC4Bs5WK";
         if ([firstViewController isKindOfClass:[UINavigationController class]]) {
             CYLConversationViewController *conversationViewController = [[CYLConversationViewController alloc] initWithPeerId:@"Jerry"];
             [(UINavigationController *)firstViewController pushViewController:conversationViewController animated:NO];
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"LCCKDemoKeyboard"]) {
+                // The chat bar is opened in -viewDidAppear:, so wait until the screen is up.
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [conversationViewController.chatBar beginInputing];
+                });
+            }
         }
     }
 }
