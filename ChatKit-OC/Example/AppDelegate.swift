@@ -76,10 +76,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         guard UserDefaults.standard.bool(forKey: "CYLDemoAccessibilityDump") else {
             return
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) { [weak self] in
-            guard let self = self else {
-                return
+        // Written every 2 s for 40 s, so the file always holds the current screen: on a slow CI simulator the screen can
+        // still be fading in when a single dump 4 s after launch would be taken.
+        for delay in stride(from: 2.0, through: 40.0, by: 2.0) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+                self?.writeAccessibilityDump()
             }
+        }
+    }
+
+    private func writeAccessibilityDump() {
+        do {
             // Walk every visible window of the app, the key window first: the screen on display is not always
             // `self.window` (the first CI run of the Swift demo wrote an empty dump from it).
             var windows = UIApplication.shared.connectedScenes
@@ -95,14 +102,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 self.appendAccessibility(of: window, depth: 0, to: &dump)
             }
             if dump.isEmpty {
-                for window in windows {
-                    self.appendViewTree(of: window, depth: 0, to: &dump)
-                }
-                // Diagnostics for CI: say what was walked instead of writing an empty file.
+                // Diagnostics for CI: say what was walked instead of writing an empty file, then the raw view tree with
+                // the properties that decide the walk, so the log shows where it stops.
                 dump = "(no accessibility elements; windows: \(windows.count))\n"
                     + windows.map { "  \(NSStringFromClass(type(of: $0))) key=\($0.isKeyWindow) alpha=\($0.alpha) "
                         + "subviews=\($0.subviews.count) root=\($0.rootViewController.map { NSStringFromClass(type(of: $0)) } ?? "nil")\n" }
                     .joined()
+                dump += "view tree:\n"
+                for window in windows {
+                    self.appendViewTree(of: window, depth: 1, to: &dump)
+                }
             }
             let directory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first ?? ""
             let path = (directory as NSString).appendingPathComponent("accessibility.txt")
@@ -112,7 +121,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     /// Diagnostics when nothing was found: the raw view tree with the properties that decide the walk.
     private func appendViewTree(of view: UIView, depth: Int, to dump: inout String) {
-        guard depth < 14 else { return }
+        guard depth < 40 else { return }
         dump += String(repeating: " ", count: depth * 2)
             + "\(NSStringFromClass(type(of: view))) hidden=\(view.isHidden) alpha=\(view.alpha) "
             + "axElement=\(view.isAccessibilityElement) axHidden=\(view.accessibilityElementsHidden) "

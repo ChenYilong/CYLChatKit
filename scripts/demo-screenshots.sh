@@ -174,7 +174,9 @@ shoot() {
     echo "===BEGIN SCREENSHOT $name.jpg==="
     base64 -i "$OUT/$name.jpg" | fold -w 120
     echo "===END SCREENSHOT $name.jpg==="
-    # What VoiceOver would find on this screen (the app writes it; see AppDelegate -dumpAccessibilityIfRequested).
+    # What VoiceOver would find on this screen. The app rewrites the file every 2 s (AppDelegate.swift,
+    # dumpAccessibilityIfRequested), so wait one more round after the screenshot to read the screen that was shot.
+    sleep 4
     data=$(xcrun simctl get_app_container "$DEVICE_ID" "$BUNDLE_ID" data 2>/dev/null || true)
     DUMP="$data/Documents/accessibility.txt"
     # The app writes it a few seconds after it starts, which can be after the screenshot on a slow first launch.
