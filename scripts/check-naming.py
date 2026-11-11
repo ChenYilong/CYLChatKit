@@ -12,7 +12,7 @@ import os, re, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FORBIDDEN = re.compile(r'LCCK|lcck_|LCChatKit(?!String)|\bAGEmoji|\bJZ[A-Z]|\bMp3Recorder')
 ALLOWED_LINES = re.compile(r'^\s*// Credit:|lcck_conversation_placeholder_avat|lcckkit : sdfsdf')
-SCAN_EXT = ('.h', '.m', '.mm', '.pch', '.xib', '.strings', '.sh', '.py', '.yml', '.podspec', 'Podfile')
+SCAN_EXT = ('.h', '.m', '.mm', '.swift', '.pch', '.xib', '.strings', '.sh', '.py', '.yml', '.podspec', 'Podfile')
 ALLOWED_PREFIX = {'core': ('CYL',), 'demo': ('CYLDemo',)}
 SYSTEM_CLASSES = {'AppDelegate'}
 # Vendored classes that still carry a foreign prefix; each one is a TODO in docs/naming.md.

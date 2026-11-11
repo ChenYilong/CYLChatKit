@@ -7,69 +7,64 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E41DDF5CD1FEF72F70EEB285 /* CYLDemoGroupConversationMemberInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2705F95659F5FBAAAEA788DD /* CYLDemoGroupConversationMemberInfoViewController.m */; };
-		0559B5CE3A663E3A3CFF76AD /* CYLDemoContactListController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0CB1FDB9FC4AD87BFBD45AA /* CYLDemoContactListController.m */; };
-		A7672B2444FA6A48C26F2611 /* CYLDemoContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D8A705227326F63D215FC7A /* CYLDemoContactCell.m */; };
-		D6C6062015836565A5F1DF69 /* CYLDemoContactCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B010ADA19D354A08D14BB107 /* CYLDemoContactCell.xib */; };
-		9320A86A2849EBC98CCC8C35 /* CYLDemoGroupConversationManagementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 231A4FE296B417FBCA0EAEDD /* CYLDemoGroupConversationManagementViewController.m */; };
+		01BDA379832FA8BD0110D578 /* CYLDemoSettingSwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518A4BC415DD8550968622A3 /* CYLDemoSettingSwitchCell.swift */; };
+		053637F01440FCB380A2D2A3 /* CYLDemoContactListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F7C3B67C42EA7BC0AAAA6D /* CYLDemoContactListController.swift */; };
+		080AB3EA959A485971496D5C /* CYLDemoChatKitExample+Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ECC54BD3A86FFAA70B2BFF /* CYLDemoChatKitExample+Setting.swift */; };
+		0EB8F06B2D271D80A5151452 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60D605A7A6547E243DB3C62 /* AppDelegate.swift */; };
+		1178CC4957C40B6538D0480E /* AVIMMessage+CYLDemoExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C1D0077188613786FE4BD67 /* AVIMMessage+CYLDemoExtension.swift */; };
+		131E61A711471908ED77B9CC /* CYLDemoSettingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A6803B7A259460FE8642D2 /* CYLDemoSettingItem.swift */; };
+		1FA1674A094E4679E7B5FEC9 /* UIColor+CYLDemoExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB1B4124CFE34A792AB509C /* UIColor+CYLDemoExtension.swift */; };
+		24E4D34F912074A41FC2F3EB /* CYLDemoEmotionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD134F6F3DFD02BC63079B8E /* CYLDemoEmotionMessage.swift */; };
+		258B2D30DB2B2FFC12B63C4D /* CYLDemoPlusButtonSubclass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F8C3001C096494DC63C669 /* CYLDemoPlusButtonSubclass.swift */; };
+		26707D923894AB8AB4775B49 /* CYLDemoLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951DDF7CE6D8DECD39DEC774 /* CYLDemoLoginViewController.swift */; };
 		2CED63493BE78D49FB7D2CF9 /* CYLDemoExample.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DA321A6C109B235AD56D1507 /* CYLDemoExample.bundle */; };
-		1EC742A9A64D35D2B5B383CA /* AVIMConversation+CYLDemoExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 0669560418FDF8FF4487F8ED /* AVIMConversation+CYLDemoExtension.m */; };
-		317AC316A0573F974B44268D /* CYLMessage+CYLDemoExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = A166CE33749D0D81CDBF99D9 /* CYLMessage+CYLDemoExtension.m */; };
-		3AFB59942977C9AA3976C547 /* AVIMMessage+CYLDemoExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = F93EE382B6E649274F68DFBB /* AVIMMessage+CYLDemoExtension.m */; };
-		3E9EB52CA58B5999E1FB7686 /* CYLDemoLeanCloudConversationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 17855C4993EC373D7E6D5B2F /* CYLDemoLeanCloudConversationService.m */; };
+		2D145439F37E89AD1EFFF147 /* CYLDemoGroupConversationManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB772F5AF17790A7B4F2C55B /* CYLDemoGroupConversationManagementViewController.swift */; };
+		2DAD26F884D15C457036AF19 /* CYLDemoSettingButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84660EB998DBD937C13C083C /* CYLDemoSettingButtonCell.swift */; };
+		35481E93C2D01217B16F3593 /* CYLDemoSettingFooterTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67622413C38E194985C03EAC /* CYLDemoSettingFooterTitleView.swift */; };
+		382346A1192A6369064B885F /* CYLDemoSettingHeaderTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A271994A4F2D794E3F64E0A /* CYLDemoSettingHeaderTitleView.swift */; };
+		40DC4B79B41F00648AC5F314 /* CYLDemoLeanCloudIMProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DEE6CB2D373DE01336A1AB2 /* CYLDemoLeanCloudIMProvider.swift */; };
+		43F2BC008294246263C9AA4D /* AVIMTypedMessage+CYLDemoExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50AB2FF86FD509028EC7DC0 /* AVIMTypedMessage+CYLDemoExtension.swift */; };
+		458BAD0BBB0769F06BCDA93E /* CYLDemoContactManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9F84E0BAFA18C2DE98F1E8 /* CYLDemoContactManager.swift */; };
+		4BEB3D92B57D45D16F3462F4 /* CYLDemoChatDetailHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6CB564DC997EE0F046F0AE /* CYLDemoChatDetailHelper.swift */; };
+		4C9DF0F0CC12C38BB5A275ED /* CYLDemoExampleConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06295A22B10C889336510329 /* CYLDemoExampleConstants.swift */; };
 		4F5E34B61FA069300067EB95 /* EmojisList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F5E34B51FA069300067EB95 /* EmojisList.plist */; };
 		4F5E34B81FA069540067EB95 /* [删除]@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F5E34B71FA069540067EB95 /* [删除]@2x.png */; };
-		560FCA8CFA42C345A0BC9B31 /* AVIMTypedMessage+CYLDemoExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 022F1E093BCB469ABEBD73A1 /* AVIMTypedMessage+CYLDemoExtension.m */; };
-		5A64B08CF04651B31F361271 /* CYLDemoEmotionMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 17B83CD24B84E995F26462DE /* CYLDemoEmotionMessage.m */; };
-		6FA5969799D8B0A04A1FE7AF /* CYLDemoLeanCloudIMProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 951BD5C139229E7A457A608C /* CYLDemoLeanCloudIMProvider.m */; };
-		9A4730621CECAEC500AEB86F /* CYLDemoUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47302E1CECAEC500AEB86F /* CYLDemoUser.m */; };
-		9A4730671CECAEC500AEB86F /* CYLDemoLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47303E1CECAEC500AEB86F /* CYLDemoLoginViewController.m */; };
+		5DE6D8927D75A1B1A253C0AC /* CYLDemoUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C5AC1ABD1A1187E1321E42C /* CYLDemoUtil.swift */; };
+		619F6ED3B63B5707911E8034 /* CYLDemoUserGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FF80D04ECCB49F0DF8151D /* CYLDemoUserGroupCell.swift */; };
+		66A76FCF8023FF19DA881515 /* CYLCommonUtils+CYLDemoExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C23A45C92ECD9B8336B4C03 /* CYLCommonUtils+CYLDemoExtension.swift */; };
+		66D65A69F99F104A15986494 /* CYLMessage+CYLDemoExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D974285F7B18C762D7E8DD00 /* CYLMessage+CYLDemoExtension.swift */; };
+		7A935450400922CFCCC5E909 /* CYLDemoLeanCloudSessionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D8129BEDDC6403B7756E4E /* CYLDemoLeanCloudSessionService.swift */; };
+		7C8A44B80454959292A1799C /* CYLDemoProfileNameEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273FCF197F7FEB70DF5903D6 /* CYLDemoProfileNameEditViewController.swift */; };
+		7CD361B45DFF9A4317E309D4 /* CYLDemoConstantsDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21E7DE1E306AD8242C70521 /* CYLDemoConstantsDefinition.swift */; };
+		8F1E5D59EA077A033F634409 /* CYLDemoChatKitExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9DD389681E6870E01251FC /* CYLDemoChatKitExample.swift */; };
+		92B04C214F573ACB548D75DD /* CYLDemoUIUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E25F91D85059F38C34ED19 /* CYLDemoUIUtility.swift */; };
 		9A4730681CECAEC500AEB86F /* CYLDemoLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A47303F1CECAEC500AEB86F /* CYLDemoLoginViewController.xib */; };
-		9A4730691CECAEC500AEB86F /* CYLDemoCustomAutoCompleteObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730421CECAEC500AEB86F /* CYLDemoCustomAutoCompleteObject.m */; };
-		9A47306A1CECAEC500AEB86F /* CYLDemoDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730441CECAEC500AEB86F /* CYLDemoDataSource.m */; };
-		9A47306B1CECAEC500AEB86F /* CYLDemoLoginDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730461CECAEC500AEB86F /* CYLDemoLoginDataSource.m */; };
-		9A47306C1CECAEC500AEB86F /* CYLDemoMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47304B1CECAEC500AEB86F /* CYLDemoMapViewController.m */; };
-		9A47306E1CECAEC500AEB86F /* CYLDemoUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730501CECAEC500AEB86F /* CYLDemoUtil.m */; };
-		9A47306F1CECAEC500AEB86F /* CYLDemoPlusButtonSubclass.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730531CECAEC500AEB86F /* CYLDemoPlusButtonSubclass.m */; };
 		9A4730701CECAEC500AEB86F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A4730551CECAEC500AEB86F /* Assets.xcassets */; };
 		9A4730711CECAEC500AEB86F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A4730561CECAEC500AEB86F /* LaunchScreen.storyboard */; };
-		9A4730731CECAEC500AEB86F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730591CECAEC500AEB86F /* main.m */; };
-		9A4730751CECAEC500AEB86F /* NSObject+CYLDemoHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47305E1CECAEC500AEB86F /* NSObject+CYLDemoHUD.m */; };
-		9A53BE401D8BB19C00AAB118 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE391D8BB19C00AAB118 /* AppDelegate.m */; };
-		9A53BE411D8BB19C00AAB118 /* CYLDemoChatKitExample.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE3B1D8BB19C00AAB118 /* CYLDemoChatKitExample.m */; };
-		9A53BE421D8BB19C00AAB118 /* CYLDemoChatKitExample+Setting.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE3D1D8BB19C00AAB118 /* CYLDemoChatKitExample+Setting.m */; };
-		9A53BE431D8BB19C00AAB118 /* CYLDemoTabBarControllerConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE3F1D8BB19C00AAB118 /* CYLDemoTabBarControllerConfig.m */; };
-		9A55EB351E00FC5A0079EB65 /* CYLDemoProfileNameEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A55EB341E00FC5A0079EB65 /* CYLDemoProfileNameEditViewController.m */; };
-		9A562A361E03D52F00BB23DD /* CYLDemoSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A231E03D52F00BB23DD /* CYLDemoSettingViewController.m */; };
-		9A562A371E03D52F00BB23DD /* CYLDemoSettingButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A261E03D52F00BB23DD /* CYLDemoSettingButtonCell.m */; };
-		9A562A381E03D52F00BB23DD /* CYLDemoSettingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A281E03D52F00BB23DD /* CYLDemoSettingCell.m */; };
-		9A562A391E03D52F00BB23DD /* CYLDemoSettingSwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A2A1E03D52F00BB23DD /* CYLDemoSettingSwitchCell.m */; };
-		9A562A3A1E03D52F00BB23DD /* CYLDemoSettingGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A2E1E03D52F00BB23DD /* CYLDemoSettingGroup.m */; };
-		9A562A3B1E03D52F00BB23DD /* CYLDemoSettingItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A301E03D52F00BB23DD /* CYLDemoSettingItem.m */; };
-		9A562A3C1E03D52F00BB23DD /* CYLDemoSettingFooterTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A331E03D52F00BB23DD /* CYLDemoSettingFooterTitleView.m */; };
-		9A562A3D1E03D52F00BB23DD /* CYLDemoSettingHeaderTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A351E03D52F00BB23DD /* CYLDemoSettingHeaderTitleView.m */; };
-		9A7E2DE91D5F1040003A7312 /* CYLDemoContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7E2DE81D5F1040003A7312 /* CYLDemoContactManager.m */; };
-		9AC3A4901DF9B7B400F3405F /* CYLDemoSingleConversationDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A48F1DF9B7B400F3405F /* CYLDemoSingleConversationDetailViewController.m */; };
-		9AC3A4931DF9B7D500F3405F /* CYLDemoGroupConversationDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4921DF9B7D500F3405F /* CYLDemoGroupConversationDetailViewController.m */; };
-		9AC3A4B81DF9BEE600F3405F /* CYLDemoUIUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4B31DF9BEE600F3405F /* CYLDemoUIUtility.m */; };
-		9AC3A4B91DF9BEE600F3405F /* UIColor+CYLDemoExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4B51DF9BEE600F3405F /* UIColor+CYLDemoExtension.m */; };
-		9AC3A4BA1DF9BEE600F3405F /* UIFont+CYLDemoExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4B71DF9BEE600F3405F /* UIFont+CYLDemoExtension.m */; };
-		9AC3A4CC1DF9C14500F3405F /* NSDate+CYLDemoExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4C71DF9C14500F3405F /* NSDate+CYLDemoExtension.m */; };
-		9AC3A4CD1DF9C14500F3405F /* NSFileManager+CYLDemoExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4C91DF9C14500F3405F /* NSFileManager+CYLDemoExtension.m */; };
-		9AC3A4D31DF9C16A00F3405F /* NSDate+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4D01DF9C16A00F3405F /* NSDate+Extension.m */; };
-		9AC3A4D41DF9C16A00F3405F /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4D21DF9C16A00F3405F /* NSDate+Utilities.m */; };
-		9AC3A4D71DF9C25200F3405F /* NSFileManager+Paths.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4D61DF9C25200F3405F /* NSFileManager+Paths.m */; };
-		9AC3A4DD1DF9C8BD00F3405F /* CYLDemoUserGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4DA1DF9C8BD00F3405F /* CYLDemoUserGroupCell.m */; };
-		9AC3A4DE1DF9C8BD00F3405F /* CYLDemoUserGroupItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4DC1DF9C8BD00F3405F /* CYLDemoUserGroupItemCell.m */; };
-		9AC3A4E21DF9CE0300F3405F /* CYLDemoChatDetailHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4E11DF9CE0300F3405F /* CYLDemoChatDetailHelper.m */; };
 		9AD665CC1D2277830040A4E3 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721B1CED662D004FDACC /* SystemConfiguration.framework */; };
 		9AD665CD1D22778B0040A4E3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */; };
 		9AD665CE1D2277920040A4E3 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721F1CED6644004FDACC /* CoreTelephony.framework */; };
 		9AD665CF1D22779A0040A4E3 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B72211CED664D004FDACC /* CoreLocation.framework */; };
-		C5C92F6F6C4B7B0667812ED3 /* CYLCommonUtils+CYLDemoExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = C0D281FD3CC22B2AD4F50E6D /* CYLCommonUtils+CYLDemoExtension.m */; };
+		9B5C2C5042B4683CEE4F21DA /* CYLDemoUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F560BB097C5975C0D54B0B6C /* CYLDemoUser.swift */; };
+		A544C6A1225E8EF055C3BB72 /* NSObject+CYLDemoHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D87CFE7CD773CE903551253 /* NSObject+CYLDemoHUD.swift */; };
+		A7A3B044529CE9D0061001AD /* UIFont+CYLDemoExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471756AD5C6AC867A2C8E77D /* UIFont+CYLDemoExtension.swift */; };
+		ACDF9A972522A408D5D52EEB /* CYLDemoSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BAEF138C7E097E6B88E11CD /* CYLDemoSettingViewController.swift */; };
+		B40773F11CCE8848F6D24D55 /* CYLDemoExampleLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04407FE285FB7A6FBE76F2DD /* CYLDemoExampleLocalization.swift */; };
+		C5260ACDEFDED94E9E33481D /* CYLDemoUserGroupItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D719D901D4188A93E43E0AFA /* CYLDemoUserGroupItemCell.swift */; };
+		CAC0D44FB83E72343F492CD8 /* CYLDemoContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0BF4C15FFD9B6285FE0635 /* CYLDemoContactCell.swift */; };
+		CDD1DE58AD5954FDF42A42B1 /* CYLDemoLoginDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4AE3017FE20FE5E399D347 /* CYLDemoLoginDataSource.swift */; };
 		D6B21DCFEA88FFA0694238EC /* libPods-ChatKit-OC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D62193C0ECACB72DC928AD70 /* libPods-ChatKit-OC.a */; };
-		DC69C37A7861B08FC4799F3D /* CYLDemoLeanCloudSessionService.m in Sources */ = {isa = PBXBuildFile; fileRef = 0233781E958C082D597A4D8F /* CYLDemoLeanCloudSessionService.m */; };
+		D6C6062015836565A5F1DF69 /* CYLDemoContactCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B010ADA19D354A08D14BB107 /* CYLDemoContactCell.xib */; };
+		D7803FEA3DB088A64824D3FA /* CYLDemoSettingGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED58ACFB7E9BBC650C60440 /* CYLDemoSettingGroup.swift */; };
+		D7897D2E7573044CB706ADFC /* CYLDemoGroupConversationMemberInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46033BE1A85A85A16401B4EE /* CYLDemoGroupConversationMemberInfoViewController.swift */; };
+		D8F027CEF4EFBCF2DB71FEF2 /* CYLDemoTabBarControllerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D6A3F35E369BDCD11B8F72 /* CYLDemoTabBarControllerConfig.swift */; };
+		DDC629A4F8E459FEE7650389 /* CYLDemoMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F85234A1E25704C94E9E54A /* CYLDemoMapViewController.swift */; };
 		E7586C4F1D630681000C18B4 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7586C4E1D630681000C18B4 /* CoreMotion.framework */; };
+		E75E9104AC4EC42C2113E426 /* AVIMConversation+CYLDemoExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318F98486C73D55AFA6478EE /* AVIMConversation+CYLDemoExtension.swift */; };
+		E96C85FEEB95D065E9CF4E8E /* CYLDemoGroupConversationDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ABCCDB4DA50E4835EB7418 /* CYLDemoGroupConversationDetailViewController.swift */; };
+		EBD7F57C710913662F404B01 /* CYLDemoLeanCloudConversationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D81CA3589E8C6A83B8D40 /* CYLDemoLeanCloudConversationService.swift */; };
+		EC33AD3EDC96FDC8871B0B75 /* CYLDemoSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12624404CBECE0986547B0A /* CYLDemoSettingCell.swift */; };
+		F5E63492C4C50820F3A4C409 /* CYLDemoSingleConversationDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398C3AC1ABF30239C44029A3 /* CYLDemoSingleConversationDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -86,132 +81,75 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		3DF176981CDA6BA7E3E51CDE /* CYLDemoGroupConversationMemberInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoGroupConversationMemberInfoViewController.h; sourceTree = "<group>"; };
-		2705F95659F5FBAAAEA788DD /* CYLDemoGroupConversationMemberInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoGroupConversationMemberInfoViewController.m; sourceTree = "<group>"; };
-		4EF1A70E78E9E01165FFAAAA /* CYLDemoContactListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoContactListController.h; sourceTree = "<group>"; };
-		A0CB1FDB9FC4AD87BFBD45AA /* CYLDemoContactListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoContactListController.m; sourceTree = "<group>"; };
-		C4D54A6FEFCB0BB1CBB969D2 /* CYLDemoContactCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoContactCell.h; sourceTree = "<group>"; };
-		2D8A705227326F63D215FC7A /* CYLDemoContactCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoContactCell.m; sourceTree = "<group>"; };
-		B010ADA19D354A08D14BB107 /* CYLDemoContactCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CYLDemoContactCell.xib; sourceTree = "<group>"; };
-		89C0FF4451DBD875B3B8A8AA /* CYLDemoGroupConversationManagementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoGroupConversationManagementViewController.h; sourceTree = "<group>"; };
-		231A4FE296B417FBCA0EAEDD /* CYLDemoGroupConversationManagementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoGroupConversationManagementViewController.m; sourceTree = "<group>"; };
-		DA321A6C109B235AD56D1507 /* CYLDemoExample.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CYLDemoExample.bundle; sourceTree = "<group>"; };
-		022F1E093BCB469ABEBD73A1 /* AVIMTypedMessage+CYLDemoExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AVIMTypedMessage+CYLDemoExtension.m"; sourceTree = "<group>"; };
-		0233781E958C082D597A4D8F /* CYLDemoLeanCloudSessionService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CYLDemoLeanCloudSessionService.m; sourceTree = "<group>"; };
-		0669560418FDF8FF4487F8ED /* AVIMConversation+CYLDemoExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AVIMConversation+CYLDemoExtension.m"; sourceTree = "<group>"; };
-		17855C4993EC373D7E6D5B2F /* CYLDemoLeanCloudConversationService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CYLDemoLeanCloudConversationService.m; sourceTree = "<group>"; };
-		17B83CD24B84E995F26462DE /* CYLDemoEmotionMessage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CYLDemoEmotionMessage.m; sourceTree = "<group>"; };
-		2380FFF0825E84C711209800 /* CYLDemoEmotionMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CYLDemoEmotionMessage.h; sourceTree = "<group>"; };
-		3D36EEFDD9498F40B768B63B /* CYLMessage+CYLDemoExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CYLMessage+CYLDemoExtension.h"; sourceTree = "<group>"; };
+		04407FE285FB7A6FBE76F2DD /* CYLDemoExampleLocalization.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoExampleLocalization.swift; sourceTree = "<group>"; };
+		06295A22B10C889336510329 /* CYLDemoExampleConstants.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoExampleConstants.swift; sourceTree = "<group>"; };
+		15FF80D04ECCB49F0DF8151D /* CYLDemoUserGroupCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoUserGroupCell.swift; sourceTree = "<group>"; };
+		16D8129BEDDC6403B7756E4E /* CYLDemoLeanCloudSessionService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoLeanCloudSessionService.swift; sourceTree = "<group>"; };
+		1DEE6CB2D373DE01336A1AB2 /* CYLDemoLeanCloudIMProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoLeanCloudIMProvider.swift; sourceTree = "<group>"; };
+		273FCF197F7FEB70DF5903D6 /* CYLDemoProfileNameEditViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoProfileNameEditViewController.swift; sourceTree = "<group>"; };
+		318F98486C73D55AFA6478EE /* AVIMConversation+CYLDemoExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "AVIMConversation+CYLDemoExtension.swift"; sourceTree = "<group>"; };
+		34ABCCDB4DA50E4835EB7418 /* CYLDemoGroupConversationDetailViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoGroupConversationDetailViewController.swift; sourceTree = "<group>"; };
+		398C3AC1ABF30239C44029A3 /* CYLDemoSingleConversationDetailViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoSingleConversationDetailViewController.swift; sourceTree = "<group>"; };
+		3A271994A4F2D794E3F64E0A /* CYLDemoSettingHeaderTitleView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoSettingHeaderTitleView.swift; sourceTree = "<group>"; };
+		3C1D0077188613786FE4BD67 /* AVIMMessage+CYLDemoExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "AVIMMessage+CYLDemoExtension.swift"; sourceTree = "<group>"; };
+		453D81CA3589E8C6A83B8D40 /* CYLDemoLeanCloudConversationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoLeanCloudConversationService.swift; sourceTree = "<group>"; };
+		46033BE1A85A85A16401B4EE /* CYLDemoGroupConversationMemberInfoViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoGroupConversationMemberInfoViewController.swift; sourceTree = "<group>"; };
+		471756AD5C6AC867A2C8E77D /* UIFont+CYLDemoExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIFont+CYLDemoExtension.swift"; sourceTree = "<group>"; };
 		4F5E34B51FA069300067EB95 /* EmojisList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = EmojisList.plist; sourceTree = "<group>"; };
 		4F5E34B71FA069540067EB95 /* [删除]@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "[删除]@2x.png"; sourceTree = "<group>"; };
+		518A4BC415DD8550968622A3 /* CYLDemoSettingSwitchCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoSettingSwitchCell.swift; sourceTree = "<group>"; };
+		57E25F91D85059F38C34ED19 /* CYLDemoUIUtility.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoUIUtility.swift; sourceTree = "<group>"; };
+		57ECC54BD3A86FFAA70B2BFF /* CYLDemoChatKitExample+Setting.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "CYLDemoChatKitExample+Setting.swift"; sourceTree = "<group>"; };
+		5C6CB564DC997EE0F046F0AE /* CYLDemoChatDetailHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoChatDetailHelper.swift; sourceTree = "<group>"; };
+		5F85234A1E25704C94E9E54A /* CYLDemoMapViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoMapViewController.swift; sourceTree = "<group>"; };
+		63D6A3F35E369BDCD11B8F72 /* CYLDemoTabBarControllerConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoTabBarControllerConfig.swift; sourceTree = "<group>"; };
+		67622413C38E194985C03EAC /* CYLDemoSettingFooterTitleView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoSettingFooterTitleView.swift; sourceTree = "<group>"; };
+		6BAEF138C7E097E6B88E11CD /* CYLDemoSettingViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoSettingViewController.swift; sourceTree = "<group>"; };
+		6C5AC1ABD1A1187E1321E42C /* CYLDemoUtil.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoUtil.swift; sourceTree = "<group>"; };
+		6C9F84E0BAFA18C2DE98F1E8 /* CYLDemoContactManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoContactManager.swift; sourceTree = "<group>"; };
 		7404AB0E0935F68A63803D6D /* Pods-ChatKit-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.release.xcconfig"; sourceTree = "<group>"; };
-		78932A7FCE2FEB02F2BCBE30 /* AVIMMessage+CYLDemoExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AVIMMessage+CYLDemoExtension.h"; sourceTree = "<group>"; };
-		88476BB114A869E434648F8D /* CYLCommonUtils+CYLDemoExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CYLCommonUtils+CYLDemoExtension.h"; sourceTree = "<group>"; };
-		951BD5C139229E7A457A608C /* CYLDemoLeanCloudIMProvider.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CYLDemoLeanCloudIMProvider.m; sourceTree = "<group>"; };
+		7D87CFE7CD773CE903551253 /* NSObject+CYLDemoHUD.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "NSObject+CYLDemoHUD.swift"; sourceTree = "<group>"; };
+		84660EB998DBD937C13C083C /* CYLDemoSettingButtonCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoSettingButtonCell.swift; sourceTree = "<group>"; };
+		86F8C3001C096494DC63C669 /* CYLDemoPlusButtonSubclass.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoPlusButtonSubclass.swift; sourceTree = "<group>"; };
+		8A9DD389681E6870E01251FC /* CYLDemoChatKitExample.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoChatKitExample.swift; sourceTree = "<group>"; };
+		951DDF7CE6D8DECD39DEC774 /* CYLDemoLoginViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoLoginViewController.swift; sourceTree = "<group>"; };
 		9A0B721B1CED662D004FDACC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		9A0B721F1CED6644004FDACC /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		9A0B72211CED664D004FDACC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		9A47302D1CECAEC500AEB86F /* CYLDemoUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoUser.h; sourceTree = "<group>"; };
-		9A47302E1CECAEC500AEB86F /* CYLDemoUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoUser.m; sourceTree = "<group>"; };
-		9A47303D1CECAEC500AEB86F /* CYLDemoLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoLoginViewController.h; sourceTree = "<group>"; };
-		9A47303E1CECAEC500AEB86F /* CYLDemoLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoLoginViewController.m; sourceTree = "<group>"; };
 		9A47303F1CECAEC500AEB86F /* CYLDemoLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CYLDemoLoginViewController.xib; sourceTree = "<group>"; };
-		9A4730411CECAEC500AEB86F /* CYLDemoCustomAutoCompleteObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoCustomAutoCompleteObject.h; sourceTree = "<group>"; };
-		9A4730421CECAEC500AEB86F /* CYLDemoCustomAutoCompleteObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoCustomAutoCompleteObject.m; sourceTree = "<group>"; };
-		9A4730431CECAEC500AEB86F /* CYLDemoDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoDataSource.h; sourceTree = "<group>"; };
-		9A4730441CECAEC500AEB86F /* CYLDemoDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoDataSource.m; sourceTree = "<group>"; };
-		9A4730451CECAEC500AEB86F /* CYLDemoLoginDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoLoginDataSource.h; sourceTree = "<group>"; };
-		9A4730461CECAEC500AEB86F /* CYLDemoLoginDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoLoginDataSource.m; sourceTree = "<group>"; };
-		9A47304A1CECAEC500AEB86F /* CYLDemoMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoMapViewController.h; sourceTree = "<group>"; };
-		9A47304B1CECAEC500AEB86F /* CYLDemoMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoMapViewController.m; sourceTree = "<group>"; };
-		9A47304E1CECAEC500AEB86F /* CYLDemoConstantsDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoConstantsDefinition.h; sourceTree = "<group>"; };
-		9A47304F1CECAEC500AEB86F /* CYLDemoUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoUtil.h; sourceTree = "<group>"; };
-		9A4730501CECAEC500AEB86F /* CYLDemoUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoUtil.m; sourceTree = "<group>"; };
-		9A4730521CECAEC500AEB86F /* CYLDemoPlusButtonSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoPlusButtonSubclass.h; sourceTree = "<group>"; };
-		9A4730531CECAEC500AEB86F /* CYLDemoPlusButtonSubclass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoPlusButtonSubclass.m; sourceTree = "<group>"; };
 		9A4730551CECAEC500AEB86F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9A4730571CECAEC500AEB86F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9A4730581CECAEC500AEB86F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9A4730591CECAEC500AEB86F /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		9A47305D1CECAEC500AEB86F /* NSObject+CYLDemoHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+CYLDemoHUD.h"; sourceTree = "<group>"; };
-		9A47305E1CECAEC500AEB86F /* NSObject+CYLDemoHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+CYLDemoHUD.m"; sourceTree = "<group>"; };
 		9A4CBADB1DB87F2000E61C92 /* ChatKit-OC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ChatKit-OC.entitlements"; sourceTree = "<group>"; };
-		9A53BE381D8BB19C00AAB118 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		9A53BE391D8BB19C00AAB118 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		9A53BE3A1D8BB19C00AAB118 /* CYLDemoChatKitExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoChatKitExample.h; sourceTree = "<group>"; };
-		9A53BE3B1D8BB19C00AAB118 /* CYLDemoChatKitExample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoChatKitExample.m; sourceTree = "<group>"; };
-		9A53BE3C1D8BB19C00AAB118 /* CYLDemoChatKitExample+Setting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CYLDemoChatKitExample+Setting.h"; sourceTree = "<group>"; };
-		9A53BE3D1D8BB19C00AAB118 /* CYLDemoChatKitExample+Setting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CYLDemoChatKitExample+Setting.m"; sourceTree = "<group>"; };
-		9A53BE3E1D8BB19C00AAB118 /* CYLDemoTabBarControllerConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoTabBarControllerConfig.h; sourceTree = "<group>"; };
-		9A53BE3F1D8BB19C00AAB118 /* CYLDemoTabBarControllerConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoTabBarControllerConfig.m; sourceTree = "<group>"; };
-		9A55EB331E00FC5A0079EB65 /* CYLDemoProfileNameEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoProfileNameEditViewController.h; sourceTree = "<group>"; };
-		9A55EB341E00FC5A0079EB65 /* CYLDemoProfileNameEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoProfileNameEditViewController.m; sourceTree = "<group>"; };
-		9A562A221E03D52F00BB23DD /* CYLDemoSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoSettingViewController.h; sourceTree = "<group>"; };
-		9A562A231E03D52F00BB23DD /* CYLDemoSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoSettingViewController.m; sourceTree = "<group>"; };
-		9A562A251E03D52F00BB23DD /* CYLDemoSettingButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoSettingButtonCell.h; sourceTree = "<group>"; };
-		9A562A261E03D52F00BB23DD /* CYLDemoSettingButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoSettingButtonCell.m; sourceTree = "<group>"; };
-		9A562A271E03D52F00BB23DD /* CYLDemoSettingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoSettingCell.h; sourceTree = "<group>"; };
-		9A562A281E03D52F00BB23DD /* CYLDemoSettingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoSettingCell.m; sourceTree = "<group>"; };
-		9A562A291E03D52F00BB23DD /* CYLDemoSettingSwitchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoSettingSwitchCell.h; sourceTree = "<group>"; };
-		9A562A2A1E03D52F00BB23DD /* CYLDemoSettingSwitchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoSettingSwitchCell.m; sourceTree = "<group>"; };
-		9A562A2B1E03D52F00BB23DD /* TLSettingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLSettingCell.h; sourceTree = "<group>"; };
-		9A562A2D1E03D52F00BB23DD /* CYLDemoSettingGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoSettingGroup.h; sourceTree = "<group>"; };
-		9A562A2E1E03D52F00BB23DD /* CYLDemoSettingGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoSettingGroup.m; sourceTree = "<group>"; };
-		9A562A2F1E03D52F00BB23DD /* CYLDemoSettingItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoSettingItem.h; sourceTree = "<group>"; };
-		9A562A301E03D52F00BB23DD /* CYLDemoSettingItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoSettingItem.m; sourceTree = "<group>"; };
-		9A562A321E03D52F00BB23DD /* CYLDemoSettingFooterTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoSettingFooterTitleView.h; sourceTree = "<group>"; };
-		9A562A331E03D52F00BB23DD /* CYLDemoSettingFooterTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoSettingFooterTitleView.m; sourceTree = "<group>"; };
-		9A562A341E03D52F00BB23DD /* CYLDemoSettingHeaderTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoSettingHeaderTitleView.h; sourceTree = "<group>"; };
-		9A562A351E03D52F00BB23DD /* CYLDemoSettingHeaderTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoSettingHeaderTitleView.m; sourceTree = "<group>"; };
 		9A754D4B1CECAC3E000967F1 /* ChatKit-OC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ChatKit-OC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9A7E2DE61D5F0B59003A7312 /* CYLDemoExampleConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoExampleConstants.h; sourceTree = "<group>"; };
-		9A7E2DE71D5F1040003A7312 /* CYLDemoContactManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoContactManager.h; sourceTree = "<group>"; };
-		9A7E2DE81D5F1040003A7312 /* CYLDemoContactManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoContactManager.m; sourceTree = "<group>"; };
 		9AAFE6571D48C863004A0309 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		9AB37B251DC86A60000782F2 /* ChatKit 自定义样式.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = "ChatKit 自定义样式.md"; path = "../../../../../ChatKit 自定义样式.md"; sourceTree = "<group>"; };
 		9AB37B261DC86A60000782F2 /* ChatKit 自定义业务.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = "ChatKit 自定义业务.md"; path = "../../../../../ChatKit 自定义业务.md"; sourceTree = "<group>"; };
 		9AB37B281DC86A60000782F2 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../../../../README.md; sourceTree = "<group>"; };
 		9AB37B2F1DC86A6E000782F2 /* issue_template.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = issue_template.md; path = ../../../../../.github/issue_template.md; sourceTree = "<group>"; };
 		9AB37B301DC86A6E000782F2 /* pull_request_template.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = pull_request_template.md; path = ../../../../../.github/pull_request_template.md; sourceTree = "<group>"; };
-		9AC3A48E1DF9B7B400F3405F /* CYLDemoSingleConversationDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoSingleConversationDetailViewController.h; sourceTree = "<group>"; };
-		9AC3A48F1DF9B7B400F3405F /* CYLDemoSingleConversationDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoSingleConversationDetailViewController.m; sourceTree = "<group>"; };
-		9AC3A4911DF9B7D500F3405F /* CYLDemoGroupConversationDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoGroupConversationDetailViewController.h; sourceTree = "<group>"; };
-		9AC3A4921DF9B7D500F3405F /* CYLDemoGroupConversationDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoGroupConversationDetailViewController.m; sourceTree = "<group>"; };
-		9AC3A4B21DF9BEE600F3405F /* CYLDemoUIUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoUIUtility.h; sourceTree = "<group>"; };
-		9AC3A4B31DF9BEE600F3405F /* CYLDemoUIUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoUIUtility.m; sourceTree = "<group>"; };
-		9AC3A4B41DF9BEE600F3405F /* UIColor+CYLDemoExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+CYLDemoExtension.h"; sourceTree = "<group>"; };
-		9AC3A4B51DF9BEE600F3405F /* UIColor+CYLDemoExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+CYLDemoExtension.m"; sourceTree = "<group>"; };
-		9AC3A4B61DF9BEE600F3405F /* UIFont+CYLDemoExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+CYLDemoExtension.h"; sourceTree = "<group>"; };
-		9AC3A4B71DF9BEE600F3405F /* UIFont+CYLDemoExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+CYLDemoExtension.m"; sourceTree = "<group>"; };
-		9AC3A4C61DF9C14500F3405F /* NSDate+CYLDemoExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+CYLDemoExtension.h"; sourceTree = "<group>"; };
-		9AC3A4C71DF9C14500F3405F /* NSDate+CYLDemoExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+CYLDemoExtension.m"; sourceTree = "<group>"; };
-		9AC3A4C81DF9C14500F3405F /* NSFileManager+CYLDemoExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+CYLDemoExtension.h"; sourceTree = "<group>"; };
-		9AC3A4C91DF9C14500F3405F /* NSFileManager+CYLDemoExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+CYLDemoExtension.m"; sourceTree = "<group>"; };
-		9AC3A4CF1DF9C16A00F3405F /* NSDate+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Extension.h"; sourceTree = "<group>"; };
-		9AC3A4D01DF9C16A00F3405F /* NSDate+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Extension.m"; sourceTree = "<group>"; };
-		9AC3A4D11DF9C16A00F3405F /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
-		9AC3A4D21DF9C16A00F3405F /* NSDate+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Utilities.m"; sourceTree = "<group>"; };
-		9AC3A4D51DF9C25200F3405F /* NSFileManager+Paths.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Paths.h"; sourceTree = "<group>"; };
-		9AC3A4D61DF9C25200F3405F /* NSFileManager+Paths.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Paths.m"; sourceTree = "<group>"; };
-		9AC3A4D91DF9C8BD00F3405F /* CYLDemoUserGroupCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoUserGroupCell.h; sourceTree = "<group>"; };
-		9AC3A4DA1DF9C8BD00F3405F /* CYLDemoUserGroupCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoUserGroupCell.m; sourceTree = "<group>"; };
-		9AC3A4DB1DF9C8BD00F3405F /* CYLDemoUserGroupItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoUserGroupItemCell.h; sourceTree = "<group>"; };
-		9AC3A4DC1DF9C8BD00F3405F /* CYLDemoUserGroupItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoUserGroupItemCell.m; sourceTree = "<group>"; };
-		9AC3A4E01DF9CE0300F3405F /* CYLDemoChatDetailHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYLDemoChatDetailHelper.h; sourceTree = "<group>"; };
-		9AC3A4E11DF9CE0300F3405F /* CYLDemoChatDetailHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYLDemoChatDetailHelper.m; sourceTree = "<group>"; };
-		9C41FB302EA3AF9C9EFA71D0 /* AVIMTypedMessage+CYLDemoExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AVIMTypedMessage+CYLDemoExtension.h"; sourceTree = "<group>"; };
-		A166CE33749D0D81CDBF99D9 /* CYLMessage+CYLDemoExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CYLMessage+CYLDemoExtension.m"; sourceTree = "<group>"; };
-		A81A200C5F6DA6E5CF65376C /* CYLDemoLeanCloudIMProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CYLDemoLeanCloudIMProvider.h; sourceTree = "<group>"; };
-		C0D281FD3CC22B2AD4F50E6D /* CYLCommonUtils+CYLDemoExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CYLCommonUtils+CYLDemoExtension.m"; sourceTree = "<group>"; };
+		9C23A45C92ECD9B8336B4C03 /* CYLCommonUtils+CYLDemoExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "CYLCommonUtils+CYLDemoExtension.swift"; sourceTree = "<group>"; };
+		AD134F6F3DFD02BC63079B8E /* CYLDemoEmotionMessage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoEmotionMessage.swift; sourceTree = "<group>"; };
+		AF4AE3017FE20FE5E399D347 /* CYLDemoLoginDataSource.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoLoginDataSource.swift; sourceTree = "<group>"; };
+		B010ADA19D354A08D14BB107 /* CYLDemoContactCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CYLDemoContactCell.xib; sourceTree = "<group>"; };
+		B60D605A7A6547E243DB3C62 /* AppDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C21E7DE1E306AD8242C70521 /* CYLDemoConstantsDefinition.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoConstantsDefinition.swift; sourceTree = "<group>"; };
+		C3F7C3B67C42EA7BC0AAAA6D /* CYLDemoContactListController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoContactListController.swift; sourceTree = "<group>"; };
+		C50AB2FF86FD509028EC7DC0 /* AVIMTypedMessage+CYLDemoExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "AVIMTypedMessage+CYLDemoExtension.swift"; sourceTree = "<group>"; };
+		CED58ACFB7E9BBC650C60440 /* CYLDemoSettingGroup.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoSettingGroup.swift; sourceTree = "<group>"; };
 		D62193C0ECACB72DC928AD70 /* libPods-ChatKit-OC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChatKit-OC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D719D901D4188A93E43E0AFA /* CYLDemoUserGroupItemCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoUserGroupItemCell.swift; sourceTree = "<group>"; };
+		D974285F7B18C762D7E8DD00 /* CYLMessage+CYLDemoExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "CYLMessage+CYLDemoExtension.swift"; sourceTree = "<group>"; };
+		DA321A6C109B235AD56D1507 /* CYLDemoExample.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CYLDemoExample.bundle; sourceTree = "<group>"; };
+		DB772F5AF17790A7B4F2C55B /* CYLDemoGroupConversationManagementViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoGroupConversationManagementViewController.swift; sourceTree = "<group>"; };
+		DDB1B4124CFE34A792AB509C /* UIColor+CYLDemoExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIColor+CYLDemoExtension.swift"; sourceTree = "<group>"; };
+		E12624404CBECE0986547B0A /* CYLDemoSettingCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoSettingCell.swift; sourceTree = "<group>"; };
 		E55D34EC8F162DB5443587B0 /* Pods-ChatKit-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.debug.xcconfig"; sourceTree = "<group>"; };
-		E68479705B82BD57C9D47CDF /* CYLDemoLeanCloudConversationService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CYLDemoLeanCloudConversationService.h; sourceTree = "<group>"; };
 		E7586C4E1D630681000C18B4 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
-		EBAF16851651C853B9AD2E54 /* AVIMConversation+CYLDemoExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AVIMConversation+CYLDemoExtension.h"; sourceTree = "<group>"; };
-		F34AC56EDFEBB45BC0F4BBF1 /* CYLDemoLeanCloudSessionService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CYLDemoLeanCloudSessionService.h; sourceTree = "<group>"; };
-		F93EE382B6E649274F68DFBB /* AVIMMessage+CYLDemoExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AVIMMessage+CYLDemoExtension.m"; sourceTree = "<group>"; };
+		F560BB097C5975C0D54B0B6C /* CYLDemoUser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoUser.swift; sourceTree = "<group>"; };
+		F9A6803B7A259460FE8642D2 /* CYLDemoSettingItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoSettingItem.swift; sourceTree = "<group>"; };
+		FD0BF4C15FFD9B6285FE0635 /* CYLDemoContactCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoContactCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -231,6 +169,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		154E0BBF4D12D1E40AC24FA8 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				C3F7C3B67C42EA7BC0AAAA6D /* CYLDemoContactListController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 		2C911BCC9532743030564C12 /* ContactList */ = {
 			isa = PBXGroup;
 			children = (
@@ -240,46 +186,18 @@
 			path = ContactList;
 			sourceTree = "<group>";
 		};
-		154E0BBF4D12D1E40AC24FA8 /* Controller */ = {
-			isa = PBXGroup;
-			children = (
-				4EF1A70E78E9E01165FFAAAA /* CYLDemoContactListController.h */,
-				A0CB1FDB9FC4AD87BFBD45AA /* CYLDemoContactListController.m */,
-			);
-			path = Controller;
-			sourceTree = "<group>";
-		};
-		E1F08BC7F753498FDECFA1DF /* View */ = {
-			isa = PBXGroup;
-			children = (
-				C4D54A6FEFCB0BB1CBB969D2 /* CYLDemoContactCell.h */,
-				2D8A705227326F63D215FC7A /* CYLDemoContactCell.m */,
-				B010ADA19D354A08D14BB107 /* CYLDemoContactCell.xib */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
 		51F089E8BD8FA22A9C0F2388 /* LeanCloud */ = {
 			isa = PBXGroup;
 			children = (
-				EBAF16851651C853B9AD2E54 /* AVIMConversation+CYLDemoExtension.h */,
-				0669560418FDF8FF4487F8ED /* AVIMConversation+CYLDemoExtension.m */,
-				2380FFF0825E84C711209800 /* CYLDemoEmotionMessage.h */,
-				17B83CD24B84E995F26462DE /* CYLDemoEmotionMessage.m */,
-				78932A7FCE2FEB02F2BCBE30 /* AVIMMessage+CYLDemoExtension.h */,
-				F93EE382B6E649274F68DFBB /* AVIMMessage+CYLDemoExtension.m */,
-				9C41FB302EA3AF9C9EFA71D0 /* AVIMTypedMessage+CYLDemoExtension.h */,
-				022F1E093BCB469ABEBD73A1 /* AVIMTypedMessage+CYLDemoExtension.m */,
-				88476BB114A869E434648F8D /* CYLCommonUtils+CYLDemoExtension.h */,
-				C0D281FD3CC22B2AD4F50E6D /* CYLCommonUtils+CYLDemoExtension.m */,
-				E68479705B82BD57C9D47CDF /* CYLDemoLeanCloudConversationService.h */,
-				17855C4993EC373D7E6D5B2F /* CYLDemoLeanCloudConversationService.m */,
-				A81A200C5F6DA6E5CF65376C /* CYLDemoLeanCloudIMProvider.h */,
-				951BD5C139229E7A457A608C /* CYLDemoLeanCloudIMProvider.m */,
-				F34AC56EDFEBB45BC0F4BBF1 /* CYLDemoLeanCloudSessionService.h */,
-				0233781E958C082D597A4D8F /* CYLDemoLeanCloudSessionService.m */,
-				3D36EEFDD9498F40B768B63B /* CYLMessage+CYLDemoExtension.h */,
-				A166CE33749D0D81CDBF99D9 /* CYLMessage+CYLDemoExtension.m */,
+				318F98486C73D55AFA6478EE /* AVIMConversation+CYLDemoExtension.swift */,
+				3C1D0077188613786FE4BD67 /* AVIMMessage+CYLDemoExtension.swift */,
+				C50AB2FF86FD509028EC7DC0 /* AVIMTypedMessage+CYLDemoExtension.swift */,
+				9C23A45C92ECD9B8336B4C03 /* CYLCommonUtils+CYLDemoExtension.swift */,
+				AD134F6F3DFD02BC63079B8E /* CYLDemoEmotionMessage.swift */,
+				453D81CA3589E8C6A83B8D40 /* CYLDemoLeanCloudConversationService.swift */,
+				1DEE6CB2D373DE01336A1AB2 /* CYLDemoLeanCloudIMProvider.swift */,
+				16D8129BEDDC6403B7756E4E /* CYLDemoLeanCloudSessionService.swift */,
+				D974285F7B18C762D7E8DD00 /* CYLMessage+CYLDemoExtension.swift */,
 			);
 			name = LeanCloud;
 			path = LeanCloud;
@@ -301,15 +219,11 @@
 		9A4730281CECAEC500AEB86F /* Example */ = {
 			isa = PBXGroup;
 			children = (
-				9A53BE381D8BB19C00AAB118 /* AppDelegate.h */,
-				9A53BE391D8BB19C00AAB118 /* AppDelegate.m */,
-				9A53BE3A1D8BB19C00AAB118 /* CYLDemoChatKitExample.h */,
-				9A53BE3B1D8BB19C00AAB118 /* CYLDemoChatKitExample.m */,
-				9A53BE3C1D8BB19C00AAB118 /* CYLDemoChatKitExample+Setting.h */,
-				9A53BE3D1D8BB19C00AAB118 /* CYLDemoChatKitExample+Setting.m */,
-				9A53BE3E1D8BB19C00AAB118 /* CYLDemoTabBarControllerConfig.h */,
-				9A53BE3F1D8BB19C00AAB118 /* CYLDemoTabBarControllerConfig.m */,
 				9A47302B1CECAEC500AEB86F /* Class */,
+				B60D605A7A6547E243DB3C62 /* AppDelegate.swift */,
+				57ECC54BD3A86FFAA70B2BFF /* CYLDemoChatKitExample+Setting.swift */,
+				8A9DD389681E6870E01251FC /* CYLDemoChatKitExample.swift */,
+				63D6A3F35E369BDCD11B8F72 /* CYLDemoTabBarControllerConfig.swift */,
 			);
 			path = Example;
 			sourceTree = "<group>";
@@ -328,8 +242,7 @@
 		9A47302C1CECAEC500AEB86F /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				9A47302D1CECAEC500AEB86F /* CYLDemoUser.h */,
-				9A47302E1CECAEC500AEB86F /* CYLDemoUser.m */,
+				F560BB097C5975C0D54B0B6C /* CYLDemoUser.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -359,9 +272,8 @@
 		9A47303C1CECAEC500AEB86F /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				9A47303D1CECAEC500AEB86F /* CYLDemoLoginViewController.h */,
-				9A47303E1CECAEC500AEB86F /* CYLDemoLoginViewController.m */,
 				9A47303F1CECAEC500AEB86F /* CYLDemoLoginViewController.xib */,
+				951DDF7CE6D8DECD39DEC774 /* CYLDemoLoginViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -369,12 +281,7 @@
 		9A4730401CECAEC500AEB86F /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				9A4730411CECAEC500AEB86F /* CYLDemoCustomAutoCompleteObject.h */,
-				9A4730421CECAEC500AEB86F /* CYLDemoCustomAutoCompleteObject.m */,
-				9A4730431CECAEC500AEB86F /* CYLDemoDataSource.h */,
-				9A4730441CECAEC500AEB86F /* CYLDemoDataSource.m */,
-				9A4730451CECAEC500AEB86F /* CYLDemoLoginDataSource.h */,
-				9A4730461CECAEC500AEB86F /* CYLDemoLoginDataSource.m */,
+				AF4AE3017FE20FE5E399D347 /* CYLDemoLoginDataSource.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -383,10 +290,9 @@
 			isa = PBXGroup;
 			children = (
 				9A4730491CECAEC500AEB86F /* Controller */,
-				9A47304E1CECAEC500AEB86F /* CYLDemoConstantsDefinition.h */,
-				9A47304F1CECAEC500AEB86F /* CYLDemoUtil.h */,
-				9A4730501CECAEC500AEB86F /* CYLDemoUtil.m */,
 				9A4730511CECAEC500AEB86F /* View */,
+				C21E7DE1E306AD8242C70521 /* CYLDemoConstantsDefinition.swift */,
+				6C5AC1ABD1A1187E1321E42C /* CYLDemoUtil.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -394,8 +300,7 @@
 		9A4730491CECAEC500AEB86F /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				9A47304A1CECAEC500AEB86F /* CYLDemoMapViewController.h */,
-				9A47304B1CECAEC500AEB86F /* CYLDemoMapViewController.m */,
+				5F85234A1E25704C94E9E54A /* CYLDemoMapViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -403,8 +308,7 @@
 		9A4730511CECAEC500AEB86F /* View */ = {
 			isa = PBXGroup;
 			children = (
-				9A4730521CECAEC500AEB86F /* CYLDemoPlusButtonSubclass.h */,
-				9A4730531CECAEC500AEB86F /* CYLDemoPlusButtonSubclass.m */,
+				86F8C3001C096494DC63C669 /* CYLDemoPlusButtonSubclass.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -418,7 +322,6 @@
 				DA321A6C109B235AD56D1507 /* CYLDemoExample.bundle */,
 				9A4730561CECAEC500AEB86F /* LaunchScreen.storyboard */,
 				9A4730581CECAEC500AEB86F /* Info.plist */,
-				9A4730591CECAEC500AEB86F /* main.m */,
 				9AB37B2F1DC86A6E000782F2 /* issue_template.md */,
 				9AB37B301DC86A6E000782F2 /* pull_request_template.md */,
 				9AB37B251DC86A60000782F2 /* ChatKit 自定义样式.md */,
@@ -431,10 +334,10 @@
 		9A47305A1CECAEC500AEB86F /* Tool */ = {
 			isa = PBXGroup;
 			children = (
-				9A7E2DE71D5F1040003A7312 /* CYLDemoContactManager.h */,
-				9A7E2DE81D5F1040003A7312 /* CYLDemoContactManager.m */,
 				9A47305B1CECAEC500AEB86F /* MBProgressHUD */,
-				9A7E2DE61D5F0B59003A7312 /* CYLDemoExampleConstants.h */,
+				6C9F84E0BAFA18C2DE98F1E8 /* CYLDemoContactManager.swift */,
+				06295A22B10C889336510329 /* CYLDemoExampleConstants.swift */,
+				04407FE285FB7A6FBE76F2DD /* CYLDemoExampleLocalization.swift */,
 			);
 			path = Tool;
 			sourceTree = "<group>";
@@ -442,8 +345,7 @@
 		9A47305B1CECAEC500AEB86F /* MBProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
-				9A47305D1CECAEC500AEB86F /* NSObject+CYLDemoHUD.h */,
-				9A47305E1CECAEC500AEB86F /* NSObject+CYLDemoHUD.m */,
+				7D87CFE7CD773CE903551253 /* NSObject+CYLDemoHUD.swift */,
 			);
 			path = MBProgressHUD;
 			sourceTree = "<group>";
@@ -451,13 +353,9 @@
 		9A562A241E03D52F00BB23DD /* SettingCells */ = {
 			isa = PBXGroup;
 			children = (
-				9A562A251E03D52F00BB23DD /* CYLDemoSettingButtonCell.h */,
-				9A562A261E03D52F00BB23DD /* CYLDemoSettingButtonCell.m */,
-				9A562A271E03D52F00BB23DD /* CYLDemoSettingCell.h */,
-				9A562A281E03D52F00BB23DD /* CYLDemoSettingCell.m */,
-				9A562A291E03D52F00BB23DD /* CYLDemoSettingSwitchCell.h */,
-				9A562A2A1E03D52F00BB23DD /* CYLDemoSettingSwitchCell.m */,
-				9A562A2B1E03D52F00BB23DD /* TLSettingCell.h */,
+				84660EB998DBD937C13C083C /* CYLDemoSettingButtonCell.swift */,
+				E12624404CBECE0986547B0A /* CYLDemoSettingCell.swift */,
+				518A4BC415DD8550968622A3 /* CYLDemoSettingSwitchCell.swift */,
 			);
 			path = SettingCells;
 			sourceTree = "<group>";
@@ -465,10 +363,8 @@
 		9A562A2C1E03D52F00BB23DD /* SettingModels */ = {
 			isa = PBXGroup;
 			children = (
-				9A562A2D1E03D52F00BB23DD /* CYLDemoSettingGroup.h */,
-				9A562A2E1E03D52F00BB23DD /* CYLDemoSettingGroup.m */,
-				9A562A2F1E03D52F00BB23DD /* CYLDemoSettingItem.h */,
-				9A562A301E03D52F00BB23DD /* CYLDemoSettingItem.m */,
+				CED58ACFB7E9BBC650C60440 /* CYLDemoSettingGroup.swift */,
+				F9A6803B7A259460FE8642D2 /* CYLDemoSettingItem.swift */,
 			);
 			path = SettingModels;
 			sourceTree = "<group>";
@@ -476,10 +372,8 @@
 		9A562A311E03D52F00BB23DD /* SettingViews */ = {
 			isa = PBXGroup;
 			children = (
-				9A562A321E03D52F00BB23DD /* CYLDemoSettingFooterTitleView.h */,
-				9A562A331E03D52F00BB23DD /* CYLDemoSettingFooterTitleView.m */,
-				9A562A341E03D52F00BB23DD /* CYLDemoSettingHeaderTitleView.h */,
-				9A562A351E03D52F00BB23DD /* CYLDemoSettingHeaderTitleView.m */,
+				67622413C38E194985C03EAC /* CYLDemoSettingFooterTitleView.swift */,
+				3A271994A4F2D794E3F64E0A /* CYLDemoSettingHeaderTitleView.swift */,
 			);
 			path = SettingViews;
 			sourceTree = "<group>";
@@ -518,16 +412,11 @@
 		9AC3A48A1DF9B72B00F3405F /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				3DF176981CDA6BA7E3E51CDE /* CYLDemoGroupConversationMemberInfoViewController.h */,
-				2705F95659F5FBAAAEA788DD /* CYLDemoGroupConversationMemberInfoViewController.m */,
-				89C0FF4451DBD875B3B8A8AA /* CYLDemoGroupConversationManagementViewController.h */,
-				231A4FE296B417FBCA0EAEDD /* CYLDemoGroupConversationManagementViewController.m */,
-				9AC3A48E1DF9B7B400F3405F /* CYLDemoSingleConversationDetailViewController.h */,
-				9AC3A48F1DF9B7B400F3405F /* CYLDemoSingleConversationDetailViewController.m */,
-				9AC3A4911DF9B7D500F3405F /* CYLDemoGroupConversationDetailViewController.h */,
-				9AC3A4921DF9B7D500F3405F /* CYLDemoGroupConversationDetailViewController.m */,
-				9A55EB331E00FC5A0079EB65 /* CYLDemoProfileNameEditViewController.h */,
-				9A55EB341E00FC5A0079EB65 /* CYLDemoProfileNameEditViewController.m */,
+				34ABCCDB4DA50E4835EB7418 /* CYLDemoGroupConversationDetailViewController.swift */,
+				DB772F5AF17790A7B4F2C55B /* CYLDemoGroupConversationManagementViewController.swift */,
+				46033BE1A85A85A16401B4EE /* CYLDemoGroupConversationMemberInfoViewController.swift */,
+				273FCF197F7FEB70DF5903D6 /* CYLDemoProfileNameEditViewController.swift */,
+				398C3AC1ABF30239C44029A3 /* CYLDemoSingleConversationDetailViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -551,11 +440,10 @@
 		9AC3A4941DF9BB6700F3405F /* SettingViewController */ = {
 			isa = PBXGroup;
 			children = (
-				9A562A221E03D52F00BB23DD /* CYLDemoSettingViewController.h */,
-				9A562A231E03D52F00BB23DD /* CYLDemoSettingViewController.m */,
 				9A562A241E03D52F00BB23DD /* SettingCells */,
 				9A562A2C1E03D52F00BB23DD /* SettingModels */,
 				9A562A311E03D52F00BB23DD /* SettingViews */,
+				6BAEF138C7E097E6B88E11CD /* CYLDemoSettingViewController.swift */,
 			);
 			path = SettingViewController;
 			sourceTree = "<group>";
@@ -572,12 +460,9 @@
 		9AC3A4B11DF9BEE600F3405F /* UIUtilities */ = {
 			isa = PBXGroup;
 			children = (
-				9AC3A4B21DF9BEE600F3405F /* CYLDemoUIUtility.h */,
-				9AC3A4B31DF9BEE600F3405F /* CYLDemoUIUtility.m */,
-				9AC3A4B41DF9BEE600F3405F /* UIColor+CYLDemoExtension.h */,
-				9AC3A4B51DF9BEE600F3405F /* UIColor+CYLDemoExtension.m */,
-				9AC3A4B61DF9BEE600F3405F /* UIFont+CYLDemoExtension.h */,
-				9AC3A4B71DF9BEE600F3405F /* UIFont+CYLDemoExtension.m */,
+				57E25F91D85059F38C34ED19 /* CYLDemoUIUtility.swift */,
+				DDB1B4124CFE34A792AB509C /* UIColor+CYLDemoExtension.swift */,
+				471756AD5C6AC867A2C8E77D /* UIFont+CYLDemoExtension.swift */,
 			);
 			path = UIUtilities;
 			sourceTree = "<group>";
@@ -585,16 +470,6 @@
 		9AC3A4C51DF9C14500F3405F /* DataUtilities */ = {
 			isa = PBXGroup;
 			children = (
-				9AC3A4D51DF9C25200F3405F /* NSFileManager+Paths.h */,
-				9AC3A4D61DF9C25200F3405F /* NSFileManager+Paths.m */,
-				9AC3A4CF1DF9C16A00F3405F /* NSDate+Extension.h */,
-				9AC3A4D01DF9C16A00F3405F /* NSDate+Extension.m */,
-				9AC3A4D11DF9C16A00F3405F /* NSDate+Utilities.h */,
-				9AC3A4D21DF9C16A00F3405F /* NSDate+Utilities.m */,
-				9AC3A4C61DF9C14500F3405F /* NSDate+CYLDemoExtension.h */,
-				9AC3A4C71DF9C14500F3405F /* NSDate+CYLDemoExtension.m */,
-				9AC3A4C81DF9C14500F3405F /* NSFileManager+CYLDemoExtension.h */,
-				9AC3A4C91DF9C14500F3405F /* NSFileManager+CYLDemoExtension.m */,
 			);
 			path = DataUtilities;
 			sourceTree = "<group>";
@@ -602,10 +477,8 @@
 		9AC3A4D81DF9C8BD00F3405F /* ConversationDetailCells */ = {
 			isa = PBXGroup;
 			children = (
-				9AC3A4D91DF9C8BD00F3405F /* CYLDemoUserGroupCell.h */,
-				9AC3A4DA1DF9C8BD00F3405F /* CYLDemoUserGroupCell.m */,
-				9AC3A4DB1DF9C8BD00F3405F /* CYLDemoUserGroupItemCell.h */,
-				9AC3A4DC1DF9C8BD00F3405F /* CYLDemoUserGroupItemCell.m */,
+				15FF80D04ECCB49F0DF8151D /* CYLDemoUserGroupCell.swift */,
+				D719D901D4188A93E43E0AFA /* CYLDemoUserGroupItemCell.swift */,
 			);
 			path = ConversationDetailCells;
 			sourceTree = "<group>";
@@ -613,8 +486,7 @@
 		9AC3A4DF1DF9CE0300F3405F /* ChatDetailHelper */ = {
 			isa = PBXGroup;
 			children = (
-				9AC3A4E01DF9CE0300F3405F /* CYLDemoChatDetailHelper.h */,
-				9AC3A4E11DF9CE0300F3405F /* CYLDemoChatDetailHelper.m */,
+				5C6CB564DC997EE0F046F0AE /* CYLDemoChatDetailHelper.swift */,
 			);
 			path = ChatDetailHelper;
 			sourceTree = "<group>";
@@ -626,6 +498,15 @@
 				7404AB0E0935F68A63803D6D /* Pods-ChatKit-OC.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		E1F08BC7F753498FDECFA1DF /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B010ADA19D354A08D14BB107 /* CYLDemoContactCell.xib */,
+				FD0BF4C15FFD9B6285FE0635 /* CYLDemoContactCell.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		E700C6F41D7192E800056E3C /* Recovered References */ = {
@@ -877,56 +758,51 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E41DDF5CD1FEF72F70EEB285 /* CYLDemoGroupConversationMemberInfoViewController.m in Sources */,
-				0559B5CE3A663E3A3CFF76AD /* CYLDemoContactListController.m in Sources */,
-				A7672B2444FA6A48C26F2611 /* CYLDemoContactCell.m in Sources */,
-				9320A86A2849EBC98CCC8C35 /* CYLDemoGroupConversationManagementViewController.m in Sources */,
-				9A47306F1CECAEC500AEB86F /* CYLDemoPlusButtonSubclass.m in Sources */,
-				9A4730671CECAEC500AEB86F /* CYLDemoLoginViewController.m in Sources */,
-				9AC3A4DD1DF9C8BD00F3405F /* CYLDemoUserGroupCell.m in Sources */,
-				9A53BE421D8BB19C00AAB118 /* CYLDemoChatKitExample+Setting.m in Sources */,
-				9A53BE411D8BB19C00AAB118 /* CYLDemoChatKitExample.m in Sources */,
-				9A55EB351E00FC5A0079EB65 /* CYLDemoProfileNameEditViewController.m in Sources */,
-				9A562A381E03D52F00BB23DD /* CYLDemoSettingCell.m in Sources */,
-				9A562A371E03D52F00BB23DD /* CYLDemoSettingButtonCell.m in Sources */,
-				9AC3A4D41DF9C16A00F3405F /* NSDate+Utilities.m in Sources */,
-				9AC3A4CD1DF9C14500F3405F /* NSFileManager+CYLDemoExtension.m in Sources */,
-				9AC3A4931DF9B7D500F3405F /* CYLDemoGroupConversationDetailViewController.m in Sources */,
-				9A47306A1CECAEC500AEB86F /* CYLDemoDataSource.m in Sources */,
-				9A562A3B1E03D52F00BB23DD /* CYLDemoSettingItem.m in Sources */,
-				9A562A391E03D52F00BB23DD /* CYLDemoSettingSwitchCell.m in Sources */,
-				9A47306C1CECAEC500AEB86F /* CYLDemoMapViewController.m in Sources */,
-				9A4730621CECAEC500AEB86F /* CYLDemoUser.m in Sources */,
-				9A47306E1CECAEC500AEB86F /* CYLDemoUtil.m in Sources */,
-				9A562A3C1E03D52F00BB23DD /* CYLDemoSettingFooterTitleView.m in Sources */,
-				9AC3A4E21DF9CE0300F3405F /* CYLDemoChatDetailHelper.m in Sources */,
-				9A562A3A1E03D52F00BB23DD /* CYLDemoSettingGroup.m in Sources */,
-				9A4730691CECAEC500AEB86F /* CYLDemoCustomAutoCompleteObject.m in Sources */,
-				9AC3A4B91DF9BEE600F3405F /* UIColor+CYLDemoExtension.m in Sources */,
-				9AC3A4901DF9B7B400F3405F /* CYLDemoSingleConversationDetailViewController.m in Sources */,
-				9A4730731CECAEC500AEB86F /* main.m in Sources */,
-				9A4730751CECAEC500AEB86F /* NSObject+CYLDemoHUD.m in Sources */,
-				9A53BE401D8BB19C00AAB118 /* AppDelegate.m in Sources */,
-				9AC3A4BA1DF9BEE600F3405F /* UIFont+CYLDemoExtension.m in Sources */,
-				9A53BE431D8BB19C00AAB118 /* CYLDemoTabBarControllerConfig.m in Sources */,
-				9A562A361E03D52F00BB23DD /* CYLDemoSettingViewController.m in Sources */,
-				9AC3A4CC1DF9C14500F3405F /* NSDate+CYLDemoExtension.m in Sources */,
-				9A47306B1CECAEC500AEB86F /* CYLDemoLoginDataSource.m in Sources */,
-				9AC3A4B81DF9BEE600F3405F /* CYLDemoUIUtility.m in Sources */,
-				9A562A3D1E03D52F00BB23DD /* CYLDemoSettingHeaderTitleView.m in Sources */,
-				9A7E2DE91D5F1040003A7312 /* CYLDemoContactManager.m in Sources */,
-				9AC3A4D31DF9C16A00F3405F /* NSDate+Extension.m in Sources */,
-				9AC3A4D71DF9C25200F3405F /* NSFileManager+Paths.m in Sources */,
-				9AC3A4DE1DF9C8BD00F3405F /* CYLDemoUserGroupItemCell.m in Sources */,
-				1EC742A9A64D35D2B5B383CA /* AVIMConversation+CYLDemoExtension.m in Sources */,
-				5A64B08CF04651B31F361271 /* CYLDemoEmotionMessage.m in Sources */,
-				3AFB59942977C9AA3976C547 /* AVIMMessage+CYLDemoExtension.m in Sources */,
-				560FCA8CFA42C345A0BC9B31 /* AVIMTypedMessage+CYLDemoExtension.m in Sources */,
-				C5C92F6F6C4B7B0667812ED3 /* CYLCommonUtils+CYLDemoExtension.m in Sources */,
-				3E9EB52CA58B5999E1FB7686 /* CYLDemoLeanCloudConversationService.m in Sources */,
-				6FA5969799D8B0A04A1FE7AF /* CYLDemoLeanCloudIMProvider.m in Sources */,
-				DC69C37A7861B08FC4799F3D /* CYLDemoLeanCloudSessionService.m in Sources */,
-				317AC316A0573F974B44268D /* CYLMessage+CYLDemoExtension.m in Sources */,
+				0EB8F06B2D271D80A5151452 /* AppDelegate.swift in Sources */,
+				080AB3EA959A485971496D5C /* CYLDemoChatKitExample+Setting.swift in Sources */,
+				8F1E5D59EA077A033F634409 /* CYLDemoChatKitExample.swift in Sources */,
+				D8F027CEF4EFBCF2DB71FEF2 /* CYLDemoTabBarControllerConfig.swift in Sources */,
+				E75E9104AC4EC42C2113E426 /* AVIMConversation+CYLDemoExtension.swift in Sources */,
+				1178CC4957C40B6538D0480E /* AVIMMessage+CYLDemoExtension.swift in Sources */,
+				43F2BC008294246263C9AA4D /* AVIMTypedMessage+CYLDemoExtension.swift in Sources */,
+				66A76FCF8023FF19DA881515 /* CYLCommonUtils+CYLDemoExtension.swift in Sources */,
+				24E4D34F912074A41FC2F3EB /* CYLDemoEmotionMessage.swift in Sources */,
+				EBD7F57C710913662F404B01 /* CYLDemoLeanCloudConversationService.swift in Sources */,
+				40DC4B79B41F00648AC5F314 /* CYLDemoLeanCloudIMProvider.swift in Sources */,
+				7A935450400922CFCCC5E909 /* CYLDemoLeanCloudSessionService.swift in Sources */,
+				66D65A69F99F104A15986494 /* CYLMessage+CYLDemoExtension.swift in Sources */,
+				9B5C2C5042B4683CEE4F21DA /* CYLDemoUser.swift in Sources */,
+				053637F01440FCB380A2D2A3 /* CYLDemoContactListController.swift in Sources */,
+				CAC0D44FB83E72343F492CD8 /* CYLDemoContactCell.swift in Sources */,
+				E96C85FEEB95D065E9CF4E8E /* CYLDemoGroupConversationDetailViewController.swift in Sources */,
+				2D145439F37E89AD1EFFF147 /* CYLDemoGroupConversationManagementViewController.swift in Sources */,
+				D7897D2E7573044CB706ADFC /* CYLDemoGroupConversationMemberInfoViewController.swift in Sources */,
+				7C8A44B80454959292A1799C /* CYLDemoProfileNameEditViewController.swift in Sources */,
+				F5E63492C4C50820F3A4C409 /* CYLDemoSingleConversationDetailViewController.swift in Sources */,
+				4BEB3D92B57D45D16F3462F4 /* CYLDemoChatDetailHelper.swift in Sources */,
+				ACDF9A972522A408D5D52EEB /* CYLDemoSettingViewController.swift in Sources */,
+				2DAD26F884D15C457036AF19 /* CYLDemoSettingButtonCell.swift in Sources */,
+				EC33AD3EDC96FDC8871B0B75 /* CYLDemoSettingCell.swift in Sources */,
+				01BDA379832FA8BD0110D578 /* CYLDemoSettingSwitchCell.swift in Sources */,
+				D7803FEA3DB088A64824D3FA /* CYLDemoSettingGroup.swift in Sources */,
+				131E61A711471908ED77B9CC /* CYLDemoSettingItem.swift in Sources */,
+				35481E93C2D01217B16F3593 /* CYLDemoSettingFooterTitleView.swift in Sources */,
+				382346A1192A6369064B885F /* CYLDemoSettingHeaderTitleView.swift in Sources */,
+				619F6ED3B63B5707911E8034 /* CYLDemoUserGroupCell.swift in Sources */,
+				C5260ACDEFDED94E9E33481D /* CYLDemoUserGroupItemCell.swift in Sources */,
+				26707D923894AB8AB4775B49 /* CYLDemoLoginViewController.swift in Sources */,
+				CDD1DE58AD5954FDF42A42B1 /* CYLDemoLoginDataSource.swift in Sources */,
+				7CD361B45DFF9A4317E309D4 /* CYLDemoConstantsDefinition.swift in Sources */,
+				5DE6D8927D75A1B1A253C0AC /* CYLDemoUtil.swift in Sources */,
+				DDC629A4F8E459FEE7650389 /* CYLDemoMapViewController.swift in Sources */,
+				258B2D30DB2B2FFC12B63C4D /* CYLDemoPlusButtonSubclass.swift in Sources */,
+				92B04C214F573ACB548D75DD /* CYLDemoUIUtility.swift in Sources */,
+				1FA1674A094E4679E7B5FEC9 /* UIColor+CYLDemoExtension.swift in Sources */,
+				A7A3B044529CE9D0061001AD /* UIFont+CYLDemoExtension.swift in Sources */,
+				458BAD0BBB0769F06BCDA93E /* CYLDemoContactManager.swift in Sources */,
+				4C9DF0F0CC12C38BB5A275ED /* CYLDemoExampleConstants.swift in Sources */,
+				B40773F11CCE8848F6D24D55 /* CYLDemoExampleLocalization.swift in Sources */,
+				A544C6A1225E8EF055C3BB72 /* NSObject+CYLDemoHUD.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -988,6 +864,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1028,6 +905,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1039,6 +917,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "ChatKit-OC.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1076,6 +955,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1085,6 +965,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "ChatKit-OC.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1122,6 +1003,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

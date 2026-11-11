@@ -1,6 +1,9 @@
 target 'ChatKit-OC' do
   project 'ChatKit-OC.xcodeproj'
   platform :ios, '15.0'
+  # The demo is Swift (AGENTS.md): pods are frameworks, so `import CYLChatKit` works. Static linkage keeps the pods that ship
+  # static libraries (AVOSCloud, lame.framework) linking as before.
+  use_frameworks! :linkage => :static
   inhibit_all_warnings!
 
   #=========================================================
@@ -24,7 +27,7 @@ target 'ChatKit-OC' do
   # CYLTabBarController is always the newest commit of its repository on any branch, by commit time, not a version
   # (AGENTS.md, "CYLTabBarController dependency"). scripts/update-cyltabbarcontroller-commit.sh rewrites the next
   # line before every build.
-  pod 'CYLTabBarController', :git => 'https://github.com/ChenYilong/CYLTabBarController.git', :commit => '0f9b56e7ac92c6a3a3c98bd8c4df1e4964cb00b3'
+  pod 'CYLTabBarController', :git => 'https://github.com/ChenYilong/CYLTabBarController.git', :commit => 'aa8a085007a2e38e6e1ff67a566a32db10a1f2b1'
   pod 'TWMessageBarManager', '1.8.1'
   pod 'MLPAutoCompleteTextField', '1.5'
   pod 'FTPopOverMenu', '2.1.4'

@@ -16,11 +16,11 @@
 
 @class CYLContact;
 
-typedef enum : NSUInteger {
+typedef NS_ENUM(NSUInteger, CYLContactListMode) {
     CYLContactListModeNormal,
     CYLContactListModeSingleSelection,
     CYLContactListModeMultipleSelection
-} CYLContactListMode;
+};
 NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^CYLSelectedContactCallback)(UIViewController *viewController, NSString *peerId);

@@ -65,9 +65,10 @@ def parse(path):
     return keys, pairs
 
 
-LOCALIZATION_API = re.compile(r'NSLocalizedString\w*|localizedStringForKey:')
+LOCALIZATION_API = re.compile(r'NSLocalizedString\w*|localizedStringForKey:|localizedString\(forKey')
+SWIFT_FUNC = re.compile(r'^func[ \t]+(\w+)\([^)]*\)[^{]*\{', re.M)
 MACRO = re.compile(r'^[ \t]*#[ \t]*define[ \t]+(\w+)(?:\([^)]*\))?((?:[^\n]*\\\n)*[^\n]*)', re.M)
-STRING_LITERAL = re.compile(r'@"((?:[^"\\]|\\.)*)"')
+STRING_LITERAL = re.compile(r'@?"((?:[^"\\]|\\.)*)"')
 
 
 def bundle_names(root, base):
@@ -88,9 +89,16 @@ def layer_macros(root, base, skip):
         if any(part in dirpath.replace(os.sep, '/').split('/') for part in skip):
             continue
         for name in filenames:
-            if not name.endswith('.h'):
+            if not name.endswith(('.h', '.swift')):
                 continue
             text = open(os.path.join(dirpath, name), encoding='utf-8', errors='replace').read()
+            if name.endswith('.swift'):
+                # Swift has no function-like macros: a global function that reads a bundle is the layer accessor.
+                for m in SWIFT_FUNC.finditer(text):
+                    body = text[m.end():text.find('\n}', m.end())]
+                    if LOCALIZATION_API.search(body):
+                        macros[m.group(1)] = STRING_LITERAL.findall(body)
+                continue
             for m in MACRO.finditer(text):
                 body = m.group(2)
                 if LOCALIZATION_API.search(body):
@@ -143,7 +151,7 @@ def check_used_keys(root, base, macros, skip, tables):
             if any(part in dirpath.replace(os.sep, '/').split('/') for part in skip):
                 continue
             for filename in filenames:
-                if not filename.endswith(('.m', '.mm', '.h')):
+                if not filename.endswith(('.m', '.mm', '.h', '.swift')):
                     continue
                 path = os.path.join(dirpath, filename)
                 text = open(path, encoding='utf-8', errors='replace').read()

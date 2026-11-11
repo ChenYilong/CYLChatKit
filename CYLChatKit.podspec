@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
     # later (#error), and UIKit provides the class on every supported iOS version.
     # The lame header ships inside lame.framework (vendored below) and is imported as <lame/lame.h>. Keeping it out
     # of the pod's own headers keeps it out of the CYLChatKit umbrella header, where it broke the module build.
-    core.exclude_files = 'ChatKit/Class/Tool/Vendor/CYLTableViewRowAction/UITableViewRowAction.m',
+    core.exclude_files = 'ChatKit/Class/Tool/Vendor/CYLTableViewRowAction/CYLTableViewRowAction.m',
                          'ChatKit/Class/Tool/Vendor/VoiceLib/lame.framework/**/*'
     core.vendored_frameworks = 'ChatKit/Class/Tool/Vendor/VoiceLib/lame.framework'
     # lame.framework has device slices (armv7, armv7s, arm64) and Intel simulator slices (i386, x86_64), but no arm64

@@ -60,7 +60,7 @@ typedef NS_ENUM(NSInteger, CYLBarButtonItemStyle) {
 
 @interface CYLChatBaseViewController : UIViewController <CYLViewControllerEventProtocol>
 
-- (void)configureBarButtonItemStyle:(CYLBarButtonItemStyle)style action:(CYLBarButtonItemActionBlock)action;
+- (void)configureBarButtonItemStyle:(CYLBarButtonItemStyle)style action:(CYLBarButtonItemActionBlock)action NS_SWIFT_NAME(configureBarButtonItem(style:action:));
 
 - (void)alert:(NSString *)message;
 

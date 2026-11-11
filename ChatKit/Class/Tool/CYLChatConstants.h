@@ -116,6 +116,10 @@ static NSString *const CYLBadgeTextForNumberGreaterThanLimit = @"···";
     NSLocalizedStringFromTableInBundle(key, @"LCChatKitString", [NSBundle cyl_bundleForName:@"Other" class:[CYLChatKit class]], nil)
 #endif
 
+/// Function form of `CYLLocalizedStrings` for Swift callers (Swift cannot import function-like macros). Same bundle and
+/// table: `Other.bundle`, `LCChatKitString`.
+FOUNDATION_EXTERN NSString *CYLLocalizedStringForKey(NSString *key);
+
 
 #ifdef DEBUG
 #define CYLLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ## __VA_ARGS__);
@@ -240,7 +244,7 @@ typedef NS_ENUM(NSUInteger, CYLConversationType){
 typedef NS_ENUM(NSUInteger, CYLMessageOwnerType){
     CYLMessageOwnerTypeUnknown = 0 /**< 未知的消息拥有者 */,
     CYLMessageOwnerTypeSystem /**< 系统消息 */,
-    CYLMessageOwnerTypeSelf /**< 自己发送的消息 */,
+    CYLMessageOwnerTypeSelf NS_SWIFT_NAME(mine) /**< 自己发送的消息 */,
     CYLMessageOwnerTypeOther /**< 接收到的他人消息 */,
 };
 
@@ -395,7 +399,7 @@ static CGFloat const CYLAnimateDuration = .25f;
 /*!
  *  提示信息的类型定义
  */
-typedef enum : NSUInteger {
+typedef NS_ENUM(NSUInteger, CYLMessageNotificationType) {
     /// 普通消息
     CYLMessageNotificationTypeMessage = 0,
     /// 警告
@@ -404,12 +408,12 @@ typedef enum : NSUInteger {
     CYLMessageNotificationTypeError,
     /// 成功
     CYLMessageNotificationTypeSuccess
-} CYLMessageNotificationType;
+};
 
 /*!
  * HUD的行为
  */
-typedef enum : NSUInteger {
+typedef NS_ENUM(NSUInteger, CYLMessageHUDActionType) {
     /// 展示
     CYLMessageHUDActionTypeShow,
     /// 隐藏
@@ -418,7 +422,7 @@ typedef enum : NSUInteger {
     CYLMessageHUDActionTypeError,
     /// 成功
     CYLMessageHUDActionTypeSuccess
-} CYLMessageHUDActionType;
+};
 
 typedef enum : NSUInteger {
     CYLChatScrollDirectionNone,

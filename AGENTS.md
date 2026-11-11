@@ -80,9 +80,9 @@ CocoaPods, never by copying its sources, and never by a released version number.
 
 ## Swift examples and Swift compatibility of core
 
-- **Every iOS example is written in Swift.** New example code is Swift only. The existing Objective-C demo
-  (`ChatKit-OC/`) is migrated to Swift; until that is done, do not add Objective-C files to it, and record the
-  remaining work as `TODO` in `docs/swift-guide.md`. Examples import only the library module (`import CYLChatKit`)
+- **Every iOS example is written in Swift.** New example code is Swift only. The demo (`ChatKit-OC/`) is
+  Swift only and has no Objective-C files; never add one (not even a bridging header). Record remaining work as `TODO` in
+  `docs/swift-guide.md`. Examples import only the library module (`import CYLChatKit`)
   and follow CYLTabBarController's Swift demos (CocoaPods with `use_frameworks!`, Swift 5).
 - **Fix Objective-C interop problems in core, not in the example.** When Swift example code meets an Objective-C API
   that imports badly (implicitly unwrapped optionals, `Any` collections, awkward names, prefixed enum cases, untyped

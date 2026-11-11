@@ -47,6 +47,6 @@ FOUNDATION_EXTERN NSString *const CYLSessionServiceErrorDemain;
  * Asks the user whether to log in again after another device took over the session,
  * then invokes `forceReconnectSessionBlock`. IM providers call this for single sign-on errors.
  */
-- (void)handleSingleSignOnError:(NSError *)error callback:(CYLBooleanResultBlock)callback;
+- (void)handleSingleSignOnError:(NSError *)error callback:(CYLBooleanResultBlock)callback NS_SWIFT_NAME(handleSingleSignOnError(_:callback:));
 
 @end

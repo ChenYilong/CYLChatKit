@@ -28,6 +28,11 @@ Name clashes: none of the new names exists in CYLTabBarController (checked again
 only for `CYLDemoAppearanceTheme*` and `CYLDemoApplyTheme*`; no demo class here shares those names). Repeat the check
 when the pin moves (`AGENTS.md`).
 
+Build note: the podspec excludes the row-action backport by file name (it has an `#error` for iOS 8+ SDKs), so renaming
+`UITableViewRowAction.m` to `CYLTableViewRowAction.m` needs the same change in `exclude_files`. The first CI run of the
+rename (run 42935160587, jobs `Build demo` and `pod lib lint`) failed exactly there; the `CYLEmoji*` and `CYLMp3Recorder`
+renames compiled without errors in that run.
+
 ## TODO
 
 - TODO: Verify the rename with the CI build. It was done mechanically on Linux without a compiler: xib `customClass`
@@ -47,8 +52,6 @@ when the pin moves (`AGENTS.md`).
   twin and a deprecated alias.
 - TODO: The demo's vendored DateTools copy still has `D_DAY`-style macros and `CURRENT_CALENDAR`, and the demo has
   `HEIGHT_SETTING_*` macros and the `UITableViewRowActionHandler` block type. Rename them to `CYLDEMO_` / `CYLDemo`.
-- TODO: The demo has duplicate files (for example `Example/CYLDemoChatKitExample.m` and
-  `Example/Class/Module/Main/CYLDemoChatKitExample.m`); only the ones in the project are built. Remove the stale copies.
 - TODO: `docs/api-reference.md` is the pre-review reference: its left-hand "old name" columns correctly keep `LCCK`
   names, but the per-file sections for the demo-facing facade were only updated by hand (`CYLChatKit`). Regenerate it
   with the next API pass.

@@ -20,18 +20,39 @@ Swift, in the same change.
 | `[CYLChatKit sharedInstance]` (formerly `[LCChatKit sharedInstance]`) | `CYLChatKit.sharedInstance()` | none yet; the class was renamed from `LCChatKit`, see `docs/naming.md` |
 | `[[CYLConversationViewController alloc] initWithPeerId:peerId]` | `CYLConversationViewController(peerId:)` | none yet |
 | `[[CYLConversationViewController alloc] initWithConversationId:conversationId]` | `CYLConversationViewController(conversationId:)` | none yet |
+| `typedef enum : NSUInteger {...} CYLMessageNotificationType` | `CYLMessageNotificationType` with `.message`, `.warning`, `.error`, `.success` | changed to `NS_ENUM` (same values) |
+| `CYLMessageHUDActionType`, `CYLContactListMode` | `.show` / `.hide` / `.error` / `.success`; `.normal` / `.singleSelection` / `.multipleSelection` | changed to `NS_ENUM` (same values) |
+| `CYLMessageOwnerTypeSelf` | `CYLMessageOwnerType.mine` (`.self` is reserved) | `NS_SWIFT_NAME(mine)` beside the case |
+| `CYLLocalizedStrings(key)` (macro) | `CYLLocalizedStringForKey(_:)` | new C function `CYLLocalizedStringForKey` in `CYLChatConstants.h/.m`, same bundle and table |
+| `-configureBarButtonItemStyle:action:` | `configureBarButtonItem(style:action:)` | `NS_SWIFT_NAME` beside the declaration |
+| `-setBackgroundImage:forConversationId:scaledToSize:` | `setBackgroundImage(_:forConversationId:scaledToSize:)` | `NS_SWIFT_NAME` beside the declaration |
+| `-handleSingleSignOnError:callback:` | `handleSingleSignOnError(_:callback:)` | `NS_SWIFT_NAME` beside the declaration |
+
 
 ## TODO
 
-- TODO: Migrate the iOS example (`ChatKit-OC/`, Objective-C) to Swift: app delegate, LeanCloud provider
-  (`ChatKit-OC/Example/Class/LeanCloud`), login, contacts, conversation detail, settings, and utilities. Keep the
-  screenshot launch hooks (`-CYLDemoScreen`, `-CYLDemoScreenshots`) and the CI build and screenshots green after each
-  step. Decide whether the migrated demo keeps the `ChatKit-OC` folder and scheme names (CI and docs refer to them).
-- TODO: Audit the core public headers for Swift import quality: nullability coverage, untyped collections, string
-  constants that should be `NS_TYPED_ENUM`, and enums that are plain C enums (for example `CYLChatScrollDirection`).
-  Fix them in core as the Swift example needs them, and add each change to the name map above.
-- TODO: Find `cyl_` protocol methods that Swift classes must implement (for example in `CYLIMProvider` and the model
-  protocols `CYLConversationProtocol` and `CYLIMMessageProtocol`) and add underscore-free twins with `NS_SWIFT_NAME`
-  as CYLTabBarController does; core must call the twin when it is implemented.
-- TODO: Localization from Swift: core needs a function form of `CYLLocalizedStrings` (function-like macros are not
-  imported into Swift), and the Swift example needs its own accessor for `CYLDemoExample.bundle`. See `docs/localization.md`.
+- TODO: The Swift demo (`ChatKit-OC/Example`, all Objective-C removed) was translated without a compiler. Verify it with
+  the CI `Examples` and `Simulator screenshots` jobs and fix compile errors by changing core only with Swift macros
+  beside the declarations (`NS_SWIFT_NAME`, `NS_REFINED_FOR_SWIFT`, `NS_ENUM`, nullability), never by editing signatures.
+  Names the Swift code guessed at the importer: see the list in `docs/naming.md`-style notes below.
+- TODO: `CYLConversationProtocol` and `CYLIMMessageProtocol` declare their getters as methods, so a Swift extension cannot
+  make `AVIMConversation` / `AVIMTypedMessage` conform. The demo registers the protocols at runtime
+  (`CYLDemoLeanCloudRuntime.registerOnce()`) and exposes `cyl_` members with `@objc(cyl_x)`. Needs a core decision:
+  property declarations or underscore-free `cyl` twins per AGENTS.md. Verify that `class_addProtocol` really finds the
+  protocol metadata in the binary.
+- TODO: Core headers without `NS_ASSUME_NONNULL` (`CYLServiceDefinition.h`, `CYLChatConstants.h` typedefs,
+  `CYLUserDelegate.h`, `CYLChatBaseViewController.h`) import as implicitly unwrapped optionals; the demo code is defensive.
+  Add nullability only where the Swift demo needs it. `-cacheUsersWithIds:callback:` takes `NSSet<id<CYLUserDelegate>> *`
+  but the demo passes client-id strings (`Set<AnyHashable>` conversion in the demo).
+- TODO: `CYLContact` has no public `-initWithUserId:name:avatarURL:clientId:` (only the protocol requirement), and
+  `CYLContactListViewController -initWithContacts:` takes `NSSet<CYLContact *> *`; the demo converts users to `CYLContact`.
+- TODO: Remaining core Swift audit: string constants that should be `NS_TYPED_ENUM`, other plain C enums
+  (`CYLChatScrollDirection`), and `cyl_` protocol methods that Swift classes implement (`CYLIMProvider`, model
+  protocols): add underscore-free twins with `NS_SWIFT_NAME` as CYLTabBarController does.
+- TODO: The demo keeps the folder and scheme name `ChatKit-OC` (CI and docs refer to it).
+- TODO: Hard-coded Chinese literals were kept 1:1 in the Swift demo (contacts, login, settings, conversation detail; list in
+  `docs/localization.md`), and the contact list and cells still lack accessibility labels (`docs/accessibility.md`).
+- TODO: Skipped as dead during the translation (no callers): the three `NSDate` category files, the two `NSFileManager`
+  category files, `CYLDemoDataSource`, `CYLDemoCustomAutoCompleteObject`, `TLSettingCell.h`, and unused macros. The
+  duplicate `CYLDemoChatKitExample` and `CYLDemoContactManager` copies were deleted. Restore a member from git history
+  (`git show 791899d:ChatKit-OC/...`) if a feature needs it.
