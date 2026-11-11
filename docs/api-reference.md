@@ -69,7 +69,7 @@ Key types: `LCChatKit` (facade), `CYLIMProvider` (IM backend protocol), `CYLConv
 - [Module: ContactList](#module-contactlist) (3 headers)
 - [Module: Conversation](#module-conversation) (48 headers)
 - [Module: ConversationList](#module-conversationlist) (3 headers)
-- [Tool](#tool) (22 headers)
+- [Tool](#tool) (23 headers)
 - [View](#view) (4 headers)
 - [Vendor (CYLAlertController)](#vendor-cylalertcontroller) (1 headers)
 - [Vendor (CYLPhotoBrowser)](#vendor-cylphotobrowser) (8 headers)
@@ -1338,6 +1338,7 @@ static CGFloat const CYLAvatarToMessageContent = 5.f;
 static CGFloat const CYLAvatarBottomToMessageContentTop = -1.f;
 static CGFloat const CYL_MSG_CELL_EDGES_OFFSET = 16;
 static NSInteger const CYL_iPHONEX_OFFSET = 34;
+static inline BOOL CYLChatDeviceHasBottomSafeArea(void);
 static NSString *const CYLBadgeTextForNumberGreaterThanLimit = @"···";
 static NSString * const CYLNotificationSessionResumed = @"CYLNotificationSessionResumed";
 static NSString *const CYLNotificationUnreadsUpdated = @"CYLNotificationUnreadsUpdated";
@@ -1397,7 +1398,22 @@ static NSString *const CYLDefaultConversationViewControllerBackgroundImageName =
 static CGFloat const CYLAnimateDuration = .25f;
 ```
 
-**Macros**: `CYL_STATUSBAR_HEIGHT`, `CYL_IS_iPHONEX`, `CYL_DEPRECATED(explain)`, `CYLLocalizedStrings(key)`, `CYLLog(fmt, ...)`, `CYLLog(...)`, `XCODE_VERSION_GREATER_THAN_OR_EQUAL_TO_8`, `SYSTEM_VERSION_EQUAL_TO(v)`, `SYSTEM_VERSION_GREATER_THAN(v)`, `SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)`, `SYSTEM_VERSION_LESS_THAN(v)`, `SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)`, `CYL_CURRENT_TIMESTAMP`, `CYL_FUTURE_TIMESTAMP`, `CYL_TIMESTAMP_REGEX`, `CYLConversationGroupAvatarURLKey`, `CYL_CURRENT_CONVERSATIONVIEWCONTROLLER_OBJECT`, `CYLMessageCellLimit`, `CYL_STRETCH_IMAGE(image, edgeInsets)`, `CYL_CONVERSATIONVIEWCONTROLLER_BACKGROUNDCOLOR`, `CYLConversationTableName`, `CYLConversationTableKeyId`, `CYLConversationTableKeyData`, `CYLConversationTableKeyUnreadCount`, `CYLConversationTableKeyMentioned`, `CYLConversationTableKeyDraft`, `CYLConversatoinTableCreateSQL`, `CYLConversationTableInsertSQL`, `CYLConversationTableWhereClause`, `CYLConversationTableDeleteSQL`, `CYLDeleteConversationTable`, `CYLConversationTableIncreaseUnreadCountSQL`, `CYLConversationTableIncreaseOneUnreadCountSQL`, `CYLConversationTableUpdateUnreadCountSQL`, `CYLConversationTableUpdateMentionedSQL`, `CYLConversationTableUpdateDraftSQL`, `CYLConversationTableSelectSQL`, `CYLConversationTableSelectDraftSQL`, `CYLConversationTableSelectOneSQL`, `CYLConversationTableUpdateDataSQL`, `CYLFaildMessageTable`, `CYLKeyId`, `CYLKeyConversationId`, `CYLKeyMessage`, `CYLCreateTableSQL`, `CYLWhereConversationId`, `CYLSelectMessagesSQL`, `CYLWhereKeyId`, `CYLSelectMessagesByIDSQL`, `CYLInsertMessageSQL`, `CYLDeleteMessageSQL`
+**Macros**: `CYL_STATUSBAR_HEIGHT`, `CYL_IS_iPHONEX` (now "the key window has a bottom safe area", through `CYLChatDeviceHasBottomSafeArea()`; it used to test for a 44 pt status bar, which fails on iPhones with a Dynamic Island), `CYL_DEPRECATED(explain)`, `CYLLocalizedStrings(key)`, `CYLLog(fmt, ...)`, `CYLLog(...)`, `XCODE_VERSION_GREATER_THAN_OR_EQUAL_TO_8`, `SYSTEM_VERSION_EQUAL_TO(v)`, `SYSTEM_VERSION_GREATER_THAN(v)`, `SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)`, `SYSTEM_VERSION_LESS_THAN(v)`, `SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)`, `CYL_CURRENT_TIMESTAMP`, `CYL_FUTURE_TIMESTAMP`, `CYL_TIMESTAMP_REGEX`, `CYLConversationGroupAvatarURLKey`, `CYL_CURRENT_CONVERSATIONVIEWCONTROLLER_OBJECT`, `CYLMessageCellLimit`, `CYL_STRETCH_IMAGE(image, edgeInsets)`, `CYL_CONVERSATIONVIEWCONTROLLER_BACKGROUNDCOLOR`, `CYLConversationTableName`, `CYLConversationTableKeyId`, `CYLConversationTableKeyData`, `CYLConversationTableKeyUnreadCount`, `CYLConversationTableKeyMentioned`, `CYLConversationTableKeyDraft`, `CYLConversatoinTableCreateSQL`, `CYLConversationTableInsertSQL`, `CYLConversationTableWhereClause`, `CYLConversationTableDeleteSQL`, `CYLDeleteConversationTable`, `CYLConversationTableIncreaseUnreadCountSQL`, `CYLConversationTableIncreaseOneUnreadCountSQL`, `CYLConversationTableUpdateUnreadCountSQL`, `CYLConversationTableUpdateMentionedSQL`, `CYLConversationTableUpdateDraftSQL`, `CYLConversationTableSelectSQL`, `CYLConversationTableSelectDraftSQL`, `CYLConversationTableSelectOneSQL`, `CYLConversationTableUpdateDataSQL`, `CYLFaildMessageTable`, `CYLKeyId`, `CYLKeyConversationId`, `CYLKeyMessage`, `CYLCreateTableSQL`, `CYLWhereConversationId`, `CYLSelectMessagesSQL`, `CYLWhereKeyId`, `CYLSelectMessagesByIDSQL`, `CYLInsertMessageSQL`, `CYLDeleteMessageSQL`
+
+#### `CYLChatLiquidGlass.h`
+
+Path: `ChatKit/Class/Tool/CYLChatLiquidGlass.h`
+
+**Class `CYLChatLiquidGlass`** : `NSObject`
+
+```objc
++ (BOOL)isActive;
++ (nullable UIView *)installBackdropBehindView:(UIView *)view inContainer:(UIView *)container;
+```
+
+The only code that touches the iOS 26 Liquid Glass material, guarded at compile time (`__IPHONE_OS_VERSION_MAX_ALLOWED`)
+and at run time (`@available(iOS 26.0, *)`, plus the app's `UIDesignRequiresCompatibility` opt-out). It returns NO / nil on
+an older SDK or system. Added after `b730b8d`.
 
 #### `CYLServiceDefinition.h`
 

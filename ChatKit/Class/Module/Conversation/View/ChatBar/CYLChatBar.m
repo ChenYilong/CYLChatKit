@@ -21,6 +21,7 @@
 #import "UIImage+CYLExtension.h"
 #import "NSString+CYLExtension.h"
 #import "CYLConversationService.h"
+#import "CYLChatLiquidGlass.h"
 
 NSString *const kCYLBatchDeleteTextPrefix = @"kCYLBatchDeleteTextPrefix";
 NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
@@ -649,7 +650,27 @@ NSString *const kCYLBatchDeleteTextSuffix = @"kCYLBatchDeleteTextSuffix";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeBackgroundCancelRecordVoice) name:UIApplicationDidEnterBackgroundNotification object:nil];
     self.backgroundColor = self.messageInputViewBackgroundColor;
     [self setupConstraints];
+    [self applyLiquidGlassStyleIfActive];
     self.mentionSet = [NSMutableSet set];
+}
+
+/**
+ *  iOS 26 Liquid Glass: the input field becomes a glass capsule. All SDK and system guards live in
+ *  CYLChatLiquidGlass; when Liquid Glass is not active (older SDK or system, or the app opted out with
+ *  UIDesignRequiresCompatibility) it returns nil and the opaque field and its border stay exactly as they were.
+ *  The bar itself stays opaque: a glass material is capsule shaped by default, which does not suit a full-width bar.
+ */
+- (void)applyLiquidGlassStyleIfActive {
+    UIView *backdrop = [CYLChatLiquidGlass installBackdropBehindView:self.textView inContainer:self.inputBarBackgroundView];
+    if (!backdrop) {
+        return;
+    }
+    self.textView.backgroundColor = [UIColor clearColor];
+    self.textView.layer.borderWidth = 0;
+    // Keep the text clear of the capsule's rounded ends. Only the horizontal insets change, so the height of the
+    // field, which follows its content, is not affected.
+    UIEdgeInsets inset = self.textView.textContainerInset;
+    self.textView.textContainerInset = UIEdgeInsetsMake(inset.top, 12, inset.bottom, 12);
 }
 
 

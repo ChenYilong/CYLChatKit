@@ -32,14 +32,32 @@ after the chat appears, and `scripts/demo-screenshots.sh` takes the `chat-keyboa
   which is false on iPhones with a Dynamic Island (taller status bar), so the bar's bottom spacing was not refreshed
   when switching between the keyboard and the emoji or more panel. The spacing is now refreshed on every change, and
   `CYL_IS_iPHONEX` means "the key window has a bottom safe area".
+- **The input field is a Liquid Glass capsule on iOS 26** (`-applyLiquidGlassStyleIfActive` in `CYLChatBar.m`). A
+  glass backdrop is placed behind the text view, the text view's own background and border are removed, and its
+  horizontal text inset grows to 12 pt so the text clears the rounded ends. The bar itself stays opaque: a glass material
+  is capsule shaped by default, which does not suit a full-width bar.
+
+## Guards for the Liquid Glass code
+
+All iOS 26 symbols are in `CYLChatLiquidGlass` (`ChatKit/Class/Tool/`), behind two guards, as CYLTabBarController does:
+
+1. Compile time: `#if defined(__IPHONE_26_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_26_0`, so the library still
+   builds with an older Xcode. Without it, the class compiles to "always NO".
+2. Run time: `if (@available(iOS 26.0, *))`, plus the app's opt-out: on iOS 26 the glass is off when the app's Info.plist sets
+   `UIDesignRequiresCompatibility` to YES; on iOS 27 and later it is always on.
+
+`CYLChatBar.m` calls `+[CYLChatLiquidGlass installBackdropBehindView:inContainer:]` and does nothing else when it returns
+nil, so on iOS 25 and earlier, with an older SDK, or with the opt-out, the opaque field and its border are exactly as before.
+The rule is in `AGENTS.md` ("Guard every Liquid Glass API") and the `cylchatkit-xcode-compat` skill.
 
 ## TODO
 
-- TODO: Visual Liquid Glass styling of the chat bar is not done. The bar keeps its opaque theme-colored background
-  and hairline. Options for a later change, each to be checked against the `chat-keyboard` screenshot: a `UIGlassEffect`
-  background behind the bar contents, a glass capsule for the input field, and a glass send button, with the table view
-  extending under the bar and a scroll edge effect. Guard it with `#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 260000` and
-  `@available(iOS 26.0, *)` so older SDKs still build.
+- TODO: Verify the glass input field in the CI `chat-keyboard` and `chat` screenshots, and the old look with
+  `UIDesignRequiresCompatibility` set to YES (the demo's Info.plist does not set it). Not done yet: the code was written
+  without an iOS 26 compiler at hand, so the first CI run is also its first compile.
+- TODO: More Liquid Glass styling is possible and not done: a glass send button (`UIButtonConfiguration` glass styles), a
+  floating glass bar with the table view extending under it, and a scroll edge effect. Each needs the same two guards and
+  an entry in `CYLChatLiquidGlass`.
 - TODO: The emoji and more panels use a fixed height (`kFunctionViewHeight`, 210 pt) while the keyboard is 291 pt or taller
   on iPhones, so switching between keyboard and panel moves the bar. Make the panels as tall as the last keyboard height.
 - TODO: The 发送 title and several other texts in the chat bar are hard-coded Chinese strings (see
