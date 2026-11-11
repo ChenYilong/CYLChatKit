@@ -435,7 +435,7 @@ extension CYLDemoChatKitExample {
             CYLDemoChatKitExample.cylDemoExampleChangeGroupAvatarURLs(forConversationId: conversationId, shouldInsert: false)
         }
         actionItemChangeGroupAvatar.backgroundColor = UIColor(red: 251 / 255.0, green: 186 / 255.0, blue: 11 / 255.0, alpha: 1.0)
-        if conversation.cyl_type() == .single {
+        if conversation.cylType() == .single {
             return [actionItemDelete, actionItemMore]
         }
         return [actionItemDelete, actionItemMore, actionItemChangeGroupAvatar]
