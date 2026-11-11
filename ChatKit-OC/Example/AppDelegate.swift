@@ -149,6 +149,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return !(view.accessibilityIdentifier ?? "").isEmpty
     }
 
+    /// The accessibility identifier. Read from the view itself: the cast to `UIAccessibilityIdentification` returned nil at run
+    /// time and every dumped identifier was empty (run 42965581243), although the views carry one.
+    private static func dumpedIdentifier(of object: NSObject) -> String {
+        if let view = object as? UIView {
+            return view.accessibilityIdentifier ?? ""
+        }
+        if let item = object as? UIBarItem {
+            return item.accessibilityIdentifier ?? ""
+        }
+        let selector = NSSelectorFromString("accessibilityIdentifier")
+        if object.responds(to: selector) {
+            return (object.value(forKey: "accessibilityIdentifier") as? String) ?? ""
+        }
+        return ""
+    }
+
     /// The accessibility label, or the visible text that VoiceOver would read when no label is set.
     private static func dumpedLabel(of object: NSObject) -> String {
         if let label = object.accessibilityLabel, !label.isEmpty {
@@ -178,7 +194,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         let indent = String(repeating: " ", count: depth * 2)
         if Self.isDumpedAsElement(object) {
-            let identifier = (object as? UIAccessibilityIdentification)?.accessibilityIdentifier ?? ""
+            let identifier = Self.dumpedIdentifier(of: object)
             let traits = String(object.accessibilityTraits.rawValue, radix: 16)
             dump += "\(indent)\(NSStringFromClass(type(of: object))) label=\"\(Self.dumpedLabel(of: object))\" "
                 + "value=\"\(object.accessibilityValue ?? "")\" hint=\"\(object.accessibilityHint ?? "")\" "

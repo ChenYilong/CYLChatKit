@@ -143,4 +143,8 @@ When this was set up (commit `0f9b56e`, branch `feat/cross-platform-components`,
   loaded on a plain simulator. The dump now counts standard controls, labels, text views, cells, and identified views,
   and the script turns on `ApplicationAccessibilityEnabled`. The reported `chat-zh` crash was the script's own
   `launchctl list | grep -q` pipe failing with SIGPIPE under pipefail; fixed.
-- TODO: Confirm in the next run that every `expect_accessibility` passes and no false crash is reported.
+- Run 42965581243 (pull request only, one run per commit now): no false crash; the dump lists every control with its
+  localized label (`Client ID`, `Send`, `Message`, `Switch to voice input`), but every identifier was empty because the
+  dump read it through a `UIAccessibilityIdentification` cast that returned nil. It now reads `accessibilityIdentifier`
+  from the view.
+- TODO: Confirm in the next run that every `expect_accessibility` passes.
