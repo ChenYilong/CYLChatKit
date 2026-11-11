@@ -118,3 +118,12 @@ When this was set up (commit `0f9b56e`, branch `feat/cross-platform-components`,
 - TODO: `ChatKit/ChatKit.xcodeproj` is only parsed and listed, not built, because it is out of sync with disk
   and its Podfile misses podspec dependencies (see leancloud-decoupling.md). `pod lib lint` is the library build check
   and passes.
+
+## CYLTabBarController default integration in the demo
+
+- TODO: The demo does not follow the default integration yet (`AGENTS.md`, "Default integration in the examples").
+  `CYLDemoTabBarControllerConfig.swift` builds `CYLTabBarController()` in code, and `CYLDemoPlusButtonSubclass` is a
+  PlusButton with a tap action but no `plusChildViewController`. Move it to a bundled configuration file
+  (`CYLDemoTabBar.json`, explicit file reference) loaded with `tabBarControllerWithConfigurationFile:error:`, register the
+  pages (`conversations`, `contacts`, and a plus child page) with `CYLTabBarPageRegistry`, and add a screenshot of the
+  plus child page. Do this after the Swift demo builds in CI.

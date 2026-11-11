@@ -1,6 +1,6 @@
 ---
 name: cylchatkit-xcode-compat
-description: "CYLChatKit Xcode and CocoaPods compatibility rules, including how CYLTabBarController is pinned to its newest commit. Use when editing either Xcode project, a Podfile or podspec, changing deployment targets, or reviewing project build settings."
+description: "CYLChatKit Xcode and CocoaPods compatibility rules, including how CYLTabBarController is pinned to its newest commit and integrated by default in examples (PlusButton with a plus child, from a local configuration file). Use when editing either Xcode project, a Podfile or podspec, changing deployment targets, or reviewing project build settings."
 ---
 
 # CYLChatKit Xcode compatibility
@@ -115,3 +115,36 @@ grep -E 'objectVersion =|compatibilityVersion =|IPHONEOS_DEPLOYMENT_TARGET =|PBX
 ```
 
 Do not claim a successful build when `xcodebuild -list` or the project parser is the only check performed. Report known build blockers separately.
+
+## Default CYLTabBarController integration in examples
+
+Unless a task says otherwise, every example integrates CYLTabBarController (pinned commit, CocoaPods) like this:
+
+1. **PlusButton with a plus child.** A PlusButton whose selection shows its own page (`plusChildViewController`), not only
+   an action. Configuration: `CYLTabBarControllerPlusButton` with `CYLTabBarItemTitle`, `CYLTabBarItemImage`, and
+   `CYLTabBarItemPageIdentifier`. Code equivalent: `+plusChildViewController` plus `+indexOfPlusButtonInTabBar`.
+2. **Local configuration file.** Build the tab bar from a bundled file (JSON by default) with
+   `+[CYLTabBarController tabBarControllerWithConfigurationFile:error:]` (Swift: `try CYLTabBarController(configurationFile:)`), not with `tabBarItemsAttributes` and view
+   controller arrays in code. Every tab and the plus button name their page with `CYLTabBarItemPageIdentifier`; register the
+   pages with `CYLTabBarPageRegistry` before the file is loaded. A tab whose page is not registered is skipped, so check
+   the registry when a tab is missing.
+3. Minimal file shape (keys from CYLTabBarController's `docs/Configuration-File.md`):
+
+   ```json
+   {
+     "CYLTabBarControllerContext": "Demo",
+     "CYLTabBarControllerStyleType": "liquidGlass",
+     "CYLTabBarControllerTabBarItemsAttributes": [
+       { "CYLTabBarItemTitle": "Messages", "CYLTabBarItemImage": "tab_chat", "CYLTabBarItemPageIdentifier": "conversations" },
+       { "CYLTabBarItemTitle": "Contacts", "CYLTabBarItemImage": "tab_contacts", "CYLTabBarItemPageIdentifier": "contacts" }
+     ],
+     "CYLTabBarControllerPlusButton": {
+       "CYLTabBarItemTitle": "New", "CYLTabBarItemImage": "tab_plus", "CYLTabBarItemPageIdentifier": "compose"
+     }
+   }
+   ```
+
+4. Read the pinned commit's `docs/Configuration-File.md`, `docs/Tab-Page-Registry.md`, and `docs/PlusButton.md` before
+   writing the code; if an API name differs, the library wins and this skill is updated.
+5. Localize the titles (example bundle), give the PlusButton an accessibility label and identifier, and take a CI
+   screenshot of the plus child page.

@@ -107,6 +107,31 @@ CocoaPods, never by copying its sources, and never by a released version number.
   (same class and selector) of core with the pinned commit's `CYLTabBarController/` folder. Record open clashes as `TODO`
   in `docs/ci.md`.
 
+### Default integration in the examples: PlusButton with a plus child, from a local configuration file
+
+Every example in this project integrates CYLTabBarController the same way unless a task explicitly says otherwise:
+
+- **With a PlusButton that has a `plusChildViewController`.** The tab bar shows a PlusButton, and selecting it shows a page
+  of its own (the plus child view controller), not only a tap action. In a configuration this is
+  `CYLTabBarControllerPlusButton` with `CYLTabBarItemPageIdentifier` (the plus button's own page), and in code it is
+  `+plusChildViewController` with `+indexOfPlusButtonInTabBar` (required when a plus child exists). Do not ship an
+  example without a PlusButton, or with a PlusButton that only runs an action, unless asked.
+- **Initialized from a local configuration file.** The tab bar is built from a file inside the app bundle with
+  `+[CYLTabBarController tabBarControllerWithConfigurationFile:error:]` (Swift: the factory imports as the throwing
+  initializer `try CYLTabBarController(configurationFile:)`), not assembled in code with `tabBarItemsAttributes` and view controller arrays. The file holds the tabs,
+  titles, images, style, context, and the `CYLTabBarControllerPlusButton` entry; each tab and the plus button name their
+  page with `CYLTabBarItemPageIdentifier`, and the app registers those pages with `CYLTabBarPageRegistry`
+  (`sharedRegistry`, or its own registry passed as `CYLTabBarControllerPageRegistry`). Use a format the parser supports
+  (JSON is the default choice); keep the file next to the example's other resources with an explicit file reference.
+  Strings in the file follow the localization rules (keys resolved through the example's bundle, see
+  CYLTabBarController's `docs/Configuration-Localization.md`).
+- Follow CYLTabBarController's own documentation at the pinned commit: `docs/Configuration-File.md`,
+  `docs/Tab-Page-Registry.md`, `docs/PlusButton.md`, and `docs/Plus-Child-Theme-Switching-Test.md`. If its API differs
+  from these names, its code wins: update this section and the skill in the same change.
+- CI screenshots and the accessibility dump cover the plus child page too (select it, then shoot), and the PlusButton has
+  an accessibility label and identifier like every control.
+- Record deviations of an existing example as `TODO` in `docs/ci.md` (CYLTabBarController section).
+
 ## Swift examples and Swift compatibility of core
 
 - **Every iOS example is written in Swift.** New example code is Swift only. The demo (`ChatKit-OC/`) is
