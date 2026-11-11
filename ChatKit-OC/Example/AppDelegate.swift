@@ -77,11 +77,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             return
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) { [weak self] in
-            guard let self = self, let window = self.window else {
+            guard let self = self else {
                 return
             }
+            // Walk every visible window of the app, the key window first: the screen on display is not always
+            // `self.window` (the first CI run of the Swift demo wrote an empty dump from it).
+            var windows = UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap { $0.windows }
+                .filter { !$0.isHidden }
+            if let appWindow = self.window, !appWindow.isHidden, !windows.contains(appWindow) {
+                windows.append(appWindow)
+            }
+            windows.sort { $0.isKeyWindow && !$1.isKeyWindow }
             var dump = ""
-            self.appendAccessibility(of: window, depth: 0, to: &dump)
+            for window in windows {
+                self.appendAccessibility(of: window, depth: 0, to: &dump)
+            }
+            if dump.isEmpty {
+                // Diagnostics for CI: say what was walked instead of writing an empty file.
+                dump = "(no accessibility elements; windows: \(windows.count))\n"
+                    + windows.map { "  \(NSStringFromClass(type(of: $0))) key=\($0.isKeyWindow) alpha=\($0.alpha) "
+                        + "subviews=\($0.subviews.count) root=\($0.rootViewController.map { NSStringFromClass(type(of: $0)) } ?? "nil")\n" }
+                    .joined()
+            }
             let directory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first ?? ""
             let path = (directory as NSString).appendingPathComponent("accessibility.txt")
             try? dump.write(toFile: path, atomically: true, encoding: .utf8)
