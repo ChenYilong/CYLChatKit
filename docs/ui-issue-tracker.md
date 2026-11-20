@@ -14,7 +14,7 @@ The source snapshot merge is recorded in [commit 90e4409b504c](https://github.co
 
 | Issue | Fix commit / implementation | Assessment |
 |---|---|---|
-| [ChenYilong/CYLChatKit #6 (open)](https://github.com/ChenYilong/CYLChatKit/issues/6) | — | Requests loading contact-list user data from local storage; this is data-source behavior, not a UI rendering or interaction issue, so it remains out of scope (N/A). |
+| [ChenYilong/CYLChatKit #6 (open)](https://github.com/ChenYilong/CYLChatKit/issues/6) | — | Asks how a custom image message cell can show an image whose width and height are unknown without redrawing it each time; UI layout question. Open, tracked in `docs/github-issues.md`. Score: 0%. |
 | [ChenYilong/CYLChatKit #5 (open)](https://github.com/ChenYilong/CYLChatKit/issues/5) | — | Not UI-related; no fix required under this UI-only scope (N/A). |
 | [ChenYilong/CYLChatKit #4 (open)](https://github.com/ChenYilong/CYLChatKit/issues/4) | [Avatar layout implementation](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit/Class/Module/Conversation/View/ChatMessageCell/CYLChatMessageCell.m#L431) | The avatar image view uses the configured dimensions and aspect-fill sizing; its implementation links this resolution to the issue. Score: 100%. |
 | [ChenYilong/CYLChatKit #3 (open)](https://github.com/ChenYilong/CYLChatKit/issues/3) | [Recording control implementation](https://github.com/ChenYilong/CYLChatKit/blob/master/ChatKit/Class/Module/Conversation/View/ChatBar/CYLChatBar.m#L913) | Recording cancellation handles TouchCancel and app backgrounding; the implementation links this fix to the issue. Score: 100%. |
