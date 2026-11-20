@@ -37,14 +37,14 @@
 
 用法如下：
 
-首先要必须自己新建一个表示 User 的 Model 并遵循 LCCKUserDelegate 协议，Demo 中对应的是 `LCCKUser`。
+首先要必须自己新建一个表示 User 的 Model 并遵循 CYLUserDelegate 协议，Demo 中对应的是 `CYLDemoUser`。
 
 然后实现 `-setFetchProfilesBlock:`：
 
  ```Objective-C
  
 #warning 注意：setFetchProfilesBlock 方法必须实现，如果不实现，ChatKit将无法显示用户头像、用户昵称。以下方法循环模拟了通过 userIds 同步查询 users 信息的过程，这里需要替换为 App 的 API 同步查询
-    [[LCChatKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, LCCKFetchProfilesCompletionHandler completionHandler) {
+    [[CYLChatKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, CYLFetchProfilesCompletionHandler completionHandler) {
         if (userIds.count == 0) {
             NSInteger code = 0;
             NSString *errorReasonText = @"User ids is nil";
@@ -52,7 +52,7 @@
                                         @"code" : @(code),
                                         NSLocalizedDescriptionKey : errorReasonText,
                                         };
-            NSError *error = [NSError errorWithDomain:@"LCChatKitExample"
+            NSError *error = [NSError errorWithDomain:@"CYLDemoChatKitExample"
                                                  code:code
                                              userInfo:errorInfo];
             !completionHandler ?: completionHandler(nil, error);
@@ -64,18 +64,18 @@
         
         [userIds enumerateObjectsUsingBlock:^(NSString * _Nonnull clientId, NSUInteger idx, BOOL * _Nonnull stop) {
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerId like %@", clientId ];
-            NSArray *searchedUsers = [LCCKContactProfiles filteredArrayUsingPredicate:predicate];
+            NSArray *searchedUsers = [CYLDemoContactProfiles filteredArrayUsingPredicate:predicate];
             if (searchedUsers.count > 0) {
                 NSDictionary *user = searchedUsers[0];
-                NSURL *avatarURL = [NSURL URLWithString:user[LCCKProfileKeyAvatarURL]];
-                LCCKUser *user_ = [LCCKUser userWithUserId:user[LCCKProfileKeyPeerId]
-                                                      name:user[LCCKProfileKeyName]
+                NSURL *avatarURL = [NSURL URLWithString:user[CYLDemoProfileKeyAvatarURL]];
+                CYLDemoUser *user_ = [CYLDemoUser userWithUserId:user[CYLDemoProfileKeyPeerId]
+                                                      name:user[CYLDemoProfileKeyName]
                                                  avatarURL:avatarURL
                                                   clientId:clientId];
                 [users addObject:user_];
             } else {
                 //注意：如果网络请求失败，请至少提供 ClientId！
-                LCCKUser *user_ = [LCCKUser userWithClientId:clientId];
+                CYLDemoUser *user_ = [CYLDemoUser userWithClientId:clientId];
                 [users addObject:user_];
             }
         }];
@@ -88,15 +88,15 @@
 
  ```
 
-注意：这个方法 `[[LCChatKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, LCCKFetchProfilesCompletionHandler completionHandler) {
+注意：这个方法 `[[CYLChatKit sharedInstance] setFetchProfilesBlock:^(NSArray<NSString *> *userIds, CYLFetchProfilesCompletionHandler completionHandler) {
 ... }` ，其中参数 `userIds` 指的是 `ClientId` 的集合。
 
 
 另外，
 
  ```Objective-C
-[LCCKUser userWithUserId:user[LCCKProfileKeyPeerId]
-          name:user[LCCKProfileKeyName]
+[CYLDemoUser userWithUserId:user[CYLDemoProfileKeyPeerId]
+          name:user[CYLDemoProfileKeyName]
           avatarURL:avatarURL
           clientId:clientId];
  ```
@@ -119,7 +119,7 @@
 
  ChatKit 与服务端进行数据交互时只会使用 ClientId，但界面展示则需要用到 App 已有用户系统的 User 信息，这时候 ChatKit 就会回调 `FetchProfilesBlock` 来获取用户信息，当然主要是获取 头像和用户名。
 
-比如上面的代码中 userIds 这个就是 ClientIds，但 LCCKProfileKeyPeerId 这个就是 App 已有用户系统的UserId。除了 LCCKUserDelegate 中的 userId，其余在 ChatKit 接口中定义的 UserId 、PeerId 均是 ClientId（如果确定是对方，不是自己，比如好友列表、进行对话的对象，就会使用 PeerId 代替UserId），建议将 App 已有的用户系统中的 UserId 直接设置为 ClientId，如果 UserId 与 ClientId 不相等，那么就需要在上面的 `-setFetchProfilesBlock:` 方法中添加 clientIds 转换为 userIds 的步骤，然后再拿 userIds 去调用 App 已有的 API 来进行查询。
+比如上面的代码中 userIds 这个就是 ClientIds，但 CYLDemoProfileKeyPeerId 这个就是 App 已有用户系统的UserId。除了 CYLUserDelegate 中的 userId，其余在 ChatKit 接口中定义的 UserId 、PeerId 均是 ClientId（如果确定是对方，不是自己，比如好友列表、进行对话的对象，就会使用 PeerId 代替UserId），建议将 App 已有的用户系统中的 UserId 直接设置为 ClientId，如果 UserId 与 ClientId 不相等，那么就需要在上面的 `-setFetchProfilesBlock:` 方法中添加 clientIds 转换为 userIds 的步骤，然后再拿 userIds 去调用 App 已有的 API 来进行查询。
 
 ## Profile缓存
 
@@ -132,33 +132,33 @@
 
 ## 聊天页面头像点击事件
 
-可以通过设置 `-[LCChatKit setOpenProfileBlock]` 来处理用户点击会话列表中头像的事件:
+可以通过设置 `-[CYLChatKit setOpenProfileBlock]` 来处理用户点击会话列表中头像的事件:
 
 用法如下：
 
  ```Objective-C
-    [[LCChatKit sharedInstance] setOpenProfileBlock:^(NSString *userId, id<LCCKUserDelegate> user, __kindof UIViewController *parentController) {
+    [[CYLChatKit sharedInstance] setOpenProfileBlock:^(NSString *userId, id<CYLUserDelegate> user, __kindof UIViewController *parentController) {
         if (!userId) {
-            [LCCKUtil showNotificationWithTitle:@"用户不存在" subtitle:nil type:LCCKMessageNotificationTypeError];
+            [CYLDemoUtil showNotificationWithTitle:@"用户不存在" subtitle:nil type:CYLMessageNotificationTypeError];
             return;
         }
         [self exampleOpenProfileForUser:user userId:userId parentController:parentController];
     }];
     
-    - (void)exampleOpenProfileForUser:(id<LCCKUserDelegate>)user userId:(NSString *)userId parentController:(__kindof UIViewController *)parentController {
+    - (void)exampleOpenProfileForUser:(id<CYLUserDelegate>)user userId:(NSString *)userId parentController:(__kindof UIViewController *)parentController {
     // 可以根据会话类型，做不同的处理
-    NSString *currentClientId = [LCChatKit sharedInstance].clientId;
+    NSString *currentClientId = [CYLChatKit sharedInstance].clientId;
     NSString *title = [NSString stringWithFormat:@"打开用户主页 \nClientId是 : %@", userId];
     NSString *subtitle = [NSString stringWithFormat:@"name是 : %@", user.name];
     if ([userId isEqualToString:currentClientId]) {
         title = [NSString stringWithFormat:@"打开自己的主页 \nClientId是 : %@", userId];
         subtitle = [NSString stringWithFormat:@"我自己的name是 : %@", user.name];
-    } else if ([parentController isKindOfClass:[LCCKConversationViewController class]] ) {
-            LCCKConversationViewController *conversationViewController_ = [[LCCKConversationViewController alloc] initWithPeerId:user.clientId ?: userId];
+    } else if ([parentController isKindOfClass:[CYLConversationViewController class]] ) {
+            CYLConversationViewController *conversationViewController_ = [[CYLConversationViewController alloc] initWithPeerId:user.clientId ?: userId];
             [[self class] pushToViewController:conversationViewController_];
             return;
     }
-    [LCCKUtil showNotificationWithTitle:title subtitle:subtitle type:LCCKMessageNotificationTypeMessage];
+    [CYLDemoUtil showNotificationWithTitle:title subtitle:subtitle type:CYLMessageNotificationTypeMessage];
 }
 
  ```
@@ -166,12 +166,12 @@
  
 ## 自定义会话列表左滑菜单
 
-会话列表会话节点的 cell 默认支持的左滑菜单为删除，可以通过 `-[LCChatKit setConversationEditActionBlock:]` 来实现自定义功能，Demo中演示了如何添加一个标记未读的左滑菜单。详情见 Demo。
+会话列表会话节点的 cell 默认支持的左滑菜单为删除，可以通过 `-[CYLChatKit setConversationEditActionBlock:]` 来实现自定义功能，Demo中演示了如何添加一个标记未读的左滑菜单。详情见 Demo。
 
 
 ## 自定义长按菜单
 
-聊天页面的气泡，默认支持长按复制， 你可以通过 `[LCChatKit setLongPressMessageBlock:]` 来自定义添加功能，Demo 中演示了如何添加长按转发消息的功能。详情见Demo。
+聊天页面的气泡，默认支持长按复制， 你可以通过 `[CYLChatKit setLongPressMessageBlock:]` 来自定义添加功能，Demo 中演示了如何添加长按转发消息的功能。详情见Demo。
 
 
 ## 自定义消息
@@ -184,7 +184,7 @@
 
 也即[暂态消息](https://leancloud.cn/docs/realtime_guide-ios.html#暂态消息) ，且不需要显示自定义 Cell 的自定义消息。
 
-请自行监听 `LCCKNotificationCustomTransientMessageReceived` 通知，自行处理响应事件。
+请自行监听 `CYLNotificationCustomTransientMessageReceived` 通知，自行处理响应事件。
 
 这里注意，非暂态自定义消息也会走这个通知，所以监听该通知时务必检查 Message 的类型，进行筛选。
 
@@ -194,19 +194,19 @@
 
 
  ```Objective-C
- //  LCCKConversationViewController.h
+ //  CYLConversationViewController.h
 /*!
  * 自定义消息位置发送
  */
-- (void)sendCustomMessage:(AVIMTypedMessage *)customMessage;
+- (void)sendCustomMessage:(id<CYLIMMessageProtocol>)customMessage;
 
 /*!
  * 自定义消息位置发送
  */
-- (void)sendCustomMessage:(AVIMTypedMessage *)customMessage
-            progressBlock:(AVProgressBlock)progressBlock
-                  success:(LCCKBooleanResultBlock)success
-                   failed:(LCCKBooleanResultBlock)failed;
+- (void)sendCustomMessage:(id<CYLIMMessageProtocol>)customMessage
+            progressBlock:(CYLProgressBlock)progressBlock
+                  success:(CYLBooleanResultBlock)success
+                   failed:(CYLBooleanResultBlock)failed;
  ```
 
 
@@ -227,7 +227,7 @@
  
  这里再介绍下 Demo 里的 VCard 消息的自定义过程：
  
-定义一个`LCCKVCardMessage` 自定义消息，继承 `AVIMTypedMessage` ，并遵循、实现 `AVIMTypedMessageSubclassing` 协议：
+定义一个`CYLDemoVCardMessage` 自定义消息，继承 `AVIMTypedMessage` ，并遵循、实现 `AVIMTypedMessageSubclassing` 协议：
 
  ```Objective-C
 #pragma mark -
@@ -254,8 +254,8 @@
 degrade | 用来定义如何展示老版本未支持的自定义消息类型  | 添加到自定义消息的 attributes 字典属性下
 typeTitle | 最近对话列表中最近一条消息的title，</p>比如：最近一条消息是图片，可设置该字段内容为：`@"图片"`，相应会展示：`[图片]`） | 添加到自定义消息的 attributes 字典属性下
 summary | 用来显示在push提示中  | 添加到自定义消息的 attributes 字典属性下，</p>另外，这个字段是为了方便自定义推送内容，这需要借助云引擎实现。
-conversationType | 用来显示在push提示中 |  添加到自定义消息的 attributes 字典属性下,</p>对话类型，用来展示在推送提示中，以达到这样的效果： [群消息]Tom：hello gays!</p> 以枚举 LCCKConversationType 定义为准，0为单聊，1为群聊
-以上三个字段需要添加到自定义消息的 attributes 字典属性下，ChatKit 给出了一个方法来方便添加 `-lcck_setObject:forKey:` ，用法如下：
+conversationType | 用来显示在push提示中 |  添加到自定义消息的 attributes 字典属性下,</p>对话类型，用来展示在推送提示中，以达到这样的效果： [群消息]Tom：hello gays!</p> 以枚举 CYLConversationType 定义为准，0为单聊，1为群聊
+以上三个字段需要添加到自定义消息的 attributes 字典属性下。The demo's LeanCloud category `AVIMTypedMessage (CYLDemoExtension)` (`ChatKit-OC/Example/Class/LeanCloud/AVIMTypedMessage+CYLDemoExtension.h`) provides `-cyl_demo_setObject:forKey:` for this; ChatKit itself no longer contains LeanCloud code, so copy that category into your app. 用法如下：
 
 
  ```Objective-C
@@ -271,10 +271,10 @@ conversationType | 用来显示在push提示中 |  添加到自定义消息的 a
     if (!self) {
         return nil;
     }
-    [self lcck_setObject:@"名片" forKey:LCCKCustomMessageTypeTitleKey];
-    [self lcck_setObject:@"这是一条名片消息，当前版本过低无法显示，请尝试升级APP查看" forKey:LCCKCustomMessageDegradeKey];
-    [self lcck_setObject:@"有人向您发送了一条名片消息，请打开APP查看" forKey:LCCKCustomMessageSummaryKey];
-    [self lcck_setObject:clientId forKey:@"clientId"];
+    [self cyl_demo_setObject:@"名片" forKey:CYLCustomMessageTypeTitleKey];
+    [self cyl_demo_setObject:@"这是一条名片消息，当前版本过低无法显示，请尝试升级APP查看" forKey:CYLCustomMessageDegradeKey];
+    [self cyl_demo_setObject:@"有人向您发送了一条名片消息，请打开APP查看" forKey:CYLCustomMessageSummaryKey];
+    [self cyl_demo_setObject:clientId forKey:@"clientId"];
     return self;
 }
  ```
@@ -283,20 +283,21 @@ conversationType | 用来显示在push提示中 |  添加到自定义消息的 a
 
 ### 自定义消息 Cell
 
-继承 `LCCKChatMessageCell` ，并遵循、实现 `LCCKChatMessageCellSubclassing` 协议，重载父类方法:
+继承 `CYLChatMessageCell` ，并遵循、实现 `CYLChatMessageCellSubclassing` 协议，重载父类方法:
 
 这里注意 `+classMediaType` 返回的类型与自定义消息里返回的类型一致：
 
 
  ```Objective-C
 #pragma mark -
-#pragma mark - LCCKChatMessageCellSubclassing Method
+#pragma mark - CYLChatMessageCellSubclassing Method
 
 + (void)load {
     [self registerCustomMessageCell];
 }
 
-+ (AVIMMessageMediaType)classMediaType {
+// The cell returns ChatKit's CYLMessageMediaType (same raw values as the LeanCloud media type).
++ (CYLMessageMediaType)classMediaType {
     return kAVIMMessageMediaTypeVCard;
 }
  ```
@@ -336,7 +337,8 @@ Demo 中的用法如下：
 
 - (void)setup {
     [self.vCardView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.contentView).with.insets(UIEdgeInsetsMake(LCCK_MSG_SPACE_TOP, LCCK_MSG_SPACE_LEFT, LCCK_MSG_SPACE_BTM, LCCK_MSG_SPACE_RIGHT));
+        // Use the spacing your design needs.
+        make.edges.equalTo(self.contentView).with.insets(UIEdgeInsetsMake(8, 10, 8, 10));
     }];
     [self updateConstraintsIfNeeded];
     [super setup];
@@ -348,7 +350,7 @@ Demo 中的用法如下：
     NSString *name = nil;
     NSURL *avatarURL = nil;
     clientId = [message.attributes valueForKey:@"clientId"];
-    [[LCChatKit sharedInstance] getCachedProfileIfExists:clientId name:&name avatarURL:&avatarURL error:nil];
+    [[CYLChatKit sharedInstance] getCachedProfileIfExists:clientId name:&name avatarURL:&avatarURL error:nil];
     if (!name) {
         name = clientId;
     }
@@ -366,28 +368,28 @@ Demo 中的用法如下：
 
 ### 自定义输入框插件
 用法与自定义消息和自定义 Cell 类似：
-继承 `LCCKInputViewPlugin` ，遵循、实现 `LCCKInputViewPluginSubclassing` 协议，
+继承 `CYLInputViewPlugin` ，遵循、实现 `CYLInputViewPluginSubclassing` 协议，
 
  ```Objective-C
 #pragma mark -
-#pragma mark - LCCKInputViewPluginSubclassing Method
+#pragma mark - CYLInputViewPluginSubclassing Method
 
 + (void)load {
     [self registerCustomInputViewPlugin];
 }
 
-+ (LCCKInputViewPluginType)classPluginType {
-    return LCCKInputViewPluginTypeVCard;
++ (CYLInputViewPluginType)classPluginType {
+    return CYLDemoInputViewPluginTypeVCard;
 }
 
  ```
 
-UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
+UI自定义，需要实现 `CYLInputViewPluginDelegate` 方法：
 
 
  ```Objective-C
 #pragma mark -
-#pragma mark - LCCKInputViewPluginDelegate Method
+#pragma mark - CYLInputViewPluginDelegate Method
 
 /**
  * 插件图标
@@ -421,12 +423,12 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
 /**
  * 发送自定消息的实现
  */
-- (LCCKIdResultBlock)sendCustomMessageHandler {
+- (CYLIdResultBlock)sendCustomMessageHandler {
     if (_sendCustomMessageHandler) {
         return _sendCustomMessageHandler;
     }
-    LCCKIdResultBlock sendCustomMessageHandler = ^(id object, NSError *error) {
-        LCCKVCardMessage *vCardMessage = [LCCKVCardMessage vCardMessageWithClientId:object];
+    CYLIdResultBlock sendCustomMessageHandler = ^(id object, NSError *error) {
+        CYLDemoVCardMessage *vCardMessage = [CYLDemoVCardMessage vCardMessageWithClientId:object];
         [self.conversationViewController sendCustomMessage:vCardMessage progressBlock:^(NSInteger percentDone) {
         } success:^(BOOL succeeded, NSError *error) {
             [self.conversationViewController sendLocalFeedbackTextMessge:@"名片发送成功"];
@@ -455,7 +457,7 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
 
 ### 删除自定义插件、自定义消息、自定义 Cell 
 
-如果需要删除插件，比如 Demo 中自定义了一个名片插件，如果想删除掉，只需要删除 LCCKInputViewPluginVCard 类中的如下代码，当然删除整个类也是能达到该效果的：
+如果需要删除插件，比如 Demo 中自定义了一个名片插件，如果想删除掉，只需要删除 CYLDemoInputViewPluginVCard 类中的如下代码，当然删除整个类也是能达到该效果的：
 
 
  ```Objective-C
@@ -472,7 +474,7 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
 
 删除自定义消息：
 
-`LCCKVCardMessage` 类中的：
+`CYLDemoVCardMessage` 类中的：
 
  ```Objective-C
 + (void)load {
@@ -482,7 +484,7 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
 
 删除自定义 Cell ：
 
-`LCCKVCardMessageCell` 类中的：
+`CYLDemoVCardMessageCell` 类中的：
 
  ```Objective-C
 + (void)load {
@@ -502,13 +504,13 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
 
 ### 监听并筛选或处理消息
 
-可以通过接口 `-[LCChatKit setSendMessageHookBlock:]` 来实现hook掉发送消息的行为，可实现黑名单，敏感词本地过滤等业务，具体用法如何：
+可以通过接口 `-[CYLChatKit setSendMessageHookBlock:]` 来实现hook掉发送消息的行为，可实现黑名单，敏感词本地过滤等业务，具体用法如何：
 
  ```Objective-C
- //见LCChatKitExample+Setting.m
-- (void)lcck_setupSendMessageHook {
-    [[LCChatKit sharedInstance] setSendMessageHookBlock:^(LCCKConversationViewController *conversationController, __kindof AVIMTypedMessage *message, LCCKSendMessageHookCompletionHandler completionHandler) {
-        if ([message.clientId isEqualToString:@"Jerry"]) {
+ //见CYLDemoChatKitExample+Setting.m
+- (void)cyl_demo_setupSendMessageHook {
+    [[CYLChatKit sharedInstance] setSendMessageHookBlock:^(CYLConversationViewController *conversationController, id<CYLIMMessageProtocol> message, CYLSendMessageHookCompletionHandler completionHandler) {
+        if ([[message cyl_senderId] isEqualToString:@"Jerry"]) {
             NSInteger code = 0;
             NSString *errorReasonText = @"不允许Jerry发送消息";
             NSDictionary *errorInfo = @{
@@ -528,57 +530,58 @@ UI自定义，需要实现 `LCCKInputViewPluginDelegate` 方法：
 }
  ```
 
-可以通过接口 `-[LCChatKit setFilterMessagesBlock:]` 实现拦截新消息，包括实时接收的消息，和拉取历史记录消息。
+可以通过接口 `-[CYLChatKit setFilterMessagesBlock:]` 实现拦截新消息，包括实时接收的消息，和拉取历史记录消息。
 
 Demo中演示了，群定向消息的实现： 
 
 
-LCCKVCardMessage类：
+CYLDemoVCardMessage类：
 
 
  ```Objective-C
-- (instancetype)initWithClientId:(NSString *)clientId  conversationType:(LCCKConversationType)conversationType {
+- (instancetype)initWithClientId:(NSString *)clientId  conversationType:(CYLConversationType)conversationType {
     self = [super init];
     if (!self) {
         return nil;
     }
-    [self lcck_setObject:@"名片" forKey:LCCKCustomMessageTypeTitleKey];
-    [self lcck_setObject:@"这是一条名片消息，当前版本过低无法显示，请尝试升级APP查看" forKey:LCCKCustomMessageDegradeKey];
-    [self lcck_setObject:@"有人向您发送了一条名片消息，请打开APP查看" forKey:LCCKCustomMessageSummaryKey];
-    [self lcck_setObject:@(conversationType) forKey:LCCKCustomMessageConversationTypeKey];
-    [self lcck_setObject:clientId forKey:@"clientId"];
-    //定向群消息，仅部分用户可见，需要实现 `-setFilterMessagesBlock:`, 详情见 LCChatKitExample 中的演示
-   [self lcck_setObject:@[ @"Tom", @"Jerry"] forKey:LCCKCustomMessageOnlyVisiableForPartClientIds];
+    [self cyl_demo_setObject:@"名片" forKey:CYLCustomMessageTypeTitleKey];
+    [self cyl_demo_setObject:@"这是一条名片消息，当前版本过低无法显示，请尝试升级APP查看" forKey:CYLCustomMessageDegradeKey];
+    [self cyl_demo_setObject:@"有人向您发送了一条名片消息，请打开APP查看" forKey:CYLCustomMessageSummaryKey];
+    [self cyl_demo_setObject:@(conversationType) forKey:CYLCustomMessageConversationTypeKey];
+    [self cyl_demo_setObject:clientId forKey:@"clientId"];
+    //定向群消息，仅部分用户可见，需要实现 `-setFilterMessagesBlock:`, 详情见 CYLDemoChatKitExample 中的演示
+   [self cyl_demo_setObject:@[ @"Tom", @"Jerry"] forKey:CYLCustomMessageOnlyVisiableForPartClientIds];
     return self;
 }
  ```
 
-LCChatKitExample 类:
+CYLDemoChatKitExample 类:
 
  ```Objective-C
-    [[LCChatKit sharedInstance] setFilterMessagesBlock:^(AVIMConversation *conversation, NSArray<AVIMTypedMessage *> *messages, LCCKFilterMessagesCompletionHandler completionHandler) {
-        if (conversation.lcck_type == LCCKConversationTypeSingle) {
+    [[CYLChatKit sharedInstance] setFilterMessagesBlock:^(id<CYLConversationProtocol> conversation, NSArray<id<CYLIMMessageProtocol>> *messages, CYLFilterMessagesCompletionHandler completionHandler) {
+        if (conversation.cyl_type == CYLConversationTypeSingle) {
             completionHandler(messages ,nil);
             return;
         }
         //群聊
         NSMutableArray *filterMessages = [NSMutableArray arrayWithCapacity:messages.count];
-        for (AVIMTypedMessage *typedMessage in messages) {
-            if ([typedMessage.clientId isEqualToString:[LCChatKit sharedInstance].clientId]) {
+        // With the LeanCloud provider the messages are LeanCloud SDK typed messages.
+        for (AVIMTypedMessage *typedMessage in (NSArray<AVIMTypedMessage *> *)messages) {
+            if ([typedMessage.clientId isEqualToString:[CYLChatKit sharedInstance].clientId]) {
                 [filterMessages addObject:typedMessage];
                 continue;
             }
-            NSArray *visiableForPartClientIds = [typedMessage.attributes valueForKey:LCCKCustomMessageOnlyVisiableForPartClientIds];
+            NSArray *visiableForPartClientIds = [typedMessage.attributes valueForKey:CYLCustomMessageOnlyVisiableForPartClientIds];
             if (!visiableForPartClientIds) {
                 [filterMessages addObject:typedMessage];
             } else if (visiableForPartClientIds.count > 0) {
-                BOOL visiableForCurrentClientId = [visiableForPartClientIds containsObject:[LCChatKit sharedInstance].clientId];
+                BOOL visiableForCurrentClientId = [visiableForPartClientIds containsObject:[CYLChatKit sharedInstance].clientId];
                 if (visiableForCurrentClientId) {
                     [filterMessages addObject:typedMessage];
                 } else {
-                    typedMessage.text = @"这是群定向消息，仅部分群成员可见";
-                    typedMessage.mediaType = kAVIMMessageMediaTypeText;
-                    [filterMessages addObject:typedMessage];
+                    // mediaType is read-only, so replace the message with a text message.
+                    AVIMTextMessage *otherMessage = [AVIMTextMessage messageWithText:@"这是群定向消息，仅部分群成员可见" attributes:typedMessage.attributes];
+                    [filterMessages addObject:otherMessage];
                 }
             }
         }
@@ -595,7 +598,7 @@ LCChatKitExample 类:
 
  ```Objective-C
     //    替换默认预览图片的样式
-    [[LCChatKit sharedInstance] setPreviewImageMessageBlock:^(NSUInteger index, NSArray *allVisibleImages, NSArray *allVisibleThumbs, NSDictionary *userInfo) {
+    [[CYLChatKit sharedInstance] setPreviewImageMessageBlock:^(NSUInteger index, NSArray *allVisibleImages, NSArray *allVisibleThumbs, NSDictionary *userInfo) {
         [self examplePreviewImageMessageWithInitialIndex:index allVisibleImages:allVisibleImages allVisibleThumbs:allVisibleThumbs];
     }];
  ```
@@ -603,10 +606,10 @@ LCChatKitExample 类:
 
 #### 预览地理位置
 
-通过设置 `[LCChatKit setPreviewLocationMessageBlock:]` 实现：
+通过设置 `[CYLChatKit setPreviewLocationMessageBlock:]` 实现：
 
  ```Objective-C
-  [[LCChatKit sharedInstance] setPreviewLocationMessageBlock:^(CLLocation *location, NSString *geolocations, NSDictionary *userInfo) {
+  [[CYLChatKit sharedInstance] setPreviewLocationMessageBlock:^(CLLocation *location, NSString *geolocations, NSDictionary *userInfo) {
         [self examplePreViewLocationMessageWithLocation:location geolocations:geolocations];
     }];
  ```
@@ -618,16 +621,16 @@ chatKit 默认会为 TabBar 样式设置未读消息数，如果不是 TabBar �
 
  ```Objective-C
     //    如果不是TabBar样式，请实现该 Blcok 来设置 Badge 红标。
-    [[LCChatKit sharedInstance] setMarkBadgeWithTotalUnreadCountBlock:^(NSInteger totalUnreadCount, UIViewController *controller) {
+    [[CYLChatKit sharedInstance] setMarkBadgeWithTotalUnreadCountBlock:^(NSInteger totalUnreadCount, UIViewController *controller) {
         [self exampleMarkBadgeWithTotalUnreadCount:totalUnreadCount controller:controller];
     }];
  ```
 
 ### 设置单点登录与强制重连
 
-单点登录被踢下线或者点击聊天界面顶端的重连红条，ChatKit会去执行 `ForceReconnectSessionBlock`，你需要设置好 `[LCChatKit setForceReconnectSessionBlock:]` 来让ChatKit执行重连逻辑。
+单点登录被踢下线或者点击聊天界面顶端的重连红条，ChatKit会去执行 `ForceReconnectSessionBlock`，你需要设置好 `[CYLChatKit setForceReconnectSessionBlock:]` 来让ChatKit执行重连逻辑。
 
-ChatKit会默认开启单点登录，如果需要关闭，需要设置 `[LCChatKit setDisableSingleSignOn:]`。
+ChatKit会默认开启单点登录，如果需要关闭，需要设置 `[CYLChatKit setDisableSingleSignOn:]`。
 
 
 

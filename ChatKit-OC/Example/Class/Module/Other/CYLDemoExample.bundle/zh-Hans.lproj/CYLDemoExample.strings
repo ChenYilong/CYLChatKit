@@ -1,0 +1,14 @@
+/* Strings used only by the ChatKit-OC demo. Read them with CYLDemoExampleLocalizedString (CYLDemoExampleConstants.h). */
+"message.bar.error.title" = "错误";
+"message.bar.error.message" = "错误";
+"message.bar.success.title" = "成功";
+"message.bar.success.message" = "成功";
+"button.label.success.message" = "成功";
+"button.label.error.message" = "失败";
+"button.label.info.message" = "注意";
+"button.label.hide.all" = "全部隐藏";
+"tab.messages" = "消息";
+"tab.contacts" = "联系人";
+"login.title" = "输入任意ClientID开始聊天";
+"login.clientid" = "客户端 ID";
+"login.clientid.hint" = "输入客户端 ID，然后按回车登录";

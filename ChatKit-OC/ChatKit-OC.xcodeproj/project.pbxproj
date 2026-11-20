@@ -7,77 +7,64 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01BDA379832FA8BD0110D578 /* CYLDemoSettingSwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518A4BC415DD8550968622A3 /* CYLDemoSettingSwitchCell.swift */; };
+		053637F01440FCB380A2D2A3 /* CYLDemoContactListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F7C3B67C42EA7BC0AAAA6D /* CYLDemoContactListController.swift */; };
+		080AB3EA959A485971496D5C /* CYLDemoChatKitExample+Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ECC54BD3A86FFAA70B2BFF /* CYLDemoChatKitExample+Setting.swift */; };
+		0EB8F06B2D271D80A5151452 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60D605A7A6547E243DB3C62 /* AppDelegate.swift */; };
+		1178CC4957C40B6538D0480E /* AVIMMessage+CYLDemoExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C1D0077188613786FE4BD67 /* AVIMMessage+CYLDemoExtension.swift */; };
+		131E61A711471908ED77B9CC /* CYLDemoSettingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A6803B7A259460FE8642D2 /* CYLDemoSettingItem.swift */; };
+		1FA1674A094E4679E7B5FEC9 /* UIColor+CYLDemoExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB1B4124CFE34A792AB509C /* UIColor+CYLDemoExtension.swift */; };
+		24E4D34F912074A41FC2F3EB /* CYLDemoEmotionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD134F6F3DFD02BC63079B8E /* CYLDemoEmotionMessage.swift */; };
+		258B2D30DB2B2FFC12B63C4D /* CYLDemoPlusButtonSubclass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F8C3001C096494DC63C669 /* CYLDemoPlusButtonSubclass.swift */; };
+		26707D923894AB8AB4775B49 /* CYLDemoLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951DDF7CE6D8DECD39DEC774 /* CYLDemoLoginViewController.swift */; };
+		2CED63493BE78D49FB7D2CF9 /* CYLDemoExample.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DA321A6C109B235AD56D1507 /* CYLDemoExample.bundle */; };
+		2D145439F37E89AD1EFFF147 /* CYLDemoGroupConversationManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB772F5AF17790A7B4F2C55B /* CYLDemoGroupConversationManagementViewController.swift */; };
+		2DAD26F884D15C457036AF19 /* CYLDemoSettingButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84660EB998DBD937C13C083C /* CYLDemoSettingButtonCell.swift */; };
+		35481E93C2D01217B16F3593 /* CYLDemoSettingFooterTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67622413C38E194985C03EAC /* CYLDemoSettingFooterTitleView.swift */; };
+		382346A1192A6369064B885F /* CYLDemoSettingHeaderTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A271994A4F2D794E3F64E0A /* CYLDemoSettingHeaderTitleView.swift */; };
+		40DC4B79B41F00648AC5F314 /* CYLDemoLeanCloudIMProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DEE6CB2D373DE01336A1AB2 /* CYLDemoLeanCloudIMProvider.swift */; };
+		43F2BC008294246263C9AA4D /* AVIMTypedMessage+CYLDemoExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50AB2FF86FD509028EC7DC0 /* AVIMTypedMessage+CYLDemoExtension.swift */; };
+		458BAD0BBB0769F06BCDA93E /* CYLDemoContactManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9F84E0BAFA18C2DE98F1E8 /* CYLDemoContactManager.swift */; };
+		4BEB3D92B57D45D16F3462F4 /* CYLDemoChatDetailHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6CB564DC997EE0F046F0AE /* CYLDemoChatDetailHelper.swift */; };
+		4C9DF0F0CC12C38BB5A275ED /* CYLDemoExampleConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06295A22B10C889336510329 /* CYLDemoExampleConstants.swift */; };
 		4F5E34B61FA069300067EB95 /* EmojisList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F5E34B51FA069300067EB95 /* EmojisList.plist */; };
 		4F5E34B81FA069540067EB95 /* [删除]@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F5E34B71FA069540067EB95 /* [删除]@2x.png */; };
-		9A2669C81D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2669B81D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.m */; };
-		9A2669C91D6DA89100B66545 /* LCCKVCardMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2669BD1D6DA89100B66545 /* LCCKVCardMessage.m */; };
-		9A2669CA1D6DA89100B66545 /* calling_card_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A2669BF1D6DA89100B66545 /* calling_card_bg@2x.png */; };
-		9A2669CB1D6DA89100B66545 /* LCCKInputViewPluginVCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2669C21D6DA89100B66545 /* LCCKInputViewPluginVCard.m */; };
-		9A2669CC1D6DA89100B66545 /* LCCKVCardMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2669C41D6DA89100B66545 /* LCCKVCardMessageCell.m */; };
-		9A2669CD1D6DA89100B66545 /* LCCKVCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2669C61D6DA89100B66545 /* LCCKVCardView.m */; };
-		9A2669CE1D6DA89100B66545 /* LCCKVCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A2669C71D6DA89100B66545 /* LCCKVCardView.xib */; };
-		9A4730621CECAEC500AEB86F /* LCCKUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47302E1CECAEC500AEB86F /* LCCKUser.m */; };
-		9A4730671CECAEC500AEB86F /* LCCKLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47303E1CECAEC500AEB86F /* LCCKLoginViewController.m */; };
-		9A4730681CECAEC500AEB86F /* LCCKLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A47303F1CECAEC500AEB86F /* LCCKLoginViewController.xib */; };
-		9A4730691CECAEC500AEB86F /* DEMOCustomAutoCompleteObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730421CECAEC500AEB86F /* DEMOCustomAutoCompleteObject.m */; };
-		9A47306A1CECAEC500AEB86F /* DEMODataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730441CECAEC500AEB86F /* DEMODataSource.m */; };
-		9A47306B1CECAEC500AEB86F /* LCCKLoginDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730461CECAEC500AEB86F /* LCCKLoginDataSource.m */; };
-		9A47306C1CECAEC500AEB86F /* LCCKMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47304B1CECAEC500AEB86F /* LCCKMapViewController.m */; };
-		9A47306E1CECAEC500AEB86F /* LCCKUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730501CECAEC500AEB86F /* LCCKUtil.m */; };
-		9A47306F1CECAEC500AEB86F /* LCCKPlusButtonSubclass.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730531CECAEC500AEB86F /* LCCKPlusButtonSubclass.m */; };
+		5DE6D8927D75A1B1A253C0AC /* CYLDemoUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C5AC1ABD1A1187E1321E42C /* CYLDemoUtil.swift */; };
+		619F6ED3B63B5707911E8034 /* CYLDemoUserGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FF80D04ECCB49F0DF8151D /* CYLDemoUserGroupCell.swift */; };
+		66A76FCF8023FF19DA881515 /* CYLCommonUtils+CYLDemoExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C23A45C92ECD9B8336B4C03 /* CYLCommonUtils+CYLDemoExtension.swift */; };
+		66D65A69F99F104A15986494 /* CYLMessage+CYLDemoExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D974285F7B18C762D7E8DD00 /* CYLMessage+CYLDemoExtension.swift */; };
+		7A935450400922CFCCC5E909 /* CYLDemoLeanCloudSessionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D8129BEDDC6403B7756E4E /* CYLDemoLeanCloudSessionService.swift */; };
+		7C8A44B80454959292A1799C /* CYLDemoProfileNameEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273FCF197F7FEB70DF5903D6 /* CYLDemoProfileNameEditViewController.swift */; };
+		7CD361B45DFF9A4317E309D4 /* CYLDemoConstantsDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21E7DE1E306AD8242C70521 /* CYLDemoConstantsDefinition.swift */; };
+		8F1E5D59EA077A033F634409 /* CYLDemoChatKitExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9DD389681E6870E01251FC /* CYLDemoChatKitExample.swift */; };
+		92B04C214F573ACB548D75DD /* CYLDemoUIUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E25F91D85059F38C34ED19 /* CYLDemoUIUtility.swift */; };
+		9A4730681CECAEC500AEB86F /* CYLDemoLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A47303F1CECAEC500AEB86F /* CYLDemoLoginViewController.xib */; };
 		9A4730701CECAEC500AEB86F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A4730551CECAEC500AEB86F /* Assets.xcassets */; };
 		9A4730711CECAEC500AEB86F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A4730561CECAEC500AEB86F /* LaunchScreen.storyboard */; };
-		9A4730731CECAEC500AEB86F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A4730591CECAEC500AEB86F /* main.m */; };
-		9A4730751CECAEC500AEB86F /* NSObject+LCCKHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A47305E1CECAEC500AEB86F /* NSObject+LCCKHUD.m */; };
-		9A53BE2B1D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE0A1D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.m */; };
-		9A53BE2C1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE0C1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.m */; };
-		9A53BE2D1D8BB13E00AAB118 /* RedpacketCellResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9A53BE0E1D8BB13E00AAB118 /* RedpacketCellResource.bundle */; };
-		9A53BE2E1D8BB13E00AAB118 /* AppDelegate+RedPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE111D8BB13E00AAB118 /* AppDelegate+RedPacket.m */; };
-		9A53BE2F1D8BB13E00AAB118 /* RedpacketConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE131D8BB13E00AAB118 /* RedpacketConfig.m */; };
-		9A53BE341D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE241D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.m */; };
-		9A53BE351D8BB13E00AAB118 /* RedPacketInputViewPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE261D8BB13E00AAB118 /* RedPacketInputViewPlugin.m */; };
-		9A53BE361D8BB13E00AAB118 /* RedpacketMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE281D8BB13E00AAB118 /* RedpacketMessageCell.m */; };
-		9A53BE371D8BB13E00AAB118 /* RedpacketTakenMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE2A1D8BB13E00AAB118 /* RedpacketTakenMessageCell.m */; };
-		9A53BE401D8BB19C00AAB118 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE391D8BB19C00AAB118 /* AppDelegate.m */; };
-		9A53BE411D8BB19C00AAB118 /* LCChatKitExample.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE3B1D8BB19C00AAB118 /* LCChatKitExample.m */; };
-		9A53BE421D8BB19C00AAB118 /* LCChatKitExample+Setting.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE3D1D8BB19C00AAB118 /* LCChatKitExample+Setting.m */; };
-		9A53BE431D8BB19C00AAB118 /* LCCKTabBarControllerConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A53BE3F1D8BB19C00AAB118 /* LCCKTabBarControllerConfig.m */; };
-		9A55EB351E00FC5A0079EB65 /* LCCKProfileNameEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A55EB341E00FC5A0079EB65 /* LCCKProfileNameEditViewController.m */; };
-		9A562A361E03D52F00BB23DD /* LCCKSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A231E03D52F00BB23DD /* LCCKSettingViewController.m */; };
-		9A562A371E03D52F00BB23DD /* LCCKSettingButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A261E03D52F00BB23DD /* LCCKSettingButtonCell.m */; };
-		9A562A381E03D52F00BB23DD /* LCCKSettingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A281E03D52F00BB23DD /* LCCKSettingCell.m */; };
-		9A562A391E03D52F00BB23DD /* LCCKSettingSwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A2A1E03D52F00BB23DD /* LCCKSettingSwitchCell.m */; };
-		9A562A3A1E03D52F00BB23DD /* LCCKSettingGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A2E1E03D52F00BB23DD /* LCCKSettingGroup.m */; };
-		9A562A3B1E03D52F00BB23DD /* LCCKSettingItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A301E03D52F00BB23DD /* LCCKSettingItem.m */; };
-		9A562A3C1E03D52F00BB23DD /* LCCKSettingFooterTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A331E03D52F00BB23DD /* LCCKSettingFooterTitleView.m */; };
-		9A562A3D1E03D52F00BB23DD /* LCCKSettingHeaderTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A562A351E03D52F00BB23DD /* LCCKSettingHeaderTitleView.m */; };
-		9A7E2DE91D5F1040003A7312 /* LCCKContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7E2DE81D5F1040003A7312 /* LCCKContactManager.m */; };
-		9AB37B2A1DC86A60000782F2 /* ChatKit 自定义样式.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B251DC86A60000782F2 /* ChatKit 自定义样式.md */; };
-		9AB37B2B1DC86A60000782F2 /* ChatKit 自定义业务.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B261DC86A60000782F2 /* ChatKit 自定义业务.md */; };
-		9AB37B2C1DC86A60000782F2 /* ChatKit.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 9AB37B271DC86A60000782F2 /* ChatKit.podspec */; };
-		9AB37B2D1DC86A60000782F2 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B281DC86A60000782F2 /* README.md */; };
-		9AB37B2E1DC86A60000782F2 /* REDPACKET.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B291DC86A60000782F2 /* REDPACKET.md */; };
-		9AB37B311DC86A6E000782F2 /* issue_template.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B2F1DC86A6E000782F2 /* issue_template.md */; };
-		9AB37B321DC86A6E000782F2 /* pull_request_template.md in Sources */ = {isa = PBXBuildFile; fileRef = 9AB37B301DC86A6E000782F2 /* pull_request_template.md */; };
-		9AC3A4901DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A48F1DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.m */; };
-		9AC3A4931DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4921DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.m */; };
-		9AC3A4B81DF9BEE600F3405F /* LCCKUIUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4B31DF9BEE600F3405F /* LCCKUIUtility.m */; };
-		9AC3A4B91DF9BEE600F3405F /* UIColor+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4B51DF9BEE600F3405F /* UIColor+LCCKExtension.m */; };
-		9AC3A4BA1DF9BEE600F3405F /* UIFont+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4B71DF9BEE600F3405F /* UIFont+LCCKExtension.m */; };
-		9AC3A4CC1DF9C14500F3405F /* NSDate+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4C71DF9C14500F3405F /* NSDate+LCCKExtension.m */; };
-		9AC3A4CD1DF9C14500F3405F /* NSFileManager+LCCKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4C91DF9C14500F3405F /* NSFileManager+LCCKExtension.m */; };
-		9AC3A4D31DF9C16A00F3405F /* NSDate+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4D01DF9C16A00F3405F /* NSDate+Extension.m */; };
-		9AC3A4D41DF9C16A00F3405F /* NSDate+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4D21DF9C16A00F3405F /* NSDate+Utilities.m */; };
-		9AC3A4D71DF9C25200F3405F /* NSFileManager+Paths.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4D61DF9C25200F3405F /* NSFileManager+Paths.m */; };
-		9AC3A4DD1DF9C8BD00F3405F /* LCCKUserGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4DA1DF9C8BD00F3405F /* LCCKUserGroupCell.m */; };
-		9AC3A4DE1DF9C8BD00F3405F /* LCCKUserGroupItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4DC1DF9C8BD00F3405F /* LCCKUserGroupItemCell.m */; };
-		9AC3A4E21DF9CE0300F3405F /* LCCKChatDetailHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC3A4E11DF9CE0300F3405F /* LCCKChatDetailHelper.m */; };
 		9AD665CC1D2277830040A4E3 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721B1CED662D004FDACC /* SystemConfiguration.framework */; };
 		9AD665CD1D22778B0040A4E3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */; };
 		9AD665CE1D2277920040A4E3 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B721F1CED6644004FDACC /* CoreTelephony.framework */; };
 		9AD665CF1D22779A0040A4E3 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B72211CED664D004FDACC /* CoreLocation.framework */; };
+		9B5C2C5042B4683CEE4F21DA /* CYLDemoUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F560BB097C5975C0D54B0B6C /* CYLDemoUser.swift */; };
+		A544C6A1225E8EF055C3BB72 /* NSObject+CYLDemoHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D87CFE7CD773CE903551253 /* NSObject+CYLDemoHUD.swift */; };
+		A7A3B044529CE9D0061001AD /* UIFont+CYLDemoExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471756AD5C6AC867A2C8E77D /* UIFont+CYLDemoExtension.swift */; };
+		ACDF9A972522A408D5D52EEB /* CYLDemoSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BAEF138C7E097E6B88E11CD /* CYLDemoSettingViewController.swift */; };
+		B40773F11CCE8848F6D24D55 /* CYLDemoExampleLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04407FE285FB7A6FBE76F2DD /* CYLDemoExampleLocalization.swift */; };
+		C5260ACDEFDED94E9E33481D /* CYLDemoUserGroupItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D719D901D4188A93E43E0AFA /* CYLDemoUserGroupItemCell.swift */; };
+		CAC0D44FB83E72343F492CD8 /* CYLDemoContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0BF4C15FFD9B6285FE0635 /* CYLDemoContactCell.swift */; };
+		CDD1DE58AD5954FDF42A42B1 /* CYLDemoLoginDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4AE3017FE20FE5E399D347 /* CYLDemoLoginDataSource.swift */; };
 		D6B21DCFEA88FFA0694238EC /* libPods-ChatKit-OC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D62193C0ECACB72DC928AD70 /* libPods-ChatKit-OC.a */; };
+		D6C6062015836565A5F1DF69 /* CYLDemoContactCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B010ADA19D354A08D14BB107 /* CYLDemoContactCell.xib */; };
+		D7803FEA3DB088A64824D3FA /* CYLDemoSettingGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED58ACFB7E9BBC650C60440 /* CYLDemoSettingGroup.swift */; };
+		D7897D2E7573044CB706ADFC /* CYLDemoGroupConversationMemberInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46033BE1A85A85A16401B4EE /* CYLDemoGroupConversationMemberInfoViewController.swift */; };
+		D8F027CEF4EFBCF2DB71FEF2 /* CYLDemoTabBarControllerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D6A3F35E369BDCD11B8F72 /* CYLDemoTabBarControllerConfig.swift */; };
+		DDC629A4F8E459FEE7650389 /* CYLDemoMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F85234A1E25704C94E9E54A /* CYLDemoMapViewController.swift */; };
 		E7586C4F1D630681000C18B4 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7586C4E1D630681000C18B4 /* CoreMotion.framework */; };
+		E75E9104AC4EC42C2113E426 /* AVIMConversation+CYLDemoExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318F98486C73D55AFA6478EE /* AVIMConversation+CYLDemoExtension.swift */; };
+		E96C85FEEB95D065E9CF4E8E /* CYLDemoGroupConversationDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ABCCDB4DA50E4835EB7418 /* CYLDemoGroupConversationDetailViewController.swift */; };
+		EBD7F57C710913662F404B01 /* CYLDemoLeanCloudConversationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D81CA3589E8C6A83B8D40 /* CYLDemoLeanCloudConversationService.swift */; };
+		EC33AD3EDC96FDC8871B0B75 /* CYLDemoSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12624404CBECE0986547B0A /* CYLDemoSettingCell.swift */; };
+		F5E63492C4C50820F3A4C409 /* CYLDemoSingleConversationDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398C3AC1ABF30239C44029A3 /* CYLDemoSingleConversationDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -94,135 +81,75 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		04407FE285FB7A6FBE76F2DD /* CYLDemoExampleLocalization.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoExampleLocalization.swift; sourceTree = "<group>"; };
+		06295A22B10C889336510329 /* CYLDemoExampleConstants.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoExampleConstants.swift; sourceTree = "<group>"; };
+		15FF80D04ECCB49F0DF8151D /* CYLDemoUserGroupCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoUserGroupCell.swift; sourceTree = "<group>"; };
+		16D8129BEDDC6403B7756E4E /* CYLDemoLeanCloudSessionService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoLeanCloudSessionService.swift; sourceTree = "<group>"; };
+		1DEE6CB2D373DE01336A1AB2 /* CYLDemoLeanCloudIMProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoLeanCloudIMProvider.swift; sourceTree = "<group>"; };
+		273FCF197F7FEB70DF5903D6 /* CYLDemoProfileNameEditViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoProfileNameEditViewController.swift; sourceTree = "<group>"; };
+		318F98486C73D55AFA6478EE /* AVIMConversation+CYLDemoExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "AVIMConversation+CYLDemoExtension.swift"; sourceTree = "<group>"; };
+		34ABCCDB4DA50E4835EB7418 /* CYLDemoGroupConversationDetailViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoGroupConversationDetailViewController.swift; sourceTree = "<group>"; };
+		398C3AC1ABF30239C44029A3 /* CYLDemoSingleConversationDetailViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoSingleConversationDetailViewController.swift; sourceTree = "<group>"; };
+		3A271994A4F2D794E3F64E0A /* CYLDemoSettingHeaderTitleView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoSettingHeaderTitleView.swift; sourceTree = "<group>"; };
+		3C1D0077188613786FE4BD67 /* AVIMMessage+CYLDemoExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "AVIMMessage+CYLDemoExtension.swift"; sourceTree = "<group>"; };
+		453D81CA3589E8C6A83B8D40 /* CYLDemoLeanCloudConversationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoLeanCloudConversationService.swift; sourceTree = "<group>"; };
+		46033BE1A85A85A16401B4EE /* CYLDemoGroupConversationMemberInfoViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoGroupConversationMemberInfoViewController.swift; sourceTree = "<group>"; };
+		471756AD5C6AC867A2C8E77D /* UIFont+CYLDemoExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIFont+CYLDemoExtension.swift"; sourceTree = "<group>"; };
 		4F5E34B51FA069300067EB95 /* EmojisList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = EmojisList.plist; sourceTree = "<group>"; };
 		4F5E34B71FA069540067EB95 /* [删除]@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "[删除]@2x.png"; sourceTree = "<group>"; };
+		518A4BC415DD8550968622A3 /* CYLDemoSettingSwitchCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoSettingSwitchCell.swift; sourceTree = "<group>"; };
+		57E25F91D85059F38C34ED19 /* CYLDemoUIUtility.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoUIUtility.swift; sourceTree = "<group>"; };
+		57ECC54BD3A86FFAA70B2BFF /* CYLDemoChatKitExample+Setting.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "CYLDemoChatKitExample+Setting.swift"; sourceTree = "<group>"; };
+		5C6CB564DC997EE0F046F0AE /* CYLDemoChatDetailHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoChatDetailHelper.swift; sourceTree = "<group>"; };
+		5F85234A1E25704C94E9E54A /* CYLDemoMapViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoMapViewController.swift; sourceTree = "<group>"; };
+		63D6A3F35E369BDCD11B8F72 /* CYLDemoTabBarControllerConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoTabBarControllerConfig.swift; sourceTree = "<group>"; };
+		67622413C38E194985C03EAC /* CYLDemoSettingFooterTitleView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoSettingFooterTitleView.swift; sourceTree = "<group>"; };
+		6BAEF138C7E097E6B88E11CD /* CYLDemoSettingViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoSettingViewController.swift; sourceTree = "<group>"; };
+		6C5AC1ABD1A1187E1321E42C /* CYLDemoUtil.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoUtil.swift; sourceTree = "<group>"; };
+		6C9F84E0BAFA18C2DE98F1E8 /* CYLDemoContactManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoContactManager.swift; sourceTree = "<group>"; };
 		7404AB0E0935F68A63803D6D /* Pods-ChatKit-OC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.release.xcconfig"; sourceTree = "<group>"; };
+		7D87CFE7CD773CE903551253 /* NSObject+CYLDemoHUD.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "NSObject+CYLDemoHUD.swift"; sourceTree = "<group>"; };
+		84660EB998DBD937C13C083C /* CYLDemoSettingButtonCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoSettingButtonCell.swift; sourceTree = "<group>"; };
+		86F8C3001C096494DC63C669 /* CYLDemoPlusButtonSubclass.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoPlusButtonSubclass.swift; sourceTree = "<group>"; };
+		8A9DD389681E6870E01251FC /* CYLDemoChatKitExample.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoChatKitExample.swift; sourceTree = "<group>"; };
+		951DDF7CE6D8DECD39DEC774 /* CYLDemoLoginViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoLoginViewController.swift; sourceTree = "<group>"; };
 		9A0B721B1CED662D004FDACC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9A0B721D1CED6637004FDACC /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		9A0B721F1CED6644004FDACC /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		9A0B72211CED664D004FDACC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		9A2669B71D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKInputViewPluginConversationBackground.h; sourceTree = "<group>"; };
-		9A2669B81D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKInputViewPluginConversationBackground.m; sourceTree = "<group>"; };
-		9A2669BC1D6DA89100B66545 /* LCCKVCardMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKVCardMessage.h; sourceTree = "<group>"; };
-		9A2669BD1D6DA89100B66545 /* LCCKVCardMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKVCardMessage.m; sourceTree = "<group>"; };
-		9A2669BF1D6DA89100B66545 /* calling_card_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "calling_card_bg@2x.png"; sourceTree = "<group>"; };
-		9A2669C11D6DA89100B66545 /* LCCKInputViewPluginVCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKInputViewPluginVCard.h; sourceTree = "<group>"; };
-		9A2669C21D6DA89100B66545 /* LCCKInputViewPluginVCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKInputViewPluginVCard.m; sourceTree = "<group>"; };
-		9A2669C31D6DA89100B66545 /* LCCKVCardMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKVCardMessageCell.h; sourceTree = "<group>"; };
-		9A2669C41D6DA89100B66545 /* LCCKVCardMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKVCardMessageCell.m; sourceTree = "<group>"; };
-		9A2669C51D6DA89100B66545 /* LCCKVCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKVCardView.h; sourceTree = "<group>"; };
-		9A2669C61D6DA89100B66545 /* LCCKVCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKVCardView.m; sourceTree = "<group>"; };
-		9A2669C71D6DA89100B66545 /* LCCKVCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LCCKVCardView.xib; sourceTree = "<group>"; };
-		9A47302D1CECAEC500AEB86F /* LCCKUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKUser.h; sourceTree = "<group>"; };
-		9A47302E1CECAEC500AEB86F /* LCCKUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKUser.m; sourceTree = "<group>"; };
-		9A47303D1CECAEC500AEB86F /* LCCKLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKLoginViewController.h; sourceTree = "<group>"; };
-		9A47303E1CECAEC500AEB86F /* LCCKLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKLoginViewController.m; sourceTree = "<group>"; };
-		9A47303F1CECAEC500AEB86F /* LCCKLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LCCKLoginViewController.xib; sourceTree = "<group>"; };
-		9A4730411CECAEC500AEB86F /* DEMOCustomAutoCompleteObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DEMOCustomAutoCompleteObject.h; sourceTree = "<group>"; };
-		9A4730421CECAEC500AEB86F /* DEMOCustomAutoCompleteObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DEMOCustomAutoCompleteObject.m; sourceTree = "<group>"; };
-		9A4730431CECAEC500AEB86F /* DEMODataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DEMODataSource.h; sourceTree = "<group>"; };
-		9A4730441CECAEC500AEB86F /* DEMODataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DEMODataSource.m; sourceTree = "<group>"; };
-		9A4730451CECAEC500AEB86F /* LCCKLoginDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKLoginDataSource.h; sourceTree = "<group>"; };
-		9A4730461CECAEC500AEB86F /* LCCKLoginDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKLoginDataSource.m; sourceTree = "<group>"; };
-		9A47304A1CECAEC500AEB86F /* LCCKMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKMapViewController.h; sourceTree = "<group>"; };
-		9A47304B1CECAEC500AEB86F /* LCCKMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKMapViewController.m; sourceTree = "<group>"; };
-		9A47304E1CECAEC500AEB86F /* LCCKConstantsDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKConstantsDefinition.h; sourceTree = "<group>"; };
-		9A47304F1CECAEC500AEB86F /* LCCKUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKUtil.h; sourceTree = "<group>"; };
-		9A4730501CECAEC500AEB86F /* LCCKUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKUtil.m; sourceTree = "<group>"; };
-		9A4730521CECAEC500AEB86F /* LCCKPlusButtonSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKPlusButtonSubclass.h; sourceTree = "<group>"; };
-		9A4730531CECAEC500AEB86F /* LCCKPlusButtonSubclass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKPlusButtonSubclass.m; sourceTree = "<group>"; };
+		9A47303F1CECAEC500AEB86F /* CYLDemoLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CYLDemoLoginViewController.xib; sourceTree = "<group>"; };
 		9A4730551CECAEC500AEB86F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9A4730571CECAEC500AEB86F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9A4730581CECAEC500AEB86F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9A4730591CECAEC500AEB86F /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		9A47305D1CECAEC500AEB86F /* NSObject+LCCKHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+LCCKHUD.h"; sourceTree = "<group>"; };
-		9A47305E1CECAEC500AEB86F /* NSObject+LCCKHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+LCCKHUD.m"; sourceTree = "<group>"; };
 		9A4CBADB1DB87F2000E61C92 /* ChatKit-OC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ChatKit-OC.entitlements"; sourceTree = "<group>"; };
-		9A53BE091D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMTypedMessageRedPacket.h; sourceTree = "<group>"; };
-		9A53BE0A1D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMTypedMessageRedPacket.m; sourceTree = "<group>"; };
-		9A53BE0B1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIMTypedMessageRedPacketTaken.h; sourceTree = "<group>"; };
-		9A53BE0C1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVIMTypedMessageRedPacketTaken.m; sourceTree = "<group>"; };
-		9A53BE0E1D8BB13E00AAB118 /* RedpacketCellResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = RedpacketCellResource.bundle; sourceTree = "<group>"; };
-		9A53BE101D8BB13E00AAB118 /* AppDelegate+RedPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+RedPacket.h"; sourceTree = "<group>"; };
-		9A53BE111D8BB13E00AAB118 /* AppDelegate+RedPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+RedPacket.m"; sourceTree = "<group>"; };
-		9A53BE121D8BB13E00AAB118 /* RedpacketConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketConfig.h; sourceTree = "<group>"; };
-		9A53BE131D8BB13E00AAB118 /* RedpacketConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedpacketConfig.m; sourceTree = "<group>"; };
-		9A53BE231D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedPacketChangeInputViewPlugin.h; sourceTree = "<group>"; };
-		9A53BE241D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedPacketChangeInputViewPlugin.m; sourceTree = "<group>"; };
-		9A53BE251D8BB13E00AAB118 /* RedPacketInputViewPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedPacketInputViewPlugin.h; sourceTree = "<group>"; };
-		9A53BE261D8BB13E00AAB118 /* RedPacketInputViewPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedPacketInputViewPlugin.m; sourceTree = "<group>"; };
-		9A53BE271D8BB13E00AAB118 /* RedpacketMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketMessageCell.h; sourceTree = "<group>"; };
-		9A53BE281D8BB13E00AAB118 /* RedpacketMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedpacketMessageCell.m; sourceTree = "<group>"; };
-		9A53BE291D8BB13E00AAB118 /* RedpacketTakenMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedpacketTakenMessageCell.h; sourceTree = "<group>"; };
-		9A53BE2A1D8BB13E00AAB118 /* RedpacketTakenMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedpacketTakenMessageCell.m; sourceTree = "<group>"; };
-		9A53BE381D8BB19C00AAB118 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		9A53BE391D8BB19C00AAB118 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		9A53BE3A1D8BB19C00AAB118 /* LCChatKitExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCChatKitExample.h; sourceTree = "<group>"; };
-		9A53BE3B1D8BB19C00AAB118 /* LCChatKitExample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCChatKitExample.m; sourceTree = "<group>"; };
-		9A53BE3C1D8BB19C00AAB118 /* LCChatKitExample+Setting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LCChatKitExample+Setting.h"; sourceTree = "<group>"; };
-		9A53BE3D1D8BB19C00AAB118 /* LCChatKitExample+Setting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LCChatKitExample+Setting.m"; sourceTree = "<group>"; };
-		9A53BE3E1D8BB19C00AAB118 /* LCCKTabBarControllerConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKTabBarControllerConfig.h; sourceTree = "<group>"; };
-		9A53BE3F1D8BB19C00AAB118 /* LCCKTabBarControllerConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKTabBarControllerConfig.m; sourceTree = "<group>"; };
-		9A55EB331E00FC5A0079EB65 /* LCCKProfileNameEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKProfileNameEditViewController.h; sourceTree = "<group>"; };
-		9A55EB341E00FC5A0079EB65 /* LCCKProfileNameEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKProfileNameEditViewController.m; sourceTree = "<group>"; };
-		9A562A221E03D52F00BB23DD /* LCCKSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSettingViewController.h; sourceTree = "<group>"; };
-		9A562A231E03D52F00BB23DD /* LCCKSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSettingViewController.m; sourceTree = "<group>"; };
-		9A562A251E03D52F00BB23DD /* LCCKSettingButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSettingButtonCell.h; sourceTree = "<group>"; };
-		9A562A261E03D52F00BB23DD /* LCCKSettingButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSettingButtonCell.m; sourceTree = "<group>"; };
-		9A562A271E03D52F00BB23DD /* LCCKSettingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSettingCell.h; sourceTree = "<group>"; };
-		9A562A281E03D52F00BB23DD /* LCCKSettingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSettingCell.m; sourceTree = "<group>"; };
-		9A562A291E03D52F00BB23DD /* LCCKSettingSwitchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSettingSwitchCell.h; sourceTree = "<group>"; };
-		9A562A2A1E03D52F00BB23DD /* LCCKSettingSwitchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSettingSwitchCell.m; sourceTree = "<group>"; };
-		9A562A2B1E03D52F00BB23DD /* TLSettingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLSettingCell.h; sourceTree = "<group>"; };
-		9A562A2D1E03D52F00BB23DD /* LCCKSettingGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSettingGroup.h; sourceTree = "<group>"; };
-		9A562A2E1E03D52F00BB23DD /* LCCKSettingGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSettingGroup.m; sourceTree = "<group>"; };
-		9A562A2F1E03D52F00BB23DD /* LCCKSettingItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSettingItem.h; sourceTree = "<group>"; };
-		9A562A301E03D52F00BB23DD /* LCCKSettingItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSettingItem.m; sourceTree = "<group>"; };
-		9A562A321E03D52F00BB23DD /* LCCKSettingFooterTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSettingFooterTitleView.h; sourceTree = "<group>"; };
-		9A562A331E03D52F00BB23DD /* LCCKSettingFooterTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSettingFooterTitleView.m; sourceTree = "<group>"; };
-		9A562A341E03D52F00BB23DD /* LCCKSettingHeaderTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSettingHeaderTitleView.h; sourceTree = "<group>"; };
-		9A562A351E03D52F00BB23DD /* LCCKSettingHeaderTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSettingHeaderTitleView.m; sourceTree = "<group>"; };
 		9A754D4B1CECAC3E000967F1 /* ChatKit-OC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ChatKit-OC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9A7E2DE61D5F0B59003A7312 /* LCCKExampleConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKExampleConstants.h; sourceTree = "<group>"; };
-		9A7E2DE71D5F1040003A7312 /* LCCKContactManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKContactManager.h; sourceTree = "<group>"; };
-		9A7E2DE81D5F1040003A7312 /* LCCKContactManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKContactManager.m; sourceTree = "<group>"; };
 		9AAFE6571D48C863004A0309 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		9AB37B251DC86A60000782F2 /* ChatKit 自定义样式.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = "ChatKit 自定义样式.md"; path = "../../../../../ChatKit 自定义样式.md"; sourceTree = "<group>"; };
 		9AB37B261DC86A60000782F2 /* ChatKit 自定义业务.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = "ChatKit 自定义业务.md"; path = "../../../../../ChatKit 自定义业务.md"; sourceTree = "<group>"; };
-		9AB37B271DC86A60000782F2 /* ChatKit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ChatKit.podspec; path = ../../../../../ChatKit.podspec; sourceTree = "<group>"; };
 		9AB37B281DC86A60000782F2 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../../../../README.md; sourceTree = "<group>"; };
-		9AB37B291DC86A60000782F2 /* REDPACKET.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = REDPACKET.md; path = ../../../../../REDPACKET.md; sourceTree = "<group>"; };
 		9AB37B2F1DC86A6E000782F2 /* issue_template.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = issue_template.md; path = ../../../../../.github/issue_template.md; sourceTree = "<group>"; };
 		9AB37B301DC86A6E000782F2 /* pull_request_template.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = pull_request_template.md; path = ../../../../../.github/pull_request_template.md; sourceTree = "<group>"; };
-		9AC3A48E1DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKSingleConversationDetailViewController.h; sourceTree = "<group>"; };
-		9AC3A48F1DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKSingleConversationDetailViewController.m; sourceTree = "<group>"; };
-		9AC3A4911DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKGroupConversationDetailViewController.h; sourceTree = "<group>"; };
-		9AC3A4921DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKGroupConversationDetailViewController.m; sourceTree = "<group>"; };
-		9AC3A4B21DF9BEE600F3405F /* LCCKUIUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKUIUtility.h; sourceTree = "<group>"; };
-		9AC3A4B31DF9BEE600F3405F /* LCCKUIUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKUIUtility.m; sourceTree = "<group>"; };
-		9AC3A4B41DF9BEE600F3405F /* UIColor+LCCKExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+LCCKExtension.h"; sourceTree = "<group>"; };
-		9AC3A4B51DF9BEE600F3405F /* UIColor+LCCKExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+LCCKExtension.m"; sourceTree = "<group>"; };
-		9AC3A4B61DF9BEE600F3405F /* UIFont+LCCKExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+LCCKExtension.h"; sourceTree = "<group>"; };
-		9AC3A4B71DF9BEE600F3405F /* UIFont+LCCKExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+LCCKExtension.m"; sourceTree = "<group>"; };
-		9AC3A4C61DF9C14500F3405F /* NSDate+LCCKExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+LCCKExtension.h"; sourceTree = "<group>"; };
-		9AC3A4C71DF9C14500F3405F /* NSDate+LCCKExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+LCCKExtension.m"; sourceTree = "<group>"; };
-		9AC3A4C81DF9C14500F3405F /* NSFileManager+LCCKExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+LCCKExtension.h"; sourceTree = "<group>"; };
-		9AC3A4C91DF9C14500F3405F /* NSFileManager+LCCKExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+LCCKExtension.m"; sourceTree = "<group>"; };
-		9AC3A4CF1DF9C16A00F3405F /* NSDate+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Extension.h"; sourceTree = "<group>"; };
-		9AC3A4D01DF9C16A00F3405F /* NSDate+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Extension.m"; sourceTree = "<group>"; };
-		9AC3A4D11DF9C16A00F3405F /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
-		9AC3A4D21DF9C16A00F3405F /* NSDate+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Utilities.m"; sourceTree = "<group>"; };
-		9AC3A4D51DF9C25200F3405F /* NSFileManager+Paths.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Paths.h"; sourceTree = "<group>"; };
-		9AC3A4D61DF9C25200F3405F /* NSFileManager+Paths.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Paths.m"; sourceTree = "<group>"; };
-		9AC3A4D91DF9C8BD00F3405F /* LCCKUserGroupCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKUserGroupCell.h; sourceTree = "<group>"; };
-		9AC3A4DA1DF9C8BD00F3405F /* LCCKUserGroupCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKUserGroupCell.m; sourceTree = "<group>"; };
-		9AC3A4DB1DF9C8BD00F3405F /* LCCKUserGroupItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKUserGroupItemCell.h; sourceTree = "<group>"; };
-		9AC3A4DC1DF9C8BD00F3405F /* LCCKUserGroupItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKUserGroupItemCell.m; sourceTree = "<group>"; };
-		9AC3A4E01DF9CE0300F3405F /* LCCKChatDetailHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCCKChatDetailHelper.h; sourceTree = "<group>"; };
-		9AC3A4E11DF9CE0300F3405F /* LCCKChatDetailHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCCKChatDetailHelper.m; sourceTree = "<group>"; };
+		9C23A45C92ECD9B8336B4C03 /* CYLCommonUtils+CYLDemoExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "CYLCommonUtils+CYLDemoExtension.swift"; sourceTree = "<group>"; };
+		AD134F6F3DFD02BC63079B8E /* CYLDemoEmotionMessage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoEmotionMessage.swift; sourceTree = "<group>"; };
+		AF4AE3017FE20FE5E399D347 /* CYLDemoLoginDataSource.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoLoginDataSource.swift; sourceTree = "<group>"; };
+		B010ADA19D354A08D14BB107 /* CYLDemoContactCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CYLDemoContactCell.xib; sourceTree = "<group>"; };
+		B60D605A7A6547E243DB3C62 /* AppDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C21E7DE1E306AD8242C70521 /* CYLDemoConstantsDefinition.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoConstantsDefinition.swift; sourceTree = "<group>"; };
+		C3F7C3B67C42EA7BC0AAAA6D /* CYLDemoContactListController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoContactListController.swift; sourceTree = "<group>"; };
+		C50AB2FF86FD509028EC7DC0 /* AVIMTypedMessage+CYLDemoExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "AVIMTypedMessage+CYLDemoExtension.swift"; sourceTree = "<group>"; };
+		CED58ACFB7E9BBC650C60440 /* CYLDemoSettingGroup.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoSettingGroup.swift; sourceTree = "<group>"; };
 		D62193C0ECACB72DC928AD70 /* libPods-ChatKit-OC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChatKit-OC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D719D901D4188A93E43E0AFA /* CYLDemoUserGroupItemCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoUserGroupItemCell.swift; sourceTree = "<group>"; };
+		D974285F7B18C762D7E8DD00 /* CYLMessage+CYLDemoExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "CYLMessage+CYLDemoExtension.swift"; sourceTree = "<group>"; };
+		DA321A6C109B235AD56D1507 /* CYLDemoExample.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CYLDemoExample.bundle; sourceTree = "<group>"; };
+		DB772F5AF17790A7B4F2C55B /* CYLDemoGroupConversationManagementViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoGroupConversationManagementViewController.swift; sourceTree = "<group>"; };
+		DDB1B4124CFE34A792AB509C /* UIColor+CYLDemoExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIColor+CYLDemoExtension.swift"; sourceTree = "<group>"; };
+		E12624404CBECE0986547B0A /* CYLDemoSettingCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoSettingCell.swift; sourceTree = "<group>"; };
 		E55D34EC8F162DB5443587B0 /* Pods-ChatKit-OC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatKit-OC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatKit-OC/Pods-ChatKit-OC.debug.xcconfig"; sourceTree = "<group>"; };
 		E7586C4E1D630681000C18B4 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		F560BB097C5975C0D54B0B6C /* CYLDemoUser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoUser.swift; sourceTree = "<group>"; };
+		F9A6803B7A259460FE8642D2 /* CYLDemoSettingItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoSettingItem.swift; sourceTree = "<group>"; };
+		FD0BF4C15FFD9B6285FE0635 /* CYLDemoContactCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CYLDemoContactCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -242,6 +169,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		154E0BBF4D12D1E40AC24FA8 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				C3F7C3B67C42EA7BC0AAAA6D /* CYLDemoContactListController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		2C911BCC9532743030564C12 /* ContactList */ = {
+			isa = PBXGroup;
+			children = (
+				154E0BBF4D12D1E40AC24FA8 /* Controller */,
+				E1F08BC7F753498FDECFA1DF /* View */,
+			);
+			path = ContactList;
+			sourceTree = "<group>";
+		};
+		51F089E8BD8FA22A9C0F2388 /* LeanCloud */ = {
+			isa = PBXGroup;
+			children = (
+				318F98486C73D55AFA6478EE /* AVIMConversation+CYLDemoExtension.swift */,
+				3C1D0077188613786FE4BD67 /* AVIMMessage+CYLDemoExtension.swift */,
+				C50AB2FF86FD509028EC7DC0 /* AVIMTypedMessage+CYLDemoExtension.swift */,
+				9C23A45C92ECD9B8336B4C03 /* CYLCommonUtils+CYLDemoExtension.swift */,
+				AD134F6F3DFD02BC63079B8E /* CYLDemoEmotionMessage.swift */,
+				453D81CA3589E8C6A83B8D40 /* CYLDemoLeanCloudConversationService.swift */,
+				1DEE6CB2D373DE01336A1AB2 /* CYLDemoLeanCloudIMProvider.swift */,
+				16D8129BEDDC6403B7756E4E /* CYLDemoLeanCloudSessionService.swift */,
+				D974285F7B18C762D7E8DD00 /* CYLMessage+CYLDemoExtension.swift */,
+			);
+			name = LeanCloud;
+			path = LeanCloud;
+			sourceTree = "<group>";
+		};
 		578A4ED63A7AFF3EA27EF73A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -255,85 +216,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		9A2669B51D6DA89100B66545 /* Customize */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669B61D6DA89100B66545 /* CustomizedConversationBackground */,
-				9A2669B91D6DA89100B66545 /* CustomizedMessage */,
-			);
-			path = Customize;
-			sourceTree = "<group>";
-		};
-		9A2669B61D6DA89100B66545 /* CustomizedConversationBackground */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669B71D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.h */,
-				9A2669B81D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.m */,
-			);
-			path = CustomizedConversationBackground;
-			sourceTree = "<group>";
-		};
-		9A2669B91D6DA89100B66545 /* CustomizedMessage */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669BA1D6DA89100B66545 /* VCardMessage */,
-			);
-			path = CustomizedMessage;
-			sourceTree = "<group>";
-		};
-		9A2669BA1D6DA89100B66545 /* VCardMessage */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669BB1D6DA89100B66545 /* Model */,
-				9A2669BE1D6DA89100B66545 /* Resources */,
-				9A2669C01D6DA89100B66545 /* View */,
-			);
-			path = VCardMessage;
-			sourceTree = "<group>";
-		};
-		9A2669BB1D6DA89100B66545 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669BC1D6DA89100B66545 /* LCCKVCardMessage.h */,
-				9A2669BD1D6DA89100B66545 /* LCCKVCardMessage.m */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		9A2669BE1D6DA89100B66545 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669BF1D6DA89100B66545 /* calling_card_bg@2x.png */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		9A2669C01D6DA89100B66545 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				9A2669C11D6DA89100B66545 /* LCCKInputViewPluginVCard.h */,
-				9A2669C21D6DA89100B66545 /* LCCKInputViewPluginVCard.m */,
-				9A2669C31D6DA89100B66545 /* LCCKVCardMessageCell.h */,
-				9A2669C41D6DA89100B66545 /* LCCKVCardMessageCell.m */,
-				9A2669C51D6DA89100B66545 /* LCCKVCardView.h */,
-				9A2669C61D6DA89100B66545 /* LCCKVCardView.m */,
-				9A2669C71D6DA89100B66545 /* LCCKVCardView.xib */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
 		9A4730281CECAEC500AEB86F /* Example */ = {
 			isa = PBXGroup;
 			children = (
-				9A53BE381D8BB19C00AAB118 /* AppDelegate.h */,
-				9A53BE391D8BB19C00AAB118 /* AppDelegate.m */,
-				9A53BE3A1D8BB19C00AAB118 /* LCChatKitExample.h */,
-				9A53BE3B1D8BB19C00AAB118 /* LCChatKitExample.m */,
-				9A53BE3C1D8BB19C00AAB118 /* LCChatKitExample+Setting.h */,
-				9A53BE3D1D8BB19C00AAB118 /* LCChatKitExample+Setting.m */,
-				9A53BE3E1D8BB19C00AAB118 /* LCCKTabBarControllerConfig.h */,
-				9A53BE3F1D8BB19C00AAB118 /* LCCKTabBarControllerConfig.m */,
 				9A47302B1CECAEC500AEB86F /* Class */,
+				B60D605A7A6547E243DB3C62 /* AppDelegate.swift */,
+				57ECC54BD3A86FFAA70B2BFF /* CYLDemoChatKitExample+Setting.swift */,
+				8A9DD389681E6870E01251FC /* CYLDemoChatKitExample.swift */,
+				63D6A3F35E369BDCD11B8F72 /* CYLDemoTabBarControllerConfig.swift */,
 			);
 			path = Example;
 			sourceTree = "<group>";
@@ -344,6 +234,7 @@
 				9A47302C1CECAEC500AEB86F /* Model */,
 				9A47302F1CECAEC500AEB86F /* Module */,
 				9A47305A1CECAEC500AEB86F /* Tool */,
+				51F089E8BD8FA22A9C0F2388 /* LeanCloud */,
 			);
 			path = Class;
 			sourceTree = "<group>";
@@ -351,8 +242,7 @@
 		9A47302C1CECAEC500AEB86F /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				9A47302D1CECAEC500AEB86F /* LCCKUser.h */,
-				9A47302E1CECAEC500AEB86F /* LCCKUser.m */,
+				F560BB097C5975C0D54B0B6C /* CYLDemoUser.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -361,9 +251,8 @@
 			isa = PBXGroup;
 			children = (
 				9AC3A4B01DF9BEE600F3405F /* Utilities */,
+				2C911BCC9532743030564C12 /* ContactList */,
 				9AC3A4891DF9B72B00F3405F /* ConversationDetail */,
-				9A53BE071D8BB13E00AAB118 /* Redpacket */,
-				9A2669B51D6DA89100B66545 /* Customize */,
 				9A47303B1CECAEC500AEB86F /* Login */,
 				9A4730481CECAEC500AEB86F /* Main */,
 				9A4730541CECAEC500AEB86F /* Other */,
@@ -376,7 +265,6 @@
 			children = (
 				9A47303C1CECAEC500AEB86F /* Controller */,
 				9A4730401CECAEC500AEB86F /* Model */,
-				9A4730471CECAEC500AEB86F /* View */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -384,9 +272,8 @@
 		9A47303C1CECAEC500AEB86F /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				9A47303D1CECAEC500AEB86F /* LCCKLoginViewController.h */,
-				9A47303E1CECAEC500AEB86F /* LCCKLoginViewController.m */,
-				9A47303F1CECAEC500AEB86F /* LCCKLoginViewController.xib */,
+				9A47303F1CECAEC500AEB86F /* CYLDemoLoginViewController.xib */,
+				951DDF7CE6D8DECD39DEC774 /* CYLDemoLoginViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -394,31 +281,18 @@
 		9A4730401CECAEC500AEB86F /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				9A4730411CECAEC500AEB86F /* DEMOCustomAutoCompleteObject.h */,
-				9A4730421CECAEC500AEB86F /* DEMOCustomAutoCompleteObject.m */,
-				9A4730431CECAEC500AEB86F /* DEMODataSource.h */,
-				9A4730441CECAEC500AEB86F /* DEMODataSource.m */,
-				9A4730451CECAEC500AEB86F /* LCCKLoginDataSource.h */,
-				9A4730461CECAEC500AEB86F /* LCCKLoginDataSource.m */,
+				AF4AE3017FE20FE5E399D347 /* CYLDemoLoginDataSource.swift */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		9A4730471CECAEC500AEB86F /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		9A4730481CECAEC500AEB86F /* Main */ = {
 			isa = PBXGroup;
 			children = (
 				9A4730491CECAEC500AEB86F /* Controller */,
-				9A47304E1CECAEC500AEB86F /* LCCKConstantsDefinition.h */,
-				9A47304F1CECAEC500AEB86F /* LCCKUtil.h */,
-				9A4730501CECAEC500AEB86F /* LCCKUtil.m */,
 				9A4730511CECAEC500AEB86F /* View */,
+				C21E7DE1E306AD8242C70521 /* CYLDemoConstantsDefinition.swift */,
+				6C5AC1ABD1A1187E1321E42C /* CYLDemoUtil.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -426,8 +300,7 @@
 		9A4730491CECAEC500AEB86F /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				9A47304A1CECAEC500AEB86F /* LCCKMapViewController.h */,
-				9A47304B1CECAEC500AEB86F /* LCCKMapViewController.m */,
+				5F85234A1E25704C94E9E54A /* CYLDemoMapViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -435,8 +308,7 @@
 		9A4730511CECAEC500AEB86F /* View */ = {
 			isa = PBXGroup;
 			children = (
-				9A4730521CECAEC500AEB86F /* LCCKPlusButtonSubclass.h */,
-				9A4730531CECAEC500AEB86F /* LCCKPlusButtonSubclass.m */,
+				86F8C3001C096494DC63C669 /* CYLDemoPlusButtonSubclass.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -447,16 +319,14 @@
 				4F5E34B71FA069540067EB95 /* [删除]@2x.png */,
 				4F5E34B51FA069300067EB95 /* EmojisList.plist */,
 				9A4730551CECAEC500AEB86F /* Assets.xcassets */,
+				DA321A6C109B235AD56D1507 /* CYLDemoExample.bundle */,
 				9A4730561CECAEC500AEB86F /* LaunchScreen.storyboard */,
 				9A4730581CECAEC500AEB86F /* Info.plist */,
-				9A4730591CECAEC500AEB86F /* main.m */,
 				9AB37B2F1DC86A6E000782F2 /* issue_template.md */,
 				9AB37B301DC86A6E000782F2 /* pull_request_template.md */,
 				9AB37B251DC86A60000782F2 /* ChatKit 自定义样式.md */,
 				9AB37B261DC86A60000782F2 /* ChatKit 自定义业务.md */,
-				9AB37B271DC86A60000782F2 /* ChatKit.podspec */,
 				9AB37B281DC86A60000782F2 /* README.md */,
-				9AB37B291DC86A60000782F2 /* REDPACKET.md */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -464,10 +334,10 @@
 		9A47305A1CECAEC500AEB86F /* Tool */ = {
 			isa = PBXGroup;
 			children = (
-				9A7E2DE71D5F1040003A7312 /* LCCKContactManager.h */,
-				9A7E2DE81D5F1040003A7312 /* LCCKContactManager.m */,
 				9A47305B1CECAEC500AEB86F /* MBProgressHUD */,
-				9A7E2DE61D5F0B59003A7312 /* LCCKExampleConstants.h */,
+				6C9F84E0BAFA18C2DE98F1E8 /* CYLDemoContactManager.swift */,
+				06295A22B10C889336510329 /* CYLDemoExampleConstants.swift */,
+				04407FE285FB7A6FBE76F2DD /* CYLDemoExampleLocalization.swift */,
 			);
 			path = Tool;
 			sourceTree = "<group>";
@@ -475,78 +345,17 @@
 		9A47305B1CECAEC500AEB86F /* MBProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
-				9A47305D1CECAEC500AEB86F /* NSObject+LCCKHUD.h */,
-				9A47305E1CECAEC500AEB86F /* NSObject+LCCKHUD.m */,
+				7D87CFE7CD773CE903551253 /* NSObject+CYLDemoHUD.swift */,
 			);
 			path = MBProgressHUD;
-			sourceTree = "<group>";
-		};
-		9A53BE071D8BB13E00AAB118 /* Redpacket */ = {
-			isa = PBXGroup;
-			children = (
-				9A53BE081D8BB13E00AAB118 /* Model */,
-				9A53BE0D1D8BB13E00AAB118 /* Resources */,
-				9A53BE0F1D8BB13E00AAB118 /* Tool */,
-				9A53BE221D8BB13E00AAB118 /* View */,
-			);
-			path = Redpacket;
-			sourceTree = "<group>";
-		};
-		9A53BE081D8BB13E00AAB118 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				9A53BE091D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.h */,
-				9A53BE0A1D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.m */,
-				9A53BE0B1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.h */,
-				9A53BE0C1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.m */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		9A53BE0D1D8BB13E00AAB118 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				9A53BE0E1D8BB13E00AAB118 /* RedpacketCellResource.bundle */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		9A53BE0F1D8BB13E00AAB118 /* Tool */ = {
-			isa = PBXGroup;
-			children = (
-				9A53BE101D8BB13E00AAB118 /* AppDelegate+RedPacket.h */,
-				9A53BE111D8BB13E00AAB118 /* AppDelegate+RedPacket.m */,
-				9A53BE121D8BB13E00AAB118 /* RedpacketConfig.h */,
-				9A53BE131D8BB13E00AAB118 /* RedpacketConfig.m */,
-			);
-			path = Tool;
-			sourceTree = "<group>";
-		};
-		9A53BE221D8BB13E00AAB118 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				9A53BE231D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.h */,
-				9A53BE241D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.m */,
-				9A53BE251D8BB13E00AAB118 /* RedPacketInputViewPlugin.h */,
-				9A53BE261D8BB13E00AAB118 /* RedPacketInputViewPlugin.m */,
-				9A53BE271D8BB13E00AAB118 /* RedpacketMessageCell.h */,
-				9A53BE281D8BB13E00AAB118 /* RedpacketMessageCell.m */,
-				9A53BE291D8BB13E00AAB118 /* RedpacketTakenMessageCell.h */,
-				9A53BE2A1D8BB13E00AAB118 /* RedpacketTakenMessageCell.m */,
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		9A562A241E03D52F00BB23DD /* SettingCells */ = {
 			isa = PBXGroup;
 			children = (
-				9A562A251E03D52F00BB23DD /* LCCKSettingButtonCell.h */,
-				9A562A261E03D52F00BB23DD /* LCCKSettingButtonCell.m */,
-				9A562A271E03D52F00BB23DD /* LCCKSettingCell.h */,
-				9A562A281E03D52F00BB23DD /* LCCKSettingCell.m */,
-				9A562A291E03D52F00BB23DD /* LCCKSettingSwitchCell.h */,
-				9A562A2A1E03D52F00BB23DD /* LCCKSettingSwitchCell.m */,
-				9A562A2B1E03D52F00BB23DD /* TLSettingCell.h */,
+				84660EB998DBD937C13C083C /* CYLDemoSettingButtonCell.swift */,
+				E12624404CBECE0986547B0A /* CYLDemoSettingCell.swift */,
+				518A4BC415DD8550968622A3 /* CYLDemoSettingSwitchCell.swift */,
 			);
 			path = SettingCells;
 			sourceTree = "<group>";
@@ -554,10 +363,8 @@
 		9A562A2C1E03D52F00BB23DD /* SettingModels */ = {
 			isa = PBXGroup;
 			children = (
-				9A562A2D1E03D52F00BB23DD /* LCCKSettingGroup.h */,
-				9A562A2E1E03D52F00BB23DD /* LCCKSettingGroup.m */,
-				9A562A2F1E03D52F00BB23DD /* LCCKSettingItem.h */,
-				9A562A301E03D52F00BB23DD /* LCCKSettingItem.m */,
+				CED58ACFB7E9BBC650C60440 /* CYLDemoSettingGroup.swift */,
+				F9A6803B7A259460FE8642D2 /* CYLDemoSettingItem.swift */,
 			);
 			path = SettingModels;
 			sourceTree = "<group>";
@@ -565,10 +372,8 @@
 		9A562A311E03D52F00BB23DD /* SettingViews */ = {
 			isa = PBXGroup;
 			children = (
-				9A562A321E03D52F00BB23DD /* LCCKSettingFooterTitleView.h */,
-				9A562A331E03D52F00BB23DD /* LCCKSettingFooterTitleView.m */,
-				9A562A341E03D52F00BB23DD /* LCCKSettingHeaderTitleView.h */,
-				9A562A351E03D52F00BB23DD /* LCCKSettingHeaderTitleView.m */,
+				67622413C38E194985C03EAC /* CYLDemoSettingFooterTitleView.swift */,
+				3A271994A4F2D794E3F64E0A /* CYLDemoSettingHeaderTitleView.swift */,
 			);
 			path = SettingViews;
 			sourceTree = "<group>";
@@ -598,7 +403,6 @@
 			children = (
 				9AC3A4941DF9BB6700F3405F /* SettingViewController */,
 				9AC3A48A1DF9B72B00F3405F /* Controller */,
-				9AC3A48B1DF9B72B00F3405F /* Model */,
 				9AC3A48C1DF9B72B00F3405F /* Other */,
 				9AC3A48D1DF9B72B00F3405F /* View */,
 			);
@@ -608,21 +412,13 @@
 		9AC3A48A1DF9B72B00F3405F /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				9AC3A48E1DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.h */,
-				9AC3A48F1DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.m */,
-				9AC3A4911DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.h */,
-				9AC3A4921DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.m */,
-				9A55EB331E00FC5A0079EB65 /* LCCKProfileNameEditViewController.h */,
-				9A55EB341E00FC5A0079EB65 /* LCCKProfileNameEditViewController.m */,
+				34ABCCDB4DA50E4835EB7418 /* CYLDemoGroupConversationDetailViewController.swift */,
+				DB772F5AF17790A7B4F2C55B /* CYLDemoGroupConversationManagementViewController.swift */,
+				46033BE1A85A85A16401B4EE /* CYLDemoGroupConversationMemberInfoViewController.swift */,
+				273FCF197F7FEB70DF5903D6 /* CYLDemoProfileNameEditViewController.swift */,
+				398C3AC1ABF30239C44029A3 /* CYLDemoSingleConversationDetailViewController.swift */,
 			);
 			path = Controller;
-			sourceTree = "<group>";
-		};
-		9AC3A48B1DF9B72B00F3405F /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		9AC3A48C1DF9B72B00F3405F /* Other */ = {
@@ -644,11 +440,10 @@
 		9AC3A4941DF9BB6700F3405F /* SettingViewController */ = {
 			isa = PBXGroup;
 			children = (
-				9A562A221E03D52F00BB23DD /* LCCKSettingViewController.h */,
-				9A562A231E03D52F00BB23DD /* LCCKSettingViewController.m */,
 				9A562A241E03D52F00BB23DD /* SettingCells */,
 				9A562A2C1E03D52F00BB23DD /* SettingModels */,
 				9A562A311E03D52F00BB23DD /* SettingViews */,
+				6BAEF138C7E097E6B88E11CD /* CYLDemoSettingViewController.swift */,
 			);
 			path = SettingViewController;
 			sourceTree = "<group>";
@@ -665,12 +460,9 @@
 		9AC3A4B11DF9BEE600F3405F /* UIUtilities */ = {
 			isa = PBXGroup;
 			children = (
-				9AC3A4B21DF9BEE600F3405F /* LCCKUIUtility.h */,
-				9AC3A4B31DF9BEE600F3405F /* LCCKUIUtility.m */,
-				9AC3A4B41DF9BEE600F3405F /* UIColor+LCCKExtension.h */,
-				9AC3A4B51DF9BEE600F3405F /* UIColor+LCCKExtension.m */,
-				9AC3A4B61DF9BEE600F3405F /* UIFont+LCCKExtension.h */,
-				9AC3A4B71DF9BEE600F3405F /* UIFont+LCCKExtension.m */,
+				57E25F91D85059F38C34ED19 /* CYLDemoUIUtility.swift */,
+				DDB1B4124CFE34A792AB509C /* UIColor+CYLDemoExtension.swift */,
+				471756AD5C6AC867A2C8E77D /* UIFont+CYLDemoExtension.swift */,
 			);
 			path = UIUtilities;
 			sourceTree = "<group>";
@@ -678,16 +470,6 @@
 		9AC3A4C51DF9C14500F3405F /* DataUtilities */ = {
 			isa = PBXGroup;
 			children = (
-				9AC3A4D51DF9C25200F3405F /* NSFileManager+Paths.h */,
-				9AC3A4D61DF9C25200F3405F /* NSFileManager+Paths.m */,
-				9AC3A4CF1DF9C16A00F3405F /* NSDate+Extension.h */,
-				9AC3A4D01DF9C16A00F3405F /* NSDate+Extension.m */,
-				9AC3A4D11DF9C16A00F3405F /* NSDate+Utilities.h */,
-				9AC3A4D21DF9C16A00F3405F /* NSDate+Utilities.m */,
-				9AC3A4C61DF9C14500F3405F /* NSDate+LCCKExtension.h */,
-				9AC3A4C71DF9C14500F3405F /* NSDate+LCCKExtension.m */,
-				9AC3A4C81DF9C14500F3405F /* NSFileManager+LCCKExtension.h */,
-				9AC3A4C91DF9C14500F3405F /* NSFileManager+LCCKExtension.m */,
 			);
 			path = DataUtilities;
 			sourceTree = "<group>";
@@ -695,10 +477,8 @@
 		9AC3A4D81DF9C8BD00F3405F /* ConversationDetailCells */ = {
 			isa = PBXGroup;
 			children = (
-				9AC3A4D91DF9C8BD00F3405F /* LCCKUserGroupCell.h */,
-				9AC3A4DA1DF9C8BD00F3405F /* LCCKUserGroupCell.m */,
-				9AC3A4DB1DF9C8BD00F3405F /* LCCKUserGroupItemCell.h */,
-				9AC3A4DC1DF9C8BD00F3405F /* LCCKUserGroupItemCell.m */,
+				15FF80D04ECCB49F0DF8151D /* CYLDemoUserGroupCell.swift */,
+				D719D901D4188A93E43E0AFA /* CYLDemoUserGroupItemCell.swift */,
 			);
 			path = ConversationDetailCells;
 			sourceTree = "<group>";
@@ -706,8 +486,7 @@
 		9AC3A4DF1DF9CE0300F3405F /* ChatDetailHelper */ = {
 			isa = PBXGroup;
 			children = (
-				9AC3A4E01DF9CE0300F3405F /* LCCKChatDetailHelper.h */,
-				9AC3A4E11DF9CE0300F3405F /* LCCKChatDetailHelper.m */,
+				5C6CB564DC997EE0F046F0AE /* CYLDemoChatDetailHelper.swift */,
 			);
 			path = ChatDetailHelper;
 			sourceTree = "<group>";
@@ -719,6 +498,15 @@
 				7404AB0E0935F68A63803D6D /* Pods-ChatKit-OC.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		E1F08BC7F753498FDECFA1DF /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B010ADA19D354A08D14BB107 /* CYLDemoContactCell.xib */,
+				FD0BF4C15FFD9B6285FE0635 /* CYLDemoContactCell.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		E700C6F41D7192E800056E3C /* Recovered References */ = {
@@ -800,15 +588,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6C6062015836565A5F1DF69 /* CYLDemoContactCell.xib in Resources */,
 				9A4730711CECAEC500AEB86F /* LaunchScreen.storyboard in Resources */,
 				9A4730701CECAEC500AEB86F /* Assets.xcassets in Resources */,
-				9AB37B2C1DC86A60000782F2 /* ChatKit.podspec in Resources */,
-				9A2669CE1D6DA89100B66545 /* LCCKVCardView.xib in Resources */,
+				2CED63493BE78D49FB7D2CF9 /* CYLDemoExample.bundle in Resources */,
 				4F5E34B81FA069540067EB95 /* [删除]@2x.png in Resources */,
-				9A2669CA1D6DA89100B66545 /* calling_card_bg@2x.png in Resources */,
 				4F5E34B61FA069300067EB95 /* EmojisList.plist in Resources */,
-				9A4730681CECAEC500AEB86F /* LCCKLoginViewController.xib in Resources */,
-				9A53BE2D1D8BB13E00AAB118 /* RedpacketCellResource.bundle in Resources */,
+				9A4730681CECAEC500AEB86F /* CYLDemoLoginViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -894,8 +680,8 @@
 				"${PODS_ROOT}/../../ChatKit/Class/Resources/Emoji.bundle",
 				"${PODS_ROOT}/../../ChatKit/Class/Resources/en.lproj",
 				"${PODS_ROOT}/../../ChatKit/Class/Resources/Lan.bundle",
-				"${PODS_ROOT}/../../ChatKit/Class/Resources/LCCKPhotoBrowser.bundle",
-				"${PODS_ROOT}/../../ChatKit/Class/Resources/LCCKRecordAudioHUD.bundle",
+				"${PODS_ROOT}/../../ChatKit/Class/Resources/CYLDemoPhotoBrowser.bundle",
+				"${PODS_ROOT}/../../ChatKit/Class/Resources/CYLDemoRecordAudioHUD.bundle",
 				"${PODS_ROOT}/../../ChatKit/Class/Resources/localization",
 				"${PODS_ROOT}/../../ChatKit/Class/Resources/MBProgressHUD.bundle",
 				"${PODS_ROOT}/../../ChatKit/Class/Resources/MessageBubble.bundle",
@@ -925,8 +711,8 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Emoji.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/en.lproj",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lan.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/LCCKPhotoBrowser.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/LCCKRecordAudioHUD.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/CYLDemoPhotoBrowser.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/CYLDemoRecordAudioHUD.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/localization",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MBProgressHUD.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MessageBubble.bundle",
@@ -972,62 +758,51 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A47306F1CECAEC500AEB86F /* LCCKPlusButtonSubclass.m in Sources */,
-				9A4730671CECAEC500AEB86F /* LCCKLoginViewController.m in Sources */,
-				9AC3A4DD1DF9C8BD00F3405F /* LCCKUserGroupCell.m in Sources */,
-				9A53BE421D8BB19C00AAB118 /* LCChatKitExample+Setting.m in Sources */,
-				9A53BE411D8BB19C00AAB118 /* LCChatKitExample.m in Sources */,
-				9A55EB351E00FC5A0079EB65 /* LCCKProfileNameEditViewController.m in Sources */,
-				9A562A381E03D52F00BB23DD /* LCCKSettingCell.m in Sources */,
-				9AB37B2D1DC86A60000782F2 /* README.md in Sources */,
-				9A562A371E03D52F00BB23DD /* LCCKSettingButtonCell.m in Sources */,
-				9AC3A4D41DF9C16A00F3405F /* NSDate+Utilities.m in Sources */,
-				9AC3A4CD1DF9C14500F3405F /* NSFileManager+LCCKExtension.m in Sources */,
-				9AC3A4931DF9B7D500F3405F /* LCCKGroupConversationDetailViewController.m in Sources */,
-				9A2669C81D6DA89100B66545 /* LCCKInputViewPluginConversationBackground.m in Sources */,
-				9A53BE371D8BB13E00AAB118 /* RedpacketTakenMessageCell.m in Sources */,
-				9A2669CC1D6DA89100B66545 /* LCCKVCardMessageCell.m in Sources */,
-				9A53BE2E1D8BB13E00AAB118 /* AppDelegate+RedPacket.m in Sources */,
-				9A2669CD1D6DA89100B66545 /* LCCKVCardView.m in Sources */,
-				9A47306A1CECAEC500AEB86F /* DEMODataSource.m in Sources */,
-				9A562A3B1E03D52F00BB23DD /* LCCKSettingItem.m in Sources */,
-				9AB37B321DC86A6E000782F2 /* pull_request_template.md in Sources */,
-				9A562A391E03D52F00BB23DD /* LCCKSettingSwitchCell.m in Sources */,
-				9A2669CB1D6DA89100B66545 /* LCCKInputViewPluginVCard.m in Sources */,
-				9A47306C1CECAEC500AEB86F /* LCCKMapViewController.m in Sources */,
-				9AB37B2A1DC86A60000782F2 /* ChatKit 自定义样式.md in Sources */,
-				9AB37B2B1DC86A60000782F2 /* ChatKit 自定义业务.md in Sources */,
-				9A4730621CECAEC500AEB86F /* LCCKUser.m in Sources */,
-				9A47306E1CECAEC500AEB86F /* LCCKUtil.m in Sources */,
-				9A53BE2F1D8BB13E00AAB118 /* RedpacketConfig.m in Sources */,
-				9A562A3C1E03D52F00BB23DD /* LCCKSettingFooterTitleView.m in Sources */,
-				9AB37B311DC86A6E000782F2 /* issue_template.md in Sources */,
-				9AC3A4E21DF9CE0300F3405F /* LCCKChatDetailHelper.m in Sources */,
-				9A53BE2C1D8BB13E00AAB118 /* AVIMTypedMessageRedPacketTaken.m in Sources */,
-				9A53BE2B1D8BB13E00AAB118 /* AVIMTypedMessageRedPacket.m in Sources */,
-				9A562A3A1E03D52F00BB23DD /* LCCKSettingGroup.m in Sources */,
-				9A53BE361D8BB13E00AAB118 /* RedpacketMessageCell.m in Sources */,
-				9A4730691CECAEC500AEB86F /* DEMOCustomAutoCompleteObject.m in Sources */,
-				9AC3A4B91DF9BEE600F3405F /* UIColor+LCCKExtension.m in Sources */,
-				9AC3A4901DF9B7B400F3405F /* LCCKSingleConversationDetailViewController.m in Sources */,
-				9A4730731CECAEC500AEB86F /* main.m in Sources */,
-				9A4730751CECAEC500AEB86F /* NSObject+LCCKHUD.m in Sources */,
-				9A53BE401D8BB19C00AAB118 /* AppDelegate.m in Sources */,
-				9AC3A4BA1DF9BEE600F3405F /* UIFont+LCCKExtension.m in Sources */,
-				9A53BE431D8BB19C00AAB118 /* LCCKTabBarControllerConfig.m in Sources */,
-				9A562A361E03D52F00BB23DD /* LCCKSettingViewController.m in Sources */,
-				9A53BE341D8BB13E00AAB118 /* RedPacketChangeInputViewPlugin.m in Sources */,
-				9AC3A4CC1DF9C14500F3405F /* NSDate+LCCKExtension.m in Sources */,
-				9A47306B1CECAEC500AEB86F /* LCCKLoginDataSource.m in Sources */,
-				9AC3A4B81DF9BEE600F3405F /* LCCKUIUtility.m in Sources */,
-				9A562A3D1E03D52F00BB23DD /* LCCKSettingHeaderTitleView.m in Sources */,
-				9A7E2DE91D5F1040003A7312 /* LCCKContactManager.m in Sources */,
-				9AC3A4D31DF9C16A00F3405F /* NSDate+Extension.m in Sources */,
-				9AC3A4D71DF9C25200F3405F /* NSFileManager+Paths.m in Sources */,
-				9AC3A4DE1DF9C8BD00F3405F /* LCCKUserGroupItemCell.m in Sources */,
-				9A53BE351D8BB13E00AAB118 /* RedPacketInputViewPlugin.m in Sources */,
-				9AB37B2E1DC86A60000782F2 /* REDPACKET.md in Sources */,
-				9A2669C91D6DA89100B66545 /* LCCKVCardMessage.m in Sources */,
+				0EB8F06B2D271D80A5151452 /* AppDelegate.swift in Sources */,
+				080AB3EA959A485971496D5C /* CYLDemoChatKitExample+Setting.swift in Sources */,
+				8F1E5D59EA077A033F634409 /* CYLDemoChatKitExample.swift in Sources */,
+				D8F027CEF4EFBCF2DB71FEF2 /* CYLDemoTabBarControllerConfig.swift in Sources */,
+				E75E9104AC4EC42C2113E426 /* AVIMConversation+CYLDemoExtension.swift in Sources */,
+				1178CC4957C40B6538D0480E /* AVIMMessage+CYLDemoExtension.swift in Sources */,
+				43F2BC008294246263C9AA4D /* AVIMTypedMessage+CYLDemoExtension.swift in Sources */,
+				66A76FCF8023FF19DA881515 /* CYLCommonUtils+CYLDemoExtension.swift in Sources */,
+				24E4D34F912074A41FC2F3EB /* CYLDemoEmotionMessage.swift in Sources */,
+				EBD7F57C710913662F404B01 /* CYLDemoLeanCloudConversationService.swift in Sources */,
+				40DC4B79B41F00648AC5F314 /* CYLDemoLeanCloudIMProvider.swift in Sources */,
+				7A935450400922CFCCC5E909 /* CYLDemoLeanCloudSessionService.swift in Sources */,
+				66D65A69F99F104A15986494 /* CYLMessage+CYLDemoExtension.swift in Sources */,
+				9B5C2C5042B4683CEE4F21DA /* CYLDemoUser.swift in Sources */,
+				053637F01440FCB380A2D2A3 /* CYLDemoContactListController.swift in Sources */,
+				CAC0D44FB83E72343F492CD8 /* CYLDemoContactCell.swift in Sources */,
+				E96C85FEEB95D065E9CF4E8E /* CYLDemoGroupConversationDetailViewController.swift in Sources */,
+				2D145439F37E89AD1EFFF147 /* CYLDemoGroupConversationManagementViewController.swift in Sources */,
+				D7897D2E7573044CB706ADFC /* CYLDemoGroupConversationMemberInfoViewController.swift in Sources */,
+				7C8A44B80454959292A1799C /* CYLDemoProfileNameEditViewController.swift in Sources */,
+				F5E63492C4C50820F3A4C409 /* CYLDemoSingleConversationDetailViewController.swift in Sources */,
+				4BEB3D92B57D45D16F3462F4 /* CYLDemoChatDetailHelper.swift in Sources */,
+				ACDF9A972522A408D5D52EEB /* CYLDemoSettingViewController.swift in Sources */,
+				2DAD26F884D15C457036AF19 /* CYLDemoSettingButtonCell.swift in Sources */,
+				EC33AD3EDC96FDC8871B0B75 /* CYLDemoSettingCell.swift in Sources */,
+				01BDA379832FA8BD0110D578 /* CYLDemoSettingSwitchCell.swift in Sources */,
+				D7803FEA3DB088A64824D3FA /* CYLDemoSettingGroup.swift in Sources */,
+				131E61A711471908ED77B9CC /* CYLDemoSettingItem.swift in Sources */,
+				35481E93C2D01217B16F3593 /* CYLDemoSettingFooterTitleView.swift in Sources */,
+				382346A1192A6369064B885F /* CYLDemoSettingHeaderTitleView.swift in Sources */,
+				619F6ED3B63B5707911E8034 /* CYLDemoUserGroupCell.swift in Sources */,
+				C5260ACDEFDED94E9E33481D /* CYLDemoUserGroupItemCell.swift in Sources */,
+				26707D923894AB8AB4775B49 /* CYLDemoLoginViewController.swift in Sources */,
+				CDD1DE58AD5954FDF42A42B1 /* CYLDemoLoginDataSource.swift in Sources */,
+				7CD361B45DFF9A4317E309D4 /* CYLDemoConstantsDefinition.swift in Sources */,
+				5DE6D8927D75A1B1A253C0AC /* CYLDemoUtil.swift in Sources */,
+				DDC629A4F8E459FEE7650389 /* CYLDemoMapViewController.swift in Sources */,
+				258B2D30DB2B2FFC12B63C4D /* CYLDemoPlusButtonSubclass.swift in Sources */,
+				92B04C214F573ACB548D75DD /* CYLDemoUIUtility.swift in Sources */,
+				1FA1674A094E4679E7B5FEC9 /* UIColor+CYLDemoExtension.swift in Sources */,
+				A7A3B044529CE9D0061001AD /* UIFont+CYLDemoExtension.swift in Sources */,
+				458BAD0BBB0769F06BCDA93E /* CYLDemoContactManager.swift in Sources */,
+				4C9DF0F0CC12C38BB5A275ED /* CYLDemoExampleConstants.swift in Sources */,
+				B40773F11CCE8848F6D24D55 /* CYLDemoExampleLocalization.swift in Sources */,
+				A544C6A1225E8EF055C3BB72 /* NSObject+CYLDemoHUD.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1089,6 +864,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1129,6 +905,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1140,7 +917,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "ChatKit-OC.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1178,6 +955,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1187,7 +965,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "ChatKit-OC.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1225,6 +1003,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

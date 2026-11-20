@@ -25,23 +25,23 @@
 页面	| 位置	| 定制点	| 定制方式
 -------------|-------------|-------------|-------------
 全局	| 顶部导航栏	| 背景色、文字颜色等样式	| 系统API
-全局	| 顶部导航栏	| 导航按钮	| 既可以使用 `-[LCCKBaseViewController configureBarButtonItemStyle:action:]`，</p>又可以在各个Controller的 `setViewDidLoadBlock:` 中调用系统API
+全局	| 顶部导航栏	| 导航按钮	| 既可以使用 `-[CYLBaseViewController configureBarButtonItemStyle:action:]`，</p>又可以在各个Controller的 `setViewDidLoadBlock:` 中调用系统API
 全局	| TableView	| 分割线、背景色、Cell文字颜色、Cell背景色等 | 【plist】</p>TableView-XXX </p>	ChatKit-Theme.plist中 </p>**【plist】是指资源包 MessageBubble.bundle 中的 MessageBubble-Customize.plist </p>或者是 Other.bundle 中的 ChatKit-Theme.plist 文件，下同** 
 全局 | 核心流程</p>（聊天、对话列表话及相关页面） | 支持国际化 | 自定义 Other.bundle 为 CustomizedChatKit.Other.bundle，并修改或增加其中的本地化文件
-全局	| 头像样式	| 头像圆角	|  `-[LCChatKit setAvatarImageViewCornerRadiusBlock:]`
-全局	| 事件处理 |	预览图片 |	`-[LCChatKit setPreviewImageMessageBlock:]`
-全局	| 事件处理 |	点击头像	| `-[LCChatKit setOpenProfileBlock:]`
-全局	| 事件处理 | 	提示信息 |	`-[LCChatKit setShowNotificationBlock:`
+全局	| 头像样式	| 头像圆角	|  `-[CYLChatKit setAvatarImageViewCornerRadiusBlock:]`
+全局	| 事件处理 |	预览图片 |	`-[CYLChatKit setPreviewImageMessageBlock:]`
+全局	| 事件处理 |	点击头像	| `-[CYLChatKit setOpenProfileBlock:]`
+全局	| 事件处理 | 	提示信息 |	`-[CYLChatKit setShowNotificationBlock:`
 会话列表 |	未读数	| 文字颜色，背景色|【plist】</p>ConversationList-UnreadText、ConversationList-UnreadBackground
-聊天页面	| 聊天背景	| 替换资源包图片 |如果想修改默认的图片，需要替换 Other.bundle</p> `conversationViewController_default_backgroundImage.png` ，</p>如果要修改特定对话，需要调用下面的方法： `-[LCChatKit setCurrentConversationBackgroundImage:scaledToSize:`或</p>`-[LCChatKit setBackgroundImage:forConversationId:scaledToSize:]`
+聊天页面	| 聊天背景	| 替换资源包图片 |如果想修改默认的图片，需要替换 Other.bundle</p> `conversationViewController_default_backgroundImage.png` ，</p>如果要修改特定对话，需要调用下面的方法： `-[CYLChatKit setBackgroundImage:forConversationId:scaledToSize:]`
 聊天页面	| 输入区域	| 主题色	|【plist】 </p>MessageInputView-Tint-Color
 聊天页面	| 输入区域 |	输入区域背景色|	【plist】</p> MessageInputView-BackgroundColor
 聊天页面	| 输入区域 |	输入框 |	【plist】</p> MessageInputView-TextField-TextColor、MessageInputView-TextField-BackgroundColor
 聊天页面	| 输入区域 |	录音按钮|	【plist】</p>MessageInputView-Record-TextColor 、MessageInputView-RecordView-BackgroundColor
 聊天页面 |	输入区域 |	更多区域|【plist】</p>MessageInputView-MorePanel-BackgroundColor、MessageInputView-MorePanel-TextColor
-聊天页面 |	输入区域	|更多区域Item |	参考 `LCCKInputViewPluginVCard` 类
+聊天页面 |	输入区域	|更多区域Item |	参考 `CYLDemoInputViewPluginVCard` 类
 聊天页面 | 输入区域	| 自定义表情	| 替换 Emoji.bundle 中的图片资源和 plist 文件
-聊天页面 | 自定义消息 |	自定义消息 | 参考 `LCCKVCardMessage` 类、与 `LCCKInputViewPluginVCard` 类
+聊天页面 | 自定义消息 |	自定义消息 | 参考 `CYLDemoVCardMessage` 类、与 `CYLDemoInputViewPluginVCard` 类
 聊天页面 | 消息显示	| 左右文本颜色	|【plist】</p>ConversationView-Message-Left-TextColor、ConversationView-Message-Right-TextColor、
 聊天页面 | 消息显示 |	链接颜色 | 【plist】</p>ConversationView-Message-LinkColor、</p>ConversationView-Message-LinkColor-Left、</p>ConversationView-Message-LinkColor-Right
 聊天页面 | 消息显示	| 发送者昵称颜色	|【plist】</p> ConversationView-SenderName-TextColor
@@ -138,7 +138,7 @@ ConversationList-UnreadBackground | 会话列表未读数背景色
 
 ### 聊天背景
 
-如果想修改默认的图片，需要替换 Other.bundle `conversationViewController_default_backgroundImage.png` ，如果要修改特定对话，需要调用下面的方法：`-[LCChatKit setCurrentConversationBackgroundImage:scaledToSize:`或`-[LCChatKit setBackgroundImage:forConversationId:scaledToSize:]`
+如果想修改默认的图片，需要替换 Other.bundle `conversationViewController_default_backgroundImage.png` ，如果要修改特定对话，需要调用下面的方法：`-[CYLChatKit setBackgroundImage:forConversationId:scaledToSize:]`
 
 
 默认背景图 | 修改bundle文件，将修改全部的默认背景图 |代码动态修改可针对特定对话 
@@ -212,30 +212,30 @@ edge_insets: 气泡背景区域（红色）和内容区域（白色）间距：
 
 ## 控制状态栏、导航栏、Tabbar等
 
-ChatKit 提供的各个 Controller 都遵循 LCCKViewControllerEventProtocol 协议，你可以在 controller 的 `-setViewDidLoadBlock:`、`-setViewWillAppearBlock:`、`-setViewDidAppearBlock:`、`-setViewWillDisappearBlock:`、`-setViewDidDisappearBlock:`等 block 中，调用相关的系统API，以便控制状态栏、导航栏、Tabbar等。
+ChatKit 提供的各个 Controller 都遵循 CYLViewControllerEventProtocol 协议，你可以在 controller 的 `-setViewDidLoadBlock:`、`-setViewWillAppearBlock:`、`-setViewDidAppearBlock:`、`-setViewWillDisappearBlock:`、`-setViewDidDisappearBlock:`等 block 中，调用相关的系统API，以便控制状态栏、导航栏、Tabbar等。
 
 例如：
 
 
  ```Objective-C
-    [conversationViewController setViewWillAppearBlock:^(LCCKBaseViewController *viewController, BOOL aAnimated) {
+    [conversationViewController setViewWillAppearBlock:^(CYLBaseViewController *viewController, BOOL aAnimated) {
         [viewController.navigationController setNavigationBarHidden:NO animated:aAnimated];
     }];
  ```
  
  ```Objective-C
-    [conversationViewController setViewWillAppearBlock:^(LCCKBaseViewController *viewController, BOOL aAnimated) {
+    [conversationViewController setViewWillAppearBlock:^(CYLBaseViewController *viewController, BOOL aAnimated) {
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:aAnimated];
     }];
  ```
  
 ## 会话列表页面的导航栏标题
 
-在 LCCKConversationListViewController 的 `setViewDidLoadBlock:` 中修改导航栏标题。
+在 CYLConversationListViewController 的 `setViewDidLoadBlock:` 中修改导航栏标题。
 
  ```Objective-C
-    LCCKConversationListViewController *firstViewController = [[LCCKConversationListViewController alloc] init];
-    [firstViewController setViewDidLoadBlock:^(LCCKBaseViewController *viewController) {
+    CYLConversationListViewController *firstViewController = [[CYLConversationListViewController alloc] init];
+    [firstViewController setViewDidLoadBlock:^(CYLBaseViewController *viewController) {
         viewController.navigationItem.title = @"消息";
     }];
  ```
@@ -250,9 +250,9 @@ ChatKit 提供的各个 Controller 都遵循 LCCKViewControllerEventProtocol 协
  - 单聊默认显示对方昵称，群聊显示 `conversation` 的 name 字段值
 
  ```Objective-C
-    LCCKConversationViewController *conversationViewController = [[LCCKConversationViewController alloc] initWithConversationId:conversationId];
+    CYLConversationViewController *conversationViewController = [[CYLConversationViewController alloc] initWithConversationId:conversationId];
     conversationViewController.disableTitleAutoConfig = YES;
-    [conversationViewController setViewDidLoadBlock:^(LCCKBaseViewController *viewController) {
+    [conversationViewController setViewDidLoadBlock:^(CYLBaseViewController *viewController) {
         viewController.navigationItem.title = @"消息";
     }];
  ```
@@ -263,7 +263,7 @@ ChatKit 提供的各个 Controller 都遵循 LCCKViewControllerEventProtocol 协
  可以通过下面的方式自定义圆角，支持设置为圆形头像：
  
  ```Objective-C
-    [[LCChatKit sharedInstance] setAvatarImageViewCornerRadiusBlock:^CGFloat(CGSize avatarImageViewSize) {
+    [[CYLChatKit sharedInstance] setAvatarImageViewCornerRadiusBlock:^CGFloat(CGSize avatarImageViewSize) {
         if (avatarImageViewSize.height > 0) {
             return avatarImageViewSize.height/2;
         }
@@ -279,7 +279,7 @@ ChatKit 提供的各个 Controller 都遵循 LCCKViewControllerEventProtocol 协
 
 
  ```Objective-C
-    [[LCChatKit sharedInstance] setShowNotificationBlock:^(UIViewController *viewController, NSString *title, NSString *subtitle, LCCKMessageNotificationType type) {
+    [[CYLChatKit sharedInstance] setShowNotificationBlock:^(UIViewController *viewController, NSString *title, NSString *subtitle, CYLMessageNotificationType type) {
         [self exampleShowNotificationWithTitle:title subtitle:subtitle type:type];
     }];
     
@@ -289,22 +289,22 @@ HUD
 
 
  ```Objective-C
-    [[LCChatKit sharedInstance] setHUDActionBlock:^(UIViewController *viewController, UIView *view, NSString *title, LCCKMessageHUDActionType type) {
+    [[CYLChatKit sharedInstance] setHUDActionBlock:^(UIViewController *viewController, UIView *view, NSString *title, CYLMessageHUDActionType type) {
         switch (type) {
-            case LCCKMessageHUDActionTypeShow:
-                [[self class] lcck_showMessage:title toView:view];
+            case CYLMessageHUDActionTypeShow:
+                [[self class] cyl_demo_showMessage:title toView:view];
                 break;
                 
-            case LCCKMessageHUDActionTypeHide:
-                [[self class] lcck_hideHUDForView:view];
+            case CYLMessageHUDActionTypeHide:
+                [[self class] cyl_demo_hideHUDForView:view];
                 break;
                 
-            case LCCKMessageHUDActionTypeError:
-                [[self class] lcck_showError:title toView:view];
+            case CYLMessageHUDActionTypeError:
+                [[self class] cyl_demo_showError:title toView:view];
                 break;
                 
-            case LCCKMessageHUDActionTypeSuccess:
-                [[self class] lcck_showSuccess:title toView:view];
+            case CYLMessageHUDActionTypeSuccess:
+                [[self class] cyl_demo_showSuccess:title toView:view];
                 break;
         }
     }];

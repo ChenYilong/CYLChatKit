@@ -1,18 +1,33 @@
 target 'ChatKit-OC' do
   project 'ChatKit-OC.xcodeproj'
   platform :ios, '15.0'
+  # The demo is Swift (AGENTS.md): pods are frameworks, so `import CYLChatKit` works. Static linkage keeps the pods that ship
+  # static libraries (AVOSCloud, lame.framework) linking as before.
+  use_frameworks! :linkage => :static
   inhibit_all_warnings!
 
   #=========================================================
   #======================== Lib Dependency =================
   #=========================================================
   pod 'CYLChatKit', :path => '../'
+  # Latest CYLTableViewPlaceHolder commit (branch claude/docs-todo-completion-xoef38, version 1.1.0 plus 20 commits).
+  # Pinned to the commit, not the branch, so installs are reproducible. Update the hash deliberately.
+  pod 'CYLTableViewPlaceHolder', :git => 'https://github.com/ChenYilong/CYLTableViewPlaceHolder.git', :commit => '9d1b8e77a99b2146608b22d4aef8f760313f0d64'
 
   #=========================================================
   #======================== Demo Dependency ================
   #=========================================================
 
-  pod 'CYLTabBarController', '1.99.72'
+  # The LeanCloud IM backend (CYLDemoLeanCloudIMProvider) lives in the demo, not in ChatKit.
+  pod 'AVOSCloud', '11.5.2'
+  pod 'AVOSCloudIM', '11.5.2'
+  # SQLite caches of the LeanCloud provider (CYLDemoLeanCloudConversationService). ChatKit itself does not use FMDB.
+  pod 'FMDB', '2.6.2'
+
+  # CYLTabBarController is always the newest commit of its repository on any branch, by commit time, not a version
+  # (AGENTS.md, "CYLTabBarController dependency"). scripts/update-cyltabbarcontroller-commit.sh rewrites the next
+  # line before every build.
+  pod 'CYLTabBarController', :git => 'https://github.com/ChenYilong/CYLTabBarController.git', :commit => 'aa8a085007a2e38e6e1ff67a566a32db10a1f2b1'
   pod 'TWMessageBarManager', '1.8.1'
   pod 'MLPAutoCompleteTextField', '1.5'
   pod 'FTPopOverMenu', '2.1.4'
@@ -20,6 +35,19 @@ target 'ChatKit-OC' do
 end
 
 post_install do |installer|
+  # AVOSCloud 11.5.2 imports <netinet6/in6.h> directly (LCNetworkReachabilityManager.m, LCHTTPSessionManager.m,
+  # AVReachability.h), which current iOS SDKs reject ("do not include netinet6/in6.h directly, include
+  # netinet/in.h"). Each of those files already imports <netinet/in.h>, which includes it, so drop that line from
+  # the installed pod. Remove this when the LeanCloud SDK is upgraded.
+  Dir.glob(File.join(installer.sandbox.root, 'AVOSCloud', '**', '*.{h,m}')).each do |path|
+    source = File.read(path)
+    next unless source.include?('<netinet/in.h>')
+    patched = source.gsub(/^#import <netinet6\/in6\.h>\n/, '')
+    next if patched == source
+    File.chmod(0644, path)
+    File.write(path, patched)
+  end
+
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'

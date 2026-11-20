@@ -71,3 +71,35 @@
 "button.label.error.message" = "失败";
 "button.label.info.message" = "注意";
 "button.label.hide.all" = "隐藏";
+
+/* Chat bar, accessibility labels and hints, message rows, conversation rows (docs/accessibility.md) */
+"chatbar.send" = "发送";
+"chatbar.send.hint" = "发送输入的消息";
+"chatbar.voice.toVoice" = "切换到语音输入";
+"chatbar.voice.toKeyboard" = "切换到键盘输入";
+"chatbar.face" = "表情";
+"chatbar.face.hint" = "显示表情面板";
+"chatbar.textview" = "消息";
+"chatbar.record" = "按住 说话";
+"chatbar.record.release" = "松开 结束";
+"chatbar.record.hint" = "按住录音，松开发送";
+"plugin.pickImage" = "照片";
+"plugin.takePhoto" = "拍摄";
+"plugin.location" = "位置";
+"message.you" = "我";
+"message.image" = "图片";
+"message.voice" = "语音消息，%@ 秒";
+"message.video" = "视频";
+"message.location" = "位置：%@";
+"message.file" = "文件";
+"message.status.sending" = "发送中";
+"message.status.failed" = "发送失败";
+"message.status.read" = "已读";
+"message.action.resend" = "重新发送";
+"message.action.profile" = "查看资料";
+"message.hint.play" = "播放语音消息";
+"message.hint.open" = "打开消息";
+"conversation.unread" = "%@ 条未读";
+"conversation.unread.muted" = "有未读消息";
+"conversation.muted" = "已静音";
+"contact.action.select" = "选择联系人";
